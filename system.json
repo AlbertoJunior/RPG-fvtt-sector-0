@@ -1,0 +1,67 @@
+{
+    "id": "setor0OSubmundo",
+    "title": "Setor 0 - O Submundo",
+    "description": "Jogue Setor 0 - O Submundo no Foundry VTT",
+    "version": "0.0.2",
+    "compatibility": {
+        "minimum": 12,
+        "verified": 12
+    },
+    "authors": [
+        {
+            "name": "Alberto Junior",
+            "url": "https://github.com/AlbertoJunior",
+            "discord": "Alberto Junior#8050"
+        }
+    ],
+    "esmodules": [
+        "setor0OSubmundo.mjs"
+    ],
+    "styles": [
+        "styles/system-styles.css"
+    ],
+    "packs": [
+        {
+            "name": "inimigos",
+            "label": "Inimigos conhecidos",
+            "type": "Actor"
+        },
+        {
+            "name": "itens",
+            "label": "Itens conhecidos",
+            "type": "Item"
+        }
+    ],
+    "languages": [
+        {
+            "lang": "pt-br",
+            "name": "Portugês Brasil",
+            "path": "lang/pt-br.json"
+        }
+    ],
+    "documentTypes": {
+        "Actor": {
+            "Jogador": {},
+            "Mestre": {},
+            "Inimigo": {}
+        },
+        "Item": {
+            "melee": {},
+            "projectile": {},
+            "armor": {},
+            "vehicle": {},
+            "substance": {}
+        }
+    },
+    "socket": false,
+    "initiative": "1d10",
+    "grid": {
+        "distance": 1,
+        "units": "PM"
+    },
+    "primaryTokenAttribute": "vitalidade",
+    "secondaryTokenAttribute": "sobrecarga",
+    "url": "https://www.set0rpg.com.br",
+    "manifest": "https://github.com/AlbertoJunior/setor0OSubmundo/system.json",
+    "download": "https://github.com/AlbertoJunior/setor0OSubmundo/download/archive.zip"
+}

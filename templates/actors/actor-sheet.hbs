@@ -1,0 +1,29 @@
+<form class="actor-sheet" autocomplete="off">
+    <div>
+        {{log this}}
+    </div>
+
+    <div id="edit-mode-toggle" class="edit-mode-toggle editable">
+        {{#if editable}}
+        Desabilitar Edição
+        {{else}}
+        Habilitar Edição
+        {{/if}}
+    </div>
+
+    <header>
+        <h1 class="charname">
+            <input name="name" type="text" value="{{actor.name}}" placeholder="{{ localize 'S0.Nome' }}" />
+        </h1>
+    </header>
+
+    <input name="system.background.biography" type="text" value="{{actor.system.background.biography}}"
+        placeholder="{{ localize 'S0.Nome' }}" />
+
+    <h2>
+        Atributos
+    </h2>
+    <section id="atributosContainer" />
+
+    </section>
+</form>
