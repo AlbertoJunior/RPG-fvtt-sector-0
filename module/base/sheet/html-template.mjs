@@ -1,6 +1,13 @@
-import { getActorFlag, selectCharacteristic, setActorFlag } from "../utils/utils.mjs";
+import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
+import { SheetMethods } from "./sheet-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
+
+    constructor(...args) {
+        super(...args)
+        this.currentPage = 1;
+    }
+
     activateListeners(html) {
         super.activateListeners(html);
         this._dinamicSheet(html);
@@ -8,89 +15,88 @@ class Setor0ActorSheet extends ActorSheet {
         this._setupListeners(html);
     }
 
+    static get defaultOptions() {
+        return foundry.utils.mergeObject(super.defaultOptions, {
+            classes: ["setor0OSubmundo", "sheet", "actor"],
+            template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
+            width: 600,
+            height: 900
+        });
+    }
+
+    getData() {
+        const data = super.getData();
+        data.editable = this.isEditable;
+        data.canRoll = game.user.isGM || this.actor.isOwner;
+        data.canEdit = game.user.isGM || this.actor.isOwner;
+
+        console.log(data)
+        return data;
+    }
+
+    get isEditable() {
+        return getActorFlag(this.actor, "editable");
+    }
+
+    get canEdit() {
+        return getActorFlag(this.actor, "canEdit");
+    }
+
+    get canRoll() {
+        return getActorFlag(this.actor, "canRoll");
+    }
+
+    _dinamicSheet(html) {
+        SheetMethods._createDinamicSheet(html, this.isEditable);
+    }
+
     _setupListeners(html) {
         html.find('#edit-mode-toggle').click(this._toggleEditMode.bind(this));
         html.find('[data-action="characteristicOnClick"]').click(this._characteristicOnClick.bind(this));
+        html.find("#roll-button").click(this._openRollDialog.bind(this));
+
+        const pages = [];
+        html.find(".S0-page").each((index, element) => {
+            if (index + 1 != this.currentPage) {
+                element.classList.add('hidden');
+            }
+            pages.push(element);
+        });
+        const buttons = html.find(".page-button");
+        buttons.each((index, element) => {
+            if (index + 1 == this.currentPage) {
+                element.classList.toggle('selected');
+            }
+            if (index < pages.length)
+                element.addEventListener('click', this._changePage.bind(this, index + 1, pages, buttons));
+        });
     }
 
     _toggleEditMode(event) {
         event.preventDefault();
 
-        let currentValue = getActorFlag(editable);
+        let currentValue = getActorFlag(this.actor, "editable");
         currentValue = !currentValue;
 
         setActorFlag(this.actor, "editable", currentValue)
             .then(() => this.render());
     }
 
-    getData() {
-        const data = super.getData();
-        data.editable = this.actor.getFlag("setor0OSubmundo", "editable") || false;
-        return data;
-    }
-
-    get isEditable() {
-        return this.actor.getFlag("setor0OSubmundo", "editable") || false;
-    }
-
-    _dinamicSheet(html) {
-        const atributos = [
-            { id: 'forca', label: 'S0.Forca' },
-            { id: 'destreza', label: 'S0.Destreza' },
-            { id: 'vigor', label: 'S0.Vigor' },
-            { id: 'percepcao', label: 'S0.Percepcao' },
-            { id: 'carisma', label: 'S0.Carisma' },
-            { id: 'inteligencia', label: 'S0.Inteligencia' }
-        ];
-
-        const atributosContainer = html.find('#atributosContainer');
-
-        atributos.forEach(atributo => {
-            const divContainer = $('<div>', {
-                class: 'characteristic-container',
-                id: atributo.id
-            });
-
-            const label = $('<label>', {
-                text: game.i18n.localize(atributo.label)
-            });
-
-            divContainer.append(label);
-
-            for (let i = 0; i < 6; i++) {
-                const divCaracteristica = (this.isEditable) ? $('<div>', {
-                    class: (i < 5) ? 'caracteristica clickable' : 'caracteristica-6 clickable',
-                    'data-action': 'characteristicOnClick'
-                }) : $('<div>', {
-                    class: (i < 5) ? 'caracteristica' : 'caracteristica-6',
-                });
-
-                if (i === 0) {
-                    divCaracteristica.addClass('selected');
-                }
-
-                divContainer.append(divCaracteristica);
-            }
-            atributosContainer.append(divContainer);
-        });
-    }
-
     _presetSheet(html) {
-        const data = this.actor.system;
+        const system = this.actor.system;
 
         const preselecteds = html.find('.selected');
         preselecteds.removeClass('selected');
 
-        const elementos = html.find('#atributosContainer')[0];
-        let hasNext = elementos.firstElementChild;
+        const atributoElementos = html.find('#atributosContainer')[0];
+        let hasNext = atributoElementos.firstElementChild;
         while (hasNext) {
-            selectCharacteristic(hasNext.children[data.atributos[hasNext.id]]);
+            selectCharacteristic(hasNext.children[system.atributos[hasNext.id]]);
             hasNext = hasNext.nextElementSibling;
         }
     }
 
     async _characteristicOnClick(event) {
-        console.log(event)
         event.preventDefault();
 
         const element = event.target;
@@ -104,13 +110,26 @@ class Setor0ActorSheet extends ActorSheet {
         await this.actor.update(characteristic);
     }
 
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["setor0OSubmundo", "sheet", "actor"],
-            template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
-            width: 600,
-            height: 900
-        });
+    async _openRollDialog(event) {
+        event.preventDefault();
+        SheetMethods._openRollDialog(this.actor);
+    }
+
+    async _changePage(pageIndex, pages, buttons, event) {
+        event.preventDefault();
+        if (pageIndex == this.currentPage)
+            return;
+
+        const normalizedCurrentIndex = Math.max(this.currentPage - 1, 0);
+        const normalizedIndex = Math.max(pageIndex - 1, 0);
+        pages[normalizedCurrentIndex].classList.toggle('hidden');
+        pages[normalizedIndex].classList.toggle('hidden');
+        
+        buttons[normalizedCurrentIndex].classList.toggle('selected');
+        buttons[normalizedIndex].classList.toggle('selected');
+        console.log(buttons[normalizedIndex].classList)
+        this.currentPage = pageIndex;
+        //this.render();
     }
 }
 

@@ -1,6 +1,6 @@
-import { createDataModels } from "./module/actor-data-model.mjs";
+import { createDataModels } from "./module/data/actor-data-model.mjs";
 import { htmlTemplateRegister } from "./module/base/sheet/html-template.mjs";
-import { loadHandlebarsHelpers } from "./scripts/helpers/loadHelpers.mjs";
+import { loadHandlebarsHelpers } from "./scripts/utils/loadHelpers.mjs";
 
 Hooks.once('init', async function () {
   console.log('Setor 0 - O Submundo | Inicializando sistema');
@@ -9,9 +9,29 @@ Hooks.once('init', async function () {
   createDataModels();
   configureSheetModels();
   await loadHandlebarsHelpers();
+  await addListenersOnDOM();
 });
 
 function configureSheetModels() {
   Actors.unregisterSheet("core", ActorSheet);
   htmlTemplateRegister();
+}
+
+async function addListenersOnDOM() {
+  document.body.addEventListener('click', (event) => {
+    if (event.target.classList.contains('toggle-tooltip')) {
+      console.log(event)
+      let tooltip = event.target.previousElementSibling;
+      let hooks = 0;
+      while (hooks < 5 && tooltip) {
+        if (tooltip.classList.contains('tooltip-part')) {
+          tooltip.classList.toggle('hidden'); 
+          return;
+        } else {
+          tooltip = tooltip.previousElementSibling;
+          hooks++;
+        }
+      }
+    }
+  });
 }

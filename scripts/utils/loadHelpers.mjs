@@ -1,13 +1,16 @@
 export async function loadHandlebarsHelpers() {
     console.log("Carregando helpers do Handlebars...");
-    const helpersPath = "systems/setor0OSubmundo/scripts/helpers/";
+    const helpersPath = "/scripts/helpers/";
     const helperFiles = [
-        "eq.mjs"
+        "eq.mjs",
+        "selectIfEq.mjs",
     ];
+
     for (const file of helperFiles) {
         const path = `${helpersPath}${file}`;
         try {
-            const module = await import(path);
+            console.log(`Tentando importar: ${path}`);
+            const module = await import(/* @vite-ignore */ `../../${path}`);
             const functionName = file.replace(".mjs", "");
 
             Handlebars.registerHelper(functionName, module.default);
