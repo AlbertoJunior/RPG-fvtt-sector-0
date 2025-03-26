@@ -98,7 +98,7 @@ function mountMessage(diceResults, attrs, abilityInfo, difficulty) {
     `;
 
     const contentResult = `
-        <button class="S0-roll-result toggle-tooltip ${result.classes}">Resultado: ${result.message}</button>
+        <button class="S0-roll-result toggle-tooltip ${result.classes}">${result.message}</button>
     `;
 
     const contentFinal = `
@@ -120,6 +120,11 @@ function mountMessage(diceResults, attrs, abilityInfo, difficulty) {
 }
 
 export function verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
+    const { result, overload } = calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
+    return mountResultMessageInfos(result, overload);
+}
+
+function calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty) {
     let resultOverload = 0;
     let overload = false;
     if (dicesOverload.length > 0) {
@@ -142,7 +147,6 @@ export function verifyResultRoll(dicesOverload, dicesDefault, specialist, diffic
 
     if (dicesDefault.length > 0) {
         dicesDefault[0].forEach(element => {
-            console.log(`elemento: ${element}`)
             if (element == 10) {
                 critic++;
                 resultDefault++;
@@ -161,25 +165,33 @@ export function verifyResultRoll(dicesOverload, dicesDefault, specialist, diffic
     if (critic % 2 == 0) {
         critic--;
     }
-    const final = resultOverload + resultDefault + Math.floor(critic / 2);
 
-    let result = ''
-    if (final > 0) {
-        result = {
-            message: overload ? "SUCESSO EXPLOSIVO!" : "Sucesso",
-            classes: overload ? "overload success" : "success"
+    const resultFinal = resultOverload + resultDefault + Math.floor(critic / 2);
+
+    return {
+        result: resultFinal,
+        overload: overload
+    }
+}
+
+function mountResultMessageInfos(resultSuccess, haveOverload) {
+    let messageInfo = ''
+    if (resultSuccess > 0) {
+        messageInfo = {
+            message: haveOverload ? "SUCESSO EXPLOSIVO!" : "Sucesso",
+            classes: haveOverload ? "overload success" : "success"
         }
-    } else if (final < 0) {
-        result = {
-            message: overload ? "FALHA CAÓTICA" : "Falha Crítica",
-            classes: overload ? "overload critical-failure" : "critical-failure"
+    } else if (resultSuccess < 0) {
+        messageInfo = {
+            message: haveOverload ? "FALHA CAÓTICA" : "Falha Crítica",
+            classes: haveOverload ? "overload critical-failure" : "critical-failure"
         }
     } else {
-        result = {
+        messageInfo = {
             message: "Falha",
             classes: "failure"
         }
     }
 
-    return result;
+    return messageInfo;
 }

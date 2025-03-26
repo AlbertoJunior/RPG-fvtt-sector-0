@@ -1,12 +1,21 @@
 import { rollAttribute } from "../../../scripts/utils/roll.mjs";
 import { keyJsonToKeyLang } from "../../../scripts/utils/utils.mjs";
 
+export const CharacteristicType = Object.freeze({
+    ATTRIBUTE: 'atributos',
+    VIRTUES: 'virtudes',
+    REPERTORY: 'repertorio',
+    ABILITY: 'habilidades',
+    SIMPLE: '',
+});
+
 export class SheetMethods {
     static _createDinamicSheet(html, isEditable) {
         SheetMethods._createAttributes(html, isEditable);
         SheetMethods._createRepertory(html, isEditable);
         SheetMethods._createVirtues(html, isEditable);
         SheetMethods._createAbilities(html, isEditable);
+        SheetMethods._createOthers(html, isEditable);
     }
 
     static _createAttributes(html, isEditable) {
@@ -20,7 +29,7 @@ export class SheetMethods {
         ];
 
         const container = html.find('#atributosContainer');
-        this._create(container, characteristics, 5, isEditable, true, true);
+        this._create(container, characteristics, CharacteristicType.ATTRIBUTE, 5, isEditable, true, true);
     }
 
     static _createRepertory(html, isEditable) {
@@ -33,7 +42,7 @@ export class SheetMethods {
         ];
 
         const container = html.find('#repertorioContainer');
-        this._create(container, characteristics, 5, isEditable, false, false);
+        this._create(container, characteristics, CharacteristicType.REPERTORY, 5, isEditable, false, false);
     }
 
     static _createVirtues(html, isEditable) {
@@ -43,7 +52,7 @@ export class SheetMethods {
             { id: 'quietude', label: 'S0.Quietude' }
         ];
         const container = html.find('#virtudesContainer');
-        this._create(container, characteristics, 5, isEditable, false, true);
+        this._create(container, characteristics, CharacteristicType.VIRTUES, 5, isEditable, false, true);
     }
 
     static _createAbilities(html, isEditable) {
@@ -64,45 +73,63 @@ export class SheetMethods {
             { id: 'quimica', label: 'S0.Quimica' },
         ];
         const container = html.find('#habilidadesContainer');
-        this._create(container, characteristics, 5, isEditable, true, false);
+        this._create(container, characteristics, CharacteristicType.ABILITY, 5, isEditable, true, false);
     }
 
-    static _create(container, characteristics, amount, isEditable, addLast, firstSelected) {
+    static _createOthers(html, isEditable) {
+        const container = html.find('#famaContainer');
+
+        [
+            { id: 'nucleo', label: 'S0.Nucleo', amount: 4, addLast: true, firstSelected: true },
+            { id: 'influencia', label: 'S0.Influencia', amount: 5, addLast: false, firstSelected: false },
+            { id: 'nivel_de_procurado', label: 'S0.Procurado', amount: 5, addLast: false, firstSelected: false },
+        ].forEach(char => {
+            this._createSingle(container, char, CharacteristicType.SIMPLE, char.amount, isEditable, char.addLast, char.firstSelected);
+        });
+    }
+
+    static _create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
+        characteristics.forEach(characteristic => {
+            this._createSingle(container, characteristic, type, amount, isEditable, addLast, firstSelected)
+        });
+    }
+
+    static _createSingle(container, characteristic, type, amount, isEditable, addLast, firstSelected) {
         const createCharacteristicDiv = (isEditable) => {
             return $('<div>', {
                 class: isEditable ? `caracteristica clickable` : `caracteristica`,
-                'data-action': isEditable ? 'characteristicOnClick' : undefined
+                'data-action': isEditable ? 'characteristicOnClick' : undefined,
+                'data-characteristic': type
             });
         };
 
-        characteristics.forEach(characteristic => {
-            const divContainer = $('<div>', {
-                class: 'characteristic-container',
-                id: characteristic.id
-            });
-
-            const label = $('<label>', {
-                text: game.i18n.localize(characteristic.label)
-            });
-
-            divContainer.append(label);
-
-            for (let i = 0; i < amount; i++) {
-                const divCaracteristica = createCharacteristicDiv(isEditable);
-                if (firstSelected && i == 0) {
-                    divCaracteristica.addClass('selected');
-                }
-                divContainer.append(divCaracteristica);
-            }
-
-            if (addLast) {
-                const divCaracteristica = createCharacteristicDiv(isEditable);
-                divCaracteristica.addClass('caracteristica-6');
-                divContainer.append(divCaracteristica);
-            }
-
-            container.append(divContainer);
+        const divContainer = $('<div>', {
+            class: 'characteristic-container',
+            id: characteristic.id
         });
+
+        const label = $('<label>', {
+            text: game.i18n.localize(characteristic.label)
+        });
+
+        divContainer.append(label);
+
+        for (let i = 0; i < amount; i++) {
+            const divCaracteristica = createCharacteristicDiv(isEditable);
+            if (firstSelected && i == 0) {
+                divCaracteristica.addClass('selected');
+            }
+            divContainer.append(divCaracteristica);
+        }
+
+        if (addLast) {
+            const divCaracteristica = createCharacteristicDiv(isEditable);
+            divCaracteristica.addClass('caracteristica-6');
+            divContainer.append(divCaracteristica);
+        }
+
+        container.append(divContainer);
+        return divContainer[0];
     }
 
     static async _openRollDialog(actor) {

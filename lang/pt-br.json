@@ -1,9 +1,13 @@
 {
+    "S0.Fechar": "Fechar", 
+    "S0.Editar": "Editar", 
+    "S0.Editando": "Editando", 
+    "S0.Rolagem": "Rolagem", 
     "S0.Title": "Setor 0 - O Submundo",
     "S0.Nome": "Nome",
+    "S0.Caracteristicas": "Características",
     "S0.Personagem": "Personagem",
     "S0.Bairro": "Bairro",
-    "S0.Alfiran": "Alfiran",
     "S0.Morfologia": "Morfologia",
     "S0.Androide": "Androide",
     "S0.Ciborgue": "Ciborgue",
@@ -42,7 +46,8 @@
     "S0.Consciencia": "Consciência",
     "S0.Perseveranca": "Perseverança",
     "S0.Quietude": "Quietude",
-    "S0.NivelProcurado": "Nível de Procurado",
+    "S0.Nivel_De_Procurado": "Nível de Procurado",
+    "S0.Procurado": "Procurado",
     "S0.Influencia": "Influência",
     "S0.Status": "Status",
     "S0.Nucleo": "Núcleo",
@@ -51,5 +56,6 @@
     "S0.Vitalidade": "Vitalidade",
     "S0.Experiencia": "Experiência",
     "S0.Tracos": "Traços",
-    "S0.Outros": "Outros"
+    "S0.Outros": "Outros",
+    "S0.Fama": "Fama"
 }

@@ -1,0 +1,9 @@
+<section data-label="Biografia" class="S0-page">
+    <label for="biography" style="flex: 1">Biografia</label>
+    <input id="biography" name="system.background.biography" type="text" value="{{actor.system.background.biography}}"
+        placeholder="{{ localize 'S0.Nome' }}" />
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}clickable{{/if}}" data-edit="img">
+    </div>
+</section>

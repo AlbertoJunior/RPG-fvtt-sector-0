@@ -29,7 +29,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
         return {
             name: new StringField({ required: true }),
             morfologia: new StringField({ required: true, label: "S0.Morfologia" }),
-            bairro: new StringField({ required: true, initial: "S0.Alfiran", label: "S0.Bairro" }),
+            bairro: new StringField({ required: true, label: "S0.Bairro" }),
             background: new SchemaField({
                 biography: new HTMLField({ required: true, blank: true })
             }),
@@ -55,6 +55,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             }),
             nivel_de_procurado: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.NivelProcurado" }),
             influencia: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.Influencia" }),
+            nucleo: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Nucleo" }),
             habilidades: new SchemaField({
                 armas_brancas: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Armas_Brancas" }),
                 armas_de_projecao: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Armas_de_Projecao" }),

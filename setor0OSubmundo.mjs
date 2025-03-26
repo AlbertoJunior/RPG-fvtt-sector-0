@@ -10,6 +10,7 @@ Hooks.once('init', async function () {
   configureSheetModels();
   await loadHandlebarsHelpers();
   await addListenersOnDOM();
+  await configureTemplates();
 });
 
 function configureSheetModels() {
@@ -25,7 +26,7 @@ async function addListenersOnDOM() {
       let hooks = 0;
       while (hooks < 5 && tooltip) {
         if (tooltip.classList.contains('tooltip-part')) {
-          tooltip.classList.toggle('hidden'); 
+          tooltip.classList.toggle('hidden');
           return;
         } else {
           tooltip = tooltip.previousElementSibling;
@@ -34,4 +35,12 @@ async function addListenersOnDOM() {
       }
     }
   });
+}
+
+async function configureTemplates() {
+  await loadTemplates([
+    "actors/characteristics",
+    "actors/biography",
+    "actors/status",
+  ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
 }
