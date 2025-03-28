@@ -5,7 +5,7 @@
 
     <ul id="floating-menu" class="S0-float-right-sheet">
         {{#if canEdit}}
-        <li id="edit-mode-toggle" class="simulate-button {{#if editable}}in-edit{{/if}}">
+        <li id="edit-mode-toggle" class="S0-simulate-button {{#if editable}}S0-in-edit{{/if}}">
             {{#if editable}}
             <i class="fas fa-edit" style="margin-right: 4px;"></i>
             {{ localize 'S0.Editando' }}
@@ -17,7 +17,7 @@
         {{/if}}
 
         {{#if canRoll}}
-        <li id="roll-button" class="simulate-button">
+        <li id="roll-button" class="S0-simulate-button">
             <i class="fas fa-dice-d10" style="margin-right: 4px;"></i>
             {{ localize 'S0.Rolagem' }}
         </li>
@@ -31,6 +31,8 @@
                 placeholder="{{ localize 'S0.Nome' }}" />
         </h2>
     </header>
+
+    <hr style="border-top: 1px solid var(--underline-header); border-bottom: 1px solid var(--underline-header);">
 
     {{> "systems/setor0OSubmundo/templates/actors/characteristics.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/biography.hbs"}}

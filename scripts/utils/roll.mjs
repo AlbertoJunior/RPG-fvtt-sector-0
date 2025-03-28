@@ -1,3 +1,4 @@
+import { ChatCreator } from "../creators/chat-creator.mjs";
 import { toTitleCase } from "./utils.mjs";
 
 export async function rollAttribute(actor, attr1, attr2, ability, specialist, difficulty) {
@@ -46,10 +47,7 @@ export async function rollAttribute(actor, attr1, attr2, ability, specialist, di
     };
 
     const messageData = mountMessage(diceResults, attrs, abilityInfo, difficulty);
-    ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor: actor }),
-        content: messageData
-    });
+    ChatCreator._sendToChat(actor, messageData);
 }
 
 function calculatePenalty(actor) {

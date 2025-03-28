@@ -2,7 +2,7 @@
     "id": "setor0OSubmundo",
     "title": "Setor 0 - O Submundo",
     "description": "Jogue Setor 0 - O Submundo no Foundry VTT",
-    "version": "0.0.2",
+    "version": "0.0.1",
     "compatibility": {
         "minimum": 12,
         "verified": 12
@@ -24,12 +24,31 @@
         {
             "name": "inimigos",
             "label": "Inimigos conhecidos",
+            "system": "setor0OSubmundo",
+            "path": "packs/inimigos",
             "type": "Actor"
         },
         {
             "name": "itens",
             "label": "Itens conhecidos",
+            "system": "setor0OSubmundo",
+            "path": "packs/itens",
             "type": "Item"
+        },
+        {
+            "name": "traits",
+            "label": "Todos os Traços",
+            "system": "setor0OSubmundo",
+            "path": "packs/tracos",
+            "type": "Item",
+            "flags": {
+                "filter": {
+                    "type": "Trait"
+                }
+            },
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
         }
     ],
     "languages": [
@@ -46,11 +65,12 @@
             "Inimigo": {}
         },
         "Item": {
-            "melee": {},
-            "projectile": {},
-            "armor": {},
-            "vehicle": {},
-            "substance": {}
+            "Melee": {},
+            "Projectile": {},
+            "Armor": {},
+            "Vehicle": {},
+            "Substance": {},
+            "Trait": {}
         }
     },
     "socket": false,

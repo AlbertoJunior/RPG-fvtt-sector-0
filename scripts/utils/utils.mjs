@@ -59,3 +59,10 @@ export function localize(key) {
 export function notification(message) {
     ui.notifications.info(message);
 }
+
+export function TODO(message, notify) {
+    console.warn(message);
+    if (notify) {
+        notification(message);
+    }
+}

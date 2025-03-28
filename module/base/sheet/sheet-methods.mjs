@@ -1,21 +1,27 @@
+import { ElementCreator } from "../../../scripts/creators/element-creator.mjs";
 import { rollAttribute } from "../../../scripts/utils/roll.mjs";
 import { keyJsonToKeyLang } from "../../../scripts/utils/utils.mjs";
-
-export const CharacteristicType = Object.freeze({
-    ATTRIBUTE: 'atributos',
-    VIRTUES: 'virtudes',
-    REPERTORY: 'repertorio',
-    ABILITY: 'habilidades',
-    SIMPLE: '',
-});
+import { CharacteristicType, OnClickEventType } from "../../enums/characteristic-enums.mjs";
 
 export class SheetMethods {
+
+    static characteristicTypeMap = {
+        [CharacteristicType.ATTRIBUTE.id]: CharacteristicType.ATTRIBUTE.system,
+        [CharacteristicType.ABILITY.id]: CharacteristicType.ABILITY.system,
+        [CharacteristicType.VIRTUES.id]: CharacteristicType.VIRTUES.system,
+        [CharacteristicType.REPERTORY.id]: CharacteristicType.REPERTORY.system,
+        [CharacteristicType.LANGUAGE.id]: CharacteristicType.LANGUAGE.system,
+        [CharacteristicType.TRAIT.id]: CharacteristicType.TRAIT.system,
+        [CharacteristicType.SIMPLE.id]: CharacteristicType.SIMPLE.system,
+    };
+
     static _createDinamicSheet(html, isEditable) {
         SheetMethods._createAttributes(html, isEditable);
         SheetMethods._createRepertory(html, isEditable);
         SheetMethods._createVirtues(html, isEditable);
         SheetMethods._createAbilities(html, isEditable);
         SheetMethods._createOthers(html, isEditable);
+        SheetMethods._createLanguages(html, isEditable);
     }
 
     static _createAttributes(html, isEditable) {
@@ -29,7 +35,7 @@ export class SheetMethods {
         ];
 
         const container = html.find('#atributosContainer');
-        this._create(container, characteristics, CharacteristicType.ATTRIBUTE, 5, isEditable, true, true);
+        this._create(container, characteristics, CharacteristicType.ATTRIBUTE.id, 5, isEditable, true, true);
     }
 
     static _createRepertory(html, isEditable) {
@@ -42,7 +48,7 @@ export class SheetMethods {
         ];
 
         const container = html.find('#repertorioContainer');
-        this._create(container, characteristics, CharacteristicType.REPERTORY, 5, isEditable, false, false);
+        this._create(container, characteristics, CharacteristicType.REPERTORY.id, 5, isEditable, false, false);
     }
 
     static _createVirtues(html, isEditable) {
@@ -52,7 +58,7 @@ export class SheetMethods {
             { id: 'quietude', label: 'S0.Quietude' }
         ];
         const container = html.find('#virtudesContainer');
-        this._create(container, characteristics, CharacteristicType.VIRTUES, 5, isEditable, false, true);
+        this._create(container, characteristics, CharacteristicType.VIRTUES.id, 5, isEditable, false, true);
     }
 
     static _createAbilities(html, isEditable) {
@@ -73,7 +79,7 @@ export class SheetMethods {
             { id: 'quimica', label: 'S0.Quimica' },
         ];
         const container = html.find('#habilidadesContainer');
-        this._create(container, characteristics, CharacteristicType.ABILITY, 5, isEditable, true, false);
+        this._create(container, characteristics, CharacteristicType.ABILITY.id, 5, isEditable, true, false);
     }
 
     static _createOthers(html, isEditable) {
@@ -84,52 +90,36 @@ export class SheetMethods {
             { id: 'influencia', label: 'S0.Influencia', amount: 5, addLast: false, firstSelected: false },
             { id: 'nivel_de_procurado', label: 'S0.Procurado', amount: 5, addLast: false, firstSelected: false },
         ].forEach(char => {
-            this._createSingle(container, char, CharacteristicType.SIMPLE, char.amount, isEditable, char.addLast, char.firstSelected);
+            ElementCreator._createCharacteristicContainer(container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected);
+        });
+    }
+
+    static _createLanguages(html, isEditable) {
+        const container = html.find('#linguasContainer');
+
+        [
+            { id: 'domini', label: 'Domini', checked: true, district: 'Colméia', color: '#ed7d31' },
+            { id: 'ameinsprache', label: 'Ameinsprache', district: 'Ameisen', color: '#c00000' },
+            { id: 'aranhes', label: 'Aranhês', district: 'Aranhas', color: '#ffd965' },
+            { id: 'bantura', label: 'Bantura', district: 'Vyura', color: '#2e75b5' },
+            { id: 'kemyura', label: 'Kemyura', district: 'Vyura', color: '#2e75b5' },
+            { id: 'dameise', label: 'L\'Ameise', district: 'Ameisen', color: '#c00000' },
+            { id: 'ptikor', label: 'Ptikor', district: 'Ptitsy', color: '#548135' },
+            { id: 'ptisyan', label: 'Ptisyan', district: 'Ptitsy', color: '#548135' },
+            { id: 'tokojhae', label: 'Tokojhae', district: 'Tokojirami', color: '#7030a0' },
+            { id: 'tokuma', label: 'Tokumá', district: 'Tokojirami', color: '#7030a0' },
+            { id: 'Zuarur', label: 'Zu\'arur', district: 'Alfiran', color: '#262626' },
+        ].forEach(lang => {
+            ElementCreator._createCharacteristicContainer(
+                container, lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnClickEventType.ADD
+            );
         });
     }
 
     static _create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
         characteristics.forEach(characteristic => {
-            this._createSingle(container, characteristic, type, amount, isEditable, addLast, firstSelected)
+            ElementCreator._createCharacteristicContainer(container, characteristic, type, amount, isEditable, addLast, firstSelected)
         });
-    }
-
-    static _createSingle(container, characteristic, type, amount, isEditable, addLast, firstSelected) {
-        const createCharacteristicDiv = (isEditable) => {
-            return $('<div>', {
-                class: isEditable ? `caracteristica clickable` : `caracteristica`,
-                'data-action': isEditable ? 'characteristicOnClick' : undefined,
-                'data-characteristic': type
-            });
-        };
-
-        const divContainer = $('<div>', {
-            class: 'characteristic-container',
-            id: characteristic.id
-        });
-
-        const label = $('<label>', {
-            text: game.i18n.localize(characteristic.label)
-        });
-
-        divContainer.append(label);
-
-        for (let i = 0; i < amount; i++) {
-            const divCaracteristica = createCharacteristicDiv(isEditable);
-            if (firstSelected && i == 0) {
-                divCaracteristica.addClass('selected');
-            }
-            divContainer.append(divCaracteristica);
-        }
-
-        if (addLast) {
-            const divCaracteristica = createCharacteristicDiv(isEditable);
-            divCaracteristica.addClass('caracteristica-6');
-            divContainer.append(divCaracteristica);
-        }
-
-        container.append(divContainer);
-        return divContainer[0];
     }
 
     static async _openRollDialog(actor) {
@@ -165,8 +155,10 @@ export class SheetMethods {
                         <h3 style="margin-top:10px">${game.i18n.localize('S0.Habilidades')}</h3>
                         <div class="form-group">
                             <select id="ability" style="flex:1; margin-inline:4px">${options2}</select>
+                            <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
                             <label for="specialist" style="flex:1; margin-inline:4px">${game.i18n.localize('S0.Especialista')}:</label>
-                            <input id="specialist" type="checkbox" style="flex:1; margin-inline:4px">
+                            <input id="specialist" type="checkbox" style="margin-inline:4px">
+                            </div>
                         </div>
                         <h3 style="margin-top: 10px">${game.i18n.localize('S0.Outros')}</h3>
                         <div class="form-group">
@@ -189,7 +181,7 @@ export class SheetMethods {
                         label: "Cancelar",
                         callback: () => resolve(null)
                     },
-                    roll: {
+                    confirm: {
                         label: "Rolar",
                         callback: (html) => {
                             const attr1 = html.find("#attr1").val();
@@ -200,8 +192,7 @@ export class SheetMethods {
                             resolve(rollAttribute(actor, attr1, attr2, ability, specialist, difficulty));
                         }
                     }
-                },
-                default: "roll"
+                }
             }).render(true);
         });
     }
