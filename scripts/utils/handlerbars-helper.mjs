@@ -3,20 +3,21 @@ export async function loadHandlebarsHelpers() {
     const helpersPath = "/scripts/helpers/";
     const helperFiles = [
         "eq.mjs",
-        "selectIfEq.mjs",
+        "selectIfEq.mjs"
     ];
 
-    for (const file of helperFiles) {
+    const resultLog = await Promise.all(helperFiles.map(async (file) => {
         const path = `${helpersPath}${file}`;
-        try {
-            console.log(`Tentando importar: ${path}`);
-            const module = await import(/* @vite-ignore */ `../../${path}`);
-            const functionName = file.replace(".mjs", "");
+        const functionName = file.replace(".mjs", "");
 
+        try {
+            const module = await import(/* @vite-ignore */ `../../${path}`);
             Handlebars.registerHelper(functionName, module.default);
-            console.log(`Helper '${functionName}' registrado.`);
+            return { Helper: functionName, Status: "Sucesso", Path: path };
         } catch (error) {
-            console.error(`Erro ao carregar helper '${file}':`, error);
+            return { Helper: functionName, Status: "Falha", Path: path };
         }
-    }
+    }));
+
+    console.table(resultLog);
 }

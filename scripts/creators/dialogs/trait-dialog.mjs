@@ -5,7 +5,7 @@ import { localize } from "../../utils/utils.mjs";
 export class TraitDialog {
   static async _open(type, callback) {
     const traits = await TraitRepository._getByType(type);
-    const content = this.#mountContent(traits, true, true);
+    const content = await this.#mountContent(traits, true, true);
 
     new Dialog({
       title: "Adicionar Traço",
@@ -33,7 +33,7 @@ export class TraitDialog {
 
   static async _openByTrait(trait, type, actor, callback) {
     const traits = await TraitRepository._getByType(type);
-    const content = this.#mountContent(traits, false, callback != undefined, trait);
+    const content = await this.#mountContent(traits, false, callback != undefined, trait);
 
     const dialog = new Dialog({
       title: `${callback ? 'Editar ' : ''}Traço`,
@@ -42,7 +42,8 @@ export class TraitDialog {
         confirm: {
           label: "Chat",
           callback: (html) => {
-            ChatCreator._sendToChat(actor, "TODO: Criar exemplo de chat para traço");
+            TODO("implementar lógica do content");
+            ChatCreator._sendToChat(actor, content);
           }
         }
       },
@@ -72,58 +73,41 @@ export class TraitDialog {
     dialog.render(true);
   }
 
-  static #mountContent(traits, enableChangeTrait, enableChangeParticularity, trait) {
-    const options = this.#mapOptions(traits, trait);
+  static async #mountContent(traits, enableChangeTrait, enableChangeParticularity, trait) {
     const isEnabledChangeTrait = enableChangeTrait ? '' : 'disabled';
     const isEnabledChangeParticularity = enableChangeParticularity ? '' : 'disabled';
-    const selectField = `<select id="trait" ${isEnabledChangeTrait} >${options}</select>`;
 
-    return `
-    <form>
-        <div class="form-group">
-            <label for="trait" style="max-width: 110px; font-weight: bold;">${localize('Traco')}</label>
-            ${selectField}
-        </div>
-        <div id="divParticularity">
-            <hr>
-            <div class="form-group">
-                <label for="particularity" style="max-width: 110px; font-weight: bold;">${localize('Particularidade')}:</label>
-                <input id="particularity" type="text" ${isEnabledChangeParticularity} value="${trait?.particularity || ''}"></input>
-            </div>
-        </div>
-        <div class="form-group" id="divMorph">
-            <hr>
-            <label style="max-width: 110px; font-weight: bold;">${localize('Requisito')}:</label>
-            <label id="morph" style="margin-inline: 5px;">${trait?.morph || ''}</label>
-        </div>
-        <div class="form-group" id="divRequirement">
-            <hr>
-            <label style="max-width: 110px; font-weight: bold;">${localize('Requisito')}:</label>
-            <label id="requirement" style="margin-inline: 5px;">${trait?.requirement || ''}</label>
-        </div>
-        <div class="form-group">
-            <hr>
-            <label style="max-width: 110px; font-weight: bold;">${localize('Custo')}:</label>
-            <label id="cost" style="margin-inline: 5px;"></label>
-        </div>
-        <hr>
-    </form>
-    `;
+    const data = {
+      title: localize('Traco'),
+      options: this.#mapOptions(traits, trait),
+      isEnabledChangeTrait: isEnabledChangeTrait,
+      particularity: localize('Particularidade'),
+      isEnabledChangeParticularity: isEnabledChangeParticularity,
+      particularityValue: trait?.particularity || '',
+      morph: localize('Morfologia'),
+      morphValue: trait?.morph || '',
+      requirement: localize('Requisito'),
+      requirementValue: trait?.requirement || '',
+      cost: localize('Custo'),
+    };
+
+    return await renderTemplate("systems/setor0OSubmundo/templates/traits/trait-dialog.hbs", data);
   }
 
   static #mapOptions(traits, selected) {
     const options = traits
       .map((attr, index) => {
-        const label = attr.name;
-        const dataset = `data-id="${attr.id}"`;
         let isSelected = '';
         if (selected) {
           isSelected = attr.id == selected.id ? 'selected' : '';
         }
-
-        return `<option ${dataset} value="${index}" ${isSelected}>${label}</option>`;
-      })
-      .join("");
+        return {
+          id: attr.id,
+          index,
+          isSelected,
+          label: attr.name
+        };
+      });
     return options;
   }
 
@@ -145,44 +129,39 @@ export class TraitDialog {
       const selectedOption = html.find(`#trait option[value="${traitIndex}"]`);
       const dataId = selectedOption.data('id');
 
-      const costLabel = html.find('#cost');
-      const particularityLabel = html.find('#particularity');
-      const divParticularity = html.find('#divParticularity');
-      const divRequirement = html.find('#divRequirement');
-      const divMorph = html.find('#divMorph');
-
       const selectedTrait = traits.find(element => element.id == dataId);
+
+      const htmlElements = {
+        costLabel: { element: html.find('#cost') },
+        divParticularity: { element: html.find('#divParticularity'), addClass: 'hidden' },
+        particularityLabel: { element: html.find('#particularity') },
+        divRequirement: { element: html.find('#divRequirement'), addClass: 'hidden' },
+        requirementLabel: { element: html.find('#requirement') },
+        divMorph: { element: html.find('#divMorph'), addClass: 'hidden' },
+        morphLabel: { element: html.find('#morph') },
+      };
+
       if (selectedTrait) {
-        if (selectedTrait.particularity !== undefined) {
-          divParticularity.removeClass('hidden');
-        } else {
-          divParticularity.addClass('hidden');
-          particularityLabel.html('');
-        }
+        const toggleVisibility = (condition, element, label = null, value = "") => {
+          element.toggleClass("hidden", !condition);
+          if (label) {
+            label.html(condition ? value : "");
+          }
+        };
 
-        if (selectedTrait.requirement !== undefined) {
-          const requirementLabel = html.find('#requirement');
-          requirementLabel.html(selectedTrait.requirement);
-          divRequirement.removeClass('hidden');
-        } else {
-          divRequirement.addClass('hidden');
-        }
+        toggleVisibility(selectedTrait.particularity !== undefined, htmlElements.divParticularity.element, htmlElements.particularityLabel.element);
+        toggleVisibility(selectedTrait.requirement !== undefined, htmlElements.divRequirement.element, htmlElements.requirementLabel.element, selectedTrait.requirement);
+        toggleVisibility(selectedTrait.morph !== undefined, htmlElements.divMorph.element, htmlElements.morphLabel.element, selectedTrait.morph);
 
-        if (selectedTrait.morph !== undefined) {
-          const morphLabel = html.find('#morph');
-          morphLabel.html(selectedTrait.morph);
-          divMorph.removeClass('hidden');
-        } else {
-          divMorph.addClass('hidden');
-        }
-
-        costLabel.html(selectedTrait.xp);
+        htmlElements.costLabel.element.html(selectedTrait.xp ?? "0");
       } else {
-        divParticularity.addClass('hidden');
-        divRequirement.addClass('hidden');
-        divMorph.addClass('hidden');
-        costLabel.html(`0`);
-        particularityLabel.html('');
+        Object.values(htmlElements).forEach(el => {
+          if (el.addClass) {
+            el.element.addClass(el.addClass);
+          }
+        });
+        htmlElements.costLabel.html('0');
+        htmlElements.particularityLabel.html('');
       }
     }
 

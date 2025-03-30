@@ -1,120 +1,12 @@
-import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
-import { TraitDialog } from "../../../scripts/creators/dialogs/trait-dialog.mjs";
-import { TraitRepository } from "../../../scripts/repository/trait-repository.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag, TODO } from "../../../scripts/utils/utils.mjs";
-import { OnClickEventType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { ActorTraitField } from "../../field/actor-trait-field.mjs";
+import { OnClickEventType } from "../../enums/characteristic-enums.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
+import { traitMethods } from "./trait-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
-        trait: {
-            add: async (event) => {
-                const traitType = event.currentTarget.dataset.type;
-                const systemChar = traitType == 'good' ? 'bons' : 'ruins';
-
-                TraitDialog._open(traitType, async (trait) => {
-                    const systemCharacteristic = SheetMethods.characteristicTypeMap[CharacteristicType.TRAIT.id];
-                    if (!systemCharacteristic) {
-                        return;
-                    }
-
-                    const sytemTraitCharacteristic = `${systemCharacteristic}.${systemChar}`;
-
-                    const objectTrait = new ActorTraitField(trait.id, trait.name, trait.particularity);
-                    const updatedTraits = [... this.actor.system.tracos[systemChar], objectTrait];
-
-                    const characteristic = { [`${sytemTraitCharacteristic}`]: updatedTraits };
-
-                    await this.actor.update(characteristic);
-                });
-            },
-            edit: async (event) => {
-                const target = event.currentTarget;
-
-                const itemIndex = target.parentElement.dataset.itemIndex;
-                if (itemIndex == undefined || itemIndex < 0) {
-                    return
-                }
-
-                const type = target.dataset.type;
-                const systemChar = type == 'good' ? 'bons' : 'ruins';
-                const trait = this.actor.system.tracos[systemChar][itemIndex];
-
-                TraitDialog._openByTrait(trait, type, this.actor, async (editedTrait) => {
-                    const systemCharacteristic = SheetMethods.characteristicTypeMap[CharacteristicType.TRAIT.id];
-                    if (!systemCharacteristic) {
-                        return;
-                    }
-
-                    const sytemTraitCharacteristic = `${systemCharacteristic}.${systemChar}`;
-                    const objectTrait = new ActorTraitField(editedTrait.id, editedTrait.name, editedTrait.particularity);
-                    const updatedTraits = [... this.actor.system.tracos[systemChar]];
-                    updatedTraits[itemIndex] = objectTrait;
-
-                    const characteristic = { [`${sytemTraitCharacteristic}`]: updatedTraits };
-
-                    await this.actor.update(characteristic);
-                });
-            },
-            remove: async (event) => {
-                const target = event.currentTarget;
-                const itemIndex = target.parentElement.dataset.itemIndex;
-
-                if (itemIndex == undefined || itemIndex < 0) {
-                    return
-                }
-
-                const systemCharacteristic = SheetMethods.characteristicTypeMap[CharacteristicType.TRAIT.id];
-                if (!systemCharacteristic) {
-                    return;
-                }
-
-                const type = target.dataset.type;
-                const systemChar = type == 'good' ? 'bons' : 'ruins';
-                const sytemTraitCharacteristic = `${systemCharacteristic}.${systemChar}`;
-
-                const updatedTraits = [... this.actor.system.tracos[systemChar]];
-                updatedTraits.splice(itemIndex, 1);
-
-                const characteristic = { [`${sytemTraitCharacteristic}`]: updatedTraits };
-
-                await this.actor.update(characteristic);
-            },
-            chat: async (event) => {
-                const target = event.currentTarget;
-                const itemIndex = target.parentElement.dataset.itemIndex;
-
-                if (itemIndex == undefined || itemIndex < 0) {
-                    return
-                }
-
-                const type = target.dataset.type;
-                const systemChar = type == 'good' ? 'bons' : 'ruins';
-                const trait = this.actor.system.tracos[systemChar][itemIndex];
-                const fetchedTrait = await TraitRepository._getById(type, trait.id);
-                const content = fetchedTrait.description;
-
-                TODO('precisa finalizar o content');
-
-                ChatCreator._sendToChat(this.actor, content);
-            },
-            view: async (event) => {
-                const target = event.currentTarget;
-                const type = target.dataset.type;
-                const itemIndex = target.parentElement.dataset.itemIndex;
-
-                if (itemIndex == undefined || itemIndex < 0) {
-                    return
-                }
-
-                const systemChar = type == 'good' ? 'bons' : 'ruins';
-                const trait = this.actor.system.tracos[systemChar][itemIndex];
-
-                TraitDialog._openByTrait(trait, type, this.actor, undefined);
-            }
-        }
+        trait: traitMethods
     };
 
     constructor(...args) {
@@ -135,7 +27,8 @@ class Setor0ActorSheet extends ActorSheet {
             classes: ["setor0OSubmundo", "sheet", "actor"],
             template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
             width: 600,
-            height: 860
+            height: 860,
+            resizable: false,
         });
     }
 
@@ -298,28 +191,10 @@ class Setor0ActorSheet extends ActorSheet {
         const action = event.currentTarget.dataset.action;
         const method = this.#mapEvents[characteristic][action];
         if (method) {
-            method(event);
+            method(this.actor, event);
         } else {
             console.warn(`[${action}] não existe para: [${characteristic}]`)
         }
-    }
-
-    async _removeOnClick(html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        this.#mapEvents[characteristic]['remove']?.(event);
-    }
-
-    async _viewOnClick(html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        this.#mapEvents[characteristic]['view']?.(event);
-    }
-
-    async _chatOnClick(html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        this.#mapEvents[characteristic]['chat']?.(event);
     }
 
     async _openRollDialog(html, event) {
@@ -352,6 +227,24 @@ async function configureTemplates() {
     await loadTemplates([
         "actors/characteristics",
         "actors/biography",
+        "actors/biography-trait-partial",
         "actors/status",
     ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
+
+    const partials = [
+        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' }
+    ];
+
+    const results = await Promise.all(partials.map(async ({ call, path }) => {
+        const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
+
+        if (!Handlebars.partials[fullPath]) {
+            return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
+        }
+
+        Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
+        return { Partial: call, Status: "Sucesso", Path: fullPath };
+    }));
+
+    console.table(results);
 }
