@@ -25,5 +25,5 @@ export function createTraitDataModels() {
     CONFIG.Item.dataModels = {
         Trait: TraitDataModel
     };
-    console.log('Modelos de dados de Traço registrado');
+    console.log('-> Modelos de dados de Traço registrado');
 }

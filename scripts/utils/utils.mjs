@@ -61,7 +61,7 @@ export function notification(message) {
 }
 
 export function TODO(message, notify) {
-    console.warn(message);
+    console.warn(`-> ${message}`);
     if (notify) {
         notification(message);
     }
