@@ -55,7 +55,17 @@
     "S0.Vida": "Vida",
     "S0.Vitalidade": "Vitalidade",
     "S0.Experiencia": "Experiência",
+    "S0.Traco": "Traço",
     "S0.Tracos": "Traços",
+    "S0.Tracos-Bons": "Traços Bons",
+    "S0.Tracos-Ruins": "Traços Ruins",
     "S0.Outros": "Outros",
-    "S0.Fama": "Fama"
+    "S0.Fama": "Fama",
+    "S0.Biografia": "Biografia",
+    "S0.Linguas": "Línguas",
+    "S0.Custo": "Custo",
+    "S0.Descricao": "Descrição",
+    "S0.Tipo": "Tipo",
+    "S0.Requisito": "Requisito",
+    "S0.Particularidade": "Particularidade"
 }

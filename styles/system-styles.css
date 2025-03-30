@@ -17,6 +17,7 @@
     --min-width-tooltip: 200px;
     --shadow-color: rgba(0, 0, 0, 0.2);
     --disabled-color: #878787a0;
+    --color-checkbox-checked: #420080;
 }
 
 button {
@@ -43,7 +44,10 @@ section {
 }
 
 h1,
-h2 {
+h2,
+h3,
+h4 {
+    margin: 0.3rem 0;
     border: none;
 }
 
@@ -80,11 +84,41 @@ h2 {
     margin-inline: 0px;
 }
 
-
 .S0-actor-sheet img {
-    max-width: 240px;
+    max-width: 220px;
     border-radius: 50%;
     margin: 6px;
+}
+
+.S0-actor-sheet button {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: var(--secondary-color);
+    box-shadow: 0 0 6px var(--shadow-color);
+    transition: background-color 0.3s;
+}
+
+.S0-actor-sheet button:hover {
+    background-color: var(--primary-color-alpha);
+}
+
+.dialog .dialog-buttons .cancel,
+.dialog .dialog-buttons .confirm {
+    background-color: var(--secondary-color-alpha);
+    transition: background-color 0.3s;
+    box-shadow: 0 0 6px var(--shadow-color);
+}
+
+.dialog .dialog-buttons .cancel:hover,
+.dialog .dialog-buttons .confirm:hover {
+    background-color: var(--primary-color-alpha);
+}
+
+.form-group hr {
+    width: 100%;
+    margin-top: 4px;
+    flex: none;
 }
 
 /* MY STYLES */
@@ -99,7 +133,6 @@ h2 {
 }
 
 .S0-page h2 {
-    margin: 0.3rem 0;
     width: 100%;
     text-align: center;
 }
@@ -144,7 +177,7 @@ h2 {
     padding: 0;
 }
 
-.simulate-button.selected {
+.S0-simulate-button.selected {
     background-color: #4d4d4dc0;
     box-shadow: 0px 3px 3px 0px var(--shadow-color);
     text-align: center;
@@ -153,7 +186,7 @@ h2 {
     transition: background-color 0.3s;
 }
 
-.simulate-button {
+.S0-simulate-button {
     margin-block: 4px;
     padding: 6px;
     font-size: small;
@@ -165,14 +198,14 @@ h2 {
     transition: background-color 0.3s;
 }
 
-.simulate-button:hover {
+.S0-simulate-button:hover {
     cursor: pointer;
     color: black;
     background-color: var(--primary-color-alpha);
     transition: background-color 0.3s;
 }
 
-.in-edit {
+.S0-in-edit {
     color: black;
     background-color: var(--primary-color);
 }
@@ -207,6 +240,10 @@ img.clickable:hover {
     margin-bottom: 0px;
 }
 
+.characteristic-container a {
+    margin-inline: 5px;
+}
+
 .caracteristica,
 .caracteristica-6,
 .caracteristica-temp {
@@ -217,9 +254,20 @@ img.clickable:hover {
     min-height: 14px;
     margin: 2px 1px;
     border: black solid 2px;
-    background-color: var(--sheet-color);
     transition: background-color 0.3s;
     transform: skew(-16deg);
+}
+
+.clickable.caracteristica,
+.clickable.caracteristica-6,
+.clickable.caracteristica-temp {
+    background-color: var(--sheet-color);
+}
+
+.clickable.caracteristica.selected,
+.clickable.caracteristica-6.selected,
+.clickable.caracteristica-temp.selected {
+    background-color: var(--alternate-black-color);
 }
 
 .clickable.caracteristica:hover,
@@ -242,21 +290,6 @@ img.clickable:hover {
     border: black solid 3px;
 }
 
-.characteristics-title-box {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.characteristics-title-box .characteristic-container {
-    width: 100%;
-    padding: 0px 20%;
-}
-
-.superficial-letal,
-.letal,
 .selected {
     background-color: var(--alternate-black-color);
 }

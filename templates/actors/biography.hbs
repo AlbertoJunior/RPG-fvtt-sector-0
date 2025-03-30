@@ -1,9 +1,22 @@
 <section data-label="Biografia" class="S0-page">
-    <label for="biography" style="flex: 1">Biografia</label>
-    <input id="biography" name="system.background.biography" type="text" value="{{actor.system.background.biography}}"
-        placeholder="{{ localize 'S0.Nome' }}" />
-
     <div style="display: flex; justify-content: center; align-items: center;">
         <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}clickable{{/if}}" data-edit="img">
     </div>
+
+    <label for="biography" style="flex: 1">{{ localize 'S0.Biografia' }}</label>
+    <input id="biography" name="system.background.biography" type="text" value="{{actor.system.background.biography}}"
+        placeholder="{{ localize 'S0.Biografia' }}" />
+
+    <h2> {{localize 'S0.Linguas'}} </h2>
+    <section id="linguasContainer" style="columns: 4;"></section>
+
+    <h2> {{localize 'S0.Tracos'}} </h2>
+    <section id="tracosContainer"
+        style="display: flex; align-items: flex-start; justify-content: space-between; column-gap: 14px;">
+
+        {{> traitPartialContainer traits=actor.system.tracos.bons type="good" title='S0.Tracos-Bons' }}
+
+        {{> traitPartialContainer traits=actor.system.tracos.ruins type="bad" title='S0.Tracos-Ruins' }}
+    </section>
+
 </section>

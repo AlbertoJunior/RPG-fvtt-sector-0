@@ -1,0 +1,33 @@
+<form>
+    <div class="form-group">
+        <label for="trait" style="max-width: 110px; font-weight: bold;">{{ title }}</label>
+        <select id="trait" {{ isEnabledChangeTrait }}>
+            {{#each options as |option|}}
+            <option data-id="{{ option.id }}" value="{{ option.index }}" {{ option.isSelected }}> {{ option.label }} </option>
+            {{/each}}
+        </select>
+    </div>
+    <div id="divParticularity">
+        <hr>
+        <div class="form-group">
+            <label for="particularity" style="max-width: 110px; font-weight: bold;">{{ particularity }}:</label>
+            <input id="particularity" type="text" {{ isEnabledChangeParticularity }} value="{{ particularityValue }}"/>
+        </div>
+    </div>
+    <div class="form-group" id="divMorph">
+        <hr>
+        <label style="max-width: 110px; font-weight: bold;">{{ morph }}:</label>
+        <label id="morph" style="margin-inline: 5px;">{{ morphValue }}</label>
+    </div>
+    <div class="form-group" id="divRequirement">
+        <hr>
+        <label style="max-width: 110px; font-weight: bold;">{{ requirement }}:</label>
+        <label id="requirement" style="margin-inline: 5px;">{{ requirementValue }}</label>
+    </div>
+    <div class="form-group">
+        <hr>
+        <label style="max-width: 110px; font-weight: bold;">{{ cost }}:</label>
+        <label id="cost" style="margin-inline: 5px;"></label>
+    </div>
+    <hr>
+</form>

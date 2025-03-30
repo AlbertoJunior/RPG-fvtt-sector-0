@@ -1,3 +1,6 @@
+import { ActorAttributeField, ActorAbilityField, ActorCharacteristicField, ActorEnhancementField } from "../field/actor-fields.mjs";
+import { ActorTraitField } from "../field/actor-trait-field.mjs";
+
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
 class ActorDataModel extends foundry.abstract.TypeDataModel {
@@ -19,10 +22,6 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
 
     prepareDerivedData() {
         super.prepareDerivedData();
-        //console.log('prepareDerivedData')
-        // for (const [a, value] of Object.entries(this.atributos)) {
-        //     console.log(`${a} -> ${value}`);
-        // }
     }
 
     static defineSchema() {
@@ -31,86 +30,66 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             morfologia: new StringField({ required: true, label: "S0.Morfologia" }),
             bairro: new StringField({ required: true, label: "S0.Bairro" }),
             background: new SchemaField({
-                biography: new HTMLField({ required: true, blank: true })
+                biography: new HTMLField({ required: false, blank: true })
             }),
             atributos: new SchemaField({
-                forca: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 6, label: "S0.Forca" }),
-                destreza: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 6, label: "S0.Destreza" }),
-                vigor: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 6, label: "S0.Vigor" }),
-                percepcao: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 6, label: "S0.Percepcao" }),
-                carisma: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 6, label: "S0.Carisma" }),
-                inteligencia: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 6, label: "S0.Inteligencia" }),
+                forca: new ActorAttributeField("S0.Forca"),
+                destreza: new ActorAttributeField("S0.Destreza"),
+                vigor: new ActorAttributeField("S0.Vigor"),
+                percepcao: new ActorAttributeField("S0.Percepcao"),
+                carisma: new ActorAttributeField("S0.Carisma"),
+                inteligencia: new ActorAttributeField("S0.Inteligencia"),
             }),
             repertorio: new SchemaField({
-                aliados: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.Aliados" }),
-                arsenal: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.Arsenal" }),
-                informantes: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.Informantes" }),
-                recursos: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.Recursos" }),
-                superequipamentos: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.SuperEquipamentos" })
+                aliados: new ActorCharacteristicField("S0.Aliados"),
+                arsenal: new ActorCharacteristicField("S0.Arsenal"),
+                informantes: new ActorCharacteristicField("S0.Informantes"),
+                recursos: new ActorCharacteristicField("S0.Recursos"),
+                superequipamentos: new ActorCharacteristicField("S0.SuperEquipamentos")
             }),
             virtudes: new SchemaField({
                 consciencia: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Consciencia" }),
                 perseveranca: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Perseveranca" }),
                 quietude: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Quietude" })
             }),
-            nivel_de_procurado: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.NivelProcurado" }),
-            influencia: new NumberField({ nullable: false, integer: true, min: 0, initial: 0, max: 5, label: "S0.Influencia" }),
+            nivel_de_procurado: new ActorCharacteristicField("S0.NivelProcurado"),
+            influencia: new ActorCharacteristicField("S0.Influencia"),
             nucleo: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Nucleo" }),
             habilidades: new SchemaField({
-                armas_brancas: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Armas_Brancas" }),
-                armas_de_projecao: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Armas_de_Projecao" }),
-                atletismo: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Atletismo" }),
-                briga: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Briga" }),
-                engenharia: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Engenharia" }),
-                expressao: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Expressao" }),
-                furtividade: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Furtividade" }),
-                hacking: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Hacking" }),
-                investigacao: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Investigacao" }),
-                medicina: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Medicina" }),
-                manha: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Manha" }),
-                performance: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Performance" }),
-                pilotagem: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Pilotagem" }),
-                quimica: new NumberField({ integer: true, min: 0, initial: 0, max: 6, label: "S0.Quimica" }),
+                armas_brancas: new ActorAbilityField("S0.Armas_Brancas"),
+                armas_de_projecao: new ActorAbilityField("S0.Armas_de_Projecao"),
+                atletismo: new ActorAbilityField("S0.Atletismo"),
+                briga: new ActorAbilityField("S0.Briga"),
+                engenharia: new ActorAbilityField("S0.Engenharia"),
+                expressao: new ActorAbilityField("S0.Expressao"),
+                furtividade: new ActorAbilityField("S0.Furtividade"),
+                hacking: new ActorAbilityField("S0.Hacking"),
+                investigacao: new ActorAbilityField("S0.Investigacao"),
+                medicina: new ActorAbilityField("S0.Medicina"),
+                manha: new ActorAbilityField("S0.Manha"),
+                performance: new ActorAbilityField("S0.Performance"),
+                pilotagem: new ActorAbilityField("S0.Pilotagem"),
+                quimica: new ActorAbilityField("S0.Quimica"),
             }),
             linguas: new ArrayField(new StringField()),
             aprimoramentos: new SchemaField({
-                aprimoramento_1: new SchemaField({
-                    nv1: new HTMLField(),
-                    nv2: new HTMLField(),
-                    nv3: new HTMLField(),
-                    nv4: new HTMLField(),
-                    nv5: new HTMLField(),
-                }),
-                aprimoramento_2: new SchemaField({
-                    nv1: new HTMLField(),
-                    nv2: new HTMLField(),
-                    nv3: new HTMLField(),
-                    nv4: new HTMLField(),
-                    nv5: new HTMLField(),
-                }),
-                aprimoramento_3: new SchemaField({
-                    nv1: new HTMLField(),
-                    nv2: new HTMLField(),
-                    nv3: new HTMLField(),
-                    nv4: new HTMLField(),
-                    nv5: new HTMLField(),
-                }),
-                aprimoramento_4: new SchemaField({
-                    nv1: new HTMLField(),
-                    nv2: new HTMLField(),
-                    nv3: new HTMLField(),
-                    nv4: new HTMLField(),
-                    nv5: new HTMLField(),
-                })
+                aprimoramento_1: new ActorEnhancementField(),
+                aprimoramento_2: new ActorEnhancementField(),
+                aprimoramento_3: new ActorEnhancementField(),
+                aprimoramento_4: new ActorEnhancementField()
+            }),
+            tracos: new SchemaField({
+                bons: new ArrayField(new ActorTraitField()),
+                ruins: new ArrayField(new ActorTraitField())
             }),
             vitalidade: new SchemaField({
-                min: new NumberField({ initial: 0 }),
+                min: new NumberField({ initial: 0, min: 0 }),
                 value: new NumberField({ initial: 6 }),
-                max: new NumberField({ initial: 6 })
+                max: new NumberField({ initial: 6, min: 0 })
             }),
             sobrecarga: new SchemaField({
                 min: new NumberField({ integer: true, initial: 0, min: 0, max: 5 }),
-                value: new NumberField({ integer: true, initial: 0, min: 0, max: 5 }),
+                value: new NumberField({ integer: true, initial: 0, min: 0 }),
                 max: new NumberField({ integer: true, initial: 5, min: 0, max: 5 })
             }),
             equipamentos: new ArrayField(new StringField())
@@ -138,7 +117,7 @@ class PlayerDataModel extends ActorDataModel {
     }
 }
 
-export function createDataModels() {
+export function createActorDataModels() {
     CONFIG.Actor.trackableAttributes = {
         Jogador: {
             bar: ["system.vitalidade", "system.sobrecarga"],
@@ -147,14 +126,17 @@ export function createDataModels() {
         Mestre: {
             bar: ["system.vitalidade", "system.sobrecarga"],
             value: ["level"]
+        },
+        Inimigo: {
+            bar: ["system.vitalidade", "system.sobrecarga"],
+            value: ["level"]
         }
     };
 
-    // Registrar o modelo de dados personalizado
     CONFIG.Actor.dataModels = {
         Jogador: PlayerDataModel,
         Mestre: PlayerDataModel,
-        BasicEnemy: BasicEnemyDataModel,
+        Inimigo: BasicEnemyDataModel,
     }
 
     console.log('Modelos de dados de ator registrados');
