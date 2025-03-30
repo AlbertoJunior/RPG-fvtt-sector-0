@@ -1,5 +1,5 @@
 export async function loadHandlebarsHelpers() {
-    console.log("Carregando helpers do Handlebars...");
+    console.log("-> Carregando helpers do Handlebars...");
     const helpersPath = "/scripts/helpers/";
     const helperFiles = [
         "eq.mjs",

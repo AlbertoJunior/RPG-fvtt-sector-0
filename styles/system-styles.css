@@ -244,9 +244,9 @@ img.clickable:hover {
     margin-inline: 5px;
 }
 
-.caracteristica,
-.caracteristica-6,
-.caracteristica-temp {
+.S0-characteristic,
+.S0-characteristic-6,
+.S0-characteristic-temp {
     flex: 1;
     max-width: 14px;
     max-height: 14px;
@@ -258,31 +258,31 @@ img.clickable:hover {
     transform: skew(-16deg);
 }
 
-.clickable.caracteristica,
-.clickable.caracteristica-6,
-.clickable.caracteristica-temp {
+.clickable.S0-characteristic,
+.clickable.S0-characteristic-6,
+.clickable.S0-characteristic-temp {
     background-color: var(--sheet-color);
 }
 
-.clickable.caracteristica.selected,
-.clickable.caracteristica-6.selected,
-.clickable.caracteristica-temp.selected {
+.clickable.S0-characteristic.selected,
+.clickable.S0-characteristic-6.selected,
+.clickable.S0-characteristic-temp.selected {
     background-color: var(--alternate-black-color);
 }
 
-.clickable.caracteristica:hover,
-.clickable.caracteristica-6:hover,
-.clickable.caracteristica-temp:hover {
+.clickable.S0-characteristic:hover,
+.clickable.S0-characteristic-6:hover,
+.clickable.S0-characteristic-temp:hover {
     cursor: pointer;
     background-color: var(--focus-color);
 }
 
-.caracteristica-temp {
+.S0-characteristic-temp {
     transform: none;
     border-radius: 4px;
 }
 
-.caracteristica-6 {
+.S0-characteristic-6 {
     min-width: 16px;
     min-height: 16px;
     max-width: 16px;

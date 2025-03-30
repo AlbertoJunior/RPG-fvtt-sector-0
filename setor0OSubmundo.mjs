@@ -4,7 +4,7 @@ import { actorHtmlTemplateRegister } from "./module/base/sheet/html-template.mjs
 import { loadHandlebarsHelpers } from "./scripts/utils/handlerbars-helper.mjs";
 
 Hooks.once('init', async function () {
-  console.log('Setor 0 - O Submundo | Inicializando sistema');
+  console.log('-> Setor 0 - O Submundo | Inicializando sistema');
   //CONFIG.debug.hooks = true;
 
   createDataModels();

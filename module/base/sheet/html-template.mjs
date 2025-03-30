@@ -6,7 +6,8 @@ import { traitMethods } from "./trait-methods.mjs";
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
-        trait: traitMethods
+        trait: traitMethods,
+        linguas: SheetMethods.handleMethods.language
     };
 
     constructor(...args) {
@@ -138,6 +139,16 @@ class Setor0ActorSheet extends ActorSheet {
                 hasNext = hasNext.nextElementSibling;
             }
         });
+
+        const langContainer = html.find('#linguasContainer')[0].children;
+        const langElements = Array.from(langContainer);
+        system.linguas.forEach(language => {
+            const langElement = langElements.find(el => el.id === language)?.querySelector('.S0-characteristic');
+
+            if (langElement) {
+                selectCharacteristic(langElement);
+            }
+        });
     }
 
     async _characteristicOnClick(html, event) {
@@ -157,43 +168,17 @@ class Setor0ActorSheet extends ActorSheet {
 
             await this.actor.update(characteristic);
         }
-
-        TODO('ADICIONAR LINGUA')
-        //TODO: ADICIONAR LINGUA
-        // const element = event.target;
-        // selectCharacteristic(element);
-
-        // const characteristicType = event.currentTarget.dataset.characteristic;
-        // const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
-
-        // if (systemCharacteristic) {
-        //     const parentElement = element.parentElement;
-        //     const checked = Array.from(parentElement.children).filter(el => el.classList.contains('selected')).length > 0;
-
-        //     const a = [...this.actor.system.linguas]
-        //     if (checked) {
-        //         a.push(parentElement.id);
-        //     } else {
-        //         a.pop(parentElement.id);
-        //     }
-
-        //     const characteristic = {
-        //         [`${systemCharacteristic}`]: a
-        //     };
-
-        //     await this.actor.update(characteristic);
-        // }
     }
 
     async _onActionClick(html, event) {
         event.preventDefault();
         const characteristic = event.currentTarget.dataset.characteristic;
         const action = event.currentTarget.dataset.action;
-        const method = this.#mapEvents[characteristic][action];
+        const method = this.#mapEvents[characteristic]?.[action];
         if (method) {
             method(this.actor, event);
         } else {
-            console.warn(`[${action}] não existe para: [${characteristic}]`)
+            console.warn(`-> [${action}] não existe para: [${characteristic}]`)
         }
     }
 
@@ -220,7 +205,7 @@ export function actorHtmlTemplateRegister() {
     configureTemplates();
     Actors.unregisterSheet("core", ActorSheet);
     Actors.registerSheet("Setor 0", Setor0ActorSheet, { makeDefault: true });
-    console.log('Modelos de dados e fichas registrados');
+    console.log('-> Modelos de dados e fichas registrados');
 }
 
 async function configureTemplates() {

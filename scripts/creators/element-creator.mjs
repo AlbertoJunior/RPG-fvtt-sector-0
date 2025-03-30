@@ -3,7 +3,7 @@ import { OnClickEventType } from "../../module/enums/characteristic-enums.mjs";
 export class ElementCreator {
     static _createCharacteristicDiv(isEditable, safeEventType, characteristicType) {
         return $('<div>', {
-            class: isEditable ? `caracteristica clickable` : `caracteristica`,
+            class: isEditable ? `S0-characteristic clickable` : `S0-characteristic`,
             'data-action': isEditable ? `${safeEventType.id}` : undefined,
             'data-characteristic': characteristicType
         });
@@ -33,7 +33,7 @@ export class ElementCreator {
 
         if (addLast) {
             const divCaracteristica = this._createCharacteristicDiv(isEditable, safeEventType, characteristicType);
-            divCaracteristica.addClass('caracteristica-6');
+            divCaracteristica.addClass('S0-characteristic-6');
             divContainer.append(divCaracteristica);
         }
 

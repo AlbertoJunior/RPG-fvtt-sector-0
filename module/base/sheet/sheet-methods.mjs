@@ -1,6 +1,6 @@
 import { ElementCreator } from "../../../scripts/creators/element-creator.mjs";
 import { rollAttribute } from "../../../scripts/utils/roll.mjs";
-import { keyJsonToKeyLang } from "../../../scripts/utils/utils.mjs";
+import { keyJsonToKeyLang, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType, OnClickEventType } from "../../enums/characteristic-enums.mjs";
 
 export class SheetMethods {
@@ -13,18 +13,51 @@ export class SheetMethods {
         [CharacteristicType.LANGUAGE.id]: CharacteristicType.LANGUAGE.system,
         [CharacteristicType.TRAIT.id]: CharacteristicType.TRAIT.system,
         [CharacteristicType.SIMPLE.id]: CharacteristicType.SIMPLE.system,
-    };
-
-    static _createDinamicSheet(html, isEditable) {
-        SheetMethods._createAttributes(html, isEditable);
-        SheetMethods._createRepertory(html, isEditable);
-        SheetMethods._createVirtues(html, isEditable);
-        SheetMethods._createAbilities(html, isEditable);
-        SheetMethods._createOthers(html, isEditable);
-        SheetMethods._createLanguages(html, isEditable);
     }
 
-    static _createAttributes(html, isEditable) {
+    static handleMethods = {
+        language: {
+            add: async (actor, event) => {
+                const element = event.target;
+                selectCharacteristic(element);
+
+                const characteristicType = event.currentTarget.dataset.characteristic;
+                const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
+
+                if (systemCharacteristic) {
+                    const parentElement = element.parentElement;
+                    const checked = Array.from(parentElement.children).some(el => el.classList.contains('selected'));
+
+                    const updatedLanguages = actor.system.linguas;
+                    if (checked) {
+                        updatedLanguages.push(parentElement.id);
+                    } else {
+                        const indexToRemove = updatedLanguages.indexOf(parentElement.id);
+                        if (indexToRemove !== -1) {
+                            updatedLanguages.splice(indexToRemove, 1);
+                        }
+                    }
+
+                    const characteristic = {
+                        [`${systemCharacteristic}`]: [... new Set(updatedLanguages)]
+                    };
+
+                    await actor.update(characteristic);
+                }
+            }
+        }
+    }
+
+    static _createDinamicSheet(html, isEditable) {
+        SheetMethods.#createAttributes(html, isEditable);
+        SheetMethods.#createRepertory(html, isEditable);
+        SheetMethods.#createVirtues(html, isEditable);
+        SheetMethods.#createAbilities(html, isEditable);
+        SheetMethods.#createFame(html, isEditable);
+        SheetMethods.#createLanguages(html, isEditable);
+    }
+
+    static #createAttributes(html, isEditable) {
         const characteristics = [
             { id: 'forca', label: 'S0.Forca' },
             { id: 'destreza', label: 'S0.Destreza' },
@@ -35,10 +68,10 @@ export class SheetMethods {
         ];
 
         const container = html.find('#atributosContainer');
-        this._create(container, characteristics, CharacteristicType.ATTRIBUTE.id, 5, isEditable, true, true);
+        this.#create(container, characteristics, CharacteristicType.ATTRIBUTE.id, 5, isEditable, true, true);
     }
 
-    static _createRepertory(html, isEditable) {
+    static #createRepertory(html, isEditable) {
         const characteristics = [
             { id: 'aliados', label: 'S0.Aliados' },
             { id: 'arsenal', label: 'S0.Arsenal' },
@@ -48,20 +81,20 @@ export class SheetMethods {
         ];
 
         const container = html.find('#repertorioContainer');
-        this._create(container, characteristics, CharacteristicType.REPERTORY.id, 5, isEditable, false, false);
+        this.#create(container, characteristics, CharacteristicType.REPERTORY.id, 5, isEditable, false, false);
     }
 
-    static _createVirtues(html, isEditable) {
+    static #createVirtues(html, isEditable) {
         const characteristics = [
             { id: 'consciencia', label: 'S0.Consciencia' },
             { id: 'perseveranca', label: 'S0.Perseveranca' },
             { id: 'quietude', label: 'S0.Quietude' }
         ];
         const container = html.find('#virtudesContainer');
-        this._create(container, characteristics, CharacteristicType.VIRTUES.id, 5, isEditable, false, true);
+        this.#create(container, characteristics, CharacteristicType.VIRTUES.id, 5, isEditable, false, true);
     }
 
-    static _createAbilities(html, isEditable) {
+    static #createAbilities(html, isEditable) {
         const characteristics = [
             { id: 'armas_brancas', label: 'S0.Armas_Brancas' },
             { id: 'armas_de_projecao', label: 'S0.Armas_De_Projecao' },
@@ -79,10 +112,10 @@ export class SheetMethods {
             { id: 'quimica', label: 'S0.Quimica' },
         ];
         const container = html.find('#habilidadesContainer');
-        this._create(container, characteristics, CharacteristicType.ABILITY.id, 5, isEditable, true, false);
+        this.#create(container, characteristics, CharacteristicType.ABILITY.id, 5, isEditable, true, false);
     }
 
-    static _createOthers(html, isEditable) {
+    static #createFame(html, isEditable) {
         const container = html.find('#famaContainer');
 
         [
@@ -94,7 +127,7 @@ export class SheetMethods {
         });
     }
 
-    static _createLanguages(html, isEditable) {
+    static #createLanguages(html, isEditable) {
         const container = html.find('#linguasContainer');
 
         [
@@ -116,7 +149,7 @@ export class SheetMethods {
         });
     }
 
-    static _create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
+    static #create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
         characteristics.forEach(characteristic => {
             ElementCreator._createCharacteristicContainer(container, characteristic, type, amount, isEditable, addLast, firstSelected)
         });
