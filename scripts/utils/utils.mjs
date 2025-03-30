@@ -4,7 +4,7 @@ export function containClass(element, cls) {
 
 export function selectCharacteristic(element) {
     function isCharacteristic(element) {
-        return containClass(element, 'caracteristica') || containClass(element, 'caracteristica-6');
+        return containClass(element, 'S0-characteristic') || containClass(element, 'S0-characteristic-6');
     }
 
     if (isCharacteristic(element)) {
