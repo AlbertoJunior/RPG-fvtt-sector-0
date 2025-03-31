@@ -37,13 +37,28 @@
         },
         {
             "name": "traits",
-            "label": "Todos os Traços",
+            "label": "Novos Traços",
             "system": "setor0OSubmundo",
             "path": "packs/tracos",
             "type": "Item",
             "flags": {
                 "filter": {
                     "type": "Trait"
+                }
+            },
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
+        },
+        {
+            "name": "enhancements",
+            "label": "Novos Aprimoramentos",
+            "system": "setor0OSubmundo",
+            "path": "packs/aprimoramentos",
+            "type": "Item",
+            "flags": {
+                "filter": {
+                    "type": "Enhancement"
                 }
             },
             "ownership": {
@@ -70,7 +85,8 @@
             "Armor": {},
             "Vehicle": {},
             "Substance": {},
-            "Trait": {}
+            "Trait": {},
+            "Enhancement": {}
         }
     },
     "socket": false,

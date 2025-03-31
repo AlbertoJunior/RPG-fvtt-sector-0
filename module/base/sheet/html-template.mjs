@@ -1,5 +1,7 @@
-import { getActorFlag, selectCharacteristic, setActorFlag, TODO } from "../../../scripts/utils/utils.mjs";
-import { OnClickEventType } from "../../enums/characteristic-enums.mjs";
+import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
+import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
+import { OnEventType } from "../../enums/characteristic-enums.mjs";
+import { enhancementHandleMethods, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 
@@ -7,6 +9,7 @@ class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
         trait: traitMethods,
+        enhancement: enhancementHandleMethods,
         linguas: SheetMethods.handleMethods.language
     };
 
@@ -17,10 +20,14 @@ class Setor0ActorSheet extends ActorSheet {
 
     activateListeners(html) {
         super.activateListeners(html);
-        this._dinamicSheet(html);
-        this._presetSheet(html);
-        this._setupListeners(html);
-        this._addPageButtonsOnFloatingMenu(html);
+        this.#activateListenersWithAsync(html);
+    }
+
+    async #activateListenersWithAsync(html) {
+        await SheetMethods._createDynamicSheet(html, this.isEditable);
+        await this.#presetSheet(html);
+        this.#setupListeners(html);
+        this.#addPageButtonsOnFloatingMenu(html);
     }
 
     static get defaultOptions() {
@@ -53,28 +60,30 @@ class Setor0ActorSheet extends ActorSheet {
         return getActorFlag(this.actor, "canRoll");
     }
 
-    _dinamicSheet(html) {
-        SheetMethods._createDinamicSheet(html, this.isEditable);
-    }
-
-    _setupListeners(html) {
-        const actions = [
+    #setupListeners(html) {
+        const actionsClick = [
             { selector: '#edit-mode-toggle', method: this._toggleEditMode },
             { selector: '#roll-button', method: this._openRollDialog },
-            { selector: `[data-action="${OnClickEventType.CHARACTERISTIC.id}"]`, method: this._characteristicOnClick },
-            { selector: `[data-action="${OnClickEventType.ADD.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnClickEventType.REMOVE.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnClickEventType.EDIT.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnClickEventType.VIEW.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnClickEventType.CHAT.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this._characteristicOnClick },
+            { selector: `[data-action="${OnEventType.ADD.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.REMOVE.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.EDIT.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.VIEW.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.CHAT.id}"]`, method: this._onActionClick },
         ];
-
-        actions.forEach(action => {
+        actionsClick.forEach(action => {
             html.find(action.selector).click(action.method.bind(this, html));
+        });
+
+        const actionsChange = [
+            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this._onChange },
+        ];
+        actionsChange.forEach(action => {
+            html.find(action.selector).change(action.method.bind(this, html));
         });
     }
 
-    _addPageButtonsOnFloatingMenu(html) {
+    #addPageButtonsOnFloatingMenu(html) {
         const buttonContainer = html.find("#floating-menu")[0];
         const pages = [];
         const buttons = [];
@@ -106,7 +115,7 @@ class Setor0ActorSheet extends ActorSheet {
             .then(() => this.render());
     }
 
-    _presetSheet(html) {
+    async #presetSheet(html) {
         html.find('.selected').removeClass('selected');
 
         const system = this.actor.system;
@@ -149,6 +158,20 @@ class Setor0ActorSheet extends ActorSheet {
                 selectCharacteristic(langElement);
             }
         });
+
+        html.find('.S0-enhancement').each((index, enhaceContainer) => {
+            const enhancement = system.aprimoramentos[`aprimoramento_${index + 1}`];
+            const selects = $(enhaceContainer).find('select');
+
+            $(selects[0]).find('option').each((_, option) => {
+                const itemId = option.dataset.itemId;
+                if (itemId == enhancement.id) {
+                    option.selected = true;
+                    const levelSelects = selects.slice(1, selects.length);
+                    updateEnhancementLevelsOptions(itemId, levelSelects);
+                }
+            });
+        });
     }
 
     async _characteristicOnClick(html, event) {
@@ -178,7 +201,18 @@ class Setor0ActorSheet extends ActorSheet {
         if (method) {
             method(this.actor, event);
         } else {
-            console.warn(`-> [${action}] não existe para: [${characteristic}]`)
+            console.warn(`-> [${action}] não existe para: [${characteristic}]`);
+        }
+    }
+
+    async _onChange(html, event) {
+        event.preventDefault();
+        const characteristic = event.currentTarget.dataset.characteristic;
+        const method = this.#mapEvents[characteristic]?.['change'];
+        if (method) {
+            method(this.actor, event);
+        } else {
+            console.warn(`-> ['change'] não existe para: [${characteristic}]`);
         }
     }
 
@@ -201,8 +235,8 @@ class Setor0ActorSheet extends ActorSheet {
     }
 }
 
-export function actorHtmlTemplateRegister() {
-    configureTemplates();
+export async function actorHtmlTemplateRegister() {
+    await configureTemplates();
     Actors.unregisterSheet("core", ActorSheet);
     Actors.registerSheet("Setor 0", Setor0ActorSheet, { makeDefault: true });
     console.log('-> Modelos de dados e fichas registrados');
@@ -214,6 +248,8 @@ async function configureTemplates() {
         "actors/biography",
         "actors/biography-trait-partial",
         "actors/status",
+        "actors/enhancement",
+        "actors/enhancement-partial",
     ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
 
     const partials = [

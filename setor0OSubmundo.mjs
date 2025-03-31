@@ -8,7 +8,7 @@ Hooks.once('init', async function () {
   //CONFIG.debug.hooks = true;
 
   createDataModels();
-  actorHtmlTemplateRegister();
+  await actorHtmlTemplateRegister();
   await loadHandlebarsHelpers();
   await addListenersOnDOM();
 });

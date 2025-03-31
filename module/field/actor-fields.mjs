@@ -1,4 +1,6 @@
-const { NumberField, SchemaField, HTMLField } = foundry.data.fields;
+import { EnhancementLevelField } from "./actor-enhancement-field.mjs";
+
+const { NumberField, SchemaField, StringField } = foundry.data.fields;
 
 export class ActorAbilityField extends NumberField {
     constructor(label) {
@@ -19,13 +21,20 @@ export class ActorCharacteristicField extends NumberField {
 }
 
 export class ActorEnhancementField extends SchemaField {
-    constructor() {
+    constructor(id, name) {
         super({
-            nv1: new HTMLField(),
-            nv2: new HTMLField(),
-            nv3: new HTMLField(),
-            nv4: new HTMLField(),
-            nv5: new HTMLField(),
+            id: new StringField({ required: true }),
+            name: new StringField({ required: true }),
+            levels: new SchemaField({
+                nv1: new EnhancementLevelField(),
+                nv2: new EnhancementLevelField(),
+                nv3: new EnhancementLevelField(),
+                nv4: new EnhancementLevelField(),
+                nv5: new EnhancementLevelField(),
+            })
         });
+        
+        this.id = id;
+        this.name = name;
     }
 }

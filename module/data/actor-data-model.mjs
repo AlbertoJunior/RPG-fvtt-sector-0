@@ -139,5 +139,5 @@ export function createActorDataModels() {
         Inimigo: BasicEnemyDataModel,
     }
 
-    console.log('Modelos de dados de ator registrados');
+    console.log('-> Modelos de dados de ator registrados');
 }

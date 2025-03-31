@@ -1,6 +1,6 @@
-import { OnClickEventType } from "../../module/enums/characteristic-enums.mjs";
+import { OnEventType } from "../../module/enums/characteristic-enums.mjs";
 
-export class ElementCreator {
+export class ElementCreatorJQuery {
     static _createCharacteristicDiv(isEditable, safeEventType, characteristicType) {
         return $('<div>', {
             class: isEditable ? `S0-characteristic clickable` : `S0-characteristic`,
@@ -10,7 +10,7 @@ export class ElementCreator {
     };
 
     static _createCharacteristicContainer(container, characteristic, characteristicType, amount, isEditable, addLast, firstSelected, eventType) {
-        const safeEventType = eventType ? eventType : OnClickEventType.CHARACTERISTIC
+        const safeEventType = eventType ? eventType : OnEventType.CHARACTERISTIC
 
         const divContainer = $('<div>', {
             class: 'characteristic-container',
@@ -39,5 +39,14 @@ export class ElementCreator {
 
         container.append(divContainer);
         return divContainer[0];
+    }
+
+    static _createOption(itemId, name, value, selected) {
+        return $('<option>', {
+            value: value,
+            text: name,
+            'data-item-id': itemId,
+            selected: selected || false
+        });
     }
 }
