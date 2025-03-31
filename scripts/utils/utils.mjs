@@ -28,7 +28,7 @@ export function selectCharacteristic(element) {
 }
 
 export async function setActorFlag(actor, flag, value) {
-    actor.setFlag("setor0OSubmundo", flag, value);
+    await actor.setFlag("setor0OSubmundo", flag, value);
 }
 
 export function getActorFlag(actor, flag) {
@@ -65,4 +65,8 @@ export function TODO(message, notify) {
     if (notify) {
         notification(message);
     }
+}
+
+export function getObject(object, path) {
+    return path.split('.').reduce((acc, key) => acc && acc[key], object);
 }

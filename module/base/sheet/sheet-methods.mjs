@@ -51,14 +51,14 @@ export class SheetMethods {
         },
     }
 
-    static async _createDynamicSheet(html, isEditable) {
+    static _createDynamicSheet(html, isEditable) {
         SheetMethods.#createAttributes(html, isEditable);
         SheetMethods.#createRepertory(html, isEditable);
         SheetMethods.#createVirtues(html, isEditable);
         SheetMethods.#createAbilities(html, isEditable);
         SheetMethods.#createFame(html, isEditable);
-        await SheetMethods.#createLanguages(html, isEditable);
-        await SheetMethods.#createEnhancements(html, isEditable);
+        SheetMethods.#createLanguages(html, isEditable);
+        SheetMethods.#createEnhancements(html, isEditable);
     }
 
     static #createAttributes(html, isEditable) {
@@ -131,9 +131,9 @@ export class SheetMethods {
         });
     }
 
-    static async #createLanguages(html, isEditable) {
+    static #createLanguages(html, isEditable) {
         const container = html.find('#linguasContainer');
-        const languages = await LanguageRepository._getWithPacks();
+        const languages = LanguageRepository._getSynchronized();
 
         languages.forEach(lang => {
             ElementCreatorJQuery._createCharacteristicContainer(
@@ -142,10 +142,10 @@ export class SheetMethods {
         });
     }
 
-    static async #createEnhancements(html, isEditable) {
+    static #createEnhancements(html, isEditable) {
         const container = html.find('.S0-enhancement select');
         const filteredElements = container.filter((index, element) => element.dataset.type === 'enhancement');
-        const enhancements = await EnhancementRepository._getWithPacks();
+        const enhancements = EnhancementRepository._getSynchronized();
 
         filteredElements.each((index, selectEnhancement) => {
             $(selectEnhancement).append(ElementCreatorJQuery._createOption(undefined, '', ''));

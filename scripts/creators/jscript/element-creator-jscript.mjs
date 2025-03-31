@@ -1,13 +1,15 @@
 export function _createEmptyOption() {
-    const option = document.createElement('option');
-    option.value = '';
-    option.textContent = '';
-    return option;
+    return _createOption('', '');
 }
 
-export function _createOption(value, textContent) {
+export function _createOption(value, textContent, data) {
     const option = document.createElement('option');
     option.value = value;
     option.textContent = textContent;
+    if (data) {
+        Object.entries(data).forEach(([key, value]) => {
+            option.dataset[key] = value;
+        });
+    }
     return option;
 }

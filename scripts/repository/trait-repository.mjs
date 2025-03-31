@@ -508,7 +508,7 @@ export class TraitRepository {
     ];
 
     static async #getTraitsFromPack(type) {
-        const compendium = (await game.packs.get('setor0OSubmundo.traits').getDocuments()).filter(item => item.type == type);
+        const compendium = (await game.packs.get('setor0OSubmundo.traits')?.getDocuments()).filter(item => item.type == type);
         if (compendium) {
             return compendium.map((item) => {
                 const convertedItem = {

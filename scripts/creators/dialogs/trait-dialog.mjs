@@ -13,9 +13,7 @@ export class TraitDialog {
       buttons: {
         cancel: {
           label: "Cancelar",
-          callback: (html) => {
-            callback(undefined);
-          }
+          callback: (html) => { }
         },
         confirm: {
           label: "Adicionar",

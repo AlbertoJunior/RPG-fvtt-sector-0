@@ -408,9 +408,9 @@ export class EnhancementRepository {
         return [... this.#enhancements, ... await this.#getEnhancementFromPack()];
     }
 
-    static async _getEnhancementByIdWithPacks(enhancementId) {
+    static _getEnhancementById(enhancementId) {
         if (enhancementId) {
-            const fetchedEnhancement = (await this._getWithPacks()).filter(item => item.id == enhancementId)[0];
+            const fetchedEnhancement = this._getSynchronized().filter(item => item.id == enhancementId)[0];
             if (fetchedEnhancement) {
                 return fetchedEnhancement;
             }
@@ -418,14 +418,22 @@ export class EnhancementRepository {
         return undefined;
     }
 
-    static async _getEnhancementLevelsByEnhancementIdWithPacks(enhancementId) {
+    static _getEnhancementLevelsByEnhancementId(enhancementId) {
         if (enhancementId) {
-            const fetchedLevels = (await this._getEnhancementByIdWithPacks(enhancementId))?.effects;
+            const fetchedLevels = this._getEnhancementById(enhancementId)?.effects;
             if (fetchedLevels) {
                 return [...fetchedLevels];
             }
         }
         return [];
+    }
+
+    static _getEnhancementLevelById(enhancementId, effectId) {
+        if (enhancementId) {
+            const fetchedEffect = this._getEnhancementById(enhancementId)?.effects.filter(ef => ef.id == effectId)[0];
+            return fetchedEffect;
+        }
+        return undefined;
     }
 
 }

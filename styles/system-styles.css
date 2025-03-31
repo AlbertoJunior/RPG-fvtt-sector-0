@@ -1,26 +1,30 @@
 /* HTML ITEMS */
 :root {
-    --min-width-page: 820px;
-    --max-width-page: 920px;
-    --font-family: Arial, sans-serif;
+    /* --font-family: Arial, sans-serif; */
     --focus-color: #FFFBBF;
-    --primary-color: #FFDC00;
-    --primary-color-alpha: #ffdd00cc;
-    --primary-color-alpha-50: rgba(255, 221, 0, 0.5);
-    --secondary-color: #420080;
-    --secondary-color-alpha: #420080cc;
+    --primary-color: rgb(255, 220, 0);
+    --primary-color-alpha: rgba(255, 220, 0, 0.8);
+    --primary-color-alpha-50: rgba(255, 220, 0, 0.5);
+    --secondary-color: rgb(66, 0, 128);
+    --secondary-color-alpha: rgba(66, 0, 128, 0.8);
+    --secondary-color-alpha-50: rgba(66, 0, 128, 0.5);
     --selected-hover: #ff0000a0;
     --deletable-hover: #ff0000c0;
     --sheet-color: white;
     --modal-color: #fefefe;
     --alternate-black-color: #333;
     --min-width-tooltip: 200px;
-    --shadow-color: rgba(0, 0, 0, 0.2);
     --disabled-color: #878787a0;
     --color-checkbox-checked: #420080;
     --border-radius-small: 4px;
     --border-radius-medium: 6px;
     --border-radius-large: 8px;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --shadow-hover-color: rgba(130, 0, 255, 0.8);
+
+    /* replace variables */
+    --color-shadow-primary: var(--shadow-hover-color);
+    --color-underline-header: var(--secondary-color)
 }
 
 button {
@@ -58,6 +62,15 @@ h4 {
 select:disabled {
     appearance: none;
     color: var(--color-text-dark-primary);
+}
+
+input:enabled:hover,
+select:enabled:hover {
+    box-shadow: 0 0 8px var(--shadow-hover-color);
+}
+
+a:hover {
+    text-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
 .roll.d10.S0-d10 {
@@ -221,15 +234,16 @@ select:disabled {
 
 img.clickable {
     cursor: pointer;
-    background-color: var(--primary-color-alpha-50);
+    background-color: var(--secondary-color-alpha-50);
     transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    border-color: var(--primary-color-alpha);
+    border-color: var(--secondary-color-alpha);
 }
 
 img.clickable:hover {
     transform: scale(1.1);
-    box-shadow: 0 3px 10px 1px var(--shadow-color);
-    background-color: var(--primary-color);
+    /* box-shadow: 0 3px 10px 1px var(--shadow-color); */
+    box-shadow: 0 0 8px var(--shadow-hover-color);
+    background-color: var(--secondary-color);
 }
 
 .sheet img[data-edit]:not(.clickable) {
@@ -259,50 +273,60 @@ img.clickable:hover {
 }
 
 .S0-enhancement ul li {
+    display: flex;
+    align-items: center;
     margin-top: 3px;
+}
+
+.S0-enhancement select {
+    text-align: center;
+    font-weight: bold;
+    margin: 3px 0px;
+    width: 100%;
+    height: 30px;
+    padding: 3px 4px;
+    border-radius: var(--border-radius-medium);
+    background-color: #0000004f;
+    box-shadow: 0 1px 4px 1px var(--shadow-color);
+}
+
+.S0-enhancement select:focus,
+.S0-enhancement select:hover {
+    border: 2px solid var(--secondary-color-alpha);
+    background-color: var(--secondary-color-alpha-50);
+    box-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
 .S0-enhancement li select {
     background-color: rgba(215, 215, 215, 0.2);
     box-shadow: inset 0 0 5px 0px rgba(40, 40, 40, 0.6);
-}
-
-.S0-enhancement select {
-    width: 100%;
-    height: 30px;
+    text-align: left;
+    font-weight: 500;
     margin: 0px;
-    /* border: 2px solid #ff000028; */
-    padding: 3px 4px;
-    border-radius: var(--border-radius-medium);
-    background-color: #0000004f;
 }
 
-.S0-enhancement select:focus,
-.S0-enhancement select:hover {
-    border: 2px solid #ff000059;
-    background-color: #b15d5d5c;
+.S0-enhancement .S0-characteristic {
+    margin-left: 6px;
 }
 
-.S0-enhancement ul li select:focus,
-.S0-enhancement ul li select:hover {
-    border: 2px solid #ff000059;
-    background-color: #b15d5d5c;
+.S0-enhancement .S0-characteristic:hover {
+    box-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
 /* #region CHARACTERISTIC */
-.characteristic-container {
+.S0-characteristic-container {
     width: 100%;
     display: flex;
     height: 28px;
     align-items: center;
 }
 
-.characteristic-container label {
+.S0-characteristic-container label {
     flex: 2;
     margin-bottom: 0px;
 }
 
-.characteristic-container a {
+.S0-characteristic-container a {
     margin-inline: 5px;
 }
 
@@ -337,6 +361,7 @@ img.clickable:hover {
 .clickable.S0-characteristic-temp:hover {
     cursor: pointer;
     background-color: var(--focus-color);
+    box-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
 .S0-characteristic-temp {
@@ -359,6 +384,7 @@ img.clickable:hover {
 .clickable.letal:hover,
 .clickable.selected:hover {
     background-color: var(--selected-hover);
+    box-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
 /* #endregion */

@@ -10,11 +10,12 @@ export const CharacteristicType = Object.freeze({
 });
 
 export const OnEventType = Object.freeze({
-    CHARACTERISTIC: { id: 'characteristic', event: 'characteristicOnClick' },
-    ADD: { id: 'add', event: 'addOnClick' },
-    REMOVE: { id: 'remove', event: 'removeOnClick' },
-    EDIT: { id: 'edit', event: 'editOnClick' },
-    VIEW: { id: 'view', event: 'viewOnClick' },
-    CHAT: { id: 'chat', event: 'chatOnClick' },
-    CHANGE: { id: 'change', event: 'changeOnClick' },
+    CHARACTERISTIC: { id: 'characteristic' },
+    ADD: { id: 'add' },
+    REMOVE: { id: 'remove' },
+    EDIT: { id: 'edit' },
+    VIEW: { id: 'view' },
+    CHAT: { id: 'chat' },
+    CHANGE: { id: 'change' },
+    CHECK: { id: 'check' },
 });

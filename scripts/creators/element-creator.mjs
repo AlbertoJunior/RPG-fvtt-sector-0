@@ -13,7 +13,7 @@ export class ElementCreatorJQuery {
         const safeEventType = eventType ? eventType : OnEventType.CHARACTERISTIC
 
         const divContainer = $('<div>', {
-            class: 'characteristic-container',
+            class: 'S0-characteristic-container',
             id: characteristic.id
         });
 

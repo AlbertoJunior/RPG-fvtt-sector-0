@@ -28,7 +28,7 @@ export class LanguageRepository {
         return [];
     }
 
-    static _getSyncLanguage() {
+    static _getSynchronized() {
         return [... this.#languages];
     }
 

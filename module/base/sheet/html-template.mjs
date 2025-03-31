@@ -1,7 +1,7 @@
 import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/characteristic-enums.mjs";
-import { enhancementHandleMethods, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
+import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 
@@ -20,12 +20,8 @@ class Setor0ActorSheet extends ActorSheet {
 
     activateListeners(html) {
         super.activateListeners(html);
-        this.#activateListenersWithAsync(html);
-    }
-
-    async #activateListenersWithAsync(html) {
-        await SheetMethods._createDynamicSheet(html, this.isEditable);
-        await this.#presetSheet(html);
+        SheetMethods._createDynamicSheet(html, this.isEditable);
+        this.#presetSheet(html);
         this.#setupListeners(html);
         this.#addPageButtonsOnFloatingMenu(html);
     }
@@ -70,6 +66,7 @@ class Setor0ActorSheet extends ActorSheet {
             { selector: `[data-action="${OnEventType.EDIT.id}"]`, method: this._onActionClick },
             { selector: `[data-action="${OnEventType.VIEW.id}"]`, method: this._onActionClick },
             { selector: `[data-action="${OnEventType.CHAT.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this._onActionClick },
         ];
         actionsClick.forEach(action => {
             html.find(action.selector).click(action.method.bind(this, html));
@@ -107,15 +104,14 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    _toggleEditMode(html, event) {
+    async _toggleEditMode(html, event) {
         let currentValue = getActorFlag(this.actor, "editable");
         currentValue = !currentValue;
 
-        setActorFlag(this.actor, "editable", currentValue)
-            .then(() => this.render());
+        await setActorFlag(this.actor, "editable", currentValue)
     }
 
-    async #presetSheet(html) {
+    #presetSheet(html) {
         html.find('.selected').removeClass('selected');
 
         const system = this.actor.system;
@@ -167,8 +163,9 @@ class Setor0ActorSheet extends ActorSheet {
                 const itemId = option.dataset.itemId;
                 if (itemId == enhancement.id) {
                     option.selected = true;
-                    const levelSelects = selects.slice(1, selects.length);
+                    const levelSelects = selects.slice(1);
                     updateEnhancementLevelsOptions(itemId, levelSelects);
+                    selectLevelOnOptions(enhancement, levelSelects);
                 }
             });
         });
