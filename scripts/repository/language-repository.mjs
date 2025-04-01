@@ -13,10 +13,12 @@ export class LanguageRepository {
         { id: 'Zuarur', label: 'Zu\'arur', district: 'Alfiran', color: '#262626' },
     ];
 
-    static async #getFromPack() {
+    static #loadedFromPack = [];
+
+    static async _loadFromPack() {
         const compendium = await game.packs.get('setor0OSubmundo.language')?.getDocuments();
         if (compendium) {
-            return compendium.map((item) => {
+            LanguageRepository.#loadedFromPack = compendium.map((item) => {
                 return {
                     id: item._id,
                     label: item.name,
@@ -25,14 +27,9 @@ export class LanguageRepository {
                 };
             });
         }
-        return [];
     }
 
-    static _getSynchronized() {
-        return [... this.#languages];
-    }
-
-    static async _getWithPacks() {
-        return [... this.#languages, ... await this.#getFromPack()];
+    static _getItems() {
+        return [... this.#languages, ... this.#loadedFromPack];
     }
 }

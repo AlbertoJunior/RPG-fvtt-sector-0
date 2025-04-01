@@ -78,7 +78,7 @@ export const traitMethods = {
         const type = target.dataset.type;
         const systemChar = getSystemChar(type);
         const trait = actor.system.tracos[systemChar][itemIndex];
-        const fetchedTrait = await TraitRepository._getById(type, trait.id);
+        const fetchedTrait = TraitRepository._getItemByTypeAndId(type, trait.id);
         const content = fetchedTrait.description;
 
         TODO("implementar lógica do content");

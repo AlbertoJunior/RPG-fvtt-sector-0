@@ -21,9 +21,8 @@ class TraitDataModel extends foundry.abstract.TypeDataModel {
     }
 }
 
-export function createTraitDataModels() {
+export async function createTraitDataModels() {
     CONFIG.Item.dataModels = {
         Trait: TraitDataModel
     };
-    console.log('-> Modelos de dados de Traço registrado');
 }

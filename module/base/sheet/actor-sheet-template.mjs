@@ -1,4 +1,3 @@
-import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/characteristic-enums.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
@@ -233,13 +232,13 @@ class Setor0ActorSheet extends ActorSheet {
 }
 
 export async function actorHtmlTemplateRegister() {
-    await configureTemplates();
+    await configurePartialTemplates();
     Actors.unregisterSheet("core", ActorSheet);
     Actors.registerSheet("Setor 0", Setor0ActorSheet, { makeDefault: true });
     console.log('-> Modelos de dados e fichas registrados');
 }
 
-async function configureTemplates() {
+async function configurePartialTemplates() {
     await loadTemplates([
         "actors/characteristics",
         "actors/biography",

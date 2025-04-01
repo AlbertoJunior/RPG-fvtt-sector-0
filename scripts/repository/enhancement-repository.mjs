@@ -67,43 +67,43 @@ export class EnhancementRepository {
             id: '11',
             name: 'Simulação',
             level: 2,
-            requirement: [9, 10]
+            requirement: ['9', '10']
         },
         {
             id: '12',
             name: 'Debug',
             level: 3,
-            requirement: [11]
+            requirement: ['11']
         },
         {
             id: '13',
             name: 'Proxy',
             level: 3,
-            requirement: [11]
+            requirement: ['11']
         },
         {
             id: '14',
             name: 'Ponto de Acesso',
             level: 4,
-            requirement: [12, 13]
+            requirement: ['12', '13']
         },
         {
             id: '15',
             name: 'Criar Gatilhos',
             level: 4,
-            requirement: [12, 13]
+            requirement: ['12', '13']
         },
         {
             id: '16',
             name: 'Onipresença',
             level: 5,
-            requirement: [14, 15]
+            requirement: ['14', '15']
         },
         {
             id: '17',
             name: 'Dedução e Indução Mental',
             level: 5,
-            requirement: [14, 15]
+            requirement: ['14', '15']
         },
     ];
 
@@ -118,37 +118,37 @@ export class EnhancementRepository {
             id: '19',
             name: 'Fanático',
             level: 2,
-            requirement: [18]
+            requirement: ['18']
         },
         {
             id: '20',
             name: 'Força Esmagadora',
             level: 2,
-            requirement: [18]
+            requirement: ['18']
         },
         {
             id: '21',
             name: 'Canhão',
             level: 3,
-            requirement: [19, 20]
+            requirement: ['19', '20']
         },
         {
             id: '22',
             name: 'Fulminante',
             level: 3,
-            requirement: [19, 20]
+            requirement: ['19', '20']
         },
         {
             id: '23',
             name: 'Hit Kill',
             level: 4,
-            requirement: [21, 22]
+            requirement: ['21', '22']
         },
         {
             id: '24',
             name: 'Destroçar',
             level: 5,
-            requirement: [23]
+            requirement: ['23']
         },
     ];
 
@@ -169,37 +169,37 @@ export class EnhancementRepository {
             id: '27',
             name: 'Vício',
             level: 2,
-            requirement: [25, 26]
+            requirement: ['25', '26']
         },
         {
             id: '28',
             name: 'Mesmerizar',
             level: 3,
-            requirement: [27]
+            requirement: ['27']
         },
         {
             id: '29',
             name: 'Esquecimento',
             level: 3,
-            requirement: [27]
+            requirement: ['27']
         },
         {
             id: '30',
             name: 'Magnetismo',
             level: 4,
-            requirement: [28, 29]
+            requirement: ['28', '29']
         },
         {
             id: '31',
             name: 'Racionalizar',
             level: 4,
-            requirement: [28, 29]
+            requirement: ['28', '29']
         },
         {
             id: '32',
             name: 'Divindade',
             level: 5,
-            requirement: [30, 31]
+            requirement: ['30', '31']
         },
     ];
 
@@ -226,31 +226,31 @@ export class EnhancementRepository {
             id: '36',
             name: 'Camuflagem',
             level: 2,
-            requirement: [33, 34, 35]
+            requirement: ['33', '34', '35']
         },
         {
             id: '37',
             name: 'Fantasma',
             level: 3,
-            requirement: [36]
+            requirement: ['36']
         },
         {
             id: '38',
             name: 'Um na multidão',
             level: 3,
-            requirement: [36]
+            requirement: ['36']
         },
         {
             id: '39',
             name: 'Desaparecer',
             level: 4,
-            requirement: [37, 38]
+            requirement: ['37', '38']
         },
         {
             id: '40',
             name: 'Incógnito',
             level: 5,
-            requirement: [39]
+            requirement: ['39']
         },
     ];
 
@@ -271,37 +271,37 @@ export class EnhancementRepository {
             id: '43',
             name: 'Regeneração',
             level: 2,
-            requirement: [42]
+            requirement: ['42']
         },
         {
             id: '44',
             name: 'Resistência à toxinas',
             level: 2,
-            requirement: [41, 42]
+            requirement: ['41', '42']
         },
         {
             id: '45',
             name: 'Anatomia',
             level: 3,
-            requirement: [44, 43]
+            requirement: ['44', '43']
         },
         {
             id: '46',
             name: 'Peçonhento',
             level: 3,
-            requirement: [44]
+            requirement: ['44']
         },
         {
             id: '47',
             name: 'Incorpóreo',
             level: 4,
-            requirement: [45, 46]
+            requirement: ['45', '46']
         },
         {
             id: '48',
             name: 'Simbiose',
             level: 4,
-            requirement: [45, 46],
+            requirement: ['45', '46'],
             requirement_special: {
                 and: [42],
                 or: []
@@ -311,7 +311,7 @@ export class EnhancementRepository {
             id: '49',
             name: 'Imortalidade',
             level: 5,
-            requirement: [47, 48],
+            requirement: ['47', '48'],
         },
     ];
 
@@ -326,37 +326,37 @@ export class EnhancementRepository {
             id: '51',
             name: 'Dureza',
             level: 2,
-            requirement: [50]
+            requirement: ['50']
         },
         {
             id: '52',
             name: 'Pele de Aço',
             level: 3,
-            requirement: [51]
+            requirement: ['51']
         },
         {
             id: '53',
             name: 'Inquebrável',
             level: 4,
-            requirement: [52]
+            requirement: ['52']
         },
         {
             id: '54',
             name: 'Troco',
             level: 4,
-            requirement: [52]
+            requirement: ['52']
         },
         {
             id: '55',
             name: 'Proeza da Dor',
             level: 5,
-            requirement: [53, 54]
+            requirement: ['53', '54']
         },
         {
             id: '56',
             name: 'Última Chance',
             level: 5,
-            requirement: [53, 54]
+            requirement: ['53', '54']
         },
     ];
 
@@ -384,33 +384,30 @@ export class EnhancementRepository {
         },
     ];
 
-    static async #getEnhancementFromPack() {
+    static #loadedFromPack = [];
+
+    static async _loadFromPack() {
         const compendium = await game.packs.get('setor0OSubmundo.enhancements')?.getDocuments();
         if (compendium) {
-            return compendium.map((item) => {
-                const convertedItem = {
+            EnhancementRepository.#loadedFromPack = compendium.map((item) => {
+                return {
                     id: item._id,
                     name: item.name,
                     value: item.value,
                     effects: item.effects
                 };
-                return convertedItem;
             });
         }
-        return [];
     }
 
-    static _getSynchronized() {
-        return [... this.#enhancements];
-    }
-
-    static async _getWithPacks() {
-        return [... this.#enhancements, ... await this.#getEnhancementFromPack()];
+    static _getItems() {
+        return [... this.#enhancements, ... this.#loadedFromPack];
     }
 
     static _getEnhancementById(enhancementId) {
         if (enhancementId) {
-            const fetchedEnhancement = this._getSynchronized().filter(item => item.id == enhancementId)[0];
+            const a = this._getItems();
+            const fetchedEnhancement = this._getItems().filter(item => item.id == enhancementId)[0];
             if (fetchedEnhancement) {
                 return fetchedEnhancement;
             }

@@ -507,10 +507,13 @@ export class TraitRepository {
         },
     ];
 
-    static async #getTraitsFromPack(type) {
-        const compendium = (await game.packs.get('setor0OSubmundo.traits')?.getDocuments()).filter(item => item.type == type);
+    static #loadedGoodFromPack = [];
+    static #loadedBadFromPack = [];
+
+    static async _loadFromPack() {
+        const compendium = (await game.packs.get('setor0OSubmundo.traits')?.getDocuments());
         if (compendium) {
-            return compendium.map((item) => {
+            const allTraits = compendium.map((item) => {
                 const convertedItem = {
                     id: item._id,
                     name: item.name,
@@ -528,19 +531,21 @@ export class TraitRepository {
 
                 return convertedItem;
             });
+
+            TraitRepository.#loadedGoodFromPack = allTraits.filter(item => item.type == 'good')
+            TraitRepository.#loadedBadFromPack = allTraits.filter(item => item.type == 'bad')
         }
-        return [];
     }
 
-    static async _getGoodTraits() {
-        return [... this.goodTrait, ... await this.#getTraitsFromPack('good')];
+    static _getGoodTraits() {
+        return [... this.goodTrait, ... this.#loadedGoodFromPack];
     }
 
-    static async _getBadTraits() {
-        return [... this.badTrait, ... await this.#getTraitsFromPack('bad')];
+    static _getBadTraits() {
+        return [... this.badTrait, ... this.#loadedBadFromPack];
     }
 
-    static async _getByType(type) {
+    static _getItemsByType(type) {
         if (type === 'good') {
             return this._getGoodTraits();
         } else {
@@ -548,11 +553,7 @@ export class TraitRepository {
         }
     }
 
-    static async _getByName(type, traitName) {
-        return (await this._getByType(type)).find(element => element.name == traitName);
-    }
-
-    static async _getById(type, traitId) {
-        return (await this._getByType(type)).find(element => element.id == traitId);
+    static _getItemByTypeAndId(type, traitId) {
+        return this._getItemsByType(type).find(element => element.id == traitId);
     }
 }

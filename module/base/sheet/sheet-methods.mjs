@@ -133,7 +133,7 @@ export class SheetMethods {
 
     static #createLanguages(html, isEditable) {
         const container = html.find('#linguasContainer');
-        const languages = LanguageRepository._getSynchronized();
+        const languages = LanguageRepository._getItems();
 
         languages.forEach(lang => {
             ElementCreatorJQuery._createCharacteristicContainer(
@@ -145,7 +145,7 @@ export class SheetMethods {
     static #createEnhancements(html, isEditable) {
         const container = html.find('.S0-enhancement select');
         const filteredElements = container.filter((index, element) => element.dataset.type === 'enhancement');
-        const enhancements = EnhancementRepository._getSynchronized();
+        const enhancements = EnhancementRepository._getItems();
 
         filteredElements.each((index, selectEnhancement) => {
             $(selectEnhancement).append(ElementCreatorJQuery._createOption(undefined, '', ''));

@@ -30,7 +30,9 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             morfologia: new StringField({ required: true, label: "S0.Morfologia" }),
             bairro: new StringField({ required: true, label: "S0.Bairro" }),
             background: new SchemaField({
-                biography: new HTMLField({ required: false, blank: true })
+                age: new NumberField({ required: false, blank: true }),
+                biography: new HTMLField({ required: false, blank: true }),
+                personality: new NumberField({ required: false, blank: true }),
             }),
             atributos: new SchemaField({
                 forca: new ActorAttributeField("S0.Forca"),
@@ -117,7 +119,7 @@ class PlayerDataModel extends ActorDataModel {
     }
 }
 
-export function createActorDataModels() {
+export async function createActorDataModels() {
     CONFIG.Actor.trackableAttributes = {
         Jogador: {
             bar: ["system.vitalidade", "system.sobrecarga"],
@@ -138,6 +140,4 @@ export function createActorDataModels() {
         Mestre: PlayerDataModel,
         Inimigo: BasicEnemyDataModel,
     }
-
-    console.log('-> Modelos de dados de ator registrados');
 }
