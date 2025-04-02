@@ -2,6 +2,7 @@ import { createDataModels } from "./scripts/utils/models.mjs";
 import { loadPackages } from "./scripts/utils/repositories.mjs";
 import { loadHandlebarsHelpers } from "./scripts/utils/handlerbars-helper.mjs";
 import { registerTemplates } from "./scripts/utils/templates.mjs";
+import { NotificationsUtils } from "./scripts/utils/notifications.mjs";
 
 Hooks.once('init', async function () {
   console.log('-> Setor 0 - O Submundo | Inicializando sistema');
@@ -38,7 +39,7 @@ Hooks.on('createItem', (item) => {
     if (pack && pack.metadata.flags.filter?.type) {
       const packFilter = pack.metadata.flags.filter.type;
       if (packFilter && item.type !== packFilter) {
-        ui.notifications.warn(`Este pacote só aceita itens do tipo '${packFilter}'.`);
+        NotificationsUtils.warn(`Este pacote só aceita itens do tipo '${packFilter}'.`);
         item.delete();
       }
     }

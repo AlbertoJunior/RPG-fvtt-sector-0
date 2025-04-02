@@ -20,6 +20,7 @@
     "styles": [
         "styles/system-styles.css"
     ],
+    "background": "https://github.com/AlbertoJunior/RPG-fvtt-sector-0/blob/dev/imgs/banner.png?raw=true",
     "packs": [
         {
             "name": "inimigos",
@@ -95,8 +96,8 @@
         "distance": 1,
         "units": "PM"
     },
-    "primaryTokenAttribute": "vitalidade",
-    "secondaryTokenAttribute": "sobrecarga",
+    "primaryTokenAttribute": "system.vitalidade.value",
+    "secondaryTokenAttribute": "system.sobrecarga",
     "url": "https://www.set0rpg.com.br",
     "manifest": "https://github.com/AlbertoJunior/setor0OSubmundo/system.json",
     "download": "https://github.com/AlbertoJunior/setor0OSubmundo/download/archive.zip"

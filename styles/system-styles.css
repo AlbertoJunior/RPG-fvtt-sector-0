@@ -59,6 +59,18 @@ h4 {
 }
 
 /* EDIT STYLE */
+
+.combat-sidebar li.combatant .roll {
+    background: url(../icons/d10.png) no-repeat 50% 50%;
+    background-size: 32px;
+    transition: background-size 0.2s ease-in-out;
+}
+
+.combat-sidebar li.combatant .roll:hover {
+    background: url(../icons/d10.png) no-repeat 50% 50%;
+    background-size: 40px;
+}
+
 select:disabled {
     appearance: none;
     color: var(--color-text-dark-primary);
@@ -272,6 +284,12 @@ img.clickable:hover {
     border: 1px solid rgb(255 255 255 / 50%);
 }
 
+.S0-enhancement option,
+.S0-enhancement optgroup {
+    color: white;
+    background: var(--secondary-color);
+}
+
 .S0-enhancement ul {
     margin: 0px;
     background-color: rgba(130, 130, 130, 0.3);
@@ -283,6 +301,10 @@ img.clickable:hover {
     display: flex;
     align-items: center;
     margin-top: 3px;
+}
+
+.S0-enhancement ul li :not(:first-child) {
+    margin-left: 6px;
 }
 
 .S0-enhancement select {

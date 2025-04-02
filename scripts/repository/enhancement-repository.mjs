@@ -1,364 +1,83 @@
+import { EnhancementDuration } from "../../module/enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../module/field/actor-enhancement-field.mjs";
+
 export class EnhancementRepository {
     static #agilityEffects = [
-        {
-            id: '1',
-            name: 'Maestria',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '2',
-            name: 'Reflexos Rápidos',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '3',
-            name: 'Agilidade',
-            level: 2,
-            requirement: ['1', '2']
-        },
-        {
-            id: '4',
-            name: 'Disparada',
-            level: 3,
-            requirement: ['3']
-        },
-        {
-            id: '5',
-            name: 'Primeira Forma Defensiva',
-            level: 3,
-            requirement: ['3']
-        },
-        {
-            id: '6',
-            name: 'Ataque Relâmpago',
-            level: 4,
-            requirement: ['4', '5']
-        },
-        {
-            id: '7',
-            name: 'Segunda Forma Defensiva',
-            level: 4,
-            requirement: ['4', '5']
-        },
-        {
-            id: '8',
-            name: 'Fração de Segundo',
-            level: 5,
-            requirement: ['6', '7']
-        }
-    ];
+        new EnhancementEffectField('1', 'Maestria', 1, EnhancementDuration.PASSIVE, [], [{ key: 'atributos.destreza', value: 5 }, { key: 'atributos.forca', value: 5 }]),
+        new EnhancementEffectField('2', 'Reflexos Rápidos', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('3', 'Agilidade', 2, EnhancementDuration.SCENE, ['1', '2']),
+        new EnhancementEffectField('4', 'Disparada', 3, EnhancementDuration.USE, ['3']),
+        new EnhancementEffectField('5', 'Primeira Forma Defensiva', 3, EnhancementDuration.SCENE, ['3']),
+        new EnhancementEffectField('6', 'Ataque Relâmpago', 4, EnhancementDuration.USE, ['4', '5']),
+        new EnhancementEffectField('7', 'Segunda Forma Defensiva', 4, EnhancementDuration.SCENE, ['4', '5']),
+        new EnhancementEffectField('8', 'Fração de Segundo', 5, EnhancementDuration.USE, ['6', '7'])
+    ].map(effect => effect.toObject(effect));
 
     static #assimilationEffects = [
-        {
-            id: '9',
-            name: 'Aguçar Sentidos',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '10',
-            name: 'Hiper-Visão Cibernética',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '11',
-            name: 'Simulação',
-            level: 2,
-            requirement: ['9', '10']
-        },
-        {
-            id: '12',
-            name: 'Debug',
-            level: 3,
-            requirement: ['11']
-        },
-        {
-            id: '13',
-            name: 'Proxy',
-            level: 3,
-            requirement: ['11']
-        },
-        {
-            id: '14',
-            name: 'Ponto de Acesso',
-            level: 4,
-            requirement: ['12', '13']
-        },
-        {
-            id: '15',
-            name: 'Criar Gatilhos',
-            level: 4,
-            requirement: ['12', '13']
-        },
-        {
-            id: '16',
-            name: 'Onipresença',
-            level: 5,
-            requirement: ['14', '15']
-        },
-        {
-            id: '17',
-            name: 'Dedução e Indução Mental',
-            level: 5,
-            requirement: ['14', '15']
-        },
-    ];
+        new EnhancementEffectField('9', 'Aguçar Sentidos', 1, EnhancementDuration.SCENE, []),
+        new EnhancementEffectField('10', 'Hiper-Visão Cibernética', 1, EnhancementDuration.SCENE, []),
+        new EnhancementEffectField('11', 'Simulação', 2, EnhancementDuration.SCENE, ['9', '10']),
+        new EnhancementEffectField('12', 'Debug', 3, EnhancementDuration.USE, ['11']),
+        new EnhancementEffectField('13', 'Proxy', 3, EnhancementDuration.SCENE, ['11']),
+        new EnhancementEffectField('14', 'Ponto de Acesso', 4, EnhancementDuration.SCENE, ['12', '13']),
+        new EnhancementEffectField('15', 'Criar Gatilhos', 4, EnhancementDuration.SCENE, ['12', '13']),
+        new EnhancementEffectField('16', 'Onipresença', 5, EnhancementDuration.USE, ['14', '15']),
+        new EnhancementEffectField('17', 'Dedução e Indução Mental', 5, EnhancementDuration.SCENE, ['14', '15'])
+    ].map(effect => effect.toObject(effect));
 
     static #brutalityEffects = [
-        {
-            id: '18',
-            name: 'Força Brutal',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '19',
-            name: 'Fanático',
-            level: 2,
-            requirement: ['18']
-        },
-        {
-            id: '20',
-            name: 'Força Esmagadora',
-            level: 2,
-            requirement: ['18']
-        },
-        {
-            id: '21',
-            name: 'Canhão',
-            level: 3,
-            requirement: ['19', '20']
-        },
-        {
-            id: '22',
-            name: 'Fulminante',
-            level: 3,
-            requirement: ['19', '20']
-        },
-        {
-            id: '23',
-            name: 'Hit Kill',
-            level: 4,
-            requirement: ['21', '22']
-        },
-        {
-            id: '24',
-            name: 'Destroçar',
-            level: 5,
-            requirement: ['23']
-        },
-    ];
+        new EnhancementEffectField('18', 'Força Brutal', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('19', 'Fanático', 2, EnhancementDuration.SCENE, ['18']),
+        new EnhancementEffectField('20', 'Força Esmagadora', 2, EnhancementDuration.SCENE, ['18']),
+        new EnhancementEffectField('21', 'Canhão', 3, EnhancementDuration.SCENE, ['19', '20']),
+        new EnhancementEffectField('22', 'Fulminante', 3, EnhancementDuration.SCENE, ['19', '20']),
+        new EnhancementEffectField('23', 'Hit Kill', 4, EnhancementDuration.USE, ['21', '22']),
+        new EnhancementEffectField('24', 'Destroçar', 5, EnhancementDuration.SCENE, ['23'])
+    ].map(effect => effect.toObject(effect));
 
     static #influenceEffects = [
-        {
-            id: '25',
-            name: 'Encantar',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '26',
-            name: 'Apavorar',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '27',
-            name: 'Vício',
-            level: 2,
-            requirement: ['25', '26']
-        },
-        {
-            id: '28',
-            name: 'Mesmerizar',
-            level: 3,
-            requirement: ['27']
-        },
-        {
-            id: '29',
-            name: 'Esquecimento',
-            level: 3,
-            requirement: ['27']
-        },
-        {
-            id: '30',
-            name: 'Magnetismo',
-            level: 4,
-            requirement: ['28', '29']
-        },
-        {
-            id: '31',
-            name: 'Racionalizar',
-            level: 4,
-            requirement: ['28', '29']
-        },
-        {
-            id: '32',
-            name: 'Divindade',
-            level: 5,
-            requirement: ['30', '31']
-        },
-    ];
+        new EnhancementEffectField('25', 'Encantar', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('26', 'Apavorar', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('27', 'Vício', 2, EnhancementDuration.PASSIVE, ['25', '26']),
+        new EnhancementEffectField('28', 'Mesmerizar', 3, EnhancementDuration.PASSIVE, ['27']),
+        new EnhancementEffectField('29', 'Esquecimento', 3, EnhancementDuration.PASSIVE, ['27']),
+        new EnhancementEffectField('30', 'Magnetismo', 4, EnhancementDuration.PASSIVE, ['28', '29']),
+        new EnhancementEffectField('31', 'Racionalizar', 4, EnhancementDuration.PASSIVE, ['28', '29']),
+        new EnhancementEffectField('32', 'Divindade', 5, EnhancementDuration.PASSIVE, ['30', '31'])
+    ].map(effect => effect.toObject(effect));
 
     static #invisibilityEffects = [
-        {
-            id: '33',
-            name: 'Esconder',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '34',
-            name: 'Supressão de Ruídos',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '35',
-            name: 'Silenciar',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '36',
-            name: 'Camuflagem',
-            level: 2,
-            requirement: ['33', '34', '35']
-        },
-        {
-            id: '37',
-            name: 'Fantasma',
-            level: 3,
-            requirement: ['36']
-        },
-        {
-            id: '38',
-            name: 'Um na multidão',
-            level: 3,
-            requirement: ['36']
-        },
-        {
-            id: '39',
-            name: 'Desaparecer',
-            level: 4,
-            requirement: ['37', '38']
-        },
-        {
-            id: '40',
-            name: 'Incógnito',
-            level: 5,
-            requirement: ['39']
-        },
-    ];
+        new EnhancementEffectField('33', 'Esconder', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('34', 'Supressão de Ruídos', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('35', 'Silenciar', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('36', 'Camuflagem', 2, EnhancementDuration.PASSIVE, ['33', '34', '35']),
+        new EnhancementEffectField('37', 'Fantasma', 3, EnhancementDuration.PASSIVE, ['36']),
+        new EnhancementEffectField('38', 'Um na multidão', 3, EnhancementDuration.PASSIVE, ['36']),
+        new EnhancementEffectField('39', 'Desaparecer', 4, EnhancementDuration.PASSIVE, ['37', '38']),
+        new EnhancementEffectField('40', 'Incógnito', 5, EnhancementDuration.PASSIVE, ['39'])
+    ].map(effect => effect.toObject(effect));
 
     static #mutationEffects = [
-        {
-            id: '41',
-            name: 'Arma Corporal',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '42',
-            name: 'Fundir',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '43',
-            name: 'Regeneração',
-            level: 2,
-            requirement: ['42']
-        },
-        {
-            id: '44',
-            name: 'Resistência à toxinas',
-            level: 2,
-            requirement: ['41', '42']
-        },
-        {
-            id: '45',
-            name: 'Anatomia',
-            level: 3,
-            requirement: ['44', '43']
-        },
-        {
-            id: '46',
-            name: 'Peçonhento',
-            level: 3,
-            requirement: ['44']
-        },
-        {
-            id: '47',
-            name: 'Incorpóreo',
-            level: 4,
-            requirement: ['45', '46']
-        },
-        {
-            id: '48',
-            name: 'Simbiose',
-            level: 4,
-            requirement: ['45', '46'],
-            requirement_special: {
-                and: [42],
-                or: []
-            }
-        },
-        {
-            id: '49',
-            name: 'Imortalidade',
-            level: 5,
-            requirement: ['47', '48'],
-        },
-    ];
+        new EnhancementEffectField('41', 'Arma Corporal', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('42', 'Fundir', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('43', 'Regeneração', 2, EnhancementDuration.PASSIVE, ['42']),
+        new EnhancementEffectField('44', 'Resistência à toxinas', 2, EnhancementDuration.PASSIVE, ['41', '42']),
+        new EnhancementEffectField('45', 'Anatomia', 3, EnhancementDuration.PASSIVE, ['44', '43']),
+        new EnhancementEffectField('46', 'Peçonhento', 3, EnhancementDuration.PASSIVE, ['44']),
+        new EnhancementEffectField('47', 'Incorpóreo', 4, EnhancementDuration.PASSIVE, ['45', '46']),
+        new EnhancementEffectField('48', 'Simbiose', 4, EnhancementDuration.PASSIVE, ['45', '46']),
+        new EnhancementEffectField('49', 'Imortalidade', 5, EnhancementDuration.PASSIVE, ['47', '48'])
+    ].map(effect => effect.toObject(effect));
 
     static #hardnessEffects = [
-        {
-            id: '50',
-            name: 'Resiliência',
-            level: 1,
-            requirement: []
-        },
-        {
-            id: '51',
-            name: 'Dureza',
-            level: 2,
-            requirement: ['50']
-        },
-        {
-            id: '52',
-            name: 'Pele de Aço',
-            level: 3,
-            requirement: ['51']
-        },
-        {
-            id: '53',
-            name: 'Inquebrável',
-            level: 4,
-            requirement: ['52']
-        },
-        {
-            id: '54',
-            name: 'Troco',
-            level: 4,
-            requirement: ['52']
-        },
-        {
-            id: '55',
-            name: 'Proeza da Dor',
-            level: 5,
-            requirement: ['53', '54']
-        },
-        {
-            id: '56',
-            name: 'Última Chance',
-            level: 5,
-            requirement: ['53', '54']
-        },
-    ];
+        new EnhancementEffectField('50', 'Resiliência', 1, EnhancementDuration.PASSIVE, []),
+        new EnhancementEffectField('51', 'Dureza', 2, EnhancementDuration.PASSIVE, ['50']),
+        new EnhancementEffectField('52', 'Pele de Aço', 3, EnhancementDuration.PASSIVE, ['51']),
+        new EnhancementEffectField('53', 'Inquebrável', 4, EnhancementDuration.PASSIVE, ['52']),
+        new EnhancementEffectField('54', 'Troco', 4, EnhancementDuration.PASSIVE, ['52']),
+        new EnhancementEffectField('55', 'Proeza da Dor', 5, EnhancementDuration.PASSIVE, ['53', '54']),
+        new EnhancementEffectField('56', 'Última Chance', 5, EnhancementDuration.PASSIVE, ['53', '54'])
+    ].map(effect => effect.toObject(effect));
 
     static #enhancements = [
         {
@@ -415,7 +134,7 @@ export class EnhancementRepository {
         return undefined;
     }
 
-    static _getEnhancementLevelsByEnhancementId(enhancementId) {
+    static _getEnhancementEffectsByEnhancementId(enhancementId) {
         if (enhancementId) {
             const fetchedLevels = this._getEnhancementById(enhancementId)?.effects;
             if (fetchedLevels) {
@@ -425,12 +144,18 @@ export class EnhancementRepository {
         return [];
     }
 
-    static _getEnhancementLevelById(enhancementId, effectId) {
-        if (enhancementId) {
-            const fetchedEffect = this._getEnhancementById(enhancementId)?.effects.filter(ef => ef.id == effectId)[0];
-            return fetchedEffect;
+    static _getEnhancementEffectById(effectId, enhancementId) {
+        let fetchedItem;
+        if (enhancementId && enhancementId !== '') {
+            fetchedItem = this._getEnhancementById(enhancementId)?.effects.filter(ef => ef.id == effectId)[0];
+        } else if (effectId && effectId !== '') {
+            fetchedItem = this._getItems().map(enhancement => enhancement.effects)?.flat().filter(ef => ef.id == effectId)[0];
         }
-        return undefined;
+        return fetchedItem;
+    }
+
+    static _getEnhancementFamilyByEffectId(effectId) {
+        return this._getItems().find(enhancement => enhancement.effects.some(effect => effect.id == effectId));
     }
 
 }

@@ -1,8 +1,15 @@
+import { NotificationsUtils } from "./notifications.mjs";
+
 export function containClass(element, cls) {
     return element.classList.contains(cls);
 }
 
 export function selectCharacteristic(element) {
+    if (!element) {
+        NotificationsUtils._warning('não encontrou o elemento')
+        return;
+    }
+
     function isCharacteristic(element) {
         return containClass(element, 'S0-characteristic') || containClass(element, 'S0-characteristic-6');
     }
@@ -56,14 +63,10 @@ export function localize(key) {
     return game.i18n.localize(`S0.${key}`)
 }
 
-export function notification(message) {
-    ui.notifications.info(message);
-}
-
 export function TODO(message, notify) {
     console.warn(`-> ${message}`);
     if (notify) {
-        notification(message);
+        NotificationsUtils._info(message);
     }
 }
 

@@ -1,8 +1,8 @@
+import { ActorRollDialog } from "../../../scripts/creators/dialogs/actor-roll-dialog.mjs";
 import { ElementCreatorJQuery } from "../../../scripts/creators/element-creator.mjs";
 import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
-import { rollAttribute } from "../../../scripts/utils/roll.mjs";
-import { keyJsonToKeyLang, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
+import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
 
 export class SheetMethods {
@@ -49,6 +49,25 @@ export class SheetMethods {
                 }
             }
         },
+        effects: {
+            remove: async (actor, event) => {
+                const currentTarget = event.currentTarget;
+                const removeType = currentTarget.dataset.type;
+                if (removeType == 'single') {
+                    const index = currentTarget.dataset.itemIndex;
+                    const effect = Array.from(actor.effects.values())[index];
+                    await effect.delete();
+                } else if (removeType == 'all') {
+                    const effects = actor.effects;
+                    for (const effect of effects) {
+                        await effect.delete();
+                    }
+                }
+            },
+            view: async (actor, event) => {
+                $(event.currentTarget.parentElement.parentElement).find('ul')[0]?.classList.toggle('hidden')
+            }
+        }
     }
 
     static _createDynamicSheet(html, isEditable) {
@@ -127,7 +146,9 @@ export class SheetMethods {
             { id: 'influencia', label: 'S0.Influencia', amount: 5, addLast: false, firstSelected: false },
             { id: 'nivel_de_procurado', label: 'S0.Procurado', amount: 5, addLast: false, firstSelected: false },
         ].forEach(char => {
-            ElementCreatorJQuery._createCharacteristicContainer(container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected);
+            ElementCreatorJQuery._createCharacteristicContainer(
+                container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected
+            );
         });
     }
 
@@ -164,77 +185,6 @@ export class SheetMethods {
     }
 
     static async _openRollDialog(actor) {
-        const system = actor.system;
-        const atributoKeys = Object.keys(system.atributos);
-        const abilitiesKeys = Object.keys(system.habilidades);
-
-        const options = atributoKeys
-            .map(attr => {
-                const label = game.i18n.localize(keyJsonToKeyLang(attr));
-                return `<option value="${attr}">${label}</option>`;
-            })
-            .join("");
-
-        const options2 = abilitiesKeys
-            .map(attr => {
-                const label = game.i18n.localize(keyJsonToKeyLang(attr));
-                return `<option value="${attr}">${label}</option>`
-            })
-            .join("");
-
-        const options3 = [5, 6, 7, 8, 9, 10]
-            .map(attr => `<option value="${attr}" ${attr === 6 ? 'selected' : ''}>${attr}</option>`)
-            .join("");
-
-        const content = `
-                <form style="margin-block:10px">
-                        <h3>${game.i18n.localize('S0.Atributos')}</h3>
-                        <div class="form-group">
-                            <select id="attr1" style="margin-inline:4px">${options}</select>
-                            <select id="attr2" style="margin-inline:4px">${options}</select>
-                        </div>
-                        <h3 style="margin-top:10px">${game.i18n.localize('S0.Habilidades')}</h3>
-                        <div class="form-group">
-                            <select id="ability" style="flex:1; margin-inline:4px">${options2}</select>
-                            <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
-                            <label for="specialist" style="flex:1; margin-inline:4px">${game.i18n.localize('S0.Especialista')}:</label>
-                            <input id="specialist" type="checkbox" style="margin-inline:4px">
-                            </div>
-                        </div>
-                        <h3 style="margin-top: 10px">${game.i18n.localize('S0.Outros')}</h3>
-                        <div class="form-group">
-                            <label for="difficulty" style="flex:1; margin-inline:4px">Dificuldade:</label>
-                            <select id="difficulty" style="margin-inline:4px; flex:1">${options3}</select>
-                        </div>
-                         <div class="form-group">
-                            <label for="bonus"  style="flex:1; margin-inline:4px">Bônus:</label>
-                            <input id="bonus" type="number" style="flex:1; margin-inline:4px">
-                        </div>
-                </form>
-            `;
-
-        return new Promise(resolve => {
-            new Dialog({
-                title: "Escolha os Atributos",
-                content,
-                buttons: {
-                    cancel: {
-                        label: "Cancelar",
-                        callback: () => resolve(null)
-                    },
-                    confirm: {
-                        label: "Rolar",
-                        callback: (html) => {
-                            const attr1 = html.find("#attr1").val();
-                            const attr2 = html.find("#attr2").val();
-                            const ability = html.find("#ability").val();
-                            const specialist = html.find("#specialist").prop("checked");
-                            const difficulty = html.find("#difficulty").val();
-                            resolve(rollAttribute(actor, attr1, attr2, ability, specialist, difficulty));
-                        }
-                    }
-                }
-            }).render(true);
-        });
+        ActorRollDialog._open(actor);
     }
 }

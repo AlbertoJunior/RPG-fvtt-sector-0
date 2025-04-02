@@ -9,7 +9,8 @@ class Setor0ActorSheet extends ActorSheet {
     #mapEvents = {
         trait: traitMethods,
         enhancement: enhancementHandleMethods,
-        linguas: SheetMethods.handleMethods.language
+        linguas: SheetMethods.handleMethods.language,
+        effects: SheetMethods.handleMethods.effects,
     };
 
     constructor(...args) {
@@ -57,8 +58,8 @@ class Setor0ActorSheet extends ActorSheet {
 
     #setupListeners(html) {
         const actionsClick = [
-            { selector: '#edit-mode-toggle', method: this._toggleEditMode },
-            { selector: '#roll-button', method: this._openRollDialog },
+            { selector: '#edit-mode-toggle', method: this.#toggleEditMode },
+            { selector: '#roll-button', method: this.#openRollDialog },
             { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this._characteristicOnClick },
             { selector: `[data-action="${OnEventType.ADD.id}"]`, method: this._onActionClick },
             { selector: `[data-action="${OnEventType.REMOVE.id}"]`, method: this._onActionClick },
@@ -103,7 +104,7 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    async _toggleEditMode(html, event) {
+    async #toggleEditMode(html, event) {
         let currentValue = getActorFlag(this.actor, "editable");
         currentValue = !currentValue;
 
@@ -114,6 +115,7 @@ class Setor0ActorSheet extends ActorSheet {
         html.find('.selected').removeClass('selected');
 
         const system = this.actor.system;
+        const activeEffects = this.actor.statuses;
 
         [
             {
@@ -123,10 +125,6 @@ class Setor0ActorSheet extends ActorSheet {
             {
                 container: html.find('#repertorioContainer')[0],
                 systemCharacteristic: system.repertorio
-            },
-            {
-                container: html.find('#virtudesContainer')[0],
-                systemCharacteristic: system.virtudes
             },
             {
                 container: html.find('#habilidadesContainer')[0],
@@ -139,10 +137,18 @@ class Setor0ActorSheet extends ActorSheet {
         ].forEach((element) => {
             let hasNext = element.container.firstElementChild;
             while (hasNext) {
-                selectCharacteristic(hasNext.children[element.systemCharacteristic[hasNext.id]]);
+                const children = hasNext.children;
+                selectCharacteristic(children[Math.min(element.systemCharacteristic[hasNext.id], children.length - 1)]);
                 hasNext = hasNext.nextElementSibling;
             }
         });
+
+        const virtueContainer = html.find('#virtudesContainer')[0];
+        let virtueElementChild = virtueContainer.firstElementChild;
+        while (virtueElementChild) {
+            selectCharacteristic(virtueElementChild.children[system.virtudes[virtueElementChild.id].level]);
+            virtueElementChild = virtueElementChild.nextElementSibling;
+        }
 
         const langContainer = html.find('#linguasContainer')[0].children;
         const langElements = Array.from(langContainer);
@@ -164,7 +170,7 @@ class Setor0ActorSheet extends ActorSheet {
                     option.selected = true;
                     const levelSelects = selects.slice(1);
                     updateEnhancementLevelsOptions(itemId, levelSelects);
-                    selectLevelOnOptions(enhancement, levelSelects);
+                    selectLevelOnOptions(enhancement, levelSelects, activeEffects);
                 }
             });
         });
@@ -181,9 +187,16 @@ class Setor0ActorSheet extends ActorSheet {
             const parentElement = element.parentElement;
             const level = Array.from(parentElement.children).filter(el => el.classList.contains('selected')).length;
 
-            const characteristic = {
-                [`${systemCharacteristic}.${parentElement.id}`]: level
-            };
+            let characteristic;
+            if (systemCharacteristic.includes('virtudes')) {
+                characteristic = {
+                    [`${systemCharacteristic}.${parentElement.id}.level`]: level
+                };
+            } else {
+                characteristic = {
+                    [`${systemCharacteristic}.${parentElement.id}`]: level
+                };
+            }
 
             await this.actor.update(characteristic);
         }
@@ -212,7 +225,7 @@ class Setor0ActorSheet extends ActorSheet {
         }
     }
 
-    async _openRollDialog(html, event) {
+    async #openRollDialog(html, event) {
         SheetMethods._openRollDialog(this.actor);
     }
 

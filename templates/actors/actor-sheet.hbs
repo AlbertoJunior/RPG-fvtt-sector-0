@@ -1,13 +1,5 @@
 <form class="S0-actor-sheet" autocomplete="off">
-    <div>
-        {{log
-        'actor:' this.actor
-        'items:' this.items
-        'effects:' this.effects
-        }}
-        {{log 'canEdit:' this.canEdit 'canRoll:' this.canRoll }}
-    </div>
-
+    {{ log this }}
     <ul id="floating-menu" class="S0-float-right-sheet">
         {{#if canEdit}}
         <li id="edit-mode-toggle" class="S0-simulate-button {{#if editable}}S0-in-edit{{/if}}">
@@ -37,7 +29,7 @@
         </h2>
     </header>
 
-    <hr >
+    <hr>
 
     {{> "systems/setor0OSubmundo/templates/actors/characteristics.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/biography.hbs"}}

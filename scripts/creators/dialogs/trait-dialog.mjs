@@ -1,6 +1,6 @@
 import { TraitRepository } from "../../repository/trait-repository.mjs";
 import { ChatCreator } from "../chat-creator.mjs";
-import { localize } from "../../utils/utils.mjs";
+import { localize, TODO } from "../../utils/utils.mjs";
 
 export class TraitDialog {
   static async _open(type, callback) {

@@ -1,12 +1,24 @@
 import { ChatCreator } from "../creators/chat-creator.mjs";
 import { toTitleCase } from "./utils.mjs";
 
+function getAttributeValue(system, attr) {
+    const base = system.atributos[attr] || 0;
+    const bonus = system.bonus.atributos[attr] || 0;
+    return base + bonus;
+}
+
+function getAbilityValue(system, ability) {
+    const base = system.habilidades[ability] || 0;
+    //const bonus = system.bonus.habilidades[ability] || 0;
+    return base;
+}
+
 export async function rollAttribute(actor, attr1, attr2, ability, specialist, difficulty) {
     const system = actor.system;
-    const attrValue1 = system.atributos[attr1] || 0;
-    const attrValue2 = system.atributos[attr2] || 0;
-    const abilityValue = system.habilidades[ability] || 0;
-    const penalty = calculatePenalty(actor);
+    const attrValue1 = getAttributeValue(system, attr1);
+    const attrValue2 = getAttributeValue(system, attr2);
+    const abilityValue = getAbilityValue(system, ability);
+    const penalty = calculatePenalty(system);
 
     const diceAmount = calculateDiceAmount(attrValue1, attrValue2, abilityValue, penalty);
     const overloadDiceAmount = Math.min(system.sobrecarga.value || 0, diceAmount);
@@ -50,10 +62,9 @@ export async function rollAttribute(actor, attr1, attr2, ability, specialist, di
     ChatCreator._sendToChat(actor, messageData);
 }
 
-function calculatePenalty(actor) {
-    const system = actor.system;
+function calculatePenalty(system) {
     const stamina = system.atributos.vigor;
-    const damage = system.vitalidade.max - system.vitalidade.value;
+    const damage = system.vitalidade.letal_damage;
     const calculatedMinor = Math.max(damage - stamina, 0);
     return Math.min(calculatedMinor, 4);
 }

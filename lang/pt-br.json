@@ -69,5 +69,9 @@
     "S0.Descricao": "Descrição",
     "S0.Tipo": "Tipo",
     "S0.Requisito": "Requisito",
-    "S0.Particularidade": "Particularidade"
+    "S0.Particularidade": "Particularidade",
+    "S0.Level": "Level",
+    "S0.Duracao": "Duração",
+    "S0.Efeitos_Ativos": "Efeitos Ativos",
+    "S0.Situacao": "Situação"
 }
