@@ -3,7 +3,8 @@ export async function loadHandlebarsHelpers() {
     const helpersPath = "/scripts/helpers/";
     const helperFiles = [
         "eq.mjs",
-        "selectIfEq.mjs"
+        "selectIfEq.mjs",
+        "fetchRepository.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {
@@ -15,6 +16,7 @@ export async function loadHandlebarsHelpers() {
             Handlebars.registerHelper(functionName, module.default);
             return { Helper: functionName, Status: "Sucesso", Path: path };
         } catch (error) {
+            console.error(error);
             return { Helper: functionName, Status: "Falha", Path: path };
         }
     }));

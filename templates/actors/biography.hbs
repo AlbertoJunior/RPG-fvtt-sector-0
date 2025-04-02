@@ -1,14 +1,17 @@
 <section data-label="Biografia" class="S0-page">
-    <div style="display: flex; justify-content: center; align-items: center;">
-        <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}clickable{{/if}}" data-edit="img">
-    </div>
+    <h2>{{localize 'S0.Descricao'}}</h2>
+    <section style="padding-bottom: 4px;">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}clickable{{/if}}" data-edit="img">
+        </div>
 
-    <label for="biography" style="flex: 1">{{ localize 'S0.Biografia' }}</label>
-    <input id="biography" name="system.background.biography" type="text" value="{{actor.system.background.biography}}"
-        placeholder="{{ localize 'S0.Biografia' }}" />
+        <label for="biography" style="flex: 1">{{ localize 'S0.Biografia' }}</label>
+        <input id="biography" name="system.background.biography" type="text"
+            value="{{actor.system.background.biography}}" placeholder="{{ localize 'S0.Biografia' }}" />
+    </section>
 
     <h2> {{localize 'S0.Linguas'}} </h2>
-    <section id="linguasContainer" style="columns: 4;"></section>
+    <section id="linguasContainer" class="S0-language-container"></section>
 
     <h2> {{localize 'S0.Tracos'}} </h2>
     <section id="tracosContainer"

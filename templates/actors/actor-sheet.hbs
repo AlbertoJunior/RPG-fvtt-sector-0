@@ -1,16 +1,21 @@
 <form class="S0-actor-sheet" autocomplete="off">
     <div>
-        {{log this}}
+        {{log
+        'actor:' this.actor
+        'items:' this.items
+        'effects:' this.effects
+        }}
+        {{log 'canEdit:' this.canEdit 'canRoll:' this.canRoll }}
     </div>
 
     <ul id="floating-menu" class="S0-float-right-sheet">
         {{#if canEdit}}
         <li id="edit-mode-toggle" class="S0-simulate-button {{#if editable}}S0-in-edit{{/if}}">
             {{#if editable}}
-            <i class="fas fa-edit" style="margin-right: 4px;"></i>
+            <i class="fas fa-toggle-on" style="margin-right: 4px;"></i>
             {{ localize 'S0.Editando' }}
             {{else}}
-            <i class="fas fa-edit" style="margin-right: 4px;"></i>
+            <i class="fas fa-toggle-off" style="margin-right: 4px;"></i>
             {{ localize 'S0.Editar' }}
             {{/if}}
         </li>
@@ -27,14 +32,16 @@
     <header>
         <h2 class="charname" style="display: flex; align-items: center;">
             <label for="name" style="flex: 1">{{ localize 'S0.Nome' }}:</label>
-            <input name="name" style="margin-left: 6px; padding: 2px 6px" type="text" value="{{actor.name}}" placeholder="{{ localize 'S0.Nome' }}" />
+            <input name="name" style="margin-left: 6px; padding: 2px 6px" type="text" value="{{actor.name}}"
+                placeholder="{{ localize 'S0.Nome' }}" />
         </h2>
     </header>
 
-    <hr style="border-top: 1px solid var(--underline-header); border-bottom: 1px solid var(--underline-header);">
+    <hr >
 
     {{> "systems/setor0OSubmundo/templates/actors/characteristics.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/biography.hbs"}}
+    {{> "systems/setor0OSubmundo/templates/actors/enhancement.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/status.hbs"}}
 
 </form>

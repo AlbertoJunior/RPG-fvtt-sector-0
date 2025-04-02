@@ -4,7 +4,7 @@ import { localize } from "../../utils/utils.mjs";
 
 export class TraitDialog {
   static async _open(type, callback) {
-    const traits = await TraitRepository._getByType(type);
+    const traits = TraitRepository._getItemsByType(type);
     const content = await this.#mountContent(traits, true, true);
 
     new Dialog({
@@ -13,9 +13,7 @@ export class TraitDialog {
       buttons: {
         cancel: {
           label: "Cancelar",
-          callback: (html) => {
-            callback(undefined);
-          }
+          callback: (html) => { }
         },
         confirm: {
           label: "Adicionar",
@@ -32,7 +30,7 @@ export class TraitDialog {
   }
 
   static async _openByTrait(trait, type, actor, callback) {
-    const traits = await TraitRepository._getByType(type);
+    const traits = TraitRepository._getItemsByType(type);
     const content = await this.#mountContent(traits, false, callback != undefined, trait);
 
     const dialog = new Dialog({

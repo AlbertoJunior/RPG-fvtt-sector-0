@@ -5,14 +5,17 @@ export const CharacteristicType = Object.freeze({
     ABILITY: { id: 'habilidades', system: 'system.habilidades' },
     LANGUAGE: { id: 'linguas', system: 'system.linguas' },
     TRAIT: { id: 'tracos', system: 'system.tracos' },
+    ENHANCEMENT: { id: 'enhancement', system: 'system.aprimoramentos.aprimoramento' },
     SIMPLE: { id: '', system: 'system' },
 });
 
-export const OnClickEventType = Object.freeze({
-    CHARACTERISTIC: { id: 'characteristic', event: 'characteristicOnClick' },
-    ADD: { id: 'add', event: 'addOnClick' },
-    REMOVE: { id: 'remove', event: 'removeOnClick' },
-    EDIT: { id: 'edit', event: 'editOnClick' },
-    VIEW: { id: 'view', event: 'viewOnClick' },
-    CHAT: { id: 'chat', event: 'chatOnClick' },
+export const OnEventType = Object.freeze({
+    CHARACTERISTIC: { id: 'characteristic' },
+    ADD: { id: 'add' },
+    REMOVE: { id: 'remove' },
+    EDIT: { id: 'edit' },
+    VIEW: { id: 'view' },
+    CHAT: { id: 'chat' },
+    CHANGE: { id: 'change' },
+    CHECK: { id: 'check' },
 });

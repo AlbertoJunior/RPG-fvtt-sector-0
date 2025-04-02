@@ -1,7 +1,9 @@
-import { ElementCreator } from "../../../scripts/creators/element-creator.mjs";
+import { ElementCreatorJQuery } from "../../../scripts/creators/element-creator.mjs";
+import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
+import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
 import { rollAttribute } from "../../../scripts/utils/roll.mjs";
 import { keyJsonToKeyLang, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType, OnClickEventType } from "../../enums/characteristic-enums.mjs";
+import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
 
 export class SheetMethods {
 
@@ -12,6 +14,7 @@ export class SheetMethods {
         [CharacteristicType.REPERTORY.id]: CharacteristicType.REPERTORY.system,
         [CharacteristicType.LANGUAGE.id]: CharacteristicType.LANGUAGE.system,
         [CharacteristicType.TRAIT.id]: CharacteristicType.TRAIT.system,
+        [CharacteristicType.ENHANCEMENT.id]: CharacteristicType.ENHANCEMENT.system,
         [CharacteristicType.SIMPLE.id]: CharacteristicType.SIMPLE.system,
     }
 
@@ -45,16 +48,17 @@ export class SheetMethods {
                     await actor.update(characteristic);
                 }
             }
-        }
+        },
     }
 
-    static _createDinamicSheet(html, isEditable) {
+    static _createDynamicSheet(html, isEditable) {
         SheetMethods.#createAttributes(html, isEditable);
         SheetMethods.#createRepertory(html, isEditable);
         SheetMethods.#createVirtues(html, isEditable);
         SheetMethods.#createAbilities(html, isEditable);
         SheetMethods.#createFame(html, isEditable);
         SheetMethods.#createLanguages(html, isEditable);
+        SheetMethods.#createEnhancements(html, isEditable);
     }
 
     static #createAttributes(html, isEditable) {
@@ -123,35 +127,39 @@ export class SheetMethods {
             { id: 'influencia', label: 'S0.Influencia', amount: 5, addLast: false, firstSelected: false },
             { id: 'nivel_de_procurado', label: 'S0.Procurado', amount: 5, addLast: false, firstSelected: false },
         ].forEach(char => {
-            ElementCreator._createCharacteristicContainer(container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected);
+            ElementCreatorJQuery._createCharacteristicContainer(container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected);
         });
     }
 
     static #createLanguages(html, isEditable) {
         const container = html.find('#linguasContainer');
+        const languages = LanguageRepository._getItems();
 
-        [
-            { id: 'domini', label: 'Domini', checked: true, district: 'Colméia', color: '#ed7d31' },
-            { id: 'ameinsprache', label: 'Ameinsprache', district: 'Ameisen', color: '#c00000' },
-            { id: 'aranhes', label: 'Aranhês', district: 'Aranhas', color: '#ffd965' },
-            { id: 'bantura', label: 'Bantura', district: 'Vyura', color: '#2e75b5' },
-            { id: 'kemyura', label: 'Kemyura', district: 'Vyura', color: '#2e75b5' },
-            { id: 'dameise', label: 'L\'Ameise', district: 'Ameisen', color: '#c00000' },
-            { id: 'ptikor', label: 'Ptikor', district: 'Ptitsy', color: '#548135' },
-            { id: 'ptisyan', label: 'Ptisyan', district: 'Ptitsy', color: '#548135' },
-            { id: 'tokojhae', label: 'Tokojhae', district: 'Tokojirami', color: '#7030a0' },
-            { id: 'tokuma', label: 'Tokumá', district: 'Tokojirami', color: '#7030a0' },
-            { id: 'Zuarur', label: 'Zu\'arur', district: 'Alfiran', color: '#262626' },
-        ].forEach(lang => {
-            ElementCreator._createCharacteristicContainer(
-                container, lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnClickEventType.ADD
+        languages.forEach(lang => {
+            ElementCreatorJQuery._createCharacteristicContainer(
+                container, lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnEventType.ADD
             );
+        });
+    }
+
+    static #createEnhancements(html, isEditable) {
+        const container = html.find('.S0-enhancement select');
+        const filteredElements = container.filter((index, element) => element.dataset.type === 'enhancement');
+        const enhancements = EnhancementRepository._getItems();
+
+        filteredElements.each((index, selectEnhancement) => {
+            $(selectEnhancement).append(ElementCreatorJQuery._createOption(undefined, '', ''));
+
+            const options = enhancements.map(enhance =>
+                ElementCreatorJQuery._createOption(enhance.id, enhance.name, enhance.value)
+            );
+            $(selectEnhancement).append(options);
         });
     }
 
     static #create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
         characteristics.forEach(characteristic => {
-            ElementCreator._createCharacteristicContainer(container, characteristic, type, amount, isEditable, addLast, firstSelected)
+            ElementCreatorJQuery._createCharacteristicContainer(container, characteristic, type, amount, isEditable, addLast, firstSelected)
         });
     }
 
