@@ -1,4 +1,6 @@
+import { rollAttribute } from "../../rolls/roll.mjs";
 import { keyJsonToKeyLang, localize, TODO } from "../../utils/utils.mjs";
+import { ChatCreator } from "../chat-creator.mjs";
 
 export class ActorRollDialog {
     static async _open(actor) {
@@ -14,13 +16,14 @@ export class ActorRollDialog {
                 },
                 confirm: {
                     label: "Rolar",
-                    callback: (html) => {
+                    callback: async (html) => {
                         const attr1 = html.find("#attr1").val();
                         const attr2 = html.find("#attr2").val();
                         const ability = html.find("#ability").val();
                         const specialist = html.find("#specialist").prop("checked");
-                        const difficulty = html.find("#difficulty").val();
-                        rollAttribute(actor, attr1, attr2, ability, specialist, difficulty);
+                        const difficulty = html.find("#difficulty").val();                        
+                        const resultRoll = await rollAttribute(actor, attr1, attr2, ability, specialist, difficulty);
+                        ChatCreator._sendToChat(actor, resultRoll);
                     }
                 }
             }

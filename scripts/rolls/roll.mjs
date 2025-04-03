@@ -1,17 +1,4 @@
-import { ChatCreator } from "../creators/chat-creator.mjs";
-import { toTitleCase } from "./utils.mjs";
-
-function getAttributeValue(system, attr) {
-    const base = system.atributos[attr] || 0;
-    const bonus = system.bonus.atributos[attr] || 0;
-    return base + bonus;
-}
-
-function getAbilityValue(system, ability) {
-    const base = system.habilidades[ability] || 0;
-    //const bonus = system.bonus.habilidades[ability] || 0;
-    return base;
-}
+import { TODO, toTitleCase } from "../utils/utils.mjs";
 
 export async function rollAttribute(actor, attr1, attr2, ability, specialist, difficulty) {
     const system = actor.system;
@@ -23,18 +10,10 @@ export async function rollAttribute(actor, attr1, attr2, ability, specialist, di
     const diceAmount = calculateDiceAmount(attrValue1, attrValue2, abilityValue, penalty);
     const overloadDiceAmount = Math.min(system.sobrecarga.value || 0, diceAmount);
 
-    const rollDice = async (amount) => {
-        if (amount > 0) {
-            const rollFormula = `${amount}d10`;
-            const roll = new Roll(rollFormula);
-            await roll.evaluate();
-            return roll.dice.map(dice => dice.results.map(result => result.result));
-        }
-        return [];
-    };
-
-    const rollOverloadResults = await rollDice(overloadDiceAmount);
-    const rollDefaultResults = await rollDice(Math.max(diceAmount - overloadDiceAmount, 0));
+    const [rollOverloadResults, rollDefaultResults] = await Promise.all([
+        rollDice(overloadDiceAmount),
+        rollDice(Math.max(diceAmount - overloadDiceAmount, 0))
+    ]);
 
     const diceResults = {
         overload: rollOverloadResults,
@@ -58,8 +37,19 @@ export async function rollAttribute(actor, attr1, attr2, ability, specialist, di
         specialist: specialist
     };
 
-    const messageData = mountMessage(diceResults, attrs, abilityInfo, difficulty);
-    ChatCreator._sendToChat(actor, messageData);
+    return await mountContent(diceResults, attrs, abilityInfo, difficulty);
+}
+
+function getAttributeValue(system, attr) {
+    const base = system.atributos[attr] || 0;
+    const bonus = system.bonus.atributos[attr] || 0;
+    return base + bonus;
+}
+
+function getAbilityValue(system, ability) {
+    const base = system.habilidades[ability] || 0;
+    //const bonus = system.bonus.habilidades[ability] || 0;
+    return base;
 }
 
 function calculatePenalty(system) {
@@ -69,13 +59,26 @@ function calculatePenalty(system) {
     return Math.min(calculatedMinor, 4);
 }
 
-export function calculateDiceAmount(attribute1, attribute2, ability, penalty) {
+function calculateDiceAmount(attribute1, attribute2, ability, penalty) {
     const amount = Math.floor((attribute1 + attribute2) / 2) + ability;
     const finalAmount = Math.max(amount - penalty, 0);
     return finalAmount;
 }
 
-function mountMessage(diceResults, attrs, abilityInfo, difficulty) {
+async function rollDice(amount) {
+    if (amount > 0) {
+        const rollFormula = `${amount}d10`;
+        const roll = new Roll(rollFormula);
+        await roll.evaluate();
+        return roll.dice.map(dice => dice.results.map(result => result.result));
+    }
+    return [];
+};
+
+async function mountContent(diceResults, attrs, abilityInfo, difficulty) {
+    //TODO: Colocar para carregar através de um arquivo .html ou .hbs
+    TODO('roll.mjs:mountContent: Colocar para carregar através de um arquivo .html ou .hbs')
+
     const attr1 = attrs.attr1;
     const attr2 = attrs.attr2;
 
@@ -107,7 +110,7 @@ function mountMessage(diceResults, attrs, abilityInfo, difficulty) {
     `;
 
     const contentResult = `
-        <button class="S0-roll-result toggle-tooltip ${result.classes}">${result.message}</button>
+        <button class="S0-roll-result toggle-tooltip ${result.message.classes}">${result.message.message}</button>
     `;
 
     const contentFinal = `
@@ -116,6 +119,7 @@ function mountMessage(diceResults, attrs, abilityInfo, difficulty) {
          ${contentTest}
          ${contentOverload}
          ${contentRoll}
+         <label><strong>Sucessos</strong>: ${result.result + result.overload}
          ${contentUsePerseverance}
      </div>
      ${contentResult}
@@ -128,9 +132,10 @@ function mountMessage(diceResults, attrs, abilityInfo, difficulty) {
     return messageContent;
 }
 
-export function verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
+function verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
     const { result, overload } = calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
-    return mountResultMessageInfos(result, overload);
+    const message = mountResultMessageInfos(result, overload);
+    return { result, overload, message };
 }
 
 function calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty) {

@@ -1,3 +1,4 @@
+import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/characteristic-enums.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
@@ -60,21 +61,21 @@ class Setor0ActorSheet extends ActorSheet {
         const actionsClick = [
             { selector: '#edit-mode-toggle', method: this.#toggleEditMode },
             { selector: '#roll-button', method: this.#openRollDialog },
-            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this._characteristicOnClick },
-            { selector: `[data-action="${OnEventType.ADD.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.REMOVE.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.EDIT.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.VIEW.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.CHAT.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this._onActionClick },
+            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#characteristicOnClick },
+            ...Object.values(OnEventType)
+                .filter(eventType => eventType !== OnEventType.CHANGE && eventType !== OnEventType.CHARACTERISTIC)
+                .map(eventType => ({
+                    selector: `[data-action="${eventType.id}"]`,
+                    method: this.#onActionClick
+                }))
         ];
+        const actionsChange = [
+            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
+        ];
+
         actionsClick.forEach(action => {
             html.find(action.selector).click(action.method.bind(this, html));
         });
-
-        const actionsChange = [
-            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this._onChange },
-        ];
         actionsChange.forEach(action => {
             html.find(action.selector).change(action.method.bind(this, html));
         });
@@ -87,14 +88,13 @@ class Setor0ActorSheet extends ActorSheet {
         html.find(".S0-page").each((index, page) => {
             pages.push(page);
 
-            const button = document.createElement("li");
-            button.textContent = page?.getAttribute('data-label') || "[Erro]";
-            button.classList = 'S0-simulate-button';
+            const textContent = page?.getAttribute('data-label') || "[Erro]";
+            const button = _createLi(textContent, { classList: 'S0-simulate-button' });
 
             buttonContainer.appendChild(button);
 
             buttons.push(button);
-            button.addEventListener('click', this._changePage.bind(this, index + 1, pages, buttons));
+            button.addEventListener('click', this.#changePage.bind(this, index + 1, pages, buttons));
 
             if (index + 1 != this.currentPage) {
                 page.classList.add('hidden');
@@ -176,7 +176,7 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    async _characteristicOnClick(html, event) {
+    async #characteristicOnClick(html, event) {
         const element = event.target;
         selectCharacteristic(element);
 
@@ -202,7 +202,7 @@ class Setor0ActorSheet extends ActorSheet {
         }
     }
 
-    async _onActionClick(html, event) {
+    async #onActionClick(html, event) {
         event.preventDefault();
         const characteristic = event.currentTarget.dataset.characteristic;
         const action = event.currentTarget.dataset.action;
@@ -214,7 +214,7 @@ class Setor0ActorSheet extends ActorSheet {
         }
     }
 
-    async _onChange(html, event) {
+    async #onChange(html, event) {
         event.preventDefault();
         const characteristic = event.currentTarget.dataset.characteristic;
         const method = this.#mapEvents[characteristic]?.['change'];
@@ -229,7 +229,7 @@ class Setor0ActorSheet extends ActorSheet {
         SheetMethods._openRollDialog(this.actor);
     }
 
-    async _changePage(pageIndex, pages, buttons, event) {
+    async #changePage(pageIndex, pages, buttons, event) {
         if (pageIndex == this.currentPage)
             return;
 

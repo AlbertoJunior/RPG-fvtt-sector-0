@@ -1,6 +1,5 @@
 /* HTML ITEMS */
 :root {
-    /* --font-family: Arial, sans-serif; */
     --focus-color: #FFFBBF;
     --primary-color: rgb(255, 220, 0);
     --primary-color-alpha: rgba(255, 220, 0, 0.8);
@@ -24,7 +23,8 @@
 
     /* replace variables */
     --color-shadow-primary: var(--shadow-hover-color);
-    --color-underline-header: var(--secondary-color)
+    --color-underline-header: var(--secondary-color);
+    --color-scrollbar: var(--secondary-color);
 }
 
 button {
@@ -48,6 +48,10 @@ section {
     margin-inline: 4px;
     border-top: 2px solid var(--color-underline-header);
     border-bottom: 2px solid var(--color-underline-header);
+}
+
+* {
+    scrollbar-color: var(--secondary-color) var(--color-scrollbar-track);
 }
 
 h1,
@@ -223,7 +227,7 @@ a:hover {
 .S0-simulate-button {
     margin-block: 4px;
     padding: 6px;
-    font-size: small;
+    font-size: var(--font-size-13);
     background-color: var(--secondary-color-alpha);
     width: 120px;
     color: white;
@@ -269,6 +273,7 @@ img.clickable:hover {
     grid-column-gap: 8px;
 }
 
+/* #region ENHANCEMENT */
 .S0-enhancement-container {
     display: grid;
     column-gap: 6px;
@@ -342,6 +347,8 @@ img.clickable:hover {
     box-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
+/* #endregion */
+
 /* #region CHARACTERISTIC */
 .S0-characteristic-container {
     width: 100%;
@@ -352,7 +359,7 @@ img.clickable:hover {
 
 .S0-characteristic-container label {
     flex: 2;
-    margin-bottom: 0px;
+    margin: 0px;
 }
 
 .S0-characteristic-container a {
@@ -416,4 +423,25 @@ img.clickable:hover {
     box-shadow: 0 0 8px var(--shadow-hover-color);
 }
 
+/* #endregion */
+
+/* #region DIALOG*/
+.S0-dialog-content {
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.S0-dialog-content h3 {
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.S0-dialog-content label {
+    display: block;
+    text-shadow: 0 1px 5px var(--shadow-color);
+}
+
+/* #endregion */
+
+/* #region */
 /* #endregion */
