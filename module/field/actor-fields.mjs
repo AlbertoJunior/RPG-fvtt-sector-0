@@ -59,4 +59,9 @@ export class ActorEnhancementField extends SchemaField {
         this.id = id;
         this.name = name;
     }
+
+    static _toJson(id, name) {
+        const object = new ActorEnhancementField(id, name);
+        return object.toObject(object);
+    }
 }

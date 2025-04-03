@@ -1,22 +1,22 @@
 {{ log this }}
-<div style="margin-bottom: 5px;">
+<div class="S0-dialog-content">
     <div style="display: flex; column-gap: 5px;">
         <div style="flex: 3;">
-            <h3 style="margin: 0;">
+            <h3>
                 <label>
                     <strong>{{ localize 'S0.Level' }}</strong>: {{ level}}
                 </label>
             </h3>
-            <label style="display: block; font-weight: bold; margin-block: 6px">{{ name }}</label>
+            <label style="font-weight: bold;">{{ name }}</label>
         </div>
 
         <label
-            style="flex: 1; min-width: 110px; text-align: center; text-shadow: 0 1px 5px var(--shadow-color); font-weight: bold;">
+            style="display: flex; flex: 1; min-width: 110px; font-weight: bold; align-items: center; justify-content: center;">
             {{family}}
         </label>
     </div>
     <hr>
 
-    <label style="font-weight: bold; display: block;">{{ localize 'S0.Sobrecarga' }}: {{ overload }}</label>
-    <label style="font-weight: bold; display: block">{{ localize 'S0.Duracao' }}: {{ duration }}</label>
+    <label><strong>{{ localize 'S0.Sobrecarga' }}</strong>: {{ overload }}</label>
+    <label><strong>{{ localize 'S0.Duracao' }}</strong>: {{ duration }}</label>
 </div>

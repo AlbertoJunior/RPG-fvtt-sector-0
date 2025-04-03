@@ -65,7 +65,7 @@ async function updateActorEnhancement(currentTarget, actor) {
     const enhancementText = selectedEnhancement.text;
 
     const characteristic = {
-        [`${systemCharacteristic}_${slotEnhancement}`]: new ActorEnhancementField(enhancementId, enhancementText)
+        [`${systemCharacteristic}_${slotEnhancement}`]: ActorEnhancementField._toJson(enhancementId, enhancementText)
     };
 
     await actor.update(characteristic);
@@ -83,10 +83,7 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
     const enhancementOnSlot = getObject(actor, `${systemCharacteristic}_${enhancementSlot}`);
     const effectId = currentTarget.selectedOptions[0].value;
 
-    let effect;
-    if (effectId && effectId !== '') {
-        effect = EnhancementRepository._getEnhancementEffectById(effectId, enhancementOnSlot.id);
-    }
+    const effect = EnhancementRepository._getEnhancementEffectById(effectId, enhancementOnSlot.id);
 
     const updatedCharacteristic = { ...enhancementOnSlot.levels };
     updatedCharacteristic[`nv${enhancementLevel}`] = effect;
@@ -96,6 +93,10 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
     };
 
     await actor.update(characteristic);
+
+    if (effect.duration == EnhancementDuration.PASSIVE) {
+        toggleEnhancementEffectOnActor(effect, actor);
+    }
 }
 
 function getEffectSelectedId(event) {
@@ -105,6 +106,7 @@ function getEffectSelectedId(event) {
 }
 
 export async function sendEffectToChat(effect, actor) {
+    TODO('criar o envio para o chat');
     ChatCreator._sendToChat(actor, effect.name)
 }
 
@@ -123,13 +125,12 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     if (haveEffect) {
         await haveEffect.delete();
         ChatCreator._sendToChat(actor, `${effect.name} Desativou`);
-        return
+        return;
     }
 
     const activeEffectData = {
         label: effect.name,
         description: localize('Aprimoramento'),
-        tint: "#00fc22",
         statuses: [effect.id]
     };
 
@@ -150,12 +151,14 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
         else if (enhancement.id == '2')
             activeEffectData.img = "systems/setor0OSubmundo/icons/heart-half-full.svg";
 
-        activeEffectData.duration = { rounds: 1, starTime: 0 }
+        activeEffectData.tint = "#00fc22";
+        activeEffectData.duration = { rounds: 1, starTime: 0 };
     }
+
+    TODO('colocar a rolagem de sobrecarga');
 
     await actor.createEmbeddedDocuments("ActiveEffect", [activeEffectData]);
 
-    TODO('colocar a rolagem de sobrecarga');
     TODO('enviar o resultado no chat');
 }
 
@@ -174,22 +177,22 @@ export const enhancementHandleMethods = {
         const type = currentTarget.dataset.type;
 
         if (type == 'enhancement') {
-            await updateActorEnhancement(currentTarget, actor);
+            updateActorEnhancement(currentTarget, actor);
         } else if (type == 'level') {
-            await updateActorLevelEnhancement(currentTarget, actor);
+            updateActorLevelEnhancement(currentTarget, actor);
         }
     },
     view: async (actor, event) => {
         const effectId = getEffectSelectedId(event);
-        if (effectId && effectId !== "") {
-            const effect = await EnhancementRepository._getEnhancementEffectById(effectId);
+        const effect = EnhancementRepository._getEnhancementEffectById(effectId);
+        if (effect) {
             EnhancementDialog._open(effect, actor);
         }
     },
     check: async (actor, event) => {
         const effectId = getEffectSelectedId(event);
-        if (effectId && effectId !== "") {
-            const effect = await EnhancementRepository._getEnhancementEffectById(effectId);
+        const effect = EnhancementRepository._getEnhancementEffectById(effectId);
+        if (effect) {
             toggleEnhancementEffectOnActor(effect, actor);
         }
     }

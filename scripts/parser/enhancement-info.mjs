@@ -1,0 +1,26 @@
+import { EnhancementDuration, EnhancementOverload } from "../../module/enums/enhancement-enums.mjs";
+import { localize } from "../utils/utils.mjs";
+
+export class EnhancementInfoParser {
+
+    static _durationValueToString(value) {
+        const mapDuration = {
+            [EnhancementDuration.PASSIVE]: `${localize('Passivo')}`,
+            [EnhancementDuration.SCENE]: `${localize('Cena')}`,
+            [EnhancementDuration.USE]: `${localize('Uso')}`,
+        }
+        return mapDuration[value] || `<${localize('Erro')}>`;
+    }
+
+    static _overloadValueToString(value) {
+        const mapOverload = {
+            [EnhancementOverload.NONE]: `${localize('Nenhum')}`,
+            [EnhancementOverload.ONE_TESTED]: '1',
+            [EnhancementOverload.ONE_FIXED]: `1 ${localize('Automatico')}`,
+            [EnhancementOverload.ONE_FIXED_ONE_TEST]: `1 ${localize('Automatico')} + 1`,
+            [EnhancementOverload.TWO_TESTED]: '2',
+            [EnhancementOverload.TWO_FIXED]: `2 ${localize('Automatico')}`,
+        }
+        return mapOverload[value] || `<${localize('Erro')}>`;
+    }
+}

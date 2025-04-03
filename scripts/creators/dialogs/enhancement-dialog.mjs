@@ -1,4 +1,6 @@
 import { sendEffectToChat } from "../../../module/base/sheet/enhancement-methods.mjs";
+import { EnhancementDuration } from "../../../module/enums/enhancement-enums.mjs";
+import { EnhancementInfoParser } from "../../parser/enhancement-info.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 
 export class EnhancementDialog {
@@ -9,13 +11,14 @@ export class EnhancementDialog {
         const buttons = {
             cancel: {
                 label: "Chat",
-                callback: (html) => {                    
+                callback: (html) => {
                     sendEffectToChat(enhancementEffect, actor);
                 }
             }
         };
 
-        if (actor) {
+        const canActive = actor != undefined && enhancementEffect.duration !== EnhancementDuration.PASSIVE;
+        if (canActive) {
             buttons.confirm = {
                 label: "Ativar",
                 callback: (html) => {
@@ -31,9 +34,11 @@ export class EnhancementDialog {
         }).render(true);
     }
 
-    static async #mountContent(enhancement, enhancementFamily) {
+    static async #mountContent(enhancementEffect, enhancementFamily) {
         const data = {
-            ...enhancement,
+            ...enhancementEffect,
+            overload: EnhancementInfoParser._overloadValueToString(enhancementEffect.overload),
+            duration: EnhancementInfoParser._durationValueToString(enhancementEffect.duration),
             family: enhancementFamily.name,
         };
         return await renderTemplate("systems/setor0OSubmundo/templates/enhancement/enhancement-dialog.hbs", data);

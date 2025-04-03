@@ -14,4 +14,9 @@ export class ActorTraitField extends SchemaField {
             this.particularity = particularity;
         }
     }
+
+    static _toJson(id, name, particularity) {
+        const object = new ActorTraitField(id, name, particularity);
+        return object.toObject(object);
+    }
 }

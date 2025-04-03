@@ -32,7 +32,7 @@ export const traitMethods = {
         const systemChar = getSystemChar(traitType);
 
         TraitDialog._open(traitType, async (trait) => {
-            const objectTrait = new ActorTraitField(trait.id, trait.name, trait.particularity);
+            const objectTrait = ActorTraitField._toJson(trait.id, trait.name, trait.particularity);
             const updatedTraits = [...actor.system.tracos[systemChar], objectTrait];
             await updateTraits(actor, systemChar, updatedTraits);
         });
@@ -49,7 +49,7 @@ export const traitMethods = {
         const trait = actor.system.tracos[systemChar][itemIndex];
 
         TraitDialog._openByTrait(trait, type, actor, async (editedTrait) => {
-            const objectTrait = new ActorTraitField(editedTrait.id, editedTrait.name, editedTrait.particularity);
+            const objectTrait = ActorTraitField._toJson(editedTrait.id, editedTrait.name, editedTrait.particularity);
             const updatedTraits = [...actor.system.tracos[systemChar]];
             updatedTraits[itemIndex] = objectTrait;
             await updateTraits(actor, systemChar, updatedTraits);
