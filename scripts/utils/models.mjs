@@ -14,6 +14,7 @@ export async function createDataModels() {
                     await method;
                     return { Model: model, Status: "Sucesso" };
                 } catch (error) {
+                    console.error(error);
                     return { Model: model, Status: "Falha" };
                 }
             })()

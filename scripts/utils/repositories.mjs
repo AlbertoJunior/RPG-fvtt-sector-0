@@ -16,6 +16,7 @@ export async function loadPackages() {
                     await repo[method]();
                     return { Repository: repo.name, Status: "Sucesso" };
                 } catch (error) {
+                    console.error(error);
                     return { Repository: repo.name, Status: "Falha" };
                 }
             })()

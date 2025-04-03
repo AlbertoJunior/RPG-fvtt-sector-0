@@ -1,5 +1,5 @@
 import { ActorRollDialog } from "../../../scripts/creators/dialogs/actor-roll-dialog.mjs";
-import { ElementCreatorJQuery } from "../../../scripts/creators/element-creator.mjs";
+import { ElementCreatorJQuery } from "../../../scripts/creators/jquery/element-creator.mjs";
 import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
 import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
@@ -70,7 +70,7 @@ export class SheetMethods {
         }
     }
 
-    static _createDynamicSheet(html, isEditable) {
+    static _createDynamicSheet(html, isEditable) {                
         SheetMethods.#createAttributes(html, isEditable);
         SheetMethods.#createRepertory(html, isEditable);
         SheetMethods.#createVirtues(html, isEditable);

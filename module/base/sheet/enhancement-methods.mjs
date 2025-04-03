@@ -68,6 +68,11 @@ async function updateActorEnhancement(currentTarget, actor) {
         [`${systemCharacteristic}_${slotEnhancement}`]: ActorEnhancementField._toJson(enhancementId, enhancementText)
     };
 
+    if (enhancementId == undefined || enhancementId == '') {
+        const enhancementOnSlot = getObject(actor, `${systemCharacteristic}_${slotEnhancement}`);
+        await removeEnhancementEffects(actor, enhancementOnSlot);
+    }
+
     await actor.update(characteristic);
 }
 
@@ -92,9 +97,14 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
         [`${systemCharacteristic}_${enhancementSlot}.levels`]: updatedCharacteristic
     };
 
+    const oldEffect = getObject(actor, `${systemCharacteristic}_${enhancementSlot}.levels.nv${enhancementLevel}`);
+    if (!effect || oldEffect.id != effect.id) {
+        removeEffect(actor, oldEffect.id);
+    }
+
     await actor.update(characteristic);
 
-    if (effect.duration == EnhancementDuration.PASSIVE) {
+    if (effect && effect.duration == EnhancementDuration.PASSIVE) {
         toggleEnhancementEffectOnActor(effect, actor);
     }
 }
@@ -128,9 +138,12 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
         return;
     }
 
+    const enhancement = await EnhancementRepository._getEnhancementFamilyByEffectId(effect.id);
+
     const activeEffectData = {
         label: effect.name,
         description: localize('Aprimoramento'),
+        origin: `${localize('Aprimoramento')}:${enhancement.name}`,
         statuses: [effect.id]
     };
 
@@ -145,14 +158,15 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     }
 
     if (effect.duration == EnhancementDuration.SCENE) {
-        const enhancement = await EnhancementRepository._getEnhancementFamilyByEffectId(effect.id);
         if (enhancement.id == '1')
             activeEffectData.img = "systems/setor0OSubmundo/icons/user-ninja.svg";
         else if (enhancement.id == '2')
             activeEffectData.img = "systems/setor0OSubmundo/icons/heart-half-full.svg";
 
         activeEffectData.tint = "#00fc22";
-        activeEffectData.duration = { rounds: 1, starTime: 0 };
+        activeEffectData.duration = { rounds: 99, startTime: 0 };
+    } else if (effect.duration == EnhancementDuration.USE) {
+        activeEffectData.duration = { rounds: 1, turns: 1, startTime: 0 };
     }
 
     TODO('colocar a rolagem de sobrecarga');
@@ -162,15 +176,43 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     TODO('enviar o resultado no chat');
 }
 
+async function removeEffect(actor, oldEffectId) {
+    const effects = actor.effects;
+    for (const effect of effects) {
+        const effectId = effect.statuses.first();
+        if (oldEffectId == effectId) {
+            await effect.delete();
+            return;
+        }
+    }
+}
+
+async function removeEnhancementEffects(actor, enhancement) {
+    const effects = actor.effects;
+    const levels = enhancement?.levels || {};
+    const ids = new Set(Object.values(levels).map(item => item.id).filter(id => id !== ""));
+
+    for (const effect of effects) {
+        const effectId = effect.statuses.first();
+        if (ids.has(effectId)) {
+            await effect.delete();
+        }
+    }
+}
+
+async function removeNonePassivesEffects(actor) {
+    const effects = actor.effects;
+    for (const effect of effects) {
+        const effectDuration = effect.duration.type
+        if (effectDuration !== 'none') {
+            effect.delete();
+        }
+    }
+}
+
 export const enhancementHandleMethods = {
     remove: async (actor, event) => {
-        const effects = actor.effects;
-        for (const effect of effects) {
-            const effectDuration = effect.duration.type
-            if (effectDuration !== 'none') {
-                effect.delete();
-            }
-        }
+        removeNonePassivesEffects(actor);
     },
     change: async (actor, event) => {
         const currentTarget = event.currentTarget;
@@ -180,6 +222,8 @@ export const enhancementHandleMethods = {
             updateActorEnhancement(currentTarget, actor);
         } else if (type == 'level') {
             updateActorLevelEnhancement(currentTarget, actor);
+        } else {
+            NotificationsUtils._warning(`enhancement-methods:change:type [${type}] is not mapped`);
         }
     },
     view: async (actor, event) => {
@@ -187,6 +231,8 @@ export const enhancementHandleMethods = {
         const effect = EnhancementRepository._getEnhancementEffectById(effectId);
         if (effect) {
             EnhancementDialog._open(effect, actor);
+        } else {
+            NotificationsUtils._warning('enhancement-methods:view:effect is null');
         }
     },
     check: async (actor, event) => {
@@ -194,6 +240,8 @@ export const enhancementHandleMethods = {
         const effect = EnhancementRepository._getEnhancementEffectById(effectId);
         if (effect) {
             toggleEnhancementEffectOnActor(effect, actor);
+        } else {
+            NotificationsUtils._warning('enhancement-methods:check:effect is null');
         }
     }
 }
