@@ -4,6 +4,7 @@ import { _createEmptyOption, _createOption } from "../../../scripts/creators/jsc
 import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { NotificationsUtils } from "../../../scripts/utils/notifications.mjs";
 import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
+import { OnEventType } from "../../enums/characteristic-enums.mjs";
 import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { ActorEnhancementField } from "../../field/actor-fields.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
@@ -43,8 +44,8 @@ export function selectLevelOnOptions(enhancement, selects, activeEffects) {
 
 function setupViewButtonIsVisibleAndItemIsChecked(select, levelId, activeEffects) {
     const parent = select.parentElement;
-    $(parent).find('a[data-action=view]').toggleClass('hidden');
-    $(parent).find('a[data-action=check]').toggleClass('selected', checkHasEffect(levelId, activeEffects));
+    $(parent).find(`a[data-action=${OnEventType.VIEW.id}]`).toggleClass('hidden');
+    $(parent).find(`a[data-action=${OnEventType.CHECK.id}]`).toggleClass('S0-selected', checkHasEffect(levelId, activeEffects));
 }
 
 function checkHasEffect(effectId, activeEffects) {

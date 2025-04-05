@@ -12,7 +12,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
 
         // Update the health.
         const { value } = this.system.vitalidade;
-        await this.update({ "system.vitalidade.value": value - damage });
+        await this.update({ "system.vitalidade.total": value - damage });
 
         // Log a message.
         await ChatMessage.implementation.create({
@@ -85,14 +85,15 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 ruins: new ArrayField(new ActorTraitField())
             }),
             vitalidade: new SchemaField({
-                value: new NumberField({ integer: true, initial: 6 }),
-                superficial_damage: new NumberField({ integer: true, initial: 0 }),
-                letal_damage: new NumberField({ integer: true, initial: 0 }),
+                total: new NumberField({ integer: true, initial: 6 }),
+                dano_superficial: new NumberField({ integer: true, initial: 0 }),
+                dano_letal: new NumberField({ integer: true, initial: 0 }),
             }),
             sobrecarga: new SchemaField({
-                value: new NumberField({ integer: true, initial: 0 }),
-                current: new NumberField({ integer: true, initial: 0 }),
+                total: new NumberField({ integer: true, initial: 0 }),
+                atual: new NumberField({ integer: true, initial: 0 }),
             }),
+            vida: new NumberField({ initial: 8, min: 0, max: 10 }),
             bonus: new SchemaField({
                 atributos: new ActorAttribute(0),
                 iniciativa: new NumberField({ integer: true, initial: 0 }),
@@ -116,9 +117,9 @@ class PlayerDataModel extends ActorDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
-            experience: new SchemaField({
-                used: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-                current: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+            experiencia: new SchemaField({
+                usada: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+                atual: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
             })
         };
     }
@@ -127,15 +128,15 @@ class PlayerDataModel extends ActorDataModel {
 export async function createActorDataModels() {
     CONFIG.Actor.trackableAttributes = {
         Jogador: {
-            bar: ["system.vitalidade.value", "system.sobrecarga"],
+            bar: ["system.vitalidade.total", "system.sobrecarga"],
             value: ["progress"]
         },
         Mestre: {
-            bar: ["system.vitalidade.value", "system.sobrecarga"],
+            bar: ["system.vitalidade.total", "system.sobrecarga"],
             value: ["level"]
         },
         Inimigo: {
-            bar: ["system.vitalidade.value", "system.sobrecarga"],
+            bar: ["system.vitalidade.total", "system.sobrecarga"],
             value: ["level"]
         }
     };

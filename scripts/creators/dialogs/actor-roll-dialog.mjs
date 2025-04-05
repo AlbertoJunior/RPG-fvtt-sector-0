@@ -21,8 +21,9 @@ export class ActorRollDialog {
                         const attr2 = html.find("#attr2").val();
                         const ability = html.find("#ability").val();
                         const specialist = html.find("#specialist").prop("checked");
-                        const difficulty = html.find("#difficulty").val();                        
-                        const resultRoll = await rollAttribute(actor, attr1, attr2, ability, specialist, difficulty);
+                        const difficulty = html.find("#difficulty").val();
+
+                        const resultRoll = await rollAttribute(actor, { attr1, attr2, ability, specialist, difficulty });
                         ChatCreator._sendToChat(actor, resultRoll);
                     }
                 }

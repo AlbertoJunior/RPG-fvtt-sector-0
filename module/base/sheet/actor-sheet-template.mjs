@@ -1,6 +1,7 @@
 import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/characteristic-enums.mjs";
+import { ActorUpdater } from "../updater/actor-updater.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
@@ -12,6 +13,66 @@ class Setor0ActorSheet extends ActorSheet {
         enhancement: enhancementHandleMethods,
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
+        temporary: {
+            contextual: async (actor, event) => {
+                const dataset = event.currentTarget.dataset;
+                const type = dataset.type;
+                switch (type) {
+                    case 'health': {
+                        const characteristicSuperficialKey = `system.vitalidade.dano_superficial`;
+                        const characteristicLetalKey = `system.vitalidade.dano_superficial`;
+
+                        selectCharacteristic(event.currentTarget);
+                        const valueSuperficial = event.currentTarget.parentElement.querySelectorAll('.S0-superficial').length;
+                        const valueLetal = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
+
+                        await ActorUpdater._verifyAndUpdateActor(actor, characteristicSuperficialKey, valueSuperficial);
+                        await ActorUpdater._verifyAndUpdateActor(actor, characteristicLetalKey, valueLetal);
+
+                        break;
+                    }
+                    default: {
+                        console.log(event);
+                        return;
+                    }
+                }
+            },
+            check: async (actor, event) => {
+                const dataset = event.currentTarget.dataset;
+                const type = dataset.type;
+
+                let characteristicKey;
+                let value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
+                switch (type) {
+                    case 'virtue': {
+                        const itemType = dataset.itemType;
+                        characteristicKey = `system.virtudes.${itemType}.used`;
+                        break;
+                    }
+                    case 'overload': {
+                        characteristicKey = `system.sobrecarga.atual`;
+                        break;
+                    }
+                    case 'life': {
+                        characteristicKey = `system.vida`;
+                        break;
+                    }
+                    case 'health': {
+                        characteristicKey = `system.vitalidade.dano_letal`;
+                        value = event.currentTarget.parentElement.querySelectorAll('.S0-letal').length;
+                        break;
+                    }
+                    default: {
+                        console.log(event);
+                        return;
+                    }
+                }
+
+                selectCharacteristic(event.currentTarget);
+
+                ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, value);
+            }
+        }
     };
 
     constructor(...args) {
@@ -32,7 +93,7 @@ class Setor0ActorSheet extends ActorSheet {
             classes: ["setor0OSubmundo", "sheet", "actor"],
             template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
             width: 600,
-            height: 860,
+            height: 870,
             resizable: false,
         });
     }
@@ -73,11 +134,18 @@ class Setor0ActorSheet extends ActorSheet {
             { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
         ];
 
+        const actionsContextMenu = [
+            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this.#onContextualClick }
+        ];
+
         actionsClick.forEach(action => {
             html.find(action.selector).click(action.method.bind(this, html));
         });
         actionsChange.forEach(action => {
             html.find(action.selector).change(action.method.bind(this, html));
+        });
+        actionsContextMenu.forEach(action => {
+            html.find(action.selector).on('contextmenu', action.method.bind(this, html));
         });
     }
 
@@ -99,7 +167,7 @@ class Setor0ActorSheet extends ActorSheet {
             if (index + 1 != this.currentPage) {
                 page.classList.add('hidden');
             } else {
-                button.classList.add('selected');
+                button.classList.add('S0-selected');
             }
         });
     }
@@ -112,7 +180,10 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetSheet(html) {
-        html.find('.selected').removeClass('selected');
+        html.find('.S0-selected').removeClass('S0-selected');
+        html.find('.S0-superficial').removeClass('S0-superficial');
+        html.find('.S0-letal').removeClass('S0-letal');
+        console.log('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
 
         const system = this.actor.system;
         const activeEffects = this.actor.statuses;
@@ -174,6 +245,21 @@ class Setor0ActorSheet extends ActorSheet {
                 }
             });
         });
+
+        const vitalityCharacteristics = html.find('#vitalidade').find('.S0-characteristic-temp');
+        let letalDamage = system.vitalidade.dano_letal || 0;
+        let superFicialDamage = system.vitalidade.dano_superficial || 0;
+        vitalityCharacteristics.each((index, item) => {
+            if (superFicialDamage > 0) {
+                item.classList.add('S0-superficial');
+                superFicialDamage--;
+            } else if (letalDamage > 0) {
+                item.classList.add('S0-letal');
+                letalDamage--;
+            } else {
+                return;
+            }
+        });
     }
 
     async #characteristicOnClick(html, event) {
@@ -185,7 +271,7 @@ class Setor0ActorSheet extends ActorSheet {
 
         if (systemCharacteristic) {
             const parentElement = element.parentElement;
-            const level = Array.from(parentElement.children).filter(el => el.classList.contains('selected')).length;
+            const level = Array.from(parentElement.children).filter(el => el.classList.contains('S0-selected')).length;
 
             let characteristic;
             if (systemCharacteristic.includes('virtudes')) {
@@ -203,25 +289,25 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     async #onActionClick(html, event) {
+        this.#onEvent(event.currentTarget.dataset.action, html, event);
+    }
+
+    async #onChange(html, event) {
+        this.#onEvent('change', html, event);
+    }
+
+    async #onContextualClick(html, event) {
+        this.#onEvent('contextual', html, event);
+    }
+
+    async #onEvent(action, html, event) {
         event.preventDefault();
         const characteristic = event.currentTarget.dataset.characteristic;
-        const action = event.currentTarget.dataset.action;
         const method = this.#mapEvents[characteristic]?.[action];
         if (method) {
             method(this.actor, event);
         } else {
             console.warn(`-> [${action}] não existe para: [${characteristic}]`);
-        }
-    }
-
-    async #onChange(html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        const method = this.#mapEvents[characteristic]?.['change'];
-        if (method) {
-            method(this.actor, event);
-        } else {
-            console.warn(`-> ['change'] não existe para: [${characteristic}]`);
         }
     }
 
@@ -238,8 +324,8 @@ class Setor0ActorSheet extends ActorSheet {
         pages[normalizedCurrentIndex].classList.toggle('hidden');
         pages[normalizedIndex].classList.toggle('hidden');
 
-        buttons[normalizedCurrentIndex].classList.toggle('selected');
-        buttons[normalizedIndex].classList.toggle('selected');
+        buttons[normalizedCurrentIndex].classList.toggle('S0-selected');
+        buttons[normalizedIndex].classList.toggle('S0-selected');
         this.currentPage = pageIndex;
     }
 }

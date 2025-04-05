@@ -1,4 +1,4 @@
-<section data-label="Status" class="S0-page" id="statusPage">
+<section data-label="Status" class="S0-page">
         <h2> {{localize 'S0.Situacao'}}
                 {{#if canRoll}}
                 <a data-action="check" data-characteristic="temporary">
@@ -7,9 +7,9 @@
                 {{/if}}
         </h2>
 
-        <section id="situationContainer">
-                <ul>
-                        <li>
+        <section>
+                <ul class="S0-ul-flex">
+                        <li class="S0-container">
                                 <h3>
                                         {{ localize 'S0.Consciencia'}}
                                         {{#if canRoll}}
@@ -19,30 +19,18 @@
                                         {{/if}}
                                 </h3>
                                 <div id="consciencia" class="SO-inner-container">
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
+                                        {{#forLoop 0 actor.system.virtudes.consciencia.level}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                                                 data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
+                                                data-characteristic="temporary" data-type="virtue" data-item-type="consciencia">
                                         </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
                                 </div>
                         </li>
 
-                        <li>
+                        <li class="S0-container">
                                 <h3>
                                         {{ localize 'S0.Perseveranca'}}
                                         {{#if canRoll}}
@@ -52,159 +40,121 @@
                                         {{/if}}
                                 </h3>
                                 <div id="perseveranca" class="SO-inner-container">
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
+                                        {{#forLoop 0 actor.system.virtudes.perseveranca.level}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                                                 data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
+                                                data-characteristic="temporary" data-type="virtue" data-item-type="perseveranca">
                                         </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used">
-                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
                                 </div>
                         </li>
 
-                        <li>
+                        <li class="S0-container">
                                 <h3>
                                         {{ localize 'S0.Quietude'}}
+                                        {{#if canRoll}}
+                                        <a data-action="check" data-characteristic="effects"> <i class="fas fa-refresh"></i> </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="quietude" class="SO-inner-container">
+                                        {{#forLoop 0 actor.system.virtudes.quietude.level}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="virtue" data-item-type="quietude">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+                </ul>
+
+                <ul class="S0-ul-flex">
+                        {{#if (eq actor.system.morfologia 'sintetico')}}
+                        <li class="S0-container">
+                                <h3>{{ localize 'S0.Vida' }}</h3>
+                                <div id="vida" class="SO-inner-container">
+                                        {{#forLoop 0 8}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="life">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+                        {{/if}}
+
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Sobrecarga' }}
                                         {{#if canRoll}}
                                         <a data-action="check" data-characteristic="effects">
                                                 <i class="fas fa-refresh"></i>
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="quietude" class="SO-inner-container">
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="used"></div>
-                                </div>
-                        </li>
-                </ul>
-
-                <ul>
-                        {{#if (eq actor.system.morfologia 'sintetico')}}
-                        <li>
-                                <h3>{{ localize 'S0.Vida' }}</h3>
-                                <div id="vida" class="SO-inner-container">
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                </div>
-                        </li>
-                        {{/if}}
-
-                        <li>
-                                <h3>{{ localize 'S0.Sobrecarga' }}</h3>
                                 <div id="sobrecarga" class="SO-inner-container">
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
+                                        {{#forLoop 0 5}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                                                 data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
-                                        <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                                data-action="{{#if canRoll}}check{{/if}}"
-                                                data-characteristic="temporary" data-type="overload"></div>
+                                                data-characteristic="temporary" data-type="overload">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
                                 </div>
                         </li>
                 </ul>
 
-                <div class="S0-container">
-                        <h3>{{ localize 'S0.Vitalidade' }}</h3>
-                        <div id="vitalidade" class="SO-inner-container">
-                                <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary"
-                                        data-type="overload"></div>
-                                <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary"
-                                        data-type="overload"></div>
-                                <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary"
-                                        data-type="overload"></div>
-                                <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary"
-                                        data-type="overload"></div>
-                                <div class="S0-characteristic-temp {{#if canRoll}}clickable{{/if}}"
-                                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary"
-                                        data-type="overload"></div>
-                        </div>
-                        <div>
-                                <div class="S0-simulate-button">+ Dano Superficial</div>
-                                <div class="S0-simulate-button">+ Dano Letal</div>
-                        </div>
-                </div>
+                <ul class="S0-ul-flex">
+                        <li class="S0-container">
+                                <h3>{{ localize 'S0.Vitalidade' }}</h3>
+                                <div id="vitalidade" class="SO-inner-container">
+                                        {{#forLoop 0 actor.system.vitalidade.total}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}} {{#if (lt ../index 2)}}S0-selected{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="health">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+
+                                <ul class="S0-container"
+                                        style="float:right; background: none; padding: 6px; max-width: 250px; margin-top: 20px; margin-bottom: 2px">
+                                        <li class="S0-inner-li">
+                                                <label>Clique esquerdo: Letal</label>
+                                                <div class="S0-characteristic-temp"
+                                                        style="background-color: var(--secondary-color);"> </div>
+                                        </li>
+                                        <li class="S0-inner-li">
+                                                <label>Clique direito: Superficial</label>
+                                                <div class="S0-characteristic-temp"
+                                                        style="background-color: var(--primary-color);"> </div>
+                                        </li>
+                                </ul>
+                        </li>
+                </ul>
         </section>
 
         <h2>
                 {{localize 'S0.Efeitos_Ativos'}}
-                <a data-action="view" data-characteristic="effects">
-                        <i class="fas fa-eye"></i>
-                </a>
+                <a data-action="view" data-characteristic="effects"> <i class="fas fa-eye"></i> </a>
                 {{#if canRoll}}
-                <a data-action="check" data-characteristic="effects">
-                        <i class="fas fa-refresh"></i>
-                </a>
-                <a data-action="remove" data-characteristic="effects" data-type="all">
-                        <i class="fas fa-trash"></i>
-                </a>
+                <a data-action="check" data-characteristic="effects"> <i class="fas fa-refresh"></i> </a>
+                <a data-action="remove" data-characteristic="effects" data-type="all"> <i class="fas fa-trash"></i> </a>
                 {{/if}}
         </h2>
 
         <section>
-                <ul class="S0-container">
+                <ul class="S0-container" style="padding: 5px;">
                         {{#each effects as |item index|}}
                         <li style="margin-block: 3px; border-bottom: 1px solid var(--secondary-color)">
-                                <strong>{{ item.description }}</strong>: {{ item.name }}
+                                <strong>{{ item.origin }}</strong>: {{ item.name }}
                                 <a data-action="remove" data-characteristic="effects" data-type="single"
                                         data-item-index="{{ index }}">
                                         <i class="fas fa-remove"></i>

@@ -1,14 +1,16 @@
+import { ActorUtils } from "../utils/actor.mjs";
 import { TODO, toTitleCase } from "../utils/utils.mjs";
 
-export async function rollAttribute(actor, attr1, attr2, ability, specialist, difficulty) {
-    const system = actor.system;
-    const attrValue1 = getAttributeValue(system, attr1);
-    const attrValue2 = getAttributeValue(system, attr2);
-    const abilityValue = getAbilityValue(system, ability);
-    const penalty = calculatePenalty(system);
+export async function rollAttribute(actor, params) {
+    const { attr1, attr2, ability, specialist, difficulty } = params;
+
+    const attrValue1 = ActorUtils.getAttributeValue(actor, attr1);
+    const attrValue2 = ActorUtils.getAttributeValue(actor, attr2);
+    const abilityValue = ActorUtils.getAbilityValue(actor, ability);
+    const penalty = ActorUtils.calculatePenalty(actor);
 
     const diceAmount = calculateDiceAmount(attrValue1, attrValue2, abilityValue, penalty);
-    const overloadDiceAmount = Math.min(system.sobrecarga.value || 0, diceAmount);
+    const overloadDiceAmount = Math.min(actor.system.sobrecarga.atual || 0, diceAmount);
 
     const [rollOverloadResults, rollDefaultResults] = await Promise.all([
         rollDice(overloadDiceAmount),
@@ -38,25 +40,6 @@ export async function rollAttribute(actor, attr1, attr2, ability, specialist, di
     };
 
     return await mountContent(diceResults, attrs, abilityInfo, difficulty);
-}
-
-function getAttributeValue(system, attr) {
-    const base = system.atributos[attr] || 0;
-    const bonus = system.bonus.atributos[attr] || 0;
-    return base + bonus;
-}
-
-function getAbilityValue(system, ability) {
-    const base = system.habilidades[ability] || 0;
-    //const bonus = system.bonus.habilidades[ability] || 0;
-    return base;
-}
-
-function calculatePenalty(system) {
-    const stamina = system.atributos.vigor;
-    const damage = system.vitalidade.letal_damage;
-    const calculatedMinor = Math.max(damage - stamina, 0);
-    return Math.min(calculatedMinor, 4);
 }
 
 function calculateDiceAmount(attribute1, attribute2, ability, penalty) {

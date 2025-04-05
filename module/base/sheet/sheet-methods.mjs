@@ -3,20 +3,10 @@ import { ElementCreatorJQuery } from "../../../scripts/creators/jquery/element-c
 import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
 import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
+import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
 
 export class SheetMethods {
-
-    static characteristicTypeMap = {
-        [CharacteristicType.ATTRIBUTE.id]: CharacteristicType.ATTRIBUTE.system,
-        [CharacteristicType.ABILITY.id]: CharacteristicType.ABILITY.system,
-        [CharacteristicType.VIRTUES.id]: CharacteristicType.VIRTUES.system,
-        [CharacteristicType.REPERTORY.id]: CharacteristicType.REPERTORY.system,
-        [CharacteristicType.LANGUAGE.id]: CharacteristicType.LANGUAGE.system,
-        [CharacteristicType.TRAIT.id]: CharacteristicType.TRAIT.system,
-        [CharacteristicType.ENHANCEMENT.id]: CharacteristicType.ENHANCEMENT.system,
-        [CharacteristicType.SIMPLE.id]: CharacteristicType.SIMPLE.system,
-    }
+    static characteristicTypeMap = CharacteristicTypeMap;
 
     static handleMethods = {
         language: {
@@ -29,7 +19,7 @@ export class SheetMethods {
 
                 if (systemCharacteristic) {
                     const parentElement = element.parentElement;
-                    const checked = Array.from(parentElement.children).some(el => el.classList.contains('selected'));
+                    const checked = Array.from(parentElement.children).some(el => el.classList.contains('S0-selected'));
 
                     const updatedLanguages = actor.system.linguas;
                     if (checked) {
@@ -64,13 +54,25 @@ export class SheetMethods {
                     }
                 }
             },
+            check: async (actor, event) => {
+                const effects = actor.effects;
+                for (const effect of effects) {
+                    const effectDuration = effect.duration.type
+                    if (effectDuration !== 'none') {
+                        effect.delete();
+                    }
+                }
+            },
             view: async (actor, event) => {
-                $(event.currentTarget.parentElement.parentElement).find('ul')[0]?.classList.toggle('hidden')
+                $(event.currentTarget.parentElement.nextElementSibling).find('ul')[0]?.classList.toggle('hidden')
             }
+        },
+        temporary: {
+
         }
     }
 
-    static _createDynamicSheet(html, isEditable) {                
+    static _createDynamicSheet(html, isEditable) {
         SheetMethods.#createAttributes(html, isEditable);
         SheetMethods.#createRepertory(html, isEditable);
         SheetMethods.#createVirtues(html, isEditable);
@@ -146,9 +148,10 @@ export class SheetMethods {
             { id: 'influencia', label: 'S0.Influencia', amount: 5, addLast: false, firstSelected: false },
             { id: 'nivel_de_procurado', label: 'S0.Procurado', amount: 5, addLast: false, firstSelected: false },
         ].forEach(char => {
-            ElementCreatorJQuery._createCharacteristicContainer(
-                container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected
+            const element = ElementCreatorJQuery._createCharacteristicContainer(
+                char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected
             );
+            container.append(element);
         });
     }
 
@@ -157,9 +160,10 @@ export class SheetMethods {
         const languages = LanguageRepository._getItems();
 
         languages.forEach(lang => {
-            ElementCreatorJQuery._createCharacteristicContainer(
-                container, lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnEventType.ADD
+            const element = ElementCreatorJQuery._createCharacteristicContainer(
+                lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnEventType.ADD
             );
+            container.append(element);
         });
     }
 
@@ -180,7 +184,10 @@ export class SheetMethods {
 
     static #create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
         characteristics.forEach(characteristic => {
-            ElementCreatorJQuery._createCharacteristicContainer(container, characteristic, type, amount, isEditable, addLast, firstSelected)
+            const element = ElementCreatorJQuery._createCharacteristicContainer(
+                characteristic, type, amount, isEditable, addLast, firstSelected
+            );
+            container.append(element);
         });
     }
 

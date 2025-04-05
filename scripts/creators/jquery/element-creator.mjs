@@ -3,7 +3,7 @@ import { OnEventType } from "../../../module/enums/characteristic-enums.mjs";
 export class ElementCreatorJQuery {
     static #createCharacteristicDiv(isEditable, safeEventType, characteristicType) {
         return $('<div>', {
-            class: isEditable ? `S0-characteristic clickable` : `S0-characteristic`,
+            class: isEditable ? `S0-characteristic S0-clickable` : `S0-characteristic`,
             'data-action': isEditable ? `${safeEventType.id}` : undefined,
             'data-characteristic': characteristicType
         });
@@ -26,7 +26,7 @@ export class ElementCreatorJQuery {
         for (let i = 0; i < amount; i++) {
             const divCaracteristica = this.#createCharacteristicDiv(isEditable, safeEventType, characteristicType);
             if (firstSelected && i == 0) {
-                divCaracteristica.addClass('selected');
+                divCaracteristica.addClass('S0-selected');
             }
             divContainer.append(divCaracteristica);
         }
@@ -40,12 +40,12 @@ export class ElementCreatorJQuery {
         return divContainer;
     }
 
-    static _createOption(itemId, name, value, selected) {
+    static _createOption(itemId, name, value, isSelected) {
         return $('<option>', {
             value: value,
             text: name,
             'data-item-id': itemId,
-            selected: selected || false
+            selected: isSelected || false
         });
     }
 }

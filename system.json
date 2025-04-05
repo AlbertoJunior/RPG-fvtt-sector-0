@@ -96,8 +96,8 @@
         "distance": 1,
         "units": "PM"
     },
-    "primaryTokenAttribute": "system.vitalidade.value",
-    "secondaryTokenAttribute": "system.sobrecarga",
+    "primaryTokenAttribute": "system.vitalidade.total",
+    "secondaryTokenAttribute": "system.sobrecarga.atual",
     "url": "https://www.set0rpg.com.br",
     "manifest": "https://github.com/AlbertoJunior/setor0OSubmundo/system.json",
     "download": "https://github.com/AlbertoJunior/setor0OSubmundo/download/archive.zip"

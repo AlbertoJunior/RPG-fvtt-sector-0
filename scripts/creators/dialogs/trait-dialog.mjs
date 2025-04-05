@@ -92,12 +92,12 @@ export class TraitDialog {
     return await renderTemplate("systems/setor0OSubmundo/templates/traits/trait-dialog.hbs", data);
   }
 
-  static #mapOptions(traits, selected) {
+  static #mapOptions(traits, selectedTrait) {
     const options = traits
       .map((attr, index) => {
         let isSelected = '';
-        if (selected) {
-          isSelected = attr.id == selected.id ? 'selected' : '';
+        if (selectedTrait) {
+          isSelected = attr.id == selectedTrait.id ? 'S0-selected' : '';
         }
         return {
           id: attr.id,
