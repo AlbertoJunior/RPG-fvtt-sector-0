@@ -3,16 +3,19 @@ import { getObject } from "../../../scripts/utils/utils.mjs";
 
 export class ActorUpdater {
     static async _verifyAndUpdateActor(actor, systemCharacteristic, value) {
-        if (getObject(actor, systemCharacteristic) == undefined) {
-            NotificationsUtils._warning('Não foi possível editar o personagem')
-            console.warn(`-> [${systemCharacteristic}] não existe, impossível atualizar o Actor`)
-            return;
-        }
+        await this._verifyKeysAndUpdateActor(actor, [{ systemCharacteristic: systemCharacteristic, value: value }]);
+    }
 
-        const characteristic = {
-            [`${systemCharacteristic}`]: value
-        };
+    static async _verifyKeysAndUpdateActor(actor, params = []) {
+        const keysToUpdate = {};
+        params.forEach(item => {
+            if (getObject(actor, item.systemCharacteristic) == undefined) {
+                console.warn(`-> [${item.systemCharacteristic}] não existe, impossível atualizar o Actor`);
+            } else {
+                keysToUpdate[item.systemCharacteristic] = item.value;
+            }
+        });
 
-        await actor.update(characteristic);
+        await actor.update(keysToUpdate);
     }
 }

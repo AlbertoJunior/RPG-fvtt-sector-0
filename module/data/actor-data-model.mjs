@@ -27,8 +27,8 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
             name: new StringField({ required: true }),
-            morfologia: new StringField({ required: true, label: "S0.Morfologia" }),
-            bairro: new StringField({ required: true, label: "S0.Bairro" }),
+            morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: 'androide' }),
+            bairro: new StringField({ required: true, label: "S0.Bairro", initial: 'alfiran' }),
             background: new SchemaField({
                 age: new NumberField({ required: false, blank: true }),
                 biography: new HTMLField({ required: false, blank: true }),
@@ -89,10 +89,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 dano_superficial: new NumberField({ integer: true, initial: 0 }),
                 dano_letal: new NumberField({ integer: true, initial: 0 }),
             }),
-            sobrecarga: new SchemaField({
-                total: new NumberField({ integer: true, initial: 0 }),
-                atual: new NumberField({ integer: true, initial: 0 }),
-            }),
+            sobrecarga: new NumberField({ integer: true, initial: 0 }),
             vida: new NumberField({ initial: 8, min: 0, max: 10 }),
             bonus: new SchemaField({
                 atributos: new ActorAttribute(0),

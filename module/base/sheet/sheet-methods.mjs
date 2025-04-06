@@ -4,6 +4,8 @@ import { EnhancementRepository } from "../../../scripts/repository/enhancement-r
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
 import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
+import { handleStatusMethods } from "./status-methods.mjs";
+import { traitMethods } from "./trait-methods.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
@@ -39,6 +41,7 @@ export class SheetMethods {
                 }
             }
         },
+        trait: traitMethods,
         effects: {
             remove: async (actor, event) => {
                 const currentTarget = event.currentTarget;
@@ -67,9 +70,7 @@ export class SheetMethods {
                 $(event.currentTarget.parentElement.nextElementSibling).find('ul')[0]?.classList.toggle('hidden')
             }
         },
-        temporary: {
-
-        }
+        temporary: handleStatusMethods
     }
 
     static _createDynamicSheet(html, isEditable) {

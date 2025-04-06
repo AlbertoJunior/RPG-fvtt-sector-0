@@ -1,38 +1,40 @@
 import { NotificationsUtils } from "./notifications.mjs";
 
-export function containClass(element, cls) {
+function containClass(element, cls) {
     return element.classList.contains(cls);
+}
+
+function isCharacteristic(element) {
+    return containClass(element, 'S0-characteristic') || containClass(element, 'S0-characteristic-6') || containClass(element, 'S0-characteristic-temp');
 }
 
 export function selectCharacteristic(element) {
     if (!element) {
-        NotificationsUtils._warning('não encontrou o elemento')
         return;
     }
 
-    function isCharacteristic(element) {
-        return containClass(element, 'S0-characteristic') || containClass(element, 'S0-characteristic-6') || containClass(element, 'S0-characteristic-temp');
+    if (!isCharacteristic(element)) {
+        return;
     }
 
-    if (isCharacteristic(element)) {
-        element.classList.toggle('S0-selected');
+    element.classList.toggle('S0-selected');
 
-        let next = element.nextElementSibling;
-        while (next) {
-            if (isCharacteristic(next)) {
-                next.classList.remove('S0-selected');
-            }
-            next = next.nextElementSibling;
+    let next = element.nextElementSibling;
+    while (next) {
+        if (isCharacteristic(next)) {
+            next.classList.remove('S0-selected');
         }
-
-        let before = element.previousElementSibling;
-        while (before) {
-            if (isCharacteristic(before)) {
-                before.classList.add('S0-selected');
-            }
-            before = before.previousElementSibling;
-        }
+        next = next.nextElementSibling;
     }
+
+    let before = element.previousElementSibling;
+    while (before) {
+        if (isCharacteristic(before)) {
+            before.classList.add('S0-selected');
+        }
+        before = before.previousElementSibling;
+    }
+    
     element.blur();
 }
 

@@ -23,4 +23,11 @@ export class ActorUtils {
         const calculatedMinor = Math.max(damage - stamina, 0);
         return Math.min(calculatedMinor, 4);
     }
+
+    static calculateVitalityByUpAttribute(actor, level) {
+        const system = actor.system;
+        const value = level;
+        const bonus = system.bonus.vitalidade || 0;
+        return 5 + value + bonus;
+    }
 }

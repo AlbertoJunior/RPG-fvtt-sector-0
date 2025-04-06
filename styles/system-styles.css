@@ -18,6 +18,7 @@
     --border-radius-medium: 6px;
     --border-radius-large: 8px;
     --shadow-color: rgba(0, 0, 0, 0.2);
+    --shadow-color-30: rgba(0, 0, 0, 0.3);
     --shadow-hover-color: rgba(130, 0, 255, 0.8);
 
     /* replace variables */
@@ -84,16 +85,6 @@ h3 a:hover {
 /* #endregion */
 
 /* #region EDIT FOUNDRY STYLE */
-
-/* .window-app .window-content {
-    color: var(--primary-color);
-    background: url(../ui/denim075.png) repeat;
-}
-
-.window-app .window-content select,
-.window-app .window-content input {
-    color: var(--primary-color);
-} */
 
 .combat-sidebar li.combatant .roll {
     background: url(../icons/d10.png) no-repeat 50% 50%;
@@ -183,6 +174,16 @@ img.S0-clickable:hover {
 /* #endregion */
 
 /* #region MY STYLES */
+.S0-page-transparent {
+    color: var(--primary-color);
+    background: url(/ui/denim075.png) repeat;
+}
+
+.S0-page-transparent select,
+.S0-page-transparent input {
+    color: var(--primary-color);
+}
+
 .S0-page {
     margin-inline: 0;
     border: none;
@@ -191,13 +192,18 @@ img.S0-clickable:hover {
 .S0-page ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 .S0-page h2,
 .S0-page h3 {
     width: 100%;
     text-align: center;
-    text-shadow: 0 1px 1px #0000004f;
+    text-shadow: 0 1px 1px var(--shadow-color-30);
+}
+
+.S0-page label {
+    text-shadow: 0 1px 1px var(--shadow-color-30);
 }
 
 .S0-actor-sheet section {
@@ -402,9 +408,7 @@ img.S0-clickable:hover {
     margin-inline: 5px;
 }
 
-.S0-characteristic,
-.S0-characteristic-6,
-.S0-characteristic-temp {
+.S0-characteristic {
     flex: 1;
     max-width: 14px;
     max-height: 14px;
@@ -416,21 +420,15 @@ img.S0-clickable:hover {
     transform: skew(-16deg);
 }
 
-.S0-clickable.S0-characteristic,
-.S0-clickable.S0-characteristic-6,
-.S0-clickable.S0-characteristic-temp {
+.S0-clickable.S0-characteristic {
     background-color: var(--sheet-color);
 }
 
-.S0-clickable.S0-characteristic.S0-selected,
-.S0-clickable.S0-characteristic-6.S0-selected,
-.S0-clickable.S0-characteristic-temp.S0-selected {
+.S0-clickable.S0-characteristic.S0-selected {
     background-color: var(--alternate-black-color);
 }
 
-.S0-clickable.S0-characteristic:hover,
-.S0-clickable.S0-characteristic-6:hover,
-.S0-clickable.S0-characteristic-temp:hover {
+.S0-clickable.S0-characteristic:hover {
     cursor: pointer;
     background-color: var(--focus-color);
     box-shadow: 0 0 8px var(--shadow-hover-color);
@@ -502,6 +500,7 @@ img.S0-clickable:hover {
 }
 
 .S0-container {
+    margin-block: 6px;
     padding: 6px;
     border: 2px solid var(--secondary-color-alpha);
     border-radius: var(--border-radius-large);

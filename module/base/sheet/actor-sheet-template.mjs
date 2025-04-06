@@ -1,83 +1,25 @@
 import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
+import { ActorUtils } from "../../../scripts/utils/actor.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
-import { OnEventType } from "../../enums/characteristic-enums.mjs";
+import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
-import { traitMethods } from "./trait-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
-        trait: traitMethods,
+        trait: SheetMethods.handleMethods.trait,
         enhancement: enhancementHandleMethods,
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
-        temporary: {
-            contextual: async (actor, event) => {
-                const dataset = event.currentTarget.dataset;
-                const type = dataset.type;
-                switch (type) {
-                    case 'health': {
-                        const characteristicSuperficialKey = `system.vitalidade.dano_superficial`;
-                        const characteristicLetalKey = `system.vitalidade.dano_superficial`;
-
-                        selectCharacteristic(event.currentTarget);
-                        const valueSuperficial = event.currentTarget.parentElement.querySelectorAll('.S0-superficial').length;
-                        const valueLetal = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
-
-                        await ActorUpdater._verifyAndUpdateActor(actor, characteristicSuperficialKey, valueSuperficial);
-                        await ActorUpdater._verifyAndUpdateActor(actor, characteristicLetalKey, valueLetal);
-
-                        break;
-                    }
-                    default: {
-                        console.log(event);
-                        return;
-                    }
-                }
-            },
-            check: async (actor, event) => {
-                const dataset = event.currentTarget.dataset;
-                const type = dataset.type;
-
-                let characteristicKey;
-                let value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
-                switch (type) {
-                    case 'virtue': {
-                        const itemType = dataset.itemType;
-                        characteristicKey = `system.virtudes.${itemType}.used`;
-                        break;
-                    }
-                    case 'overload': {
-                        characteristicKey = `system.sobrecarga.atual`;
-                        break;
-                    }
-                    case 'life': {
-                        characteristicKey = `system.vida`;
-                        break;
-                    }
-                    case 'health': {
-                        characteristicKey = `system.vitalidade.dano_letal`;
-                        value = event.currentTarget.parentElement.querySelectorAll('.S0-letal').length;
-                        break;
-                    }
-                    default: {
-                        console.log(event);
-                        return;
-                    }
-                }
-
-                selectCharacteristic(event.currentTarget);
-
-                ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, value);
-            }
-        }
+        temporary: SheetMethods.handleMethods.temporary
     };
 
     constructor(...args) {
         super(...args)
         this.currentPage = 1;
+        this.enableBlackMode = false;
     }
 
     activateListeners(html) {
@@ -133,7 +75,6 @@ class Setor0ActorSheet extends ActorSheet {
         const actionsChange = [
             { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
         ];
-
         const actionsContextMenu = [
             { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this.#onContextualClick }
         ];
@@ -180,9 +121,17 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetSheet(html) {
-        html.find('.S0-selected').removeClass('S0-selected');
-        html.find('.S0-superficial').removeClass('S0-superficial');
-        html.find('.S0-letal').removeClass('S0-letal');
+        if (this.enableBlackMode) {
+            const parent = html.parent()[0];
+            parent.classList.add('S0-page-transparent')
+        };
+
+        const classesToRemove = [
+            'S0-selected', 'S0-superficial', 'S0-letal'
+        ];
+        for (const item of classesToRemove) {
+            html.find(`.${item}`).removeClass(item);
+        }
         console.log('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
 
         const system = this.actor.system;
@@ -206,10 +155,11 @@ class Setor0ActorSheet extends ActorSheet {
                 systemCharacteristic: system
             }
         ].forEach((element) => {
-            let hasNext = element.container.firstElementChild;
+            let hasNext = element.container?.firstElementChild;
             while (hasNext) {
-                const children = hasNext.children;
-                selectCharacteristic(children[Math.min(element.systemCharacteristic[hasNext.id], children.length - 1)]);
+                const children = hasNext.querySelectorAll('.S0-characteristic');
+                const level = element.systemCharacteristic[hasNext.id];
+                selectCharacteristic(children[Math.min(level - 1, children.length - 1)]);
                 hasNext = hasNext.nextElementSibling;
             }
         });
@@ -246,10 +196,18 @@ class Setor0ActorSheet extends ActorSheet {
             });
         });
 
-        const vitalityCharacteristics = html.find('#vitalidade').find('.S0-characteristic-temp');
+        selectCharacteristic(html.find('#statusPage #consciencia .S0-characteristic')[system.virtudes.consciencia.used - 1]);
+        selectCharacteristic(html.find('#statusPage #perseveranca .S0-characteristic')[system.virtudes.perseveranca.used - 1]);
+        selectCharacteristic(html.find('#statusPage #quietude .S0-characteristic')[system.virtudes.quietude.used - 1]);
+        selectCharacteristic(html.find('#statusPage #sobrecarga .S0-characteristic')[system.sobrecarga - 1]);
+
+        const life = html.find('#statusPage #vida .S0-characteristic');
+        life.addClass('S0-selected');
+        selectCharacteristic(life[system.vida]);
+
         let letalDamage = system.vitalidade.dano_letal || 0;
         let superFicialDamage = system.vitalidade.dano_superficial || 0;
-        vitalityCharacteristics.each((index, item) => {
+        html.find('#vitalidade .S0-characteristic-temp').each((index, item) => {
             if (superFicialDamage > 0) {
                 item.classList.add('S0-superficial');
                 superFicialDamage--;
@@ -273,18 +231,29 @@ class Setor0ActorSheet extends ActorSheet {
             const parentElement = element.parentElement;
             const level = Array.from(parentElement.children).filter(el => el.classList.contains('S0-selected')).length;
 
-            let characteristic;
             if (systemCharacteristic.includes('virtudes')) {
-                characteristic = {
-                    [`${systemCharacteristic}.${parentElement.id}.level`]: level
-                };
+                const characteristic = `${systemCharacteristic}.${parentElement.id}.level`;
+                ActorUpdater._verifyAndUpdateActor(this.actor, characteristic, level);
             } else {
-                characteristic = {
-                    [`${systemCharacteristic}.${parentElement.id}`]: level
-                };
-            }
+                const params = [];
+                params.push(
+                    {
+                        systemCharacteristic: `${systemCharacteristic}.${parentElement.id}`,
+                        value: level
+                    }
+                );
 
-            await this.actor.update(characteristic);
+                if (parentElement.id == 'vigor') {
+                    params.push(
+                        {
+                            systemCharacteristic: CharacteristicType.VITALITY_TOTAL.system,
+                            value: ActorUtils.calculateVitalityByUpAttribute(this.actor, level)
+                        }
+                    );
+                }
+
+                ActorUpdater._verifyKeysAndUpdateActor(this.actor, params);
+            }
         }
     }
 
