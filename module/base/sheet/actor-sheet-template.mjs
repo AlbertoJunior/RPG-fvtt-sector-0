@@ -33,7 +33,7 @@ class Setor0ActorSheet extends ActorSheet {
             classes: ["setor0OSubmundo", "sheet", "actor"],
             template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
             width: 600,
-            height: 870,
+            height: 880,
             resizable: false,
         });
     }

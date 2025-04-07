@@ -1,6 +1,8 @@
+import { RollRepository } from "../../repository/roll-repository.mjs";
 import { rollAttribute } from "../../rolls/roll.mjs";
 import { keyJsonToKeyLang, localize, TODO } from "../../utils/utils.mjs";
 import { ChatCreator } from "../chat-creator.mjs";
+import { RollMessageCreator } from "../messages/roll-mesage.mjs";
 
 export class ActorRollDialog {
     static async _open(actor) {
@@ -24,7 +26,22 @@ export class ActorRollDialog {
                         const difficulty = html.find("#difficulty").val();
 
                         const resultRoll = await rollAttribute(actor, { attr1, attr2, ability, specialist, difficulty });
-                        ChatCreator._sendToChat(actor, resultRoll);
+                        const rollItems = resultRoll.roll;
+                        const rolls = [];
+                        if (rollItems.default.roll != undefined) {
+                            const objectRoll = rollItems.default.roll;
+                            objectRoll.options.isOverload = false;
+                            rolls.push(objectRoll);
+                        }
+                        if (rollItems.overload.roll != undefined) {
+                            const objectRoll = rollItems.overload.roll;
+                            objectRoll.options.isOverload = true;
+                            rolls.push(objectRoll);
+                        }
+
+                        const message = await RollMessageCreator.mountContent(resultRoll.roll, resultRoll.attrs, resultRoll.abilityInfo, difficulty);
+
+                        console.log(await ChatCreator._sendToChatTypeRoll(actor, message, rolls));
                     }
                 }
             }

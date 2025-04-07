@@ -92,6 +92,11 @@
     "S0.Nenhum": "Nenhum",
     "S0.Automatico": "Automático",
     
+    "S0.Teste": "Teste",
+    "S0.Sucesso": "Sucesso",
+    "S0.Sucessos": "Sucessos",
+    "S0.Usar_Perseveranca": "Usar Perseverança",
+    
     "S0.Movimento": "Movimento",
     "S0.Iniciativa": "Iniciativa",
     "S0.Penalidade": "Penalidade"

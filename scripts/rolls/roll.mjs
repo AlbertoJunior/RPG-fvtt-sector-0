@@ -1,5 +1,5 @@
+import { RollMessageCreator } from "../creators/messages/roll-mesage.mjs";
 import { ActorUtils } from "../utils/actor.mjs";
-import { TODO, toTitleCase } from "../utils/utils.mjs";
 
 export async function rollAttribute(actor, params) {
     const { attr1, attr2, ability, specialist, difficulty } = params;
@@ -12,16 +12,15 @@ export async function rollAttribute(actor, params) {
     const diceAmount = calculateDiceAmount(attrValue1, attrValue2, abilityValue, penalty);
     const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), diceAmount);
 
-
     const [rollOverloadResults, rollDefaultResults] = await Promise.all([
         rollDice(overloadDiceAmount),
         rollDice(Math.max(diceAmount - overloadDiceAmount, 0))
     ]);
 
-    const diceResults = {
+    const roll = {
         overload: rollOverloadResults,
         default: rollDefaultResults
-    };
+    }
 
     const attrs = {
         attr1: {
@@ -40,7 +39,11 @@ export async function rollAttribute(actor, params) {
         specialist: specialist
     };
 
-    return await mountContent(diceResults, attrs, abilityInfo, difficulty);
+    return {
+        roll: roll,
+        attrs: attrs,
+        abilityInfo: abilityInfo
+    };
 }
 
 function calculateDiceAmount(attribute1, attribute2, ability, penalty) {
@@ -54,75 +57,20 @@ async function rollDice(amount) {
         const rollFormula = `${amount}d10`;
         const roll = new Roll(rollFormula);
         await roll.evaluate();
-        return roll.dice.map(dice => dice.results.map(result => result.result));
+
+        return {
+            roll: roll,
+            values: roll.dice.map(dice => dice.results.map(result => result.result))
+        };
     }
-    return [];
+
+    return {
+        roll: undefined,
+        values: []
+    };
 };
 
-async function mountContent(diceResults, attrs, abilityInfo, difficulty) {
-    //TODO: Colocar para carregar através de um arquivo .html ou .hbs
-    TODO('roll.mjs:mountContent: Colocar para carregar através de um arquivo .html ou .hbs')
-
-    const attr1 = attrs.attr1;
-    const attr2 = attrs.attr2;
-
-    const contentAbility = `<p><strong>Habilidade:</strong> ${toTitleCase(abilityInfo.label.replaceAll('_', ' '))}</p>`
-
-    const contentTest = `<p><strong>Teste:</strong> (${attr1.value} + ${attr2.value}) / 2 + ${abilityInfo.value}</p>`;
-
-    const formatDiceResults = (results, label, customStyle = '') => {
-        if (results.length === 0) return '';
-        const formattedResults = results[0]
-            .map(result => `<li class="S0-d10 roll die d10" style="${customStyle}">${result}</li>`)
-            .join("");
-        return `
-            <p><strong>${label}:</strong></p>
-            <ol class="dice-rolls">${formattedResults}</ol>
-        `;
-    };
-    const contentOverload = formatDiceResults(
-        diceResults.overload, 'Sobrecarga', 'filter: sepia(1) hue-rotate(330deg);'
-    );
-    const contentRoll = formatDiceResults(diceResults.default, 'Rolagem');
-
-    const result = verifyResultRoll(
-        diceResults.overload, diceResults.default, abilityInfo.specialist, difficulty
-    );
-
-    const contentUsePerseverance = `
-        <button class="S0-roll-result">Usar Perseverança</button>
-    `;
-
-    const contentResult = `
-        <button class="S0-roll-result toggle-tooltip ${result.message.classes}">${result.message.message}</button>
-    `;
-
-    const contentFinal = `
-     <div class="dice-tooltip tooltip-part hidden">
-         ${contentAbility}
-         ${contentTest}
-         ${contentOverload}
-         ${contentRoll}
-         <label><strong>Sucessos</strong>: ${result.result + result.overload}
-         ${contentUsePerseverance}
-     </div>
-     ${contentResult}
-    `;
-
-    const messageContent = `
-    <h3>Teste de ${toTitleCase(attr1.label)} e ${toTitleCase(attr2.label)}</h3>
-    ${contentFinal}
-    `
-    return messageContent;
-}
-
-function verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
-    const { result, overload } = calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
-    const message = mountResultMessageInfos(result, overload);
-    return { result, overload, message };
-}
-
-function calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty) {
+export function calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty) {
     let resultOverload = 0;
     let overload = false;
     if (dicesOverload.length > 0) {
@@ -170,26 +118,4 @@ function calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty) {
         result: resultFinal,
         overload: overload
     }
-}
-
-function mountResultMessageInfos(resultSuccess, haveOverload) {
-    let messageInfo = ''
-    if (resultSuccess > 0) {
-        messageInfo = {
-            message: haveOverload ? "SUCESSO EXPLOSIVO!" : "Sucesso",
-            classes: haveOverload ? "overload success" : "success"
-        }
-    } else if (resultSuccess < 0) {
-        messageInfo = {
-            message: haveOverload ? "FALHA CAÓTICA" : "Falha Crítica",
-            classes: haveOverload ? "overload critical-failure" : "critical-failure"
-        }
-    } else {
-        messageInfo = {
-            message: "Falha",
-            classes: "failure"
-        }
-    }
-
-    return messageInfo;
 }

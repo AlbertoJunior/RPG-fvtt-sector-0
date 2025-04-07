@@ -59,14 +59,15 @@
         {{else}}
         <div style="text-align: center;">
             <h1>{{actor.name}}</h1>
-            <h3 style="display: inline; margin-right: 6px;">{{actor.system.morfologia}}</h3>
-            <h3 style="display: inline; padding-left: 6px; border-left: 2px solid var(--secondary-color);">
-                {{actor.system.bairro}}</h3>
+            <h3 style="display: inline; padding-right: 6px; border-right: 1px solid var(--secondary-color);">
+                {{actor.system.morfologia}}
+            </h3>
+            <h3 style="display: inline; padding-left: 6px; border-left: 1px solid var(--secondary-color);">
+                {{actor.system.bairro}}
+            </h3>
         </div>
         {{/if}}
     </header>
-
-    <hr>
 
     {{> "systems/setor0OSubmundo/templates/actors/characteristics.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/biography.hbs"}}

@@ -1,0 +1,46 @@
+<div class="S0-message-content">
+    {{#if haveResult}}
+    <h4>{{localize 'S0.Atributos'}} [{{ localize attr1 }}] e [{{ localize attr2 }}]</h4>
+
+    <hr>
+
+    <div class="dice-tooltip tooltip-part hidden">
+        <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
+        <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
+
+        <hr>
+
+        {{#unless (isEmpty overloadValues)}}
+        <p style="margin-top: 6px;">{{localize 'S0.Sobrecarga'}}:</p>
+        <ol class="dice-rolls">
+            {{#each overloadValues}}
+            <li class="S0-d10 roll die d10" style="filter: sepia(1) hue-rotate(330deg);">{{ this }}</li>
+            {{/each}}
+        </ol>
+        {{/unless}}
+
+        {{#unless (isEmpty defaultValues)}}
+        <p style="margin-top: 6px;">{{localize 'S0.Rolagem'}}:</p>
+        <ol class="dice-rolls">
+            {{#each defaultValues }}
+            <li class="S0-d10 roll die d10">{{ this }}</li>
+            {{/each}}
+        </ol>
+        {{/unless}}
+
+        <hr>
+
+        <label style="display: block; margin-block: 6px;">{{localize 'S0.Sucessos'}}: {{ resultValue }}</label>
+
+        <button class="S0-roll-result" data-action="roll" data-type="perseverance">
+            {{localize 'S0.Usar_Perseveranca'}}
+        </button>
+    </div>
+
+    <button class="S0-roll-result success {{ resultMessageClasses }}" data-action="toggle-tooltip">
+        {{ resultMessage }} ({{ resultValue }})
+    </button>
+    {{else}}
+    Teste impossível
+    {{/if}}
+</div>

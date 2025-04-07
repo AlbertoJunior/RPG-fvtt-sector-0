@@ -14,6 +14,7 @@ body {
     --secondary-color: rgba(65, 0, 130, 1);
     --secondary-color-alpha: rgba(65, 0, 130, 0.8);
     --secondary-color-alpha-50: rgba(65, 0, 130, 0.5);
+    --light-secondary-color-alpha-50: rgba(155, 30, 255, 0.5);
     --selected-color-hover: rgba(255, 0, 0, 0.6);
     --deletable-color-hover: rgba(255, 0, 0, 0.8);
     --sheet-color: rgba(255, 255, 255, 1);
@@ -119,7 +120,8 @@ select:enabled:hover {
     height: 36px;
     min-width: 36px;
     width: 36px;
-    line-height: 38px;
+    line-height: 42px;
+    font-size: var(--font-size-12);
 }
 
 .S0-dice {
@@ -301,24 +303,24 @@ img.S0-clickable:hover {
     color: white;
 }
 
-.S0-roll-result.success {
+.S0-roll-result.S0-success {
     background: rgba(30, 200, 50, 0.5);
 }
 
-.S0-roll-result.failure {
+.S0-roll-result.S0-failure {
     background: rgba(116, 116, 116, 0.5);
 }
 
-.S0-roll-result.critical-failure {
+.S0-roll-result.S0-critical-failure {
     background: rgba(255, 0, 0, 0.5);
 }
 
-.S0-roll-result.overload {
+.S0-roll-result.S0-overload {
     border: dashed 2px white;
     box-shadow: none;
 }
 
-.S0-roll-result.overload:hover {
+.S0-roll-result.S0-overload:hover {
     border: dashed 2px black;
     box-shadow: none;
 }
@@ -594,6 +596,15 @@ img.S0-clickable:hover {
 
 /* #endregion */
 
+/* #region MESSAGE*/
+.S0-message-content hr {
+    border-color: var(--light-secondary-color-alpha-50);
+}
+
+/* #endregion */
+
 /* #region */
 /* #endregion */
+
+
 /* #endregion */

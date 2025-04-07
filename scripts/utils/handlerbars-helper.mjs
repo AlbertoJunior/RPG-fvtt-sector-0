@@ -8,6 +8,7 @@ export async function loadHandlebarsHelpers() {
         "fetchRepository.mjs",
         "forLoop.mjs",
         "actorValues.mjs",
+        "isEmpty.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {
