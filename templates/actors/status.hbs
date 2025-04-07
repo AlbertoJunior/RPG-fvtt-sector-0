@@ -10,6 +10,27 @@
         <section>
                 <ul class="S0-ul-flex">
                         <li class="S0-container">
+                                <h3>{{ localize 'S0.Movimento'}}</h3>
+                                <h4>{{actorValues actor 'pm'}}</h4>
+                        </li>
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Iniciativa'}}
+                                        {{#if canRoll}}
+                                        <a data-action="roll" data-characteristic="temporary" data-type="initiative">
+                                                <i class="fas fa-dice-d10"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <h4>{{actorValues actor 'initiative'}}</h4>
+                        </li>
+                        <li class="S0-container">
+                                <h3>{{ localize 'S0.Penalidade'}}</h3>
+                                <h4>{{actorValues actor 'penalty'}}</h4>
+                        </li>
+                </ul>
+                <ul class="S0-ul-flex">
+                        <li class="S0-container">
                                 <h3>
                                         {{ localize 'S0.Consciencia'}}
                                         {{#if canRoll}}
@@ -85,7 +106,7 @@
                                 <h3>
                                         {{ localize 'S0.Vida' }}
                                         {{#if canRoll}}
-                                        <a data-action="check" data-characteristic="effects">
+                                        <a data-action="roll" data-characteristic="temporary" data-type="overload">
                                                 <i class="fas fa-dice-d10"></i>
                                         </a>
                                         {{/if}}
@@ -107,7 +128,7 @@
                                 <h3>
                                         {{ localize 'S0.Sobrecarga' }}
                                         {{#if canRoll}}
-                                        <a data-action="check" data-characteristic="effects">
+                                        <a data-action="roll" data-characteristic="temporary" data-type="overload">
                                                 <i class="fas fa-dice-d10"></i>
                                         </a>
                                         <a data-action="remove" data-characteristic="temporary" data-type="overload">
@@ -149,19 +170,19 @@
                                         {{/forLoop}}
                                 </div>
 
-                                <ul class="S0-container"
-                                        style="float:right; background: none; padding: 6px; max-width: 250px; margin-top: 20px; margin-bottom: 2px">
-                                        <li class="S0-inner-li">
+                                <div class="S0-container"
+                                        style="display: flex; justify-content: space-around; background: none; padding: 6px; margin-bottom: 2px;">
+                                        <div class="S0-inner-li">
                                                 <label><strong>Clique esquerdo:</strong> Letal</label>
                                                 <div class="S0-characteristic S0-characteristic-temp"
                                                         style="background-color: var(--secondary-color);"> </div>
-                                        </li>
-                                        <li class="S0-inner-li">
+                                        </div>
+                                        <div class="S0-inner-li">
                                                 <label><strong>Clique direito:</strong> Superficial</label>
                                                 <div class="S0-characteristic S0-characteristic-temp"
                                                         style="background-color: var(--primary-color);"> </div>
-                                        </li>
-                                </ul>
+                                        </div>
+                                </div>
                         </li>
                 </ul>
         </section>
@@ -176,7 +197,7 @@
         </h2>
 
         <section>
-                <ul class="S0-container" style="padding: 5px;">
+                <ul class="S0-container" style="padding: 5px; margin-block: 6px;">
                         {{#each effects as |item index|}}
                         <li style="margin-block: 3px; border-bottom: 1px solid var(--secondary-color)">
                                 <strong>{{ item.origin }}</strong>: {{ item.name }}

@@ -2,12 +2,13 @@ import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
 import { EnhancementDialog } from "../../../scripts/creators/dialogs/enhancement-dialog.mjs";
 import { _createEmptyOption, _createOption } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
 import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
+import { ActorUtils } from "../../../scripts/utils/actor.mjs";
 import { NotificationsUtils } from "../../../scripts/utils/notifications.mjs";
 import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
-import { OnEventType } from "../../enums/characteristic-enums.mjs";
-import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
+import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { ActorEnhancementField } from "../../field/actor-fields.mjs";
-import { SheetMethods } from "./sheet-methods.mjs";
+import { ActorUpdater } from "../updater/actor-updater.mjs";
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
@@ -53,57 +54,41 @@ function checkHasEffect(effectId, activeEffects) {
 }
 
 async function updateActorEnhancement(currentTarget, actor) {
-    const characteristicType = currentTarget.dataset.characteristic;
-    const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
-
-    if (!systemCharacteristic)
-        return;
-
-    const slotEnhancement = currentTarget.dataset.itemId;
-
-    const selectedEnhancement = currentTarget.options[currentTarget.options.selectedIndex];
+    const selectedEnhancement = currentTarget.selectedOptions[0];
     const enhancementId = selectedEnhancement.dataset.itemId;
     const enhancementText = selectedEnhancement.text;
 
-    const characteristic = {
-        [`${systemCharacteristic}_${slotEnhancement}`]: ActorEnhancementField._toJson(enhancementId, enhancementText)
-    };
+    const slotEnhancement = currentTarget.dataset.itemId;
+    const key = `${CharacteristicType.ENHANCEMENT.system}_${slotEnhancement}`;
+    const characteristic = ActorEnhancementField._toJson(enhancementId, enhancementText);
 
     if (enhancementId == undefined || enhancementId == '') {
-        const enhancementOnSlot = getObject(actor, `${systemCharacteristic}_${slotEnhancement}`);
+        const enhancementOnSlot = getObject(actor, key);
         await removeEnhancementEffects(actor, enhancementOnSlot);
     }
 
-    await actor.update(characteristic);
+    ActorUpdater._verifyAndUpdateActor(actor, key, characteristic);
 }
 
 async function updateActorLevelEnhancement(currentTarget, actor) {
-    const dataset = currentTarget.dataset;
-
-    const systemCharacteristic = SheetMethods.characteristicTypeMap[dataset.characteristic];
-    if (!systemCharacteristic)
-        return;
-
-    const { enhancementSlot, enhancementLevel } = dataset;
-
-    const enhancementOnSlot = getObject(actor, `${systemCharacteristic}_${enhancementSlot}`);
+    const { enhancementSlot, enhancementLevel } = currentTarget.dataset;
     const effectId = currentTarget.selectedOptions[0].value;
+
+    const enhancementOnSlotKey = `${CharacteristicType.ENHANCEMENT.system}_${enhancementSlot}`
+
+    const enhancementOnSlot = getObject(actor, `${enhancementOnSlotKey}`);
 
     const effect = EnhancementRepository._getEnhancementEffectById(effectId, enhancementOnSlot.id);
 
-    const updatedCharacteristic = { ...enhancementOnSlot.levels };
-    updatedCharacteristic[`nv${enhancementLevel}`] = effect;
-
-    const characteristic = {
-        [`${systemCharacteristic}_${enhancementSlot}.levels`]: updatedCharacteristic
-    };
-
-    const oldEffect = getObject(actor, `${systemCharacteristic}_${enhancementSlot}.levels.nv${enhancementLevel}`);
+    const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
     if (!effect || oldEffect.id != effect.id) {
-        removeEffect(actor, oldEffect.id);
+        await removeEffect(actor, oldEffect.id);
     }
 
-    await actor.update(characteristic);
+    const updatedCharacteristicLevels = { ...enhancementOnSlot.levels };
+    updatedCharacteristicLevels[`nv${enhancementLevel}`] = effect;
+
+    await ActorUpdater._verifyAndUpdateActor(actor, `${enhancementOnSlotKey}.levels`, updatedCharacteristicLevels);
 
     if (effect && effect.duration == EnhancementDuration.PASSIVE) {
         toggleEnhancementEffectOnActor(effect, actor);
@@ -135,7 +120,7 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     const haveEffect = actor.effects.find(ef => ef.name == effect.name);
     if (haveEffect) {
         await haveEffect.delete();
-        ChatCreator._sendToChat(actor, `${effect.name} Desativou`);
+        ChatCreator._sendToChat(actor, `Desativou ${effect.name}`);
         return;
     }
 
@@ -144,21 +129,40 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     const activeEffectData = {
         label: effect.name,
         description: localize('Aprimoramento'),
-        origin: `${localize('Aprimoramento')}:${enhancement.name}`,
+        origin: `${localize('Aprimoramento')}: ${enhancement.name}`,
         statuses: [effect.id]
     };
 
     if (effect.effectChanges.length > 0) {
+        const enhancementLevel = ActorUtils.getEnhancementLevel(actor, enhancement);
+
         activeEffectData.changes = effect.effectChanges.map(change => {
+            let value = 0;
+            
+            const typeOfValue = change.typeOfValue;
+            if (typeOfValue == EffectChangeValueType.FIXED) {
+                value = change.value;
+            } else if (typeOfValue == EffectChangeValueType.ENHANCEMENT_LEVEL) {
+                value = enhancementLevel;
+            } else if (typeOfValue == EffectChangeValueType.HALF_ENHANCEMENT_LEVEL) {
+                value = Math.floor(enhancementLevel / 2);
+            } else if (typeOfValue == EffectChangeValueType.ENHANCEMENT_LEVEL_PLUS_FIXED) {
+                value = enhancementLevel + change.value;
+            } else if (typeOfValue == EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED) {
+                value = Math.floor(enhancementLevel / 2) + change.value;
+            }
+
             return {
-                key: `system.bonus.${change.key}`,
+                key: `system.${change.key}`,
                 mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-                value: change.value
+                value: value
             }
         });
     }
 
     if (effect.duration == EnhancementDuration.SCENE) {
+        TODO('colocar os ícones corretos');
+
         if (enhancement.id == '1')
             activeEffectData.img = "systems/setor0OSubmundo/icons/user-ninja.svg";
         else if (enhancement.id == '2')

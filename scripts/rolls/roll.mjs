@@ -10,7 +10,8 @@ export async function rollAttribute(actor, params) {
     const penalty = ActorUtils.calculatePenalty(actor);
 
     const diceAmount = calculateDiceAmount(attrValue1, attrValue2, abilityValue, penalty);
-    const overloadDiceAmount = Math.min(actor.system.sobrecarga.atual || 0, diceAmount);
+    const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), diceAmount);
+
 
     const [rollOverloadResults, rollDefaultResults] = await Promise.all([
         rollDice(overloadDiceAmount),
@@ -80,7 +81,7 @@ async function mountContent(diceResults, attrs, abilityInfo, difficulty) {
         `;
     };
     const contentOverload = formatDiceResults(
-        diceResults.overload, 'Sobrecarga', 'filter: sepia(0.5) hue-rotate(60deg);'
+        diceResults.overload, 'Sobrecarga', 'filter: sepia(1) hue-rotate(330deg);'
     );
     const contentRoll = formatDiceResults(diceResults.default, 'Rolagem');
 

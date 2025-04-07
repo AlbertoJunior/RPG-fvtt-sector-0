@@ -1,13 +1,27 @@
-import { EnhancementDuration, EnhancementOverload } from "../../module/enums/enhancement-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../module/enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../module/field/actor-enhancement-field.mjs";
 
 export class EnhancementRepository {
     static #agilityEffects = [
         EnhancementEffectField._toJson(
-            '1', 'Maestria', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, [], [{ key: 'atributos.destreza', value: 5 }, { key: 'atributos.forca', value: 5 }]
+            '1', 'Maestria', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE,
+            [],
+            [
+                { key: 'bonus.iniciativa', value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
+            ]
         ),
-        EnhancementEffectField._toJson('2', 'Reflexos Rápidos', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, []),
-        EnhancementEffectField._toJson('3', 'Agilidade', 2, EnhancementOverload.NONE, EnhancementDuration.SCENE, ['1', '2']),
+        EnhancementEffectField._toJson('2', 'Reflexos Rápidos', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE,
+            [],
+            [
+                { key: 'bonus.iniciativa', value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
+            ]
+        ),
+        EnhancementEffectField._toJson('3', 'Agilidade', 2, EnhancementOverload.NONE, EnhancementDuration.SCENE, 
+            ['1', '2'],
+            [
+                { key: 'bonus.atributos.destreza', value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            ]
+        ),
         EnhancementEffectField._toJson('4', 'Disparada', 3, EnhancementOverload.NONE, EnhancementDuration.USE, ['3']),
         EnhancementEffectField._toJson('5', 'Primeira Forma Defensiva', 3, EnhancementOverload.NONE, EnhancementDuration.SCENE, ['3']),
         EnhancementEffectField._toJson('6', 'Ataque Relâmpago', 4, EnhancementOverload.NONE, EnhancementDuration.USE, ['4', '5']),
@@ -72,7 +86,9 @@ export class EnhancementRepository {
     ];
 
     static #hardnessEffects = [
-        EnhancementEffectField._toJson('50', 'Resiliência', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, []),
+        EnhancementEffectField._toJson('50', 'Resiliência', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, [], [
+            { key: 'vitalidade.total', value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+        ]),
         EnhancementEffectField._toJson('51', 'Dureza', 2, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, ['50']),
         EnhancementEffectField._toJson('52', 'Pele de Aço', 3, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, ['51']),
         EnhancementEffectField._toJson('53', 'Inquebrável', 4, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, ['52']),

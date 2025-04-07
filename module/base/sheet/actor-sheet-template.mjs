@@ -1,8 +1,6 @@
 import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { ActorUtils } from "../../../scripts/utils/actor.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
-import { ActorUpdater } from "../updater/actor-updater.mjs";
+import { OnEventType } from "../../enums/characteristic-enums.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 
@@ -52,19 +50,11 @@ class Setor0ActorSheet extends ActorSheet {
         return getActorFlag(this.actor, "editable");
     }
 
-    get canEdit() {
-        return getActorFlag(this.actor, "canEdit");
-    }
-
-    get canRoll() {
-        return getActorFlag(this.actor, "canRoll");
-    }
-
     #setupListeners(html) {
         const actionsClick = [
             { selector: '#edit-mode-toggle', method: this.#toggleEditMode },
             { selector: '#roll-button', method: this.#openRollDialog },
-            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#characteristicOnClick },
+            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#onCharacteristicClick },
             ...Object.values(OnEventType)
                 .filter(eventType => eventType !== OnEventType.CHANGE && eventType !== OnEventType.CHARACTERISTIC)
                 .map(eventType => ({
@@ -132,7 +122,7 @@ class Setor0ActorSheet extends ActorSheet {
         for (const item of classesToRemove) {
             html.find(`.${item}`).removeClass(item);
         }
-        console.log('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
+        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
 
         const system = this.actor.system;
         const activeEffects = this.actor.statuses;
@@ -220,41 +210,8 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    async #characteristicOnClick(html, event) {
-        const element = event.target;
-        selectCharacteristic(element);
-
-        const characteristicType = event.currentTarget.dataset.characteristic;
-        const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
-
-        if (systemCharacteristic) {
-            const parentElement = element.parentElement;
-            const level = Array.from(parentElement.children).filter(el => el.classList.contains('S0-selected')).length;
-
-            if (systemCharacteristic.includes('virtudes')) {
-                const characteristic = `${systemCharacteristic}.${parentElement.id}.level`;
-                ActorUpdater._verifyAndUpdateActor(this.actor, characteristic, level);
-            } else {
-                const params = [];
-                params.push(
-                    {
-                        systemCharacteristic: `${systemCharacteristic}.${parentElement.id}`,
-                        value: level
-                    }
-                );
-
-                if (parentElement.id == 'vigor') {
-                    params.push(
-                        {
-                            systemCharacteristic: CharacteristicType.VITALITY_TOTAL.system,
-                            value: ActorUtils.calculateVitalityByUpAttribute(this.actor, level)
-                        }
-                    );
-                }
-
-                ActorUpdater._verifyKeysAndUpdateActor(this.actor, params);
-            }
-        }
+    async #onCharacteristicClick(html, event) {
+        SheetMethods._handleCharacteristicClickEvent(event, this.actor);
     }
 
     async #onActionClick(html, event) {

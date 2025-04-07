@@ -90,5 +90,10 @@
     "S0.Cena": "Cena",
     "S0.Uso": "Uso",
     "S0.Nenhum": "Nenhum",
-    "S0.Automatico": "Automático"
+    "S0.Automatico": "Automático",
+    
+    "S0.Movimento": "Movimento",
+    "S0.Iniciativa": "Iniciativa",
+    "S0.Penalidade": "Penalidade"
+
 }

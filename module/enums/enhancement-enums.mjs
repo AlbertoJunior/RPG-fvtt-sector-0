@@ -12,3 +12,11 @@ export const EnhancementOverload = Object.freeze({
     TWO_FIXED: 4,
     ONE_FIXED_ONE_TEST: 5,
 });
+
+export const EffectChangeValueType = Object.freeze({
+    FIXED: 0,
+    ENHANCEMENT_LEVEL: 1,
+    HALF_ENHANCEMENT_LEVEL: 2,
+    ENHANCEMENT_LEVEL_PLUS_FIXED: 3,
+    HALF_ENHANCEMENT_LEVEL_PLUS_FIXED: 4,
+});

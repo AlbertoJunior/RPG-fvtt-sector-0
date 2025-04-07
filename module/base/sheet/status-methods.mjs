@@ -1,4 +1,4 @@
-import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
+import { selectCharacteristic, TODO } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
 
@@ -70,6 +70,15 @@ const mapCheck = {
         selectLifeCharacteristic(event, 'S0-letal')
         const keysToUpdate = mountLifeCharacteristicToUpdate(event);
         ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+    }
+}
+
+const mapRoll = {
+    overload: async (actor, event) => {
+        TODO(`implementar roll de sobrecarga`)
+    },
+    initiative: async (actor, event) => {
+        TODO(`implementar roll de iniciativa`)
     }
 }
 
@@ -146,5 +155,8 @@ export const handleStatusMethods = {
     },
     remove: async (actor, event) => {
         handleMethodOnMap(mapRemove, actor, event);
+    },
+    roll: async (actor, event) => {
+        handleMethodOnMap(mapRoll, actor, event);
     }
 }

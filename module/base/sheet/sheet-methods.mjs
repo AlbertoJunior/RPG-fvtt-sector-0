@@ -4,6 +4,7 @@ import { EnhancementRepository } from "../../../scripts/repository/enhancement-r
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
 import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
+import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 
@@ -49,7 +50,7 @@ export class SheetMethods {
                 if (removeType == 'single') {
                     const index = currentTarget.dataset.itemIndex;
                     const effect = Array.from(actor.effects.values())[index];
-                    await effect.delete();
+                    effect.delete();
                 } else if (removeType == 'all') {
                     const effects = actor.effects;
                     for (const effect of effects) {
@@ -194,5 +195,9 @@ export class SheetMethods {
 
     static async _openRollDialog(actor) {
         ActorRollDialog._open(actor);
+    }
+
+    static async _handleCharacteristicClickEvent(event, actor) {
+        await characteristicOnClick(event, actor);        
     }
 }

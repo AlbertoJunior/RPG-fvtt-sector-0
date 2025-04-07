@@ -57,9 +57,12 @@
             </li>
         </ul>
         {{else}}
-        <h1>{{actor.name}}</h1>
-        <h3 style="display: inline;">{{actor.system.morfologia}}</h3>
-        <h3 style="display: inline; padding-left: 3px; border-left: 2px solid var(--secondary-color);">{{actor.system.bairro}}</h3>
+        <div style="text-align: center;">
+            <h1>{{actor.name}}</h1>
+            <h3 style="display: inline; margin-right: 6px;">{{actor.system.morfologia}}</h3>
+            <h3 style="display: inline; padding-left: 6px; border-left: 2px solid var(--secondary-color);">
+                {{actor.system.bairro}}</h3>
+        </div>
         {{/if}}
     </header>
 

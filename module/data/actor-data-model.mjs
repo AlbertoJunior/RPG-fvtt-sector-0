@@ -94,7 +94,6 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             bonus: new SchemaField({
                 atributos: new ActorAttribute(0),
                 iniciativa: new NumberField({ integer: true, initial: 0 }),
-                vitalidade: new NumberField({ integer: true, initial: 0 }),
                 movimento: new NumberField({ integer: true, initial: 0 }),
             }),
             equipamentos: new ArrayField(new StringField())

@@ -43,4 +43,5 @@ export const OnEventType = Object.freeze({
     CHAT: { id: 'chat' },
     CHANGE: { id: 'change' },
     CHECK: { id: 'check' },
+    ROLL: { id: 'roll' },
 });

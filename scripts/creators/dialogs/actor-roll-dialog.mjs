@@ -60,8 +60,8 @@ export class ActorRollDialog {
                 <form style="margin-block:10px">
                         <h3>${localize('Atributos')}</h3>
                         <div class="form-group">
-                            <select id="attr1" style="margin-inline:4px">${options}</select>
-                            <select id="attr2" style="margin-inline:4px">${options}</select>
+                            <select id="attr1" style="margin-inline: 4px">${options}</select>
+                            <select id="attr2" style="margin-inline: 4px">${options}</select>
                         </div>
                         <h3 style="margin-top:10px">${localize('Habilidades')}</h3>
                         <div class="form-group">
