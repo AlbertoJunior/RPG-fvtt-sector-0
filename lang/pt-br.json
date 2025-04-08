@@ -94,7 +94,11 @@
     
     "S0.Teste": "Teste",
     "S0.Sucesso": "Sucesso",
+    "S0.Sucesso_Explosivo": "Sucesso Explosívo",
     "S0.Sucessos": "Sucessos",
+    "S0.Falha": "Falha",
+    "S0.Falha_Critica": "Falha Crítica",
+    "S0.Falha_Caótica": "Falha Caótica",
     "S0.Usar_Perseveranca": "Usar Perseverança",
     
     "S0.Movimento": "Movimento",

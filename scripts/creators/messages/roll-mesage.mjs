@@ -1,5 +1,5 @@
 import { CoreRollMethods } from "../../../module/core/rolls/core-roll-methods.mjs";
-import { keyJsonToKeyLang, toTitleCase } from "../../utils/utils.mjs";
+import { keyJsonToKeyLang, localize, toTitleCase } from "../../utils/utils.mjs";
 
 export class RollMessageCreator {
     static async mountContent(rolls, attrs, abilityInfo, difficulty) {
@@ -41,17 +41,17 @@ export class RollMessageCreator {
         let messageInfo = ''
         if (resultSuccess > 0) {
             messageInfo = {
-                message: haveOverload ? "SUCESSO EXPLOSIVO!" : "Sucesso",
+                message: haveOverload ? `${localize('Sucesso_Explosivo').toUpperCase()}!` : localize('Sucesso'),
                 classes: haveOverload ? "S0-overload S0-success" : "S0-success"
             }
         } else if (resultSuccess < 0) {
             messageInfo = {
-                message: haveOverload ? "FALHA CAÓTICA" : "Falha Crítica",
+                message: haveOverload ? localize('Falha_Caotica').toUpperCase() : localize('Falha_Critica'),
                 classes: haveOverload ? "S0-overload S0-critical-failure" : "S0-critical-failure"
             }
         } else {
             messageInfo = {
-                message: "Falha",
+                message: localize('Falha'),
                 classes: "S0-failure"
             }
         }

@@ -8,6 +8,7 @@ export class RollOverload {
         const resultRoll = await CoreRollMethods.rollDice(core);
         const success = this.calculateSuccess(resultRoll.values);
         return {
+            core: core,
             roll: resultRoll.roll,
             values: resultRoll.values,
             success: success,
@@ -16,6 +17,12 @@ export class RollOverload {
     }
 
     static calculateSuccess(values) {
-        
+        let result = 0;
+        for (const element of values) {
+            if (element >= 8) {
+                result++;
+            }
+        }
+        return result;
     }
 }

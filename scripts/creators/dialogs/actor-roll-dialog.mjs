@@ -39,8 +39,7 @@ export class ActorRollDialog {
                         }
 
                         const message = await RollMessageCreator.mountContent(resultRoll.roll, resultRoll.attrs, resultRoll.abilityInfo, difficulty);
-
-                        console.log(await ChatCreator._sendToChatTypeRoll(actor, message, rolls));
+                        ChatCreator._sendToChatTypeRoll(actor, message, rolls);
                     }
                 }
             }

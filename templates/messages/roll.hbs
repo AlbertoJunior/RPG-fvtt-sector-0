@@ -1,9 +1,7 @@
 <div class="S0-message-content">
-    {{#if haveResult}}
     <h4>{{localize 'S0.Atributos'}} [{{ localize attr1 }}] e [{{ localize attr2 }}]</h4>
-
     <hr>
-
+    {{#if haveResult}}
     <div class="dice-tooltip tooltip-part hidden">
         <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
         <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
@@ -37,10 +35,12 @@
         </button>
     </div>
 
-    <button class="S0-roll-result success {{ resultMessageClasses }}" data-action="toggle-tooltip">
+    <button class="S0-roll-result {{ resultMessageClasses }}" data-action="toggle-tooltip">
         {{ resultMessage }} ({{ resultValue }})
     </button>
     {{else}}
-    Teste impossível
+
+    <p>O Teste não foi realizado por falta de Dados.</p>
+
     {{/if}}
 </div>

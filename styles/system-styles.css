@@ -25,6 +25,8 @@ body {
     --color-gray-alpha: rgba(80, 80, 80, 0.8);
     --color-checkbox-checked: var(--secondary-color);
 
+    --whisper-color-alpha-50: rgba(20, 20, 60, 0.5);
+
     --min-width-tooltip: 200px;
     --border-radius-small: 4px;
     --border-radius-medium: 6px;
@@ -143,11 +145,20 @@ select:enabled:hover {
     background: var(--secondary-color-alpha-50);
 }
 
+.chat-message.whisper {
+    background: var(--whisper-color-alpha-50);
+}
+
+.chat-message.blind {
+    border-color: var(--primary-color-alpha-50);
+}
+
 .message-sender,
 .message-metadata,
 .chat-message {
+    max-width: 270px;
     color: var(--primary-color);
-    text-shadow: 0 0px 1px #ffffff4d;
+    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
 }
 
 .message-content button {
@@ -297,10 +308,10 @@ img.S0-clickable:hover {
     margin: 2px 0px;
     line-height: 24px;
     text-align: center;
-    background: rgba(0, 0, 0, 0.1);
     border-radius: var(--border-radius-small);
-    box-shadow: 0 0 2px white inset;
+    box-shadow: 0 0 2px var(--primary-color-alpha) inset;
     color: white;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .S0-roll-result.S0-success {
@@ -308,11 +319,11 @@ img.S0-clickable:hover {
 }
 
 .S0-roll-result.S0-failure {
-    background: rgba(116, 116, 116, 0.5);
+    background: rgba(200, 30, 30, 0.5);
 }
 
 .S0-roll-result.S0-critical-failure {
-    background: rgba(255, 0, 0, 0.5);
+    background: rgba(255, 0, 0, 0.8);
 }
 
 .S0-roll-result.S0-overload {
