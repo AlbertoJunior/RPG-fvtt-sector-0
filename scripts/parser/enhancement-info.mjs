@@ -3,7 +3,7 @@ import { localize } from "../utils/utils.mjs";
 
 export class EnhancementInfoParser {
 
-    static _durationValueToString(value) {
+    static durationValueToString(value) {
         const mapDuration = {
             [EnhancementDuration.PASSIVE]: `${localize('Passivo')}`,
             [EnhancementDuration.SCENE]: `${localize('Cena')}`,
@@ -12,7 +12,7 @@ export class EnhancementInfoParser {
         return mapDuration[value] || `<${localize('Erro')}>`;
     }
 
-    static _overloadValueToString(value) {
+    static overloadValueToString(value) {
         const mapOverload = {
             [EnhancementOverload.NONE]: `${localize('Nenhum')}`,
             [EnhancementOverload.ONE_TESTED]: '1',

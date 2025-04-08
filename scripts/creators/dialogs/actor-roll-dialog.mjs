@@ -1,4 +1,3 @@
-import { RollRepository } from "../../repository/roll-repository.mjs";
 import { rollAttribute } from "../../rolls/roll.mjs";
 import { keyJsonToKeyLang, localize, TODO } from "../../utils/utils.mjs";
 import { ChatCreator } from "../chat-creator.mjs";

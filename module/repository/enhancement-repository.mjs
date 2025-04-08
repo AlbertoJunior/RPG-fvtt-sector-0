@@ -1,5 +1,5 @@
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../module/enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../module/field/actor-enhancement-field.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../field/actor-enhancement-field.mjs";
 
 export class EnhancementRepository {
     static #agilityEffects = [

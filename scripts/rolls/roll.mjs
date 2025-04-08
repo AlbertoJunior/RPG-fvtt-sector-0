@@ -1,4 +1,3 @@
-import { RollMessageCreator } from "../creators/messages/roll-mesage.mjs";
 import { ActorUtils } from "../utils/actor.mjs";
 
 export async function rollAttribute(actor, params) {

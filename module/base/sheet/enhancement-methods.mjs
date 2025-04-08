@@ -1,13 +1,14 @@
 import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
 import { EnhancementDialog } from "../../../scripts/creators/dialogs/enhancement-dialog.mjs";
 import { _createEmptyOption, _createOption } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
 import { ActorUtils } from "../../../scripts/utils/actor.mjs";
 import { NotificationsUtils } from "../../../scripts/utils/notifications.mjs";
 import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
+import { EnhancementUtils } from "../../core/enhancement.mjs";
 import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration } from "../../enums/enhancement-enums.mjs";
+import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { ActorEnhancementField } from "../../field/actor-fields.mjs";
+import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
@@ -137,21 +138,7 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
         const enhancementLevel = ActorUtils.getEnhancementLevel(actor, enhancement);
 
         activeEffectData.changes = effect.effectChanges.map(change => {
-            let value = 0;
-            
-            const typeOfValue = change.typeOfValue;
-            if (typeOfValue == EffectChangeValueType.FIXED) {
-                value = change.value;
-            } else if (typeOfValue == EffectChangeValueType.ENHANCEMENT_LEVEL) {
-                value = enhancementLevel;
-            } else if (typeOfValue == EffectChangeValueType.HALF_ENHANCEMENT_LEVEL) {
-                value = Math.floor(enhancementLevel / 2);
-            } else if (typeOfValue == EffectChangeValueType.ENHANCEMENT_LEVEL_PLUS_FIXED) {
-                value = enhancementLevel + change.value;
-            } else if (typeOfValue == EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED) {
-                value = Math.floor(enhancementLevel / 2) + change.value;
-            }
-
+            const value = EnhancementUtils.valueCalculator(change.typeOfValue, change.value, enhancementLevel);
             return {
                 key: `system.${change.key}`,
                 mode: CONST.ACTIVE_EFFECT_MODES.ADD,

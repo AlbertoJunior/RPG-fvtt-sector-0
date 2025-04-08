@@ -1,6 +1,6 @@
 import { ActorRollDialog } from "../../../scripts/creators/dialogs/actor-roll-dialog.mjs";
 import { ElementCreatorJQuery } from "../../../scripts/creators/jquery/element-creator.mjs";
-import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
+import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
 import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
@@ -13,7 +13,7 @@ export class SheetMethods {
 
     static handleMethods = {
         language: {
-            add: async (actor, event) => {
+            add: async (actor, event) => {                                
                 const element = event.target;
                 selectCharacteristic(element);
 

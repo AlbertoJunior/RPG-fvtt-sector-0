@@ -1,4 +1,3 @@
-import { NotificationsUtils } from "../../../scripts/utils/notifications.mjs";
 import { getObject } from "../../../scripts/utils/utils.mjs";
 
 export class ActorUpdater {

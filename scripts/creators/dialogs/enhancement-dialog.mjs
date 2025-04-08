@@ -1,7 +1,7 @@
 import { sendEffectToChat } from "../../../module/base/sheet/enhancement-methods.mjs";
 import { EnhancementDuration } from "../../../module/enums/enhancement-enums.mjs";
+import { EnhancementRepository } from "../../../module/repository/enhancement-repository.mjs";
 import { EnhancementInfoParser } from "../../parser/enhancement-info.mjs";
-import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 
 export class EnhancementDialog {
     static async _open(enhancementEffect, actor) {
@@ -37,8 +37,8 @@ export class EnhancementDialog {
     static async #mountContent(enhancementEffect, enhancementFamily) {
         const data = {
             ...enhancementEffect,
-            overload: EnhancementInfoParser._overloadValueToString(enhancementEffect.overload),
-            duration: EnhancementInfoParser._durationValueToString(enhancementEffect.duration),
+            overload: EnhancementInfoParser.overloadValueToString(enhancementEffect.overload),
+            duration: EnhancementInfoParser.durationValueToString(enhancementEffect.duration),
             family: enhancementFamily.name,
         };
         return await renderTemplate("systems/setor0OSubmundo/templates/enhancement/enhancement-dialog.hbs", data);
