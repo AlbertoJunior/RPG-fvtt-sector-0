@@ -1,4 +1,4 @@
-import { calculateSuccess } from "../../rolls/roll.mjs";
+import { CoreRollMethods } from "../../../module/core/rolls/core-roll-methods.mjs";
 import { keyJsonToKeyLang, toTitleCase } from "../../utils/utils.mjs";
 
 export class RollMessageCreator {
@@ -32,7 +32,7 @@ export class RollMessageCreator {
     }
 
     static #verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
-        const { result, overload } = calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
+        const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
         const message = this.#mountResultMessageInfos(result, overload);
         return { result, overload, message };
     }

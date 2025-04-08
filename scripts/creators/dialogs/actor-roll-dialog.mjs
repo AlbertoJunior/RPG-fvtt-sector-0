@@ -1,4 +1,4 @@
-import { rollAttribute } from "../../rolls/roll.mjs";
+import { RollAttribute } from "../../../module/core/rolls/attribute-roll.mjs";
 import { keyJsonToKeyLang, localize, TODO } from "../../utils/utils.mjs";
 import { ChatCreator } from "../chat-creator.mjs";
 import { RollMessageCreator } from "../messages/roll-mesage.mjs";
@@ -24,7 +24,7 @@ export class ActorRollDialog {
                         const specialist = html.find("#specialist").prop("checked");
                         const difficulty = html.find("#difficulty").val();
 
-                        const resultRoll = await rollAttribute(actor, { attr1, attr2, ability, specialist, difficulty });
+                        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, specialist, difficulty });
                         const rollItems = resultRoll.roll;
                         const rolls = [];
                         if (rollItems.default.roll != undefined) {

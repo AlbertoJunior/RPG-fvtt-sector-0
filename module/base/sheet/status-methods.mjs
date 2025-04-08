@@ -1,4 +1,6 @@
+import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
 import { selectCharacteristic, TODO } from "../../../scripts/utils/utils.mjs";
+import { RollOverload } from "../../core/rolls/overload-roll.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
 
@@ -75,7 +77,10 @@ const mapCheck = {
 
 const mapRoll = {
     overload: async (actor, event) => {
-        TODO(`implementar roll de sobrecarga`)
+        const resultRoll = await RollOverload.roll(actor);
+        TODO(`implementar o content do roll de sobrecarga`)
+        const contentMessage = "";
+        ChatCreator._sendToChatTypeRoll(actor, contentMessage, resultRoll.roll);
     },
     initiative: async (actor, event) => {
         TODO(`implementar roll de iniciativa`)

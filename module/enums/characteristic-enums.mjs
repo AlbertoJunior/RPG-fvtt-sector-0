@@ -13,6 +13,7 @@ export const CharacteristicType = Object.freeze({
     TRAIT: { id: 'tracos', system: 'system.tracos' },
     ENHANCEMENT: { id: 'enhancement', system: 'system.aprimoramentos.aprimoramento' },
     TEMPORARY: { id: 'temporary', system: 'system' },
+    CORE: { id: 'core', system: 'system.nucleo' },
     OVERLOAD: { id: 'overload', system: 'system.sobrecarga' },
     LIFE: { id: 'vida', system: 'system.vida' },
     VITALITY_TOTAL: { id: 'vitalidade', system: 'system.vitalidade.total' },
