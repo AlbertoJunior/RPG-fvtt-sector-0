@@ -1,20 +1,23 @@
+import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/characteristic-enums.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
-import { traitMethods } from "./trait-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
-        trait: traitMethods,
+        trait: SheetMethods.handleMethods.trait,
         enhancement: enhancementHandleMethods,
-        linguas: SheetMethods.handleMethods.language
+        linguas: SheetMethods.handleMethods.language,
+        effects: SheetMethods.handleMethods.effects,
+        temporary: SheetMethods.handleMethods.temporary
     };
 
     constructor(...args) {
         super(...args)
         this.currentPage = 1;
+        this.enableBlackMode = false;
     }
 
     activateListeners(html) {
@@ -30,7 +33,7 @@ class Setor0ActorSheet extends ActorSheet {
             classes: ["setor0OSubmundo", "sheet", "actor"],
             template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
             width: 600,
-            height: 860,
+            height: 880,
             resizable: false,
         });
     }
@@ -47,35 +50,33 @@ class Setor0ActorSheet extends ActorSheet {
         return getActorFlag(this.actor, "editable");
     }
 
-    get canEdit() {
-        return getActorFlag(this.actor, "canEdit");
-    }
-
-    get canRoll() {
-        return getActorFlag(this.actor, "canRoll");
-    }
-
     #setupListeners(html) {
         const actionsClick = [
-            { selector: '#edit-mode-toggle', method: this._toggleEditMode },
-            { selector: '#roll-button', method: this._openRollDialog },
-            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this._characteristicOnClick },
-            { selector: `[data-action="${OnEventType.ADD.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.REMOVE.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.EDIT.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.VIEW.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.CHAT.id}"]`, method: this._onActionClick },
-            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this._onActionClick },
+            { selector: '#edit-mode-toggle', method: this.#toggleEditMode },
+            { selector: '#roll-button', method: this.#openRollDialog },
+            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#onCharacteristicClick },
+            ...Object.values(OnEventType)
+                .filter(eventType => eventType !== OnEventType.CHANGE && eventType !== OnEventType.CHARACTERISTIC)
+                .map(eventType => ({
+                    selector: `[data-action="${eventType.id}"]`,
+                    method: this.#onActionClick
+                }))
         ];
+        const actionsChange = [
+            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
+        ];
+        const actionsContextMenu = [
+            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this.#onContextualClick }
+        ];
+
         actionsClick.forEach(action => {
             html.find(action.selector).click(action.method.bind(this, html));
         });
-
-        const actionsChange = [
-            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this._onChange },
-        ];
         actionsChange.forEach(action => {
             html.find(action.selector).change(action.method.bind(this, html));
+        });
+        actionsContextMenu.forEach(action => {
+            html.find(action.selector).on('contextmenu', action.method.bind(this, html));
         });
     }
 
@@ -86,24 +87,23 @@ class Setor0ActorSheet extends ActorSheet {
         html.find(".S0-page").each((index, page) => {
             pages.push(page);
 
-            const button = document.createElement("li");
-            button.textContent = page?.getAttribute('data-label') || "[Erro]";
-            button.classList = 'S0-simulate-button';
+            const textContent = page?.getAttribute('data-label') || "[Erro]";
+            const button = _createLi(textContent, { classList: 'S0-simulate-button' });
 
             buttonContainer.appendChild(button);
 
             buttons.push(button);
-            button.addEventListener('click', this._changePage.bind(this, index + 1, pages, buttons));
+            button.addEventListener('click', this.#changePage.bind(this, index + 1, pages, buttons));
 
             if (index + 1 != this.currentPage) {
                 page.classList.add('hidden');
             } else {
-                button.classList.add('selected');
+                button.classList.add('S0-selected');
             }
         });
     }
 
-    async _toggleEditMode(html, event) {
+    async #toggleEditMode(html, event) {
         let currentValue = getActorFlag(this.actor, "editable");
         currentValue = !currentValue;
 
@@ -111,9 +111,21 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetSheet(html) {
-        html.find('.selected').removeClass('selected');
+        if (this.enableBlackMode) {
+            const parent = html.parent()[0];
+            parent.classList.add('S0-page-transparent')
+        };
+
+        const classesToRemove = [
+            'S0-selected', 'S0-superficial', 'S0-letal'
+        ];
+        for (const item of classesToRemove) {
+            html.find(`.${item}`).removeClass(item);
+        }
+        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
 
         const system = this.actor.system;
+        const activeEffects = this.actor.statuses;
 
         [
             {
@@ -125,10 +137,6 @@ class Setor0ActorSheet extends ActorSheet {
                 systemCharacteristic: system.repertorio
             },
             {
-                container: html.find('#virtudesContainer')[0],
-                systemCharacteristic: system.virtudes
-            },
-            {
                 container: html.find('#habilidadesContainer')[0],
                 systemCharacteristic: system.habilidades
             },
@@ -137,12 +145,21 @@ class Setor0ActorSheet extends ActorSheet {
                 systemCharacteristic: system
             }
         ].forEach((element) => {
-            let hasNext = element.container.firstElementChild;
+            let hasNext = element.container?.firstElementChild;
             while (hasNext) {
-                selectCharacteristic(hasNext.children[element.systemCharacteristic[hasNext.id]]);
+                const children = hasNext.querySelectorAll('.S0-characteristic');
+                const level = element.systemCharacteristic[hasNext.id];
+                selectCharacteristic(children[Math.min(level - 1, children.length - 1)]);
                 hasNext = hasNext.nextElementSibling;
             }
         });
+
+        const virtueContainer = html.find('#virtudesContainer')[0];
+        let virtueElementChild = virtueContainer.firstElementChild;
+        while (virtueElementChild) {
+            selectCharacteristic(virtueElementChild.children[system.virtudes[virtueElementChild.id].level]);
+            virtueElementChild = virtueElementChild.nextElementSibling;
+        }
 
         const langContainer = html.find('#linguasContainer')[0].children;
         const langElements = Array.from(langContainer);
@@ -164,35 +181,54 @@ class Setor0ActorSheet extends ActorSheet {
                     option.selected = true;
                     const levelSelects = selects.slice(1);
                     updateEnhancementLevelsOptions(itemId, levelSelects);
-                    selectLevelOnOptions(enhancement, levelSelects);
+                    selectLevelOnOptions(enhancement, levelSelects, activeEffects);
                 }
             });
         });
+
+        selectCharacteristic(html.find('#statusPage #consciencia .S0-characteristic')[system.virtudes.consciencia.used - 1]);
+        selectCharacteristic(html.find('#statusPage #perseveranca .S0-characteristic')[system.virtudes.perseveranca.used - 1]);
+        selectCharacteristic(html.find('#statusPage #quietude .S0-characteristic')[system.virtudes.quietude.used - 1]);
+        selectCharacteristic(html.find('#statusPage #sobrecarga .S0-characteristic')[system.sobrecarga - 1]);
+
+        const life = html.find('#statusPage #vida .S0-characteristic');
+        life.addClass('S0-selected');
+        selectCharacteristic(life[system.vida]);
+
+        let letalDamage = system.vitalidade.dano_letal || 0;
+        let superFicialDamage = system.vitalidade.dano_superficial || 0;
+        html.find('#vitalidade .S0-characteristic-temp').each((index, item) => {
+            if (superFicialDamage > 0) {
+                item.classList.add('S0-superficial');
+                superFicialDamage--;
+            } else if (letalDamage > 0) {
+                item.classList.add('S0-letal');
+                letalDamage--;
+            } else {
+                return;
+            }
+        });
     }
 
-    async _characteristicOnClick(html, event) {
-        const element = event.target;
-        selectCharacteristic(element);
-
-        const characteristicType = event.currentTarget.dataset.characteristic;
-        const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
-
-        if (systemCharacteristic) {
-            const parentElement = element.parentElement;
-            const level = Array.from(parentElement.children).filter(el => el.classList.contains('selected')).length;
-
-            const characteristic = {
-                [`${systemCharacteristic}.${parentElement.id}`]: level
-            };
-
-            await this.actor.update(characteristic);
-        }
+    async #onCharacteristicClick(html, event) {
+        SheetMethods._handleCharacteristicClickEvent(event, this.actor);
     }
 
-    async _onActionClick(html, event) {
+    async #onActionClick(html, event) {
+        this.#onEvent(event.currentTarget.dataset.action, html, event);
+    }
+
+    async #onChange(html, event) {
+        this.#onEvent('change', html, event);
+    }
+
+    async #onContextualClick(html, event) {
+        this.#onEvent('contextual', html, event);
+    }
+
+    async #onEvent(action, html, event) {
         event.preventDefault();
         const characteristic = event.currentTarget.dataset.characteristic;
-        const action = event.currentTarget.dataset.action;
         const method = this.#mapEvents[characteristic]?.[action];
         if (method) {
             method(this.actor, event);
@@ -201,22 +237,11 @@ class Setor0ActorSheet extends ActorSheet {
         }
     }
 
-    async _onChange(html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        const method = this.#mapEvents[characteristic]?.['change'];
-        if (method) {
-            method(this.actor, event);
-        } else {
-            console.warn(`-> ['change'] não existe para: [${characteristic}]`);
-        }
-    }
-
-    async _openRollDialog(html, event) {
+    async #openRollDialog(html, event) {
         SheetMethods._openRollDialog(this.actor);
     }
 
-    async _changePage(pageIndex, pages, buttons, event) {
+    async #changePage(pageIndex, pages, buttons, event) {
         if (pageIndex == this.currentPage)
             return;
 
@@ -225,8 +250,8 @@ class Setor0ActorSheet extends ActorSheet {
         pages[normalizedCurrentIndex].classList.toggle('hidden');
         pages[normalizedIndex].classList.toggle('hidden');
 
-        buttons[normalizedCurrentIndex].classList.toggle('selected');
-        buttons[normalizedIndex].classList.toggle('selected');
+        buttons[normalizedCurrentIndex].classList.toggle('S0-selected');
+        buttons[normalizedIndex].classList.toggle('S0-selected');
         this.currentPage = pageIndex;
     }
 }

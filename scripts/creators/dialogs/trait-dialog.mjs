@@ -1,6 +1,6 @@
 import { TraitRepository } from "../../repository/trait-repository.mjs";
 import { ChatCreator } from "../chat-creator.mjs";
-import { localize } from "../../utils/utils.mjs";
+import { localize, TODO } from "../../utils/utils.mjs";
 
 export class TraitDialog {
   static async _open(type, callback) {
@@ -92,12 +92,12 @@ export class TraitDialog {
     return await renderTemplate("systems/setor0OSubmundo/templates/traits/trait-dialog.hbs", data);
   }
 
-  static #mapOptions(traits, selected) {
+  static #mapOptions(traits, selectedTrait) {
     const options = traits
       .map((attr, index) => {
         let isSelected = '';
-        if (selected) {
-          isSelected = attr.id == selected.id ? 'selected' : '';
+        if (selectedTrait) {
+          isSelected = attr.id == selectedTrait.id ? 'S0-selected' : '';
         }
         return {
           id: attr.id,

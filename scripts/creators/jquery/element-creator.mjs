@@ -1,15 +1,15 @@
-import { OnEventType } from "../../module/enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../module/enums/characteristic-enums.mjs";
 
 export class ElementCreatorJQuery {
-    static _createCharacteristicDiv(isEditable, safeEventType, characteristicType) {
+    static #createCharacteristicDiv(isEditable, safeEventType, characteristicType) {
         return $('<div>', {
-            class: isEditable ? `S0-characteristic clickable` : `S0-characteristic`,
+            class: isEditable ? `S0-characteristic S0-clickable` : `S0-characteristic`,
             'data-action': isEditable ? `${safeEventType.id}` : undefined,
             'data-characteristic': characteristicType
         });
     };
 
-    static _createCharacteristicContainer(container, characteristic, characteristicType, amount, isEditable, addLast, firstSelected, eventType) {
+    static _createCharacteristicContainer(characteristic, characteristicType, amount, isEditable, addLast, firstSelected, eventType) {
         const safeEventType = eventType ? eventType : OnEventType.CHARACTERISTIC
 
         const divContainer = $('<div>', {
@@ -24,29 +24,28 @@ export class ElementCreatorJQuery {
         divContainer.append(label);
 
         for (let i = 0; i < amount; i++) {
-            const divCaracteristica = this._createCharacteristicDiv(isEditable, safeEventType, characteristicType);
+            const divCaracteristica = this.#createCharacteristicDiv(isEditable, safeEventType, characteristicType);
             if (firstSelected && i == 0) {
-                divCaracteristica.addClass('selected');
+                divCaracteristica.addClass('S0-selected');
             }
             divContainer.append(divCaracteristica);
         }
 
         if (addLast) {
-            const divCaracteristica = this._createCharacteristicDiv(isEditable, safeEventType, characteristicType);
+            const divCaracteristica = this.#createCharacteristicDiv(isEditable, safeEventType, characteristicType);
             divCaracteristica.addClass('S0-characteristic-6');
             divContainer.append(divCaracteristica);
         }
 
-        container.append(divContainer);
-        return divContainer[0];
+        return divContainer;
     }
 
-    static _createOption(itemId, name, value, selected) {
+    static _createOption(itemId, name, value, isSelected) {
         return $('<option>', {
             value: value,
             text: name,
             'data-item-id': itemId,
-            selected: selected || false
+            selected: isSelected || false
         });
     }
 }

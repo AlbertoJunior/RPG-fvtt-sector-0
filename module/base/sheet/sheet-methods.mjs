@@ -1,26 +1,19 @@
-import { ElementCreatorJQuery } from "../../../scripts/creators/element-creator.mjs";
-import { EnhancementRepository } from "../../../scripts/repository/enhancement-repository.mjs";
+import { ActorRollDialog } from "../../../scripts/creators/dialogs/actor-roll-dialog.mjs";
+import { ElementCreatorJQuery } from "../../../scripts/creators/jquery/element-creator.mjs";
+import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
-import { rollAttribute } from "../../../scripts/utils/roll.mjs";
-import { keyJsonToKeyLang, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
+import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
+import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
+import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
+import { handleStatusMethods } from "./status-methods.mjs";
+import { traitMethods } from "./trait-methods.mjs";
 
 export class SheetMethods {
-
-    static characteristicTypeMap = {
-        [CharacteristicType.ATTRIBUTE.id]: CharacteristicType.ATTRIBUTE.system,
-        [CharacteristicType.ABILITY.id]: CharacteristicType.ABILITY.system,
-        [CharacteristicType.VIRTUES.id]: CharacteristicType.VIRTUES.system,
-        [CharacteristicType.REPERTORY.id]: CharacteristicType.REPERTORY.system,
-        [CharacteristicType.LANGUAGE.id]: CharacteristicType.LANGUAGE.system,
-        [CharacteristicType.TRAIT.id]: CharacteristicType.TRAIT.system,
-        [CharacteristicType.ENHANCEMENT.id]: CharacteristicType.ENHANCEMENT.system,
-        [CharacteristicType.SIMPLE.id]: CharacteristicType.SIMPLE.system,
-    }
+    static characteristicTypeMap = CharacteristicTypeMap;
 
     static handleMethods = {
         language: {
-            add: async (actor, event) => {
+            add: async (actor, event) => {                                
                 const element = event.target;
                 selectCharacteristic(element);
 
@@ -29,7 +22,7 @@ export class SheetMethods {
 
                 if (systemCharacteristic) {
                     const parentElement = element.parentElement;
-                    const checked = Array.from(parentElement.children).some(el => el.classList.contains('selected'));
+                    const checked = Array.from(parentElement.children).some(el => el.classList.contains('S0-selected'));
 
                     const updatedLanguages = actor.system.linguas;
                     if (checked) {
@@ -49,6 +42,36 @@ export class SheetMethods {
                 }
             }
         },
+        trait: traitMethods,
+        effects: {
+            remove: async (actor, event) => {
+                const currentTarget = event.currentTarget;
+                const removeType = currentTarget.dataset.type;
+                if (removeType == 'single') {
+                    const index = currentTarget.dataset.itemIndex;
+                    const effect = Array.from(actor.effects.values())[index];
+                    effect.delete();
+                } else if (removeType == 'all') {
+                    const effects = actor.effects;
+                    for (const effect of effects) {
+                        await effect.delete();
+                    }
+                }
+            },
+            check: async (actor, event) => {
+                const effects = actor.effects;
+                for (const effect of effects) {
+                    const effectDuration = effect.duration.type
+                    if (effectDuration !== 'none') {
+                        effect.delete();
+                    }
+                }
+            },
+            view: async (actor, event) => {
+                $(event.currentTarget.parentElement.nextElementSibling).find('ul')[0]?.classList.toggle('hidden')
+            }
+        },
+        temporary: handleStatusMethods
     }
 
     static _createDynamicSheet(html, isEditable) {
@@ -127,7 +150,10 @@ export class SheetMethods {
             { id: 'influencia', label: 'S0.Influencia', amount: 5, addLast: false, firstSelected: false },
             { id: 'nivel_de_procurado', label: 'S0.Procurado', amount: 5, addLast: false, firstSelected: false },
         ].forEach(char => {
-            ElementCreatorJQuery._createCharacteristicContainer(container, char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected);
+            const element = ElementCreatorJQuery._createCharacteristicContainer(
+                char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected
+            );
+            container.append(element);
         });
     }
 
@@ -136,9 +162,10 @@ export class SheetMethods {
         const languages = LanguageRepository._getItems();
 
         languages.forEach(lang => {
-            ElementCreatorJQuery._createCharacteristicContainer(
-                container, lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnEventType.ADD
+            const element = ElementCreatorJQuery._createCharacteristicContainer(
+                lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnEventType.ADD
             );
+            container.append(element);
         });
     }
 
@@ -159,82 +186,18 @@ export class SheetMethods {
 
     static #create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
         characteristics.forEach(characteristic => {
-            ElementCreatorJQuery._createCharacteristicContainer(container, characteristic, type, amount, isEditable, addLast, firstSelected)
+            const element = ElementCreatorJQuery._createCharacteristicContainer(
+                characteristic, type, amount, isEditable, addLast, firstSelected
+            );
+            container.append(element);
         });
     }
 
     static async _openRollDialog(actor) {
-        const system = actor.system;
-        const atributoKeys = Object.keys(system.atributos);
-        const abilitiesKeys = Object.keys(system.habilidades);
+        ActorRollDialog._open(actor);
+    }
 
-        const options = atributoKeys
-            .map(attr => {
-                const label = game.i18n.localize(keyJsonToKeyLang(attr));
-                return `<option value="${attr}">${label}</option>`;
-            })
-            .join("");
-
-        const options2 = abilitiesKeys
-            .map(attr => {
-                const label = game.i18n.localize(keyJsonToKeyLang(attr));
-                return `<option value="${attr}">${label}</option>`
-            })
-            .join("");
-
-        const options3 = [5, 6, 7, 8, 9, 10]
-            .map(attr => `<option value="${attr}" ${attr === 6 ? 'selected' : ''}>${attr}</option>`)
-            .join("");
-
-        const content = `
-                <form style="margin-block:10px">
-                        <h3>${game.i18n.localize('S0.Atributos')}</h3>
-                        <div class="form-group">
-                            <select id="attr1" style="margin-inline:4px">${options}</select>
-                            <select id="attr2" style="margin-inline:4px">${options}</select>
-                        </div>
-                        <h3 style="margin-top:10px">${game.i18n.localize('S0.Habilidades')}</h3>
-                        <div class="form-group">
-                            <select id="ability" style="flex:1; margin-inline:4px">${options2}</select>
-                            <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
-                            <label for="specialist" style="flex:1; margin-inline:4px">${game.i18n.localize('S0.Especialista')}:</label>
-                            <input id="specialist" type="checkbox" style="margin-inline:4px">
-                            </div>
-                        </div>
-                        <h3 style="margin-top: 10px">${game.i18n.localize('S0.Outros')}</h3>
-                        <div class="form-group">
-                            <label for="difficulty" style="flex:1; margin-inline:4px">Dificuldade:</label>
-                            <select id="difficulty" style="margin-inline:4px; flex:1">${options3}</select>
-                        </div>
-                         <div class="form-group">
-                            <label for="bonus"  style="flex:1; margin-inline:4px">Bônus:</label>
-                            <input id="bonus" type="number" style="flex:1; margin-inline:4px">
-                        </div>
-                </form>
-            `;
-
-        return new Promise(resolve => {
-            new Dialog({
-                title: "Escolha os Atributos",
-                content,
-                buttons: {
-                    cancel: {
-                        label: "Cancelar",
-                        callback: () => resolve(null)
-                    },
-                    confirm: {
-                        label: "Rolar",
-                        callback: (html) => {
-                            const attr1 = html.find("#attr1").val();
-                            const attr2 = html.find("#attr2").val();
-                            const ability = html.find("#ability").val();
-                            const specialist = html.find("#specialist").prop("checked");
-                            const difficulty = html.find("#difficulty").val();
-                            resolve(rollAttribute(actor, attr1, attr2, ability, specialist, difficulty));
-                        }
-                    }
-                }
-            }).render(true);
-        });
+    static async _handleCharacteristicClickEvent(event, actor) {
+        await characteristicOnClick(event, actor);        
     }
 }

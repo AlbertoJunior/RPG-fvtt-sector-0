@@ -13,3 +13,10 @@ export function _createOption(value, textContent, data) {
     }
     return option;
 }
+
+export function _createLi(textContent, options = {}) {
+    const li = document.createElement("li");
+    li.textContent = textContent;
+    li.classList = options?.classList || '';
+    return li;
+}

@@ -3,8 +3,12 @@ export async function loadHandlebarsHelpers() {
     const helpersPath = "/scripts/helpers/";
     const helperFiles = [
         "eq.mjs",
+        "lt.mjs",
         "selectIfEq.mjs",
         "fetchRepository.mjs",
+        "forLoop.mjs",
+        "actorValues.mjs",
+        "isEmpty.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {

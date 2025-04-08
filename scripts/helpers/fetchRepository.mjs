@@ -1,4 +1,4 @@
-import { EnhancementRepository } from "../repository/enhancement-repository.mjs";
+import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../repository/language-repository.mjs";
 import { TraitRepository } from "../repository/trait-repository.mjs";
 

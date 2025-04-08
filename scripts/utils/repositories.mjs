@@ -1,4 +1,4 @@
-import { EnhancementRepository } from "../repository/enhancement-repository.mjs";
+import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../repository/language-repository.mjs";
 import { TraitRepository } from "../repository/trait-repository.mjs";
 
@@ -16,6 +16,7 @@ export async function loadPackages() {
                     await repo[method]();
                     return { Repository: repo.name, Status: "Sucesso" };
                 } catch (error) {
+                    console.error(error);
                     return { Repository: repo.name, Status: "Falha" };
                 }
             })()

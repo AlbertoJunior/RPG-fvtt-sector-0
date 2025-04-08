@@ -1,29 +1,40 @@
-export function containClass(element, cls) {
+import { NotificationsUtils } from "./notifications.mjs";
+
+function containClass(element, cls) {
     return element.classList.contains(cls);
 }
 
+function isCharacteristic(element) {
+    return containClass(element, 'S0-characteristic') || containClass(element, 'S0-characteristic-6') || containClass(element, 'S0-characteristic-temp');
+}
+
 export function selectCharacteristic(element) {
-    function isCharacteristic(element) {
-        return containClass(element, 'S0-characteristic') || containClass(element, 'S0-characteristic-6');
+    if (!element) {
+        return;
     }
 
-    if (isCharacteristic(element)) {
-        element.classList.toggle('selected');
-
-        let next = element.nextElementSibling;
-        while (next) {
-            if (isCharacteristic(next))
-                next.classList.remove('selected');
-            next = next.nextElementSibling;
-        }
-
-        let before = element.previousElementSibling;
-        while (before) {
-            if (isCharacteristic(before))
-                before.classList.add('selected');
-            before = before.previousElementSibling;
-        }
+    if (!isCharacteristic(element)) {
+        return;
     }
+
+    element.classList.toggle('S0-selected');
+
+    let next = element.nextElementSibling;
+    while (next) {
+        if (isCharacteristic(next)) {
+            next.classList.remove('S0-selected');
+        }
+        next = next.nextElementSibling;
+    }
+
+    let before = element.previousElementSibling;
+    while (before) {
+        if (isCharacteristic(before)) {
+            before.classList.add('S0-selected');
+        }
+        before = before.previousElementSibling;
+    }
+    
     element.blur();
 }
 
@@ -56,14 +67,10 @@ export function localize(key) {
     return game.i18n.localize(`S0.${key}`)
 }
 
-export function notification(message) {
-    ui.notifications.info(message);
-}
-
 export function TODO(message, notify) {
     console.warn(`-> ${message}`);
     if (notify) {
-        notification(message);
+        NotificationsUtils._info(message);
     }
 }
 

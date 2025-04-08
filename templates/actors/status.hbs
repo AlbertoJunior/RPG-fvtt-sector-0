@@ -1,3 +1,213 @@
-<section data-label="Status" class="S0-page">
-    
+<section data-label="Status" class="S0-page" id="statusPage">
+        <h2> {{localize 'S0.Situacao'}}
+                {{#if canRoll}}
+                <a data-action="remove" data-characteristic="temporary" data-type="all">
+                        <i class="fas fa-refresh"></i>
+                </a>
+                {{/if}}
+        </h2>
+
+        <section>
+                <ul class="S0-ul-flex">
+                        <li class="S0-container">
+                                <h3>{{ localize 'S0.Movimento'}}</h3>
+                                <h4>{{actorValues actor 'pm'}}</h4>
+                        </li>
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Iniciativa'}}
+                                        {{#if canRoll}}
+                                        <a data-action="roll" data-characteristic="temporary" data-type="initiative">
+                                                <i class="fas fa-dice-d10"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <h4>{{actorValues actor 'initiative'}}</h4>
+                        </li>
+                        <li class="S0-container">
+                                <h3>{{ localize 'S0.Penalidade'}}</h3>
+                                <h4>{{actorValues actor 'penalty'}}</h4>
+                        </li>
+                </ul>
+                <ul class="S0-ul-flex">
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Consciencia'}}
+                                        {{#if canRoll}}
+                                        <a data-action="remove" data-characteristic="temporary" data-type="virtue"
+                                                data-item-type="consciencia">
+                                                <i class="fas fa-refresh"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="consciencia" class="SO-inner-container">
+                                        {{#forLoop 0 actor.system.virtudes.consciencia.level}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="virtue"
+                                                data-item-type="consciencia">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Perseveranca'}}
+                                        {{#if canRoll}}
+                                        <a data-action="remove" data-characteristic="temporary" data-type="virtue"
+                                                data-item-type="perseveranca">
+                                                <i class="fas fa-refresh"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="perseveranca" class="SO-inner-container">
+                                        {{#forLoop 0 actor.system.virtudes.perseveranca.level}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="virtue"
+                                                data-item-type="perseveranca">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Quietude'}}
+                                        {{#if canRoll}}
+                                        <a data-action="remove" data-characteristic="temporary" data-type="virtue"
+                                                data-item-type="quietude">
+                                                <i class="fas fa-refresh"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="quietude" class="SO-inner-container">
+                                        {{#forLoop 0 actor.system.virtudes.quietude.level}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="virtue"
+                                                data-item-type="quietude">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+                </ul>
+
+                <ul class="S0-ul-flex">
+                        {{#if (eq actor.system.morfologia 'sintetico')}}
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Vida' }}
+                                        {{#if canRoll}}
+                                        <a data-action="roll" data-characteristic="temporary" data-type="overload">
+                                                <i class="fas fa-dice-d10"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="vida" class="SO-inner-container">
+                                        {{#forLoop 0 8}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="life">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+                        {{/if}}
+
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Sobrecarga' }}
+                                        {{#if canRoll}}
+                                        <a data-action="roll" data-characteristic="temporary" data-type="overload">
+                                                <i class="fas fa-dice-d10"></i>
+                                        </a>
+                                        <a data-action="remove" data-characteristic="temporary" data-type="overload">
+                                                <i class="fas fa-refresh"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="sobrecarga" class="SO-inner-container">
+                                        {{#forLoop 0 5}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="overload">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+                        </li>
+                </ul>
+
+                <ul class="S0-ul-flex">
+                        <li class="S0-container">
+                                <h3>
+                                        {{ localize 'S0.Vitalidade' }}
+                                        {{#if canRoll}}
+                                        <a data-action="remove" data-characteristic="temporary" data-type="health">
+                                                <i class="fas fa-refresh"></i>
+                                        </a>
+                                        {{/if}}
+                                </h3>
+                                <div id="vitalidade" class="SO-inner-container">
+                                        {{#forLoop 0 actor.system.vitalidade.total}}
+                                        {{#with ../canRoll as |canRoll|}}
+                                        <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                                                data-action="{{#if canRoll}}check{{/if}}"
+                                                data-characteristic="temporary" data-type="health">
+                                        </div>
+                                        {{/with}}
+                                        {{/forLoop}}
+                                </div>
+
+                                <div class="S0-container"
+                                        style="display: flex; justify-content: space-around; background: none; padding: 6px; margin-bottom: 2px;">
+                                        <div class="S0-inner-li">
+                                                <label><strong>Clique esquerdo:</strong> Letal</label>
+                                                <div class="S0-characteristic S0-characteristic-temp"
+                                                        style="background-color: var(--secondary-color);"> </div>
+                                        </div>
+                                        <div class="S0-inner-li">
+                                                <label><strong>Clique direito:</strong> Superficial</label>
+                                                <div class="S0-characteristic S0-characteristic-temp"
+                                                        style="background-color: var(--primary-color);"> </div>
+                                        </div>
+                                </div>
+                        </li>
+                </ul>
+        </section>
+
+        <h2>
+                {{localize 'S0.Efeitos_Ativos'}}
+                <a data-action="view" data-characteristic="effects"> <i class="fas fa-eye"></i> </a>
+                {{#if canRoll}}
+                <a data-action="check" data-characteristic="effects"> <i class="fas fa-refresh"></i> </a>
+                <a data-action="remove" data-characteristic="effects" data-type="all"> <i class="fas fa-trash"></i> </a>
+                {{/if}}
+        </h2>
+
+        <section>
+                <ul class="S0-container" style="padding: 5px; margin-block: 6px;">
+                        {{#each effects as |item index|}}
+                        <li style="margin-block: 3px; border-bottom: 1px solid var(--secondary-color)">
+                                <strong>{{ item.origin }}</strong>: {{ item.name }}
+                                <a data-action="remove" data-characteristic="effects" data-type="single"
+                                        data-item-index="{{ index }}">
+                                        <i class="fas fa-remove"></i>
+                                </a>
+                        </li>
+                        {{/each}}
+                </ul>
+        </section>
+
 </section>

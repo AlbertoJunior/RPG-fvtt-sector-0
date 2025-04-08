@@ -1,7 +1,7 @@
 <form>
     <div class="form-group">
         <label for="trait" style="max-width: 110px; font-weight: bold;">{{ title }}</label>
-        <select id="trait" {{ isEnabledChangeTrait }}>
+        <select id="trait" class="S0-select" {{ isEnabledChangeTrait }}>
             {{#each options as |option|}}
             <option data-id="{{ option.id }}" value="{{ option.index }}" {{ option.isSelected }}> {{ option.label }} </option>
             {{/each}}
@@ -29,5 +29,5 @@
         <label style="max-width: 110px; font-weight: bold;">{{ cost }}:</label>
         <label id="cost" style="margin-inline: 5px;"></label>
     </div>
-    <hr>
+    <hr>    
 </form>
