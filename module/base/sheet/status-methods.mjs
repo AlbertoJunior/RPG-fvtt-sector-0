@@ -1,8 +1,6 @@
-import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
-import { selectCharacteristic, TODO } from "../../../scripts/utils/utils.mjs";
-import { RollOverload } from "../../core/rolls/overload-roll.mjs";
-import { RollOverloadMessageCreator } from "../../creators/message/overload-roll.mjs";
+import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { DefaultActions } from "../../utils/default-actions.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
 
 function selectLifeCharacteristic(event, addClassIfBlank) {
@@ -78,12 +76,10 @@ const mapCheck = {
 
 const mapRoll = {
     overload: async (actor, event) => {
-        const resultRoll = await RollOverload.roll(actor);
-        const contentMessage = await RollOverloadMessageCreator.mountContent(resultRoll);
-        ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
+        DefaultActions.processOverloadRoll(actor);
     },
     initiative: async (actor, event) => {
-        TODO(`implementar roll de iniciativa`)
+        DefaultActions.processInitiativeRoll(actor);
     }
 }
 

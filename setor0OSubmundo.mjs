@@ -2,13 +2,16 @@ import { createDataModels } from "./scripts/utils/models.mjs";
 import { loadPackages } from "./scripts/utils/repositories.mjs";
 import { loadHandlebarsHelpers } from "./scripts/utils/handlerbars-helper.mjs";
 import { registerTemplates } from "./scripts/utils/templates.mjs";
-import { NotificationsUtils } from "./scripts/utils/notifications.mjs";
+import { NotificationsUtils } from "./module/creators/message/notifications.mjs";
 import { GameSettingsUtils } from "./module/settings/game-settings.mjs";
 import { MessageRepository } from "./scripts/repository/message-repository.mjs";
+import { Setor0Combat } from "./module/core/combat/combat.mjs";
 
 Hooks.once('init', async function () {
   console.log('-> Setor 0 - O Submundo | Inicializando sistema');
   //CONFIG.debug.hooks = true;
+
+  CONFIG.Combat.documentClass = Setor0Combat;
 
   addListenersOnDOM();
   await createDataModels();
@@ -32,6 +35,11 @@ Hooks.on('createItem', (item) => {
       }
     }
   }
+});
+
+
+Hooks.on('createCombat', (combat) => {
+  console.log(combat);
 });
 
 function addListenersOnDOM() {

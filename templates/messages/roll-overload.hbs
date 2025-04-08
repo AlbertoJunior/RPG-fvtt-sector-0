@@ -1,8 +1,7 @@
 <div class="S0-message-content">
-    <h4>{{localize 'S0.Nucleo'}} [{{ core }}]</h4>
+    <h4>{{localize 'S0.Nucleo'}} [ {{ core }} ]</h4>
     <hr>
     <div class="dice-tooltip tooltip-part hidden">
-        <p style="margin-top: 6px;">{{localize 'S0.Sobrecarga'}}:</p>
         <ol class="dice-rolls">
             {{#each diceValues}}
             <li class="S0-d10 roll die d10" style="filter: sepia(1) hue-rotate(330deg);">{{ this }}</li>
@@ -13,6 +12,6 @@
     </div>
 
     <button class="S0-roll-result {{ resultMessageClasses }}" data-action="toggle-tooltip">
-        {{ resultMessage }} ({{ resultValue }})
+        {{ resultMessage }} ( {{ resultValue }} )
     </button>
 </div>

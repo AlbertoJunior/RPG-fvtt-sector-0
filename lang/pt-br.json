@@ -92,6 +92,8 @@
     "S0.Nenhum": "Nenhum",
     "S0.Automatico": "Automático",
     
+    "S0.Total": "Total",
+    "S0.Base": "Base",
     "S0.Teste": "Teste",
     "S0.Sucesso": "Sucesso",
     "S0.Sucesso_Explosivo": "Sucesso Explosívo",
@@ -103,6 +105,7 @@
     
     "S0.Movimento": "Movimento",
     "S0.Iniciativa": "Iniciativa",
-    "S0.Penalidade": "Penalidade"
+    "S0.Penalidade": "Penalidade",
 
+    "COMBAT.RollsInitiative": "Rolou Iniciativa"
 }

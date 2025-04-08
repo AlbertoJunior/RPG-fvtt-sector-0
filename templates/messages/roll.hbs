@@ -1,5 +1,5 @@
 <div class="S0-message-content">
-    <h4>{{localize 'S0.Atributos'}} [{{ localize attr1 }}] e [{{ localize attr2 }}]</h4>
+    <h4>{{localize 'S0.Atributos'}} [ {{ localize attr1 }} ] + [ {{ localize attr2 }} ]</h4>
     <hr>
     {{#if haveResult}}
     <div class="dice-tooltip tooltip-part hidden">
@@ -36,7 +36,7 @@
     </div>
 
     <button class="S0-roll-result {{ resultMessageClasses }}" data-action="toggle-tooltip">
-        {{ resultMessage }} ({{ resultValue }})
+        {{ resultMessage }} ( {{ resultValue }} )
     </button>
     {{else}}
 
