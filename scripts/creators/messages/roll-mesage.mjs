@@ -2,7 +2,9 @@ import { CoreRollMethods } from "../../../module/core/rolls/core-roll-methods.mj
 import { keyJsonToKeyLang, localize, toTitleCase } from "../../utils/utils.mjs";
 
 export class RollMessageCreator {
-    static async mountContent(rolls, attrs, abilityInfo, difficulty) {
+    static async mountContent(params) {
+        const { rolls, attrs, abilityInfo, difficulty, havePerseverance } = params;
+
         const diceResults = {
             overload: rolls.overload.values,
             default: rolls.default.values
@@ -15,6 +17,8 @@ export class RollMessageCreator {
             diceResults.overload, diceResults.default, abilityInfo.specialist, difficulty
         );
 
+        const canUsePerseverance = diceResults.default.length > 0 && (havePerseverance || false);
+
         const data = {
             haveResult: (rolls.overload.values.length + rolls.default.values.length) > 0,
             attr1: keyJsonToKeyLang(attr1.label),
@@ -23,9 +27,10 @@ export class RollMessageCreator {
             formule: `(${attr1.value} + ${attr2.value}) / 2 + ${abilityInfo.value}`,
             overloadValues: diceResults.overload.flat(),
             defaultValues: diceResults.default.flat(),
+            canUsePerseverance: canUsePerseverance,
             resultMessageClasses: result.message.classes,
             resultMessage: result.message.message,
-            resultValue: result.result + result.overload
+            resultValue: result.result
         };
 
         return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll.hbs", data);
@@ -34,7 +39,7 @@ export class RollMessageCreator {
     static #verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
         const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
         const message = this.#mountResultMessageInfos(result, overload);
-        return { result, overload, message };
+        return { result, message };
     }
 
     static #mountResultMessageInfos(resultSuccess, haveOverload) {

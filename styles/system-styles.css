@@ -123,7 +123,16 @@ select:enabled:hover {
     min-width: 36px;
     width: 36px;
     line-height: 42px;
-    font-size: var(--font-size-12);
+    font-size: var(--font-size-13);
+}
+
+.roll.d10.S0-d10-small {
+    background-size: 28px;
+    height: 28px;
+    min-width: 28px;
+    width: 28px;
+    line-height: 32px;
+    font-size: var(--font-size-11);
 }
 
 .chat-message {
@@ -561,8 +570,29 @@ img.S0-clickable:hover {
 /* #endregion */
 
 /* #region MESSAGE*/
+button.S0-roll-result {
+    font-family: 'Setor0';
+    color: var(--primary-color);
+    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
+    padding: 0;
+    letter-spacing: 0.1em;
+}
+
+button.S0-roll-result:not([disabled]):hover {
+    color: var(--secondary-color);
+}
+
 .S0-message-content hr {
     border-color: var(--light-secondary-color-alpha-50);
+}
+
+.S0-message-content button:disabled {
+    cursor: default;
+    color: black;
+    background-color: gray;
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
 }
 
 .S0-dice {
@@ -580,6 +610,14 @@ img.S0-clickable:hover {
     background: url(systems/setor0OSubmundo/icons/d1.png) no-repeat 0%;
 }
 
+.S0-d10 {
+    filter: sepia(1);
+}
+
+.S0-d10-overload {
+    filter: sepia(1) hue-rotate(330deg);
+}
+
 .S0-roll-result {
     margin: 2px 0px;
     line-height: 24px;
@@ -588,18 +626,6 @@ img.S0-clickable:hover {
     box-shadow: 0 0 2px var(--primary-color-alpha) inset;
     color: white;
     transition: background-color 0.3s, color 0.3s;
-}
-
-button.S0-roll-result {
-    font-family: 'Setor0';
-    color: var(--primary-color);
-    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
-    padding: 0;
-    letter-spacing: 0.1em;
-}
-
-button.S0-roll-result:hover {
-    color: var(--secondary-color);
 }
 
 .S0-roll-result.S0-success {

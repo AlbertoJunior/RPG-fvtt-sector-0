@@ -7,7 +7,7 @@ export class CoreRollMethods {
 
             return {
                 roll: roll,
-                values: roll.dice.flatMap(dice => dice.results.map(result => result.result))
+                values: this.getValuesOnRoll(roll)
             };
         }
 
@@ -16,6 +16,10 @@ export class CoreRollMethods {
             values: []
         };
     };
+
+    static getValuesOnRoll(roll) {
+        return roll.dice.flatMap(dice => dice.results.map(result => result.result));
+    }
 
     static calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty) {
         let resultOverload = 0;
@@ -43,6 +47,7 @@ export class CoreRollMethods {
             } else if (element == 1) {
                 if (usedSpecialist) {
                     resultDefault--;
+                    critic--;
                 } else {
                     usedSpecialist = true
                 }
@@ -51,7 +56,7 @@ export class CoreRollMethods {
             }
         }
 
-        if (critic % 2 !== 0) {
+        if (critic > 0 && critic % 2 !== 0) {
             critic--;
         }
 

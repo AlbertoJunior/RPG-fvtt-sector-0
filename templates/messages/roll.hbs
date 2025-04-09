@@ -12,7 +12,7 @@
         <p style="margin-top: 6px;">{{localize 'S0.Sobrecarga'}}:</p>
         <ol class="dice-rolls">
             {{#each overloadValues}}
-            <li class="S0-d10 roll die d10" style="filter: sepia(1) hue-rotate(330deg);">{{ this }}</li>
+            <li class="S0-d10 roll die d10 S0-d10-overload">{{ this }}</li>
             {{/each}}
         </ol>
         {{/unless}}
@@ -30,9 +30,11 @@
 
         <label style="display: block; margin-block: 6px;">{{localize 'S0.Sucessos'}}: {{ resultValue }}</label>
 
+        {{#if canUsePerseverance}}
         <button class="S0-roll-result" data-action="roll" data-type="perseverance">
             {{localize 'S0.Usar_Perseveranca'}}
         </button>
+        {{/if}}
     </div>
 
     <button class="S0-roll-result {{ resultMessageClasses }}" data-action="toggle-tooltip">

@@ -1,4 +1,5 @@
-import { TODO } from "./utils.mjs";
+import { CharacteristicType } from "../../module/enums/characteristic-enums.mjs";
+import { getObject, TODO } from "./utils.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -53,6 +54,12 @@ export class ActorUtils {
         const enhancementOnActor = this.#findEnhancementOnActorById(enhancement.id, actor.system.aprimoramentos);
         const levelsOnActor = this.#findLevelsWithId(enhancementOnActor);
         return levelsOnActor.length;
+    }
+
+    static havePerseverance(actor) {
+        const level = getObject(actor, CharacteristicType.PERSEVERANCE_LEVEL.system);
+        const used = getObject(actor, CharacteristicType.PERSEVERANCE_USED.system);
+        return used < level;
     }
 
     static #findEnhancementOnActorById(selectedId, enhancements) {
