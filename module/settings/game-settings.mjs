@@ -2,7 +2,7 @@ import { RollRepository } from "../../scripts/repository/roll-repository.mjs";
 
 export class GameSettingsUtils {
     static async loadGameSettings() {
-        await this.#register(RollRepository._ROLL_HISTORY, RollRepository._CONFIG);
+        //await this.#register(RollRepository._ROLL_HISTORY, RollRepository._CONFIG);
     }
 
     static async #register(settingId, settingConfig) {

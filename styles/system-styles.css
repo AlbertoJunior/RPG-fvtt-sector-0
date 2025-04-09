@@ -25,6 +25,8 @@ body {
     --color-gray-alpha: rgba(80, 80, 80, 0.8);
     --color-checkbox-checked: var(--secondary-color);
 
+    --whisper-color-alpha-50: rgba(20, 20, 60, 0.5);
+
     --min-width-tooltip: 200px;
     --border-radius-small: 4px;
     --border-radius-medium: 6px;
@@ -121,33 +123,36 @@ select:enabled:hover {
     min-width: 36px;
     width: 36px;
     line-height: 42px;
-    font-size: var(--font-size-12);
+    font-size: var(--font-size-13);
 }
 
-.S0-dice {
-    background: url(systems/setor0OSubmundo/icons/dn.png) no-repeat 0%;
-    background-size: 36px;
-    height: 36px;
-    width: 36px;
-}
-
-.S0-dice.S0-d10 {
-    background: url(systems/setor0OSubmundo/icons/d10.png) no-repeat 0%;
-}
-
-.S0-dice.S0-d1 {
-    background: url(systems/setor0OSubmundo/icons/d1.png) no-repeat 0%;
+.roll.d10.S0-d10-small {
+    background-size: 28px;
+    height: 28px;
+    min-width: 28px;
+    width: 28px;
+    line-height: 32px;
+    font-size: var(--font-size-11);
 }
 
 .chat-message {
     background: var(--secondary-color-alpha-50);
 }
 
+.chat-message.whisper {
+    background: var(--whisper-color-alpha-50);
+}
+
+.chat-message.blind {
+    border-color: var(--primary-color-alpha-50);
+}
+
 .message-sender,
 .message-metadata,
 .chat-message {
+    max-width: 270px;
     color: var(--primary-color);
-    text-shadow: 0 0px 1px #ffffff4d;
+    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
 }
 
 .message-content button {
@@ -291,38 +296,6 @@ img.S0-clickable:hover {
 
 .S0-actor-sheet button:hover {
     background-color: var(--primary-color-alpha);
-}
-
-.S0-roll-result {
-    margin: 2px 0px;
-    line-height: 24px;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: var(--border-radius-small);
-    box-shadow: 0 0 2px white inset;
-    color: white;
-}
-
-.S0-roll-result.S0-success {
-    background: rgba(30, 200, 50, 0.5);
-}
-
-.S0-roll-result.S0-failure {
-    background: rgba(116, 116, 116, 0.5);
-}
-
-.S0-roll-result.S0-critical-failure {
-    background: rgba(255, 0, 0, 0.5);
-}
-
-.S0-roll-result.S0-overload {
-    border: dashed 2px white;
-    box-shadow: none;
-}
-
-.S0-roll-result.S0-overload:hover {
-    border: dashed 2px black;
-    box-shadow: none;
 }
 
 .S0-float-right-sheet {
@@ -597,8 +570,85 @@ img.S0-clickable:hover {
 /* #endregion */
 
 /* #region MESSAGE*/
+button.S0-roll-result {
+    font-family: 'Setor0';
+    color: var(--primary-color);
+    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
+    padding: 0;
+    letter-spacing: 0.1em;
+}
+
+button.S0-roll-result:not([disabled]):hover {
+    color: var(--secondary-color);
+}
+
 .S0-message-content hr {
     border-color: var(--light-secondary-color-alpha-50);
+}
+
+.S0-message-content button:disabled {
+    cursor: default;
+    color: black;
+    background-color: gray;
+    text-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+
+.S0-dice {
+    background: url(systems/setor0OSubmundo/icons/dn.png) no-repeat 0%;
+    background-size: 36px;
+    height: 36px;
+    width: 36px;
+}
+
+.S0-dice.S0-d10 {
+    background: url(systems/setor0OSubmundo/icons/d10.png) no-repeat 0%;
+}
+
+.S0-dice.S0-d1 {
+    background: url(systems/setor0OSubmundo/icons/d1.png) no-repeat 0%;
+}
+
+.S0-d10 {
+    filter: sepia(1);
+}
+
+.S0-d10-overload {
+    filter: sepia(1) hue-rotate(330deg);
+}
+
+.S0-roll-result {
+    margin: 2px 0px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: var(--border-radius-small);
+    box-shadow: 0 0 2px var(--primary-color-alpha) inset;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.S0-roll-result.S0-success {
+    background: rgba(30, 200, 50, 0.5);
+}
+
+
+.S0-roll-result.S0-failure {
+    background: rgba(200, 30, 30, 0.5);
+}
+
+.S0-roll-result.S0-critical-failure {
+    background: rgba(255, 0, 0, 0.8);
+}
+
+.S0-roll-result.S0-overload {
+    border: dashed 2px white;
+    box-shadow: none;
+}
+
+.S0-roll-result.S0-overload:hover {
+    border: dashed 2px black;
+    box-shadow: none;
 }
 
 /* #endregion */

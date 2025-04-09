@@ -1,8 +1,10 @@
-import { calculateSuccess } from "../../rolls/roll.mjs";
-import { keyJsonToKeyLang, toTitleCase } from "../../utils/utils.mjs";
+import { CoreRollMethods } from "../../../module/core/rolls/core-roll-methods.mjs";
+import { keyJsonToKeyLang, localize, toTitleCase } from "../../utils/utils.mjs";
 
 export class RollMessageCreator {
-    static async mountContent(rolls, attrs, abilityInfo, difficulty) {
+    static async mountContent(params) {
+        const { rolls, attrs, abilityInfo, difficulty, havePerseverance } = params;
+
         const diceResults = {
             overload: rolls.overload.values,
             default: rolls.default.values
@@ -15,6 +17,8 @@ export class RollMessageCreator {
             diceResults.overload, diceResults.default, abilityInfo.specialist, difficulty
         );
 
+        const canUsePerseverance = diceResults.default.length > 0 && (havePerseverance || false);
+
         const data = {
             haveResult: (rolls.overload.values.length + rolls.default.values.length) > 0,
             attr1: keyJsonToKeyLang(attr1.label),
@@ -23,35 +27,36 @@ export class RollMessageCreator {
             formule: `(${attr1.value} + ${attr2.value}) / 2 + ${abilityInfo.value}`,
             overloadValues: diceResults.overload.flat(),
             defaultValues: diceResults.default.flat(),
+            canUsePerseverance: canUsePerseverance,
             resultMessageClasses: result.message.classes,
             resultMessage: result.message.message,
-            resultValue: result.result + result.overload
+            resultValue: result.result
         };
 
         return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll.hbs", data);
     }
 
     static #verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty) {
-        const { result, overload } = calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
+        const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty);
         const message = this.#mountResultMessageInfos(result, overload);
-        return { result, overload, message };
+        return { result, message };
     }
 
     static #mountResultMessageInfos(resultSuccess, haveOverload) {
         let messageInfo = ''
         if (resultSuccess > 0) {
             messageInfo = {
-                message: haveOverload ? "SUCESSO EXPLOSIVO!" : "Sucesso",
+                message: haveOverload ? `${localize('Sucesso_Explosivo').toUpperCase()}!` : localize('Sucesso'),
                 classes: haveOverload ? "S0-overload S0-success" : "S0-success"
             }
         } else if (resultSuccess < 0) {
             messageInfo = {
-                message: haveOverload ? "FALHA CAÓTICA" : "Falha Crítica",
+                message: haveOverload ? localize('Falha_Caotica').toUpperCase() : localize('Falha_Critica'),
                 classes: haveOverload ? "S0-overload S0-critical-failure" : "S0-critical-failure"
             }
         } else {
             messageInfo = {
-                message: "Falha",
+                message: localize('Falha'),
                 classes: "S0-failure"
             }
         }

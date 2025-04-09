@@ -2,7 +2,7 @@ import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
 import { EnhancementDialog } from "../../../scripts/creators/dialogs/enhancement-dialog.mjs";
 import { _createEmptyOption, _createOption } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
 import { ActorUtils } from "../../../scripts/utils/actor.mjs";
-import { NotificationsUtils } from "../../../scripts/utils/notifications.mjs";
+import { NotificationsUtils } from "../../creators/message/notifications.mjs";
 import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
 import { EnhancementUtils } from "../../core/enhancement.mjs";
 import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";

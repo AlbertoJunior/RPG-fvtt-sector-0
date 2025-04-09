@@ -1,12 +1,10 @@
 {
     "S0.Title": "Setor 0 - O Submundo",
-
-    "S0.Fechar": "Fechar", 
-    "S0.Editar": "Editar", 
-    "S0.Editando": "Editando", 
-    "S0.Erro": "Erro", 
-
-    "S0.Rolagem": "Rolagem", 
+    "S0.Fechar": "Fechar",
+    "S0.Editar": "Editar",
+    "S0.Editando": "Editando",
+    "S0.Erro": "Erro",
+    "S0.Rolagem": "Rolagem",
     "S0.Nome": "Nome",
     "S0.Caracteristicas": "Características",
     "S0.Personagem": "Personagem",
@@ -15,7 +13,7 @@
     "S0.Androide": "Androide",
     "S0.Ciborgue": "Ciborgue",
     "S0.Sintetico": "Sintético",
-    
+
     "S0.Atributos": "Atributos",
     "S0.Forca": "Força",
     "S0.Destreza": "Destreza",
@@ -23,7 +21,7 @@
     "S0.Percepcao": "Percepção",
     "S0.Carisma": "Carisma",
     "S0.Inteligencia": "Inteligência",
-    
+
     "S0.Habilidade": "Habilidade",
     "S0.Habilidades": "Habilidades",
     "S0.Armas_Brancas": "Armas Brancas",
@@ -41,38 +39,38 @@
     "S0.Pilotagem": "Pilotagem",
     "S0.Quimica": "Química",
     "S0.Especialista": "Especialista",
-    
+
     "S0.Repertorio": "Repertório",
     "S0.Aliados": "Aliados",
     "S0.Arsenal": "Arsenal",
     "S0.Informantes": "Informantes",
     "S0.Recursos": "Recursos",
     "S0.SuperEquipamentos": "SuperEquipamentos",
-    
+
     "S0.Virtudes": "Virtudes",
     "S0.Consciencia": "Consciência",
     "S0.Perseveranca": "Perseverança",
     "S0.Quietude": "Quietude",
-    
+
     "S0.Nivel_De_Procurado": "Nível de Procurado",
     "S0.Procurado": "Procurado",
     "S0.Influencia": "Influência",
-    
+
     "S0.Status": "Status",
     "S0.Nucleo": "Núcleo",
     "S0.Sobrecarga": "Sobrecarga",
     "S0.Aprimoramento": "Aprimoramento",
     "S0.Aprimoramentos": "Aprimoramentos",
-    
+
     "S0.Vida": "Vida",
     "S0.Vitalidade": "Vitalidade",
     "S0.Experiencia": "Experiência",
-    
+
     "S0.Traco": "Traço",
     "S0.Tracos": "Traços",
     "S0.Tracos-Bons": "Traços Bons",
     "S0.Tracos-Ruins": "Traços Ruins",
-    
+
     "S0.Outros": "Outros",
     "S0.Fama": "Fama",
     "S0.Biografia": "Biografia",
@@ -91,14 +89,20 @@
     "S0.Uso": "Uso",
     "S0.Nenhum": "Nenhum",
     "S0.Automatico": "Automático",
-    
+
+    "S0.Total": "Total",
+    "S0.Base": "Base",
     "S0.Teste": "Teste",
     "S0.Sucesso": "Sucesso",
+    "S0.Sucesso_Explosivo": "Sucesso Explosívo",
     "S0.Sucessos": "Sucessos",
+    "S0.Falha": "Falha",
+    "S0.Falha_Critica": "Falha Crítica",
+    "S0.Falha_Caotica": "Falha Caótica",
     "S0.Usar_Perseveranca": "Usar Perseverança",
-    
+    "S0.Removidos": "Removidos",
+
     "S0.Movimento": "Movimento",
     "S0.Iniciativa": "Iniciativa",
     "S0.Penalidade": "Penalidade"
-
 }

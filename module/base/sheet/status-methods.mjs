@@ -1,5 +1,6 @@
-import { selectCharacteristic, TODO } from "../../../scripts/utils/utils.mjs";
+import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { DefaultActions } from "../../utils/default-actions.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
 
 function selectLifeCharacteristic(event, addClassIfBlank) {
@@ -75,10 +76,10 @@ const mapCheck = {
 
 const mapRoll = {
     overload: async (actor, event) => {
-        TODO(`implementar roll de sobrecarga`)
+        DefaultActions.processOverloadRoll(actor);
     },
     initiative: async (actor, event) => {
-        TODO(`implementar roll de iniciativa`)
+        DefaultActions.processInitiativeRoll(actor);
     }
 }
 
