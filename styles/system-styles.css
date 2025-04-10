@@ -685,6 +685,67 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* #endregion */
 
+/* #region EQUIPMENT */
+.S0-full-background {
+    background-image: url(../imgs/body.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -100;
+}
+
+.S0-bag {
+    display: flex;
+    justify-content: space-between;
+    row-gap: 6px;
+    flex-wrap: wrap;
+}
+
+.S0-bag li {
+    padding: 4px;
+}
+
+.S0-item-bag {
+    background-color: var(--shadow-color-30);
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    height: 100px;
+    width: 90px;
+    margin: 0 auto;
+    border: 2px solid black;
+    border-radius: var(--border-radius-large);
+}
+
+.S0-item-legend {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    bottom: 0px;
+    background: var(--secondary-color-alpha-50);
+    border: 1px solid;
+    padding-top: 3px;
+    border-radius: 0px 0px var(--border-radius-medium) var(--border-radius-medium);
+}
+
+.S0-item-bag.S0-clickable {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.S0-item-bag.S0-clickable:hover {
+    cursor: pointer;
+    background-color: var(--primary-color-alpha-50);
+}
+
+.S0-item-bag img {
+    margin: 3px;
+    border: none;
+}
+
+/* #endregion */
+
 /* #region */
 /* #endregion */
 

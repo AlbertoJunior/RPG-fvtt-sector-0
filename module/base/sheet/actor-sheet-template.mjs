@@ -289,6 +289,7 @@ async function configurePartialTemplates() {
         "actors/status",
         "actors/enhancement",
         "actors/enhancement-partial",
+        "actors/equipment"
     ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
 
     const partials = [

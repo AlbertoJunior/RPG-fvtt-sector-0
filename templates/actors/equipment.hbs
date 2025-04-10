@@ -1,0 +1,59 @@
+<section data-label="{{localize 'S0.Equipamentos'}}" class="S0-page" data-icon="fa-solid fa-swords-laser">
+    <div class="S0-full-background S0-container">
+        <h3>Equipados</h3>
+        <ul class="S0-bag">
+            {{#forLoop 0 10}}
+            <li>
+                <h4>Proteção</h3>
+                    <div class="S0-item-bag">
+                        <img src="icons/svg/mystery-man.svg" />
+                    </div>
+            </li>
+            {{/forLoop}}
+        </ul>
+    </div>
+
+    <div class="S0-full-background S0-container">
+        <h3>Mochila</h3>
+        <ul class="S0-bag">
+            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
+                <h4>Proteção</h3>
+            </li>
+            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
+                <h4>Armas Brancas</h3>
+            </li>
+            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
+                <h4>Armas de Projeção</h3>
+            </li>
+            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
+                <h4>Substâncias</h3>
+            </li>
+            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
+                <h4>Veículos</h3>
+            </li>
+        </ul>
+        <hr>
+        <ul class="S0-bag">
+            {{#forLoop 0 10}}
+            <li>
+                <h4>Proteção</h3>
+                    <div class="S0-item-bag" style="position: relative;">
+                        <img src="icons/svg/mystery-man.svg" />
+
+                        <div class="S0-item-legend">
+                            <a data-action="chat" data-characteristic="trait" data-type="{{type}}">
+                                <i class="fas fa-message-quote"></i>
+                            </a>
+                            <a data-action="view" data-characteristic="trait" data-type="{{type}}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a data-action="edit" data-characteristic="trait" data-type="good">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+            </li>
+            {{/forLoop}}
+        </ul>
+    </div>
+</section>
