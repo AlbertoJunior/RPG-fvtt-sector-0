@@ -4,7 +4,7 @@ import { loadHandlebarsHelpers } from "./scripts/utils/handlerbars-helper.mjs";
 import { registerTemplates } from "./scripts/utils/templates.mjs";
 import { NotificationsUtils } from "./module/creators/message/notifications.mjs";
 import { GameSettingsUtils } from "./module/settings/game-settings.mjs";
-import { Setor0Combat } from "./module/core/combat/combat.mjs";
+import { Setor0Combat } from "./module/core/combat/setor0-combat.mjs";
 import { addListenersOnDOM } from "./scripts/utils/dom-listeners.mjs";
 
 Hooks.once('init', async function () {

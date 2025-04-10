@@ -1,6 +1,3 @@
-import { ActorUtils } from "../../../scripts/utils/actor.mjs";
-import { DefaultActions } from "../../utils/default-actions.mjs";
-
 export class CombatUtils {
     static async addOrUpdateActorOnCombat(actor, initiative, hidden = false) {
         const currentCombat = game.combat;
@@ -36,32 +33,5 @@ export class CombatUtils {
         }
 
         await currentCombat.createEmbeddedDocuments("Combatant", [combatant]);
-    }
-}
-
-export class Setor0Combat extends Combat {
-    getData() {
-        const data = super.getData();
-        return data;
-    }
-
-    async rollInitiative(combatantIdArray) {
-        if (combatantIdArray) {
-            for (const combatantId of combatantIdArray) {
-                const combatant = this.combatants.get(combatantId);
-                const actor = combatant.actor;
-                await DefaultActions.processInitiativeRoll(actor);
-            }
-        }
-    }
-
-    _getInitiativeFormula(combatant) {
-        const actor = combatant.actor;
-        const formula = this.constructor.defaultInitiative;
-        if (!actor) {
-            return formula;
-        }
-
-        return formula + ActorUtils.calculateInitiative(actor);
     }
 }

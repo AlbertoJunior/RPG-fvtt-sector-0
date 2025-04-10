@@ -101,7 +101,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
     }
 }
 
-class BasicEnemyDataModel extends ActorDataModel {
+class NPCDataModel extends ActorDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema()
@@ -138,8 +138,7 @@ export async function createActorDataModels() {
     };
 
     CONFIG.Actor.dataModels = {
-        Jogador: PlayerDataModel,
-        Mestre: PlayerDataModel,
-        Inimigo: BasicEnemyDataModel,
+        Player: PlayerDataModel,
+        NPC: NPCDataModel
     }
 }

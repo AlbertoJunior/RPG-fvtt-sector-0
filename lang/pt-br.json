@@ -1,10 +1,13 @@
 {
     "S0.Title": "Setor 0 - O Submundo",
+
     "S0.Fechar": "Fechar",
     "S0.Editar": "Editar",
     "S0.Editando": "Editando",
+    "S0.Modo_Escuro": "Modo Escuro",
     "S0.Erro": "Erro",
     "S0.Rolagem": "Rolagem",
+    
     "S0.Nome": "Nome",
     "S0.Caracteristicas": "Características",
     "S0.Personagem": "Personagem",
@@ -70,6 +73,7 @@
     "S0.Tracos": "Traços",
     "S0.Tracos-Bons": "Traços Bons",
     "S0.Tracos-Ruins": "Traços Ruins",
+    
 
     "S0.Outros": "Outros",
     "S0.Fama": "Fama",
@@ -104,5 +108,37 @@
 
     "S0.Movimento": "Movimento",
     "S0.Iniciativa": "Iniciativa",
-    "S0.Penalidade": "Penalidade"
+    "S0.Penalidade": "Penalidade",
+
+    "TYPES.Actor.NPC": "NPC",
+    "TYPES.Actor.Player": "Jogador",
+
+    "DOCUMENT.ChatMessages": "Mensagens",
+    "DOCUMENT.Combats": "Combates",
+    "DOCUMENT.Scenes": "Cenas",
+    "DOCUMENT.Actors": "Personagens",
+    "DOCUMENT.Items": "Itens",
+    "SIDEBAR.TabJournal": "Jornal",
+    "DOCUMENT.RollTables": "Tabela de Rolagens",
+    "DOCUMENT.CardsPlural": "Cartas",
+    "DOCUMENT.Playlists": "Músicas",
+    "SIDEBAR.TabCompendium": "Compêndio",
+    "SIDEBAR.TabSettings": "Configurações",
+    
+    "HUD.ToggleVis": "Alternar Visibilidade",
+    "HUD.AssignStatusEffects": "Alternar Efeito",
+    "HUD.ToggleTargetState": "Alternar Alvo",
+    "HUD.ToggleCombatState": "Adicionar/Remover no Combate",
+    "HUD.ToFront": "Enviar para frente",
+    "HUD.ToBack": "Enviar para trás",
+    "HUD.Elevation": "Elevação",
+    "HUD.OpenConfig": "Configuração",
+    
+    "TYPES.Item.Armor": "Proteção",
+    "TYPES.Item.Enhancement": "Aprimoramento",
+    "TYPES.Item.Melee": "Corpo-a-Corpo",
+    "TYPES.Item.Projectile": "Arma de Projeção",
+    "TYPES.Item.Substance": "Substância",
+    "TYPES.Item.Vehicle": "Veículo",
+    "TYPES.Item.Trait": "Traço"
 }

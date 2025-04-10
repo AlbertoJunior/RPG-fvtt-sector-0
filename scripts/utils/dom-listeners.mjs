@@ -16,12 +16,14 @@ export function addListenersOnDOM() {
         const target = event.target;
         const eventData = target.dataset;
 
-        if (!eventData)
+        if (!eventData) {
             return;
+        }
 
         const action = eventData.action;
-        if (!action || action == '')
+        if (!action) {
             return;
+        }
 
         const method = mapEventsHandle[action];
         if (typeof method === 'function') {

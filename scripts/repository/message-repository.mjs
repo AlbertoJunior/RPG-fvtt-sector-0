@@ -8,8 +8,9 @@ export class MessageRepository {
     }
 
     static updateMessage(message, params) {
-        if (!message)
+        if (!message) {
             return;
+        }
 
         message.update(params);
     }

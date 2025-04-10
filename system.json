@@ -76,9 +76,8 @@
     ],
     "documentTypes": {
         "Actor": {
-            "Jogador": {},
-            "Mestre": {},
-            "Inimigo": {}
+            "Player": {},
+            "NPC": {}
         },
         "Item": {
             "Melee": {},

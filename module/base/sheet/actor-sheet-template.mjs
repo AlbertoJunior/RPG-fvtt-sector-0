@@ -7,6 +7,25 @@ import { SheetMethods } from "./sheet-methods.mjs";
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
+        sheet: {
+            'check': async (actor, event) => {
+                const type = event.currentTarget.dataset.type;
+                switch (type) {
+                    case 'color': {
+                        this.enableBlackMode = !this.enableBlackMode;
+                        this.render();
+                        return;
+                    }
+                    case 'edit': {
+                        let currentValue = getActorFlag(actor, "editable");
+                        currentValue = !currentValue;
+
+                        setActorFlag(actor, "editable", currentValue)
+                        return;
+                    }
+                }
+            }
+        },
         trait: SheetMethods.handleMethods.trait,
         enhancement: enhancementHandleMethods,
         linguas: SheetMethods.handleMethods.language,
@@ -52,7 +71,6 @@ class Setor0ActorSheet extends ActorSheet {
 
     #setupListeners(html) {
         const actionsClick = [
-            { selector: '#edit-mode-toggle', method: this.#toggleEditMode },
             { selector: '#roll-button', method: this.#openRollDialog },
             { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#onCharacteristicClick },
             ...Object.values(OnEventType)
@@ -88,7 +106,16 @@ class Setor0ActorSheet extends ActorSheet {
             pages.push(page);
 
             const textContent = page?.getAttribute('data-label') || "[Erro]";
-            const button = _createLi(textContent, { classList: 'S0-simulate-button' });
+
+            const iconClass = page?.getAttribute('data-icon');
+            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: '4px', } } : {};
+
+            const options = {
+                classList: 'S0-simulate-button',
+                ...iconOption
+            };
+
+            const button = _createLi(textContent, options);
 
             buttonContainer.appendChild(button);
 
@@ -103,18 +130,9 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    async #toggleEditMode(html, event) {
-        let currentValue = getActorFlag(this.actor, "editable");
-        currentValue = !currentValue;
-
-        await setActorFlag(this.actor, "editable", currentValue)
-    }
-
     #presetSheet(html) {
-        if (this.enableBlackMode) {
-            const parent = html.parent()[0];
-            parent.classList.add('S0-page-transparent')
-        };
+        const parent = html.parent()[0];
+        parent.classList.toggle('S0-page-transparent', this.enableBlackMode);
 
         const classesToRemove = [
             'S0-selected', 'S0-superficial', 'S0-letal'

@@ -43,7 +43,7 @@ export class RollMessageCreator {
     }
 
     static #mountResultMessageInfos(resultSuccess, haveOverload) {
-        let messageInfo = ''
+        let messageInfo = '';
         if (resultSuccess > 0) {
             messageInfo = {
                 message: haveOverload ? `${localize('Sucesso_Explosivo').toUpperCase()}!` : localize('Sucesso'),
