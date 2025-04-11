@@ -16,7 +16,7 @@ export function addListenersOnDOM() {
         const target = event.target;
         const eventData = target.dataset;
 
-        if (!eventData) {
+        if (!eventData || !eventData.handleOnDom) {
             return;
         }
 
@@ -36,7 +36,7 @@ export function addListenersOnDOM() {
             return methodOfType(target);
         }
 
-        console.log(`Não existe evento configurado para [${action}]`);
+        console.log(`Não existe evento configurado no DOM para [${action}]`);
     });
 }
 

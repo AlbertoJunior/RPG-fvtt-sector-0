@@ -8,6 +8,7 @@
     "S0.Erro": "Erro",
     "S0.Rolagem": "Rolagem",
     
+    "S0.Id": "Identificador",
     "S0.Nome": "Nome",
     "S0.Caracteristicas": "Características",
     "S0.Personagem": "Personagem",
@@ -111,18 +112,16 @@
     "S0.Iniciativa": "Iniciativa",
     "S0.Penalidade": "Penalidade",
 
-    "TYPES.Actor.NPC": "NPC",
-    "TYPES.Actor.Player": "Jogador",
-
     "DOCUMENT.ChatMessages": "Mensagens",
     "DOCUMENT.Combats": "Combates",
     "DOCUMENT.Scenes": "Cenas",
     "DOCUMENT.Actors": "Personagens",
     "DOCUMENT.Items": "Itens",
-    "SIDEBAR.TabJournal": "Jornal",
     "DOCUMENT.RollTables": "Tabela de Rolagens",
     "DOCUMENT.CardsPlural": "Cartas",
     "DOCUMENT.Playlists": "Músicas",
+    
+    "SIDEBAR.TabJournal": "Jornal",
     "SIDEBAR.TabCompendium": "Compêndio",
     "SIDEBAR.TabSettings": "Configurações",
     
@@ -135,6 +134,8 @@
     "HUD.Elevation": "Elevação",
     "HUD.OpenConfig": "Configuração",
     
+    "TYPES.Actor.NPC": "NPC",
+    "TYPES.Actor.Player": "Jogador",
     "TYPES.Item.Armor": "Proteção",
     "TYPES.Item.Enhancement": "Aprimoramento",
     "TYPES.Item.Melee": "Corpo-a-Corpo",

@@ -18,11 +18,11 @@ export class CombatUtils {
         if (existingCombatant) {
             await existingCombatant.update({ initiative: initiative });
         } else {
-            await this.#add({ token: token, actor: actor, hidden: hidden, initiative: initiative });
+            await this.#add(currentCombat, { token: token, actor: actor, hidden: hidden, initiative: initiative });
         }
     }
 
-    static async #add(params) {
+    static async #add(currentCombat, params) {
         const { token, actor, hidden, initiative } = params;
         const combatant = {
             tokenId: token.id,

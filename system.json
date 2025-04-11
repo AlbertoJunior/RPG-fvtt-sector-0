@@ -34,7 +34,18 @@
             "label": "Itens conhecidos",
             "system": "setor0OSubmundo",
             "path": "packs/itens",
-            "type": "Item"
+            "type": "Item",
+            "flags": {
+                "filter": {
+                    "type": [
+                        "Armor",
+                        "Melee",
+                        "Projectile",
+                        "Substance",
+                        "Vehicle"
+                    ]
+                }
+            }
         },
         {
             "name": "traits",
@@ -44,7 +55,9 @@
             "type": "Item",
             "flags": {
                 "filter": {
-                    "type": "Trait"
+                    "type": [
+                        "Trait"
+                    ]
                 }
             },
             "ownership": {
@@ -59,7 +72,9 @@
             "type": "Item",
             "flags": {
                 "filter": {
-                    "type": "Enhancement"
+                    "type": [
+                        "Enhancement"
+                    ]
                 }
             },
             "ownership": {
@@ -80,11 +95,11 @@
             "NPC": {}
         },
         "Item": {
+            "Armor": {},
             "Melee": {},
             "Projectile": {},
-            "Armor": {},
-            "Vehicle": {},
             "Substance": {},
+            "Vehicle": {},
             "Trait": {},
             "Enhancement": {}
         }

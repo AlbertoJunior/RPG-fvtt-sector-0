@@ -60,7 +60,7 @@ export class CoreRollMethods {
             critic--;
         }
 
-        const resultFinal = resultOverload + resultDefault + Math.floor(critic / 2);
+        const resultFinal = resultOverload + resultDefault + Math.floor(Math.max(critic, 0) / 2);
 
         return {
             result: resultFinal,

@@ -1,5 +1,3 @@
-import { RollRepository } from "../../scripts/repository/roll-repository.mjs";
-
 export class GameSettingsUtils {
     static async loadGameSettings() {
         //await this.#register(RollRepository._ROLL_HISTORY, RollRepository._CONFIG);

@@ -287,6 +287,14 @@ img.S0-clickable:hover {
     grid-template-columns: repeat(auto-fit, minmax(23%, 1fr));
 }
 
+.S0-container-5-column {
+    display: grid;
+    column-gap: 10px;
+    grid-row-gap: 4px;
+    grid-template-columns: repeat(auto-fit, minmax(18%, 1fr));
+    justify-items: center;
+}
+
 .S0-container h1,
 .S0-container h2,
 .S0-container h3,
@@ -373,7 +381,7 @@ img.S0-clickable:hover {
     transition: background-color 0.3s;
 }
 
-.S0-in-edit {
+.S0-marked {
     color: black;
     background-color: var(--primary-color);
 }

@@ -1,7 +1,7 @@
 import { ActorUtils } from "../../../scripts/utils/actor.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
 
-export class Setor0Combat extends Combat {
+class Setor0Combat extends Combat {
     getData() {
         const data = super.getData();
         return data;
@@ -28,4 +28,8 @@ export class Setor0Combat extends Combat {
 
         return formula + ActorUtils.calculateInitiative(actor);
     }
+}
+
+export async function configureSetor0Combat() {
+    CONFIG.Combat.documentClass = Setor0Combat;
 }

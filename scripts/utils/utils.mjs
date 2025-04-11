@@ -34,7 +34,7 @@ export function selectCharacteristic(element) {
         }
         before = before.previousElementSibling;
     }
-    
+
     element.blur();
 }
 
@@ -67,6 +67,10 @@ export function localize(key) {
     return game.i18n.localize(`S0.${key}`)
 }
 
+export function localizeType(key) {
+    return game.i18n.localize(`TYPES.${key}`)
+}
+
 export function TODO(message, notify) {
     console.warn(`-> ${message}`);
     if (notify) {
@@ -76,4 +80,13 @@ export function TODO(message, notify) {
 
 export function getObject(object, path) {
     return path.split('.').reduce((acc, key) => acc && acc[key], object);
+}
+
+export function randomId() {
+    const id = crypto.randomUUID?.() ?? Math.random().toString(36).substring(2, 10);
+    return id.replaceAll('-', '');
+}
+
+export function convertToCollection(items) {
+    return new foundry.utils.Collection(items.map(item => [item.id, item]));
 }

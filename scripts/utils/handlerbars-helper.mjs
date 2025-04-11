@@ -8,6 +8,7 @@ export async function loadHandlebarsHelpers() {
         "fetchRepository.mjs",
         "forLoop.mjs",
         "actorValues.mjs",
+        "actorLists.mjs",
         "isEmpty.mjs",
     ];
 
