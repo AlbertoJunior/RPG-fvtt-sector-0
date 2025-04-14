@@ -1,8 +1,9 @@
-import { loadPackages } from "../../scripts/utils/repositories.mjs";
+import { RepositoriesUtils } from "../utils/repositories.mjs";
 
 export class ReadyHookHandle {
     static async handle() {
-        await loadPackages();
+        await RepositoriesUtils.loadFromPackages();
+        await RepositoriesUtils.loadFromGame();
         console.log('-> Setor 0 - O Submundo | Sistema Pronto');
     }
 }

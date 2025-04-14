@@ -1,0 +1,36 @@
+<div class="S0-item-bag {{#if @root/editable}}S0-clickable{{/if}}">
+    <div class="S0-item-container" data-action="view" data-characteristic="equipment" data-sub-characteristic="equipped"
+        data-type="{{type}}" data-item-id="{{id}}">
+        <h4 class="S0-item-type">
+            {{localize type}}
+        </h4>
+
+        <span class="S0-item-name">
+            {{name}}
+        </span>
+
+        <img src="{{img}}" />
+    </div>
+
+
+    <div class="S0-item-legend" style="text-shadow: 0 0 3px var(--primary-color);">
+        <a data-action="chat" data-characteristic="equipment" data-type="{{type}}" data-sub-characteristic="equipped"
+            data-item-id="{{id}}">
+            <i class="fas fa-message-quote"></i>
+        </a>
+
+        {{#if @root/canRoll}}
+        <a data-action="roll" data-characteristic="equipment" data-type="{{type}}" data-sub-characteristic="equipped"
+            data-item-id="{{id}}">
+            <i class="fas fa-dice-d10"></i>
+        </a>
+        {{/if}}
+
+        {{#if @root/editable}}
+        <a data-action="remove" data-characteristic="equipment" data-type="{{type}}" data-sub-characteristic="equipped"
+            data-item-id="{{id}}">
+            <i class="fas fa-arrow-down-to-square"></i>
+        </a>
+        {{/if}}
+    </div>
+</div>

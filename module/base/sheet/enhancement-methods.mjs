@@ -10,6 +10,7 @@ import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { ActorEnhancementField } from "../../field/actor-fields.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { ActorUpdater } from "../updater/actor-updater.mjs";
+import { ActiveEffectsUtils } from "../../core/effect/active-effects.mjs";
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
@@ -83,7 +84,7 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
 
     const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
     if (!effect || oldEffect.id != effect.id) {
-        await removeEffect(actor, oldEffect.id);
+        await ActiveEffectsUtils.removeActorEffect(actor, oldEffect.id)
     }
 
     const updatedCharacteristicLevels = { ...enhancementOnSlot.levels };
@@ -127,6 +128,7 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
 
     const enhancement = await EnhancementRepository._getEnhancementFamilyByEffectId(effect.id);
 
+    TODO('mudar para o ActiveEffectsUtils')
     const activeEffectData = {
         label: effect.name,
         description: localize('Aprimoramento'),
@@ -168,28 +170,18 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     TODO('enviar o resultado no chat');
 }
 
-async function removeEffect(actor, oldEffectId) {
-    const effects = actor.effects;
-    for (const effect of effects) {
-        const effectId = effect.statuses.first();
-        if (oldEffectId == effectId) {
-            await effect.delete();
-            return;
-        }
-    }
-}
-
 async function removeEnhancementEffects(actor, enhancement) {
-    const effects = actor.effects;
-    const levels = enhancement?.levels || {};
-    const ids = new Set(Object.values(levels).map(item => item.id).filter(id => id !== ""));
-
-    for (const effect of effects) {
-        const effectId = effect.statuses.first();
-        if (ids.has(effectId)) {
-            await effect.delete();
-        }
+    const levels = enhancement?.levels;
+    if (!levels) {
+        return;
     }
+
+    const ids = new Set(Object.values(levels).map(item => item.id).filter(Boolean));
+    const promises = actor.effects
+        .filter(effect => ids.has(effect.statuses.first()))
+        .map(effect => effect.delete());
+
+    await Promise.all(promises);
 }
 
 async function removeNonePassivesEffects(actor) {

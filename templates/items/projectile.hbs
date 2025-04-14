@@ -1,0 +1,29 @@
+<form class="item-sheet" autocomplete="off">
+    <header class="sheet-header">
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Equipamento" /></h1>
+    </header>
+
+    <div class="sheet-body">
+        <div class="item-image">
+            <img src="{{item.img}}" data-edit="img" title="{{item.name}}" width="64" height="64" />
+        </div>
+
+        <label>Descrição:</label>
+        <textarea name="system.description">{{system.description}}</textarea>
+
+        <label>Resistência:</label>
+        <input type="number" name="system.resistance" value="{{system.resistance}}" />
+
+        <label>Dano:</label>
+        <input type="number" name="system.damage" value="{{system.damage}}" />
+
+        <label>Cadência:</label>
+        <input type="number" name="system.cadence" value="{{system.cadence}}" />
+
+        <label>Alcance Curto:</label>
+        <input type="number" name="system.short_range" value="{{system.short_range}}" />
+
+        <label>Especial?</label>
+        <input type="checkbox" name="system.special" {{#if system.special}}checked{{/if}} />
+    </div>
+</form>

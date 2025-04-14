@@ -1,10 +1,12 @@
 import { createActorDataModels } from "../../module/data/actor-data-model.mjs";
+import { createEquipmentDataModels } from "../../module/data/equipment-data-model.mjs";
 import { createTraitDataModels } from "../../module/data/trait-data-model.mjs";
 
 export async function createDataModels() {
     const models = [
         { model: "Actor", method: createActorDataModels() },
         { model: "Trait", method: createTraitDataModels() },
+        { model: "Equipment", method: createEquipmentDataModels() },
     ];
 
     const results = await Promise.all(

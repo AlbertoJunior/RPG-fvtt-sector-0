@@ -1,0 +1,51 @@
+<div class="S0-item-bag S0-clickable">
+    <div class="S0-item-container" data-action="view" data-characteristic="equipment" data-sub-characteristic="bag"
+        data-type="{{type}}" data-item-id="{{id}}">
+        <h4 class="S0-item-type">
+            {{localize type}}
+        </h4>
+
+        <span class="S0-item-name">
+            {{name}}
+        </span>
+
+        <img src="{{img}}" />
+    </div>
+
+    <div class="S0-item-legend" style="text-shadow: 0 0 3px var(--primary-color);">
+        <a data-action="chat" data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}"
+            data-item-id="{{id}}">
+            <i class="fas fa-message-quote"></i>
+        </a>
+
+        {{#if @root/editable}}
+
+        {{#if this.system.canEquip}}
+        <a data-action="add" data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}"
+            data-item-id="{{id}}" {{#if flags.setor0OSubmundo.equipped}} disabled class="hidden" {{/if}}>
+            <i class="fas fa-arrow-up-from-square"></i>
+        </a>
+        {{/if}}
+
+        {{#if this.system.canUse}}
+        <a data-action="check" data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}"
+            data-item-id="{{id}}">
+            <i class="fas fa-hand-holding-droplet"></i>
+        </a>
+        {{/if}}
+
+        {{#if this.system.haveQuantity}}
+        <a data-action="edit" data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}"
+            data-item-id="{{id}}">
+            <i class="fas fa-arrow-up-arrow-down"></i>
+        </a>
+        {{/if}}
+
+        <a data-action="remove" data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}"
+            data-item-id="{{id}}">
+            <i class="fas fa-trash"></i>
+        </a>
+        {{/if}}
+
+    </div>
+</div>

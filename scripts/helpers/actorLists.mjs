@@ -1,12 +1,12 @@
-import { EquipmentRepository } from "../../module/repository/equipment-repository.mjs";
+import { ActorEquipmentUtils } from "../../module/core/equipment/actor-equipment.mjs";
 
 const map = {
     'equipment-filtered': (actor) => {
         const type = actor.sheet.filterBag || 0;
-        return EquipmentRepository.getFilteredEquipment(actor, type);
+        return ActorEquipmentUtils.getActorFilteredEquipment(actor, type);
     },
     'equipment-equipped': (actor) => {
-        return EquipmentRepository.getEquippedItems(actor);
+        return ActorEquipmentUtils.getActorEquippedItems(actor);
     }
 }
 

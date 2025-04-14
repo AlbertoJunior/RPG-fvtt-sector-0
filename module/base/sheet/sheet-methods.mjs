@@ -2,18 +2,38 @@ import { ActorRollDialog } from "../../../scripts/creators/dialogs/actor-roll-di
 import { ElementCreatorJQuery } from "../../../scripts/creators/jquery/element-creator.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
-import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
+import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
 import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
+import { handlerEquipmentEvents } from "./methods/equipment-methods.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
 
     static handleMethods = {
+        sheet: {
+            check: async (actor, event) => {
+                const type = event.currentTarget.dataset.type;
+                switch (type) {
+                    case 'color': {
+                        actor.sheet.enableBlackMode = !actor.sheet.enableBlackMode;
+                        actor.sheet.render();
+                        return;
+                    }
+                    case 'edit': {
+                        let currentValue = getActorFlag(actor, "editable");
+                        currentValue = !currentValue;
+
+                        setActorFlag(actor, "editable", currentValue)
+                        return;
+                    }
+                }
+            }
+        },
         language: {
-            add: async (actor, event) => {                                
+            add: async (actor, event) => {
                 const element = event.target;
                 selectCharacteristic(element);
 
@@ -71,7 +91,8 @@ export class SheetMethods {
                 $(event.currentTarget.parentElement.nextElementSibling).find('ul')[0]?.classList.toggle('hidden')
             }
         },
-        temporary: handleStatusMethods
+        temporary: handleStatusMethods,
+        equipment: handlerEquipmentEvents
     }
 
     static _createDynamicSheet(html, isEditable) {
@@ -198,6 +219,6 @@ export class SheetMethods {
     }
 
     static async _handleCharacteristicClickEvent(event, actor) {
-        await characteristicOnClick(event, actor);        
+        await characteristicOnClick(event, actor);
     }
 }

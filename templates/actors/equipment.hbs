@@ -1,59 +1,56 @@
 <section data-label="{{localize 'S0.Equipamentos'}}" class="S0-page" data-icon="fa-solid fa-swords-laser">
     <div class="S0-full-background S0-container">
-        <h3>Equipados</h3>
-        <ul class="S0-bag">
-            {{#forLoop 0 10}}
-            <li>
-                <h4>Proteção</h3>
-                    <div class="S0-item-bag">
-                        <img src="icons/svg/mystery-man.svg" />
-                    </div>
-            </li>
-            {{/forLoop}}
+        <h3>
+            {{localize 'S0.Equipados'}}
+            {{#if editable}}
+            <a data-characteristic="equipment" data-sub-characteristic="menu" data-type="equipped" data-action="remove">
+                <i class="fas fa-arrow-down-to-square"></i>
+            </a>
+            {{/if}}
+        </h3>
+
+        <hr>
+
+        <ul class="S0-container-5-column">
+            {{#each (actorLists actor 'equipment-equipped') as |item|}}
+            <li>{{> equipamentEquippedItem item }}</li>
+            {{/each}}
         </ul>
     </div>
 
     <div class="S0-full-background S0-container">
-        <h3>Mochila</h3>
-        <ul class="S0-bag">
-            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
-                <h4>Proteção</h3>
-            </li>
-            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
-                <h4>Armas Brancas</h3>
-            </li>
-            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
-                <h4>Armas de Projeção</h3>
-            </li>
-            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
-                <h4>Substâncias</h3>
-            </li>
-            <li class="S0-simulate-button" style="width: auto; padding-inline: 10px">
-                <h4>Veículos</h3>
-            </li>
-        </ul>
-        <hr>
-        <ul class="S0-bag">
-            {{#forLoop 0 10}}
-            <li>
-                <h4>Proteção</h3>
-                    <div class="S0-item-bag" style="position: relative;">
-                        <img src="icons/svg/mystery-man.svg" />
+        <h3>
+            {{localize 'S0.Mochila'}}
+            {{#if editable}}
+            <a data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag" data-action="remove">
+                <i class="fas fa-trash"></i>
+            </a>
+            <a data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag" data-action="add">
+                <i class="fas fa-square-plus"></i>
+            </a>
+            {{/if}}
+        </h3>
 
-                        <div class="S0-item-legend">
-                            <a data-action="chat" data-characteristic="trait" data-type="{{type}}">
-                                <i class="fas fa-message-quote"></i>
-                            </a>
-                            <a data-action="view" data-characteristic="trait" data-type="{{type}}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a data-action="edit" data-characteristic="trait" data-type="good">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </div>
+        <ul class="S0-infinity-horizontal-menu">
+            {{#each (fetchRepository 'equipment-types')}}
+            <li class="S0-simulate-button {{#if (eq @root/document.sheet.filterBag id)}}S0-marked{{/if}}"
+                style="width: auto; padding-inline: 20px" data-action="check" data-characteristic="equipment"
+                data-sub-characteristic="filter" data-type="{{type}}">
+                <h4 style="font-size: var(--font-size-12);">
+                    {{label}}
+                </h4>
             </li>
-            {{/forLoop}}
+            {{/each}}
+        </ul>
+
+        <hr>
+
+        <ul class="S0-container-5-column" id="bagContainer" style="row-gap: 10px;">
+            {{#each (actorLists actor 'equipment-filtered') as |item|}}
+            <li>
+                {{> equipamentBagItem item }}
+            </li>
+            {{/each}}
         </ul>
     </div>
 </section>

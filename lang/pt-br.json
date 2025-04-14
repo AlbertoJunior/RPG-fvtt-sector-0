@@ -75,7 +75,15 @@
     "S0.Tracos-Bons": "Traços Bons",
     "S0.Tracos-Ruins": "Traços Ruins",
     
+    "S0.Equipados": "Equipados",
+    "S0.Equipado": "Equipado",
+    "S0.Mochila": "Mochila",
     "S0.Equipamentos": "Equipamentos",
+    "S0.Equipamento": "Equipamento",
+    "S0.Protecao": "Proteção",
+    "S0.Veiculos": "Veiculos",
+    "S0.Substancias": "Substâncias",
+    "S0.Resistencia": "Resistência",
 
     "S0.Outros": "Outros",
     "S0.Fama": "Fama",
@@ -142,5 +150,12 @@
     "TYPES.Item.Projectile": "Arma de Projeção",
     "TYPES.Item.Substance": "Substância",
     "TYPES.Item.Vehicle": "Veículo",
-    "TYPES.Item.Trait": "Traço"
+    "TYPES.Item.Trait": "Traço",
+
+    "Armor": "Proteção",
+    "Enhancement": "Aprimoramento",
+    "Melee": "Corpo-a-Corpo",
+    "Projectile": "Arma de Projeção",
+    "Substance": "Substância",
+    "Vehicle": "Veículo"
 }

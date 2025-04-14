@@ -1,42 +1,27 @@
 import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
+import { getActorFlag, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/characteristic-enums.mjs";
+import { EquipmentType } from "../../enums/equipment-enums.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
-        sheet: {
-            'check': async (actor, event) => {
-                const type = event.currentTarget.dataset.type;
-                switch (type) {
-                    case 'color': {
-                        this.enableBlackMode = !this.enableBlackMode;
-                        this.render();
-                        return;
-                    }
-                    case 'edit': {
-                        let currentValue = getActorFlag(actor, "editable");
-                        currentValue = !currentValue;
-
-                        setActorFlag(actor, "editable", currentValue)
-                        return;
-                    }
-                }
-            }
-        },
+        sheet: SheetMethods.handleMethods.sheet,
         trait: SheetMethods.handleMethods.trait,
         enhancement: enhancementHandleMethods,
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
-        temporary: SheetMethods.handleMethods.temporary
+        temporary: SheetMethods.handleMethods.temporary,
+        equipment: SheetMethods.handleMethods.equipment
     };
 
     constructor(...args) {
         super(...args)
         this.currentPage = 1;
         this.enableBlackMode = false;
+        this.filterBag = EquipmentType.UNKNOWM;
     }
 
     activateListeners(html) {
@@ -133,18 +118,11 @@ class Setor0ActorSheet extends ActorSheet {
     #presetSheet(html) {
         const parent = html.parent()[0];
         parent.classList.toggle('S0-page-transparent', this.enableBlackMode);
+        parent.style.margin = '0';
 
-        const classesToRemove = [
-            'S0-selected', 'S0-superficial', 'S0-letal'
-        ];
-        for (const item of classesToRemove) {
-            html.find(`.${item}`).removeClass(item);
-        }
-        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
+        this.#cleanSheetBeforePreset(html);
 
         const system = this.actor.system;
-        const activeEffects = this.actor.statuses;
-
         [
             {
                 container: html.find('#atributosContainer')[0],
@@ -179,6 +157,23 @@ class Setor0ActorSheet extends ActorSheet {
             virtueElementChild = virtueElementChild.nextElementSibling;
         }
 
+        this.#presetLanguages(html);
+        this.#presetEnhancement(html);
+        this.#presetStatus(html);
+    }
+
+    #cleanSheetBeforePreset(html) {
+        const classesToRemove = [
+            'S0-selected', 'S0-superficial', 'S0-letal'
+        ];
+        for (const item of classesToRemove) {
+            html.find(`.${item}`).removeClass(item);
+        }
+        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
+    }
+
+    #presetLanguages(html) {
+        const system = this.actor.system;
         const langContainer = html.find('#linguasContainer')[0].children;
         const langElements = Array.from(langContainer);
         system.linguas.forEach(language => {
@@ -188,6 +183,11 @@ class Setor0ActorSheet extends ActorSheet {
                 selectCharacteristic(langElement);
             }
         });
+    }
+
+    #presetEnhancement(html) {
+        const system = this.actor.system;
+        const activeEffects = this.actor.statuses;
 
         html.find('.S0-enhancement').each((index, enhaceContainer) => {
             const enhancement = system.aprimoramentos[`aprimoramento_${index + 1}`];
@@ -203,7 +203,10 @@ class Setor0ActorSheet extends ActorSheet {
                 }
             });
         });
+    }
 
+    #presetStatus(html) {
+        const system = this.actor.system;
         selectCharacteristic(html.find('#statusPage #consciencia .S0-characteristic')[system.virtudes.consciencia.used - 1]);
         selectCharacteristic(html.find('#statusPage #perseveranca .S0-characteristic')[system.virtudes.perseveranca.used - 1]);
         selectCharacteristic(html.find('#statusPage #quietude .S0-characteristic')[system.virtudes.quietude.used - 1]);
@@ -289,11 +292,15 @@ async function configurePartialTemplates() {
         "actors/status",
         "actors/enhancement",
         "actors/enhancement-partial",
-        "actors/equipment"
+        "actors/equipment",
+        "actors/equipment-bag-item",
+        "actors/equipment-equipped-item",
     ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
 
     const partials = [
-        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' }
+        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' },
+        { call: 'equipamentBagItem', path: 'actors/equipment-bag-item' },
+        { call: 'equipamentEquippedItem', path: 'actors/equipment-equipped-item' },
     ];
 
     const results = await Promise.all(partials.map(async ({ call, path }) => {
