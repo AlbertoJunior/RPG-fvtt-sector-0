@@ -1,7 +1,7 @@
 import { equipmentTypeIdToTypeString, validEquipmentTypes } from "../../module/enums/equipment-enums.mjs";
 import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
-import { LanguageRepository } from "../repository/language-repository.mjs";
-import { TraitRepository } from "../repository/trait-repository.mjs";
+import { TraitRepository } from "../../module/repository/trait-repository.mjs";
+import { LanguageRepository } from "../../module/repository/language-repository.mjs";
 import { localizeType } from "../utils/utils.mjs";
 
 const map = {
@@ -12,7 +12,7 @@ const map = {
     'equipment-types': getActorEquipmentTypes,
 }
 
-function getActorEquipmentTypes() {
+function getActorEquipmentTypes() {            
     return validEquipmentTypes().map(item => {
         const type = equipmentTypeIdToTypeString(item);
         return {

@@ -1,8 +1,8 @@
-import { RollAttribute } from "../../../module/core/rolls/attribute-roll.mjs";
-import { ActorUtils } from "../../utils/actor.mjs";
-import { keyJsonToKeyLang, localize, TODO } from "../../utils/utils.mjs";
-import { ChatCreator } from "../chat-creator.mjs";
-import { RollMessageCreator } from "../messages/roll-mesage.mjs";
+import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
+import { ActorUtils } from "../../../scripts/utils/actor.mjs";
+import { keyJsonToKeyLang, localize, TODO } from "../../../scripts/utils/utils.mjs";
+import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
+import { RollMessageCreator } from "../message/roll-mesage.mjs";
 
 export class ActorRollDialog {
     static async _open(actor) {

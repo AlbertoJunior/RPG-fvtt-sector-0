@@ -2,7 +2,7 @@ import { CoreRollMethods } from "../../module/core/rolls/core-roll-methods.mjs";
 import { RollPerseverance } from "../../module/core/rolls/perseverance-roll.mjs";
 import { RollPerseveranceMessageCreator } from "../../module/creators/message/perseverance-roll.mjs";
 import { ChatCreator } from "../creators/chat-creator.mjs";
-import { MessageRepository } from "../repository/message-repository.mjs";
+import { MessageRepository } from "../../module/repository/message-repository.mjs";
 
 const mapEventsHandle = {
     'toggle-tooltip': (target) => toggleTooltip(target),

@@ -1,12 +1,12 @@
-import { TODO } from "../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../core/equipment/actor-equipment.mjs";
-import { AddEquipmentDialog } from "../../../creators/dialog/add-equipment-dialog.mjs";
-import { ConfirmationDialog } from "../../../creators/dialog/confirmation-dialog.mjs";
-import { UpdateEquipmentQuantityDialog } from "../../../creators/dialog/update-equipment-quantity-dialog copy.mjs";
-import { EquipmentType } from "../../../enums/equipment-enums.mjs";
-import { EquipmentRepository } from "../../../repository/equipment-repository.mjs";
-import { ActorUpdater } from "../../updater/actor-updater.mjs";
-import { EquipmentUpdater } from "../../updater/equipment-updater.mjs";
+import { TODO } from "../../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../../core/equipment/actor-equipment.mjs";
+import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
+import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
+import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog copy.mjs";
+import { EquipmentType } from "../../../../enums/equipment-enums.mjs";
+import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
+import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 
 export const handlerEquipmentEvents = {
     add: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),

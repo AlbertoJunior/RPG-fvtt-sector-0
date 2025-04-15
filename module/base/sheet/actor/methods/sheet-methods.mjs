@@ -1,13 +1,14 @@
-import { ActorRollDialog } from "../../../scripts/creators/dialogs/actor-roll-dialog.mjs";
-import { ElementCreatorJQuery } from "../../../scripts/creators/jquery/element-creator.mjs";
-import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
-import { LanguageRepository } from "../../../scripts/repository/language-repository.mjs";
-import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../enums/characteristic-enums.mjs";
-import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
+import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
+import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/element-creator.mjs";
+import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
+import { LanguageRepository } from "../../../../repository/language-repository.mjs";
+import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
+import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../../../enums/characteristic-enums.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
+import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
-import { handlerEquipmentEvents } from "./methods/equipment-methods.mjs";
+import { characteristicOnClick } from "./characteristics-methods.mjs";
+import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
@@ -18,7 +19,8 @@ export class SheetMethods {
                 const type = event.currentTarget.dataset.type;
                 switch (type) {
                     case 'color': {
-                        actor.sheet.enableBlackMode = !actor.sheet.enableBlackMode;
+                        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
+                        await FlagsUtils.setGameUserFlag(game.user, 'darkMode', !actualMode);
                         actor.sheet.render();
                         return;
                     }

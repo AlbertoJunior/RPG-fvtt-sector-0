@@ -1,5 +1,5 @@
-import { CoreRollMethods } from "../../../module/core/rolls/core-roll-methods.mjs";
-import { keyJsonToKeyLang, localize, toTitleCase } from "../../utils/utils.mjs";
+import { CoreRollMethods } from "../../core/rolls/core-roll-methods.mjs";
+import { keyJsonToKeyLang, localize, toTitleCase } from "../../../scripts/utils/utils.mjs";
 
 export class RollMessageCreator {
     static async mountContent(params) {

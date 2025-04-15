@@ -1,9 +1,10 @@
-import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { getActorFlag, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
-import { OnEventType } from "../../enums/characteristic-enums.mjs";
-import { EquipmentType } from "../../enums/equipment-enums.mjs";
-import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
-import { SheetMethods } from "./sheet-methods.mjs";
+import { _createLi } from "../../../../scripts/creators/jscript/element-creator-jscript.mjs";
+import { getActorFlag, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
+import { OnEventType } from "../../../enums/characteristic-enums.mjs";
+import { SheetMethods } from "./methods/sheet-methods.mjs";
+import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
+import { EquipmentType } from "../../../enums/equipment-enums.mjs";
+import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -18,9 +19,8 @@ class Setor0ActorSheet extends ActorSheet {
     };
 
     constructor(...args) {
-        super(...args)
+        super(...args);
         this.currentPage = 1;
-        this.enableBlackMode = false;
         this.filterBag = EquipmentType.UNKNOWM;
     }
 
@@ -45,13 +45,17 @@ class Setor0ActorSheet extends ActorSheet {
     getData() {
         const data = super.getData();
         data.editable = this.isEditable;
-        data.canRoll = game.user.isGM || this.actor.isOwner;
-        data.canEdit = game.user.isGM || this.actor.isOwner;
+        data.canRoll = this.canRollOrEdit;
+        data.canEdit = this.canRollOrEdit;
         return data;
     }
 
     get isEditable() {
-        return getActorFlag(this.actor, "editable");
+        return getActorFlag(this.actor, "editable") && this.canRollOrEdit;
+    }
+
+    get canRollOrEdit() {
+        return game.user.isGM || this.actor.isOwner;
     }
 
     #setupListeners(html) {
@@ -68,6 +72,7 @@ class Setor0ActorSheet extends ActorSheet {
         const actionsChange = [
             { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
         ];
+        TODO('mudar de CHECK para CONTEXTUAL')
         const actionsContextMenu = [
             { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this.#onContextualClick }
         ];
@@ -116,10 +121,7 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetSheet(html) {
-        const parent = html.parent()[0];
-        parent.classList.toggle('S0-page-transparent', this.enableBlackMode);
-        parent.style.margin = '0';
-
+        this.#verifyDarkMode(html);
         this.#cleanSheetBeforePreset(html);
 
         const system = this.actor.system;
@@ -160,6 +162,15 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetLanguages(html);
         this.#presetEnhancement(html);
         this.#presetStatus(html);
+    }
+
+    #verifyDarkMode(html) {
+        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
+
+        const parent = html.parent()[0];
+        parent.classList.toggle('S0-page-transparent', actualMode);
+        parent.style.margin = '0';
+        parent.style.paddingBlock = '0';
     }
 
     #cleanSheetBeforePreset(html) {
@@ -280,7 +291,7 @@ class Setor0ActorSheet extends ActorSheet {
 export async function actorHtmlTemplateRegister() {
     await configurePartialTemplates();
     Actors.unregisterSheet("core", ActorSheet);
-    Actors.registerSheet("Setor 0", Setor0ActorSheet, { makeDefault: true });
+    Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
     console.log('-> Modelos de dados e fichas registrados');
 }
 

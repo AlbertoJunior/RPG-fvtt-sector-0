@@ -28,9 +28,9 @@ export const CharacteristicTypeMap = Object.fromEntries(
 
 export function characteristicTypeVirtueByType(type, isUsed) {
     switch (type) {
-        case 'consciencia' : return isUsed ? CharacteristicType.CONSCIOUSNESS_USED.system : CharacteristicType.CONSCIOUSNESS_LEVEL.system;
-        case 'perseveranca' : return isUsed ? CharacteristicType.PERSEVERANCE_USED.system : CharacteristicType.PERSEVERANCE_LEVEL.system;
-        case 'quietude' : return isUsed ? CharacteristicType.QUIETNESS_USED.system : CharacteristicType.QUIETNESS_LEVEL.system;
+        case 'consciencia': return isUsed ? CharacteristicType.CONSCIOUSNESS_USED.system : CharacteristicType.CONSCIOUSNESS_LEVEL.system;
+        case 'perseveranca': return isUsed ? CharacteristicType.PERSEVERANCE_USED.system : CharacteristicType.PERSEVERANCE_LEVEL.system;
+        case 'quietude': return isUsed ? CharacteristicType.QUIETNESS_USED.system : CharacteristicType.QUIETNESS_LEVEL.system;
     }
     return '';
 }
@@ -43,6 +43,10 @@ export const OnEventType = Object.freeze({
     VIEW: { id: 'view' },
     CHAT: { id: 'chat' },
     CHANGE: { id: 'change' },
+    CONTEXTUAL: { id: 'contextual' },
     CHECK: { id: 'check' },
     ROLL: { id: 'roll' },
 });
+
+export const OnEventTypeClickableEvents = Object.values(OnEventType)
+    .filter(event => event !== OnEventType.CHANGE && event !== OnEventType.CHARACTERISTIC && event !== OnEventType.CONTEXTUAL)

@@ -1,16 +1,16 @@
-import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
-import { EnhancementDialog } from "../../../scripts/creators/dialogs/enhancement-dialog.mjs";
-import { _createEmptyOption, _createOption } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { ActorUtils } from "../../../scripts/utils/actor.mjs";
-import { NotificationsUtils } from "../../creators/message/notifications.mjs";
-import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
-import { EnhancementUtils } from "../../core/enhancement.mjs";
-import { CharacteristicType, OnEventType } from "../../enums/characteristic-enums.mjs";
-import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
-import { ActorEnhancementField } from "../../field/actor-fields.mjs";
-import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
-import { ActorUpdater } from "../updater/actor-updater.mjs";
-import { ActiveEffectsUtils } from "../../core/effect/active-effects.mjs";
+import { ChatCreator } from "../../../../../scripts/creators/chat-creator.mjs";
+import { EnhancementDialog } from "../../../../creators/dialog/enhancement-dialog.mjs";
+import { _createEmptyOption, _createOption } from "../../../../../scripts/creators/jscript/element-creator-jscript.mjs";
+import { ActorUtils } from "../../../../../scripts/utils/actor.mjs";
+import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
+import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { EnhancementUtils } from "../../../../core/enhancement.mjs";
+import { CharacteristicType, OnEventType } from "../../../../enums/characteristic-enums.mjs";
+import { EnhancementDuration } from "../../../../enums/enhancement-enums.mjs";
+import { ActorEnhancementField } from "../../../../field/actor-fields.mjs";
+import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
+import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
@@ -48,7 +48,9 @@ export function selectLevelOnOptions(enhancement, selects, activeEffects) {
 function setupViewButtonIsVisibleAndItemIsChecked(select, levelId, activeEffects) {
     const parent = select.parentElement;
     $(parent).find(`a[data-action=${OnEventType.VIEW.id}]`).toggleClass('hidden');
-    $(parent).find(`a[data-action=${OnEventType.CHECK.id}]`).toggleClass('S0-selected', checkHasEffect(levelId, activeEffects));
+    $(parent).find(`a[data-action=${OnEventType.CHECK.id}]`)
+        .toggleClass('hidden')
+        .toggleClass('S0-selected', checkHasEffect(levelId, activeEffects));
 }
 
 function checkHasEffect(effectId, activeEffects) {

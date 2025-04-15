@@ -1,12 +1,12 @@
-import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
-import { TraitDialog } from "../../../scripts/creators/dialogs/trait-dialog.mjs";
-import { TraitRepository } from "../../../scripts/repository/trait-repository.mjs";
-import { ActorTraitField } from "../../field/actor-trait-field.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { TODO } from "../../../scripts/utils/utils.mjs";
+import { ChatCreator } from "../../../../../scripts/creators/chat-creator.mjs";
+import { TraitDialog } from "../../../../creators/dialog/trait-dialog.mjs";
+import { TraitRepository } from "../../../../repository/trait-repository.mjs";
+import { ActorTraitField } from "../../../../field/actor-trait-field.mjs";
+import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { TODO } from "../../../../../scripts/utils/utils.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 
-function getSystemChar(type) {
+function getSystemChar(type) {            
     return type == 'good' ? 'bons' : 'ruins';
 }
 
