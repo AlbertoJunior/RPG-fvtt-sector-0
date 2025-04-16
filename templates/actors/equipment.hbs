@@ -1,13 +1,34 @@
 <section data-label="{{localize 'S0.Equipamentos'}}" class="S0-page" data-icon="fa-solid fa-swords-laser">
-    <div class="S0-full-background S0-container">
-        <h3>
-            {{localize 'S0.Equipados'}}
-            {{#if editable}}
-            <a data-characteristic="equipment" data-sub-characteristic="menu" data-type="equipped" data-action="remove">
-                <i class="fas fa-arrow-down-to-square"></i>
+    <div class="S0-container">
+        <h3> {{localize 'S0.Equipados'}} </h3>
+
+        <div
+            style="display: flex; align-items: center; column-gap: 10px; justify-content: center; margin-top: 2px; margin-bottom: 4px">
+
+            {{#if (gameFunc 'isGm')}}
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu"
+                data-type="equipped" data-action="check" data-item-type="unlock"
+                title="{{localize 'S0.Permitir_Edicao'}}">
+                <i class="fas fa-lock S0-icon-idle"></i>
+                <i class="fas fa-unlock S0-icon-hover"></i>
+            </a>
+
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu"
+                data-type="equipped" data-action="check" data-item-type="lock"
+                title="{{localize 'S0.Bloquear_Edicao'}}">
+                <i class="fas fa-unlock S0-icon-idle"></i>
+                <i class="fas fa-lock S0-icon-hover"></i>
             </a>
             {{/if}}
-        </h3>
+
+            {{#if editable}}
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu"
+                data-type="equipped" data-action="remove">
+                <i class="fas fa-arrow-down-to-bracket S0-icon-idle"></i>
+                <i class="fas fa-arrow-down-to-square S0-icon-hover"></i>
+            </a>
+            {{/if}}
+        </div>
 
         <hr>
 
@@ -18,23 +39,42 @@
         </ul>
     </div>
 
-    <div class="S0-full-background S0-container">
-        <h3>
-            {{localize 'S0.Mochila'}}
-            {{#if editable}}
-            <a data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag" data-action="remove">
-                <i class="fas fa-trash"></i>
+    <div class="S0-container">
+        <h3> {{localize 'S0.Mochila'}} </h3>
+        <div
+            style="display: flex; align-items: center; column-gap: 10px; justify-content: center; margin-top: 2px; margin-bottom: 4px">
+            {{#if (gameFunc 'isGm')}}
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag"
+                data-action="check" data-item-type="unlock" title="{{localize 'S0.Permitir_Edicao'}}">
+                <i class="fas fa-lock S0-icon-idle"></i>
+                <i class="fas fa-unlock S0-icon-hover"></i>
             </a>
-            <a data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag" data-action="add">
-                <i class="fas fa-square-plus"></i>
+
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag"
+                data-action="check" data-item-type="lock" title="{{localize 'S0.Bloquear_Edicao'}}">
+                <i class="fas fa-unlock S0-icon-idle"></i>
+                <i class="fas fa-lock S0-icon-hover"></i>
             </a>
             {{/if}}
-        </h3>
+
+            {{#if editable}}
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag"
+                data-action="remove">
+                <i class="fas fa-trash S0-icon-idle"></i>
+                <i class="fas fa-trash-list S0-icon-hover"></i>
+            </a>
+            <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag"
+                data-action="add">
+                <i class="fas fa-bag-shopping S0-icon-idle"></i>
+                <i class="fas fa-bag-shopping-plus S0-icon-hover"></i>
+            </a>
+            {{/if}}
+        </div>
 
         <ul class="S0-infinity-horizontal-menu">
             {{#each (fetchRepository 'equipment-types')}}
             <li class="S0-simulate-button {{#if (eq @root/document.sheet.filterBag id)}}S0-marked{{/if}}"
-                style="width: auto; padding-inline: 20px" data-action="check" data-characteristic="equipment"
+                style="width: auto; padding-inline: 16px" data-action="check" data-characteristic="equipment"
                 data-sub-characteristic="filter" data-type="{{type}}">
                 <h4 style="font-size: var(--font-size-12);">
                     {{label}}

@@ -18,6 +18,10 @@ class EquipmentDataModel extends foundry.abstract.TypeDataModel {
         this.img = data.img;
     }
 
+    prepareDerivedData() {
+        super.prepareDerivedData();
+    }
+
     static defineSchema() {
         return {
             name: new StringField({ required: true, label: "S0.Nome" }),

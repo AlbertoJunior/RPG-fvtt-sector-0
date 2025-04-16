@@ -1,97 +1,131 @@
-import { TODO } from "../../../scripts/utils/utils.mjs";
-
+import { localize, localizeType } from "../../../scripts/utils/utils.mjs"
 export class AddEquipmentDialog {
     static async showItemSelectorDialog(items, onSelect = () => { }) {
-        TODO('refazer, colocando em um arquivo .hbs o content')
-        const selectedItems = new Set();
-
-        const content = `
-          <div class="item-selector-dialog">
-            <input type="text" class="item-filter-input" placeholder="Filtrar por nome ou tipo...">
-      
-            <div class="item-carousel"></div>
-            
-            <hr>
-            
-            <div class="item-details">Selecione um item para ver detalhes.</div>
-        
-            <button class="add-item-button" disabled>Adicionar</button>
-          </div>
-        `;
-
-        function renderItems(html, filteredItems, dialog) {
-            const carousel = html.find(".item-carousel");
-            const details = html.find(".item-details");
-            const addButton = html.find(".add-item-button");
-            const filterInput = html.find(".item-filter-input");
-
-            filterInput.on("input", () => {
-                const query = filterInput.val().toLowerCase();
-                const filtered = items.filter(i => i.name.toLowerCase().includes(query));
-                renderItems(html, filtered, dialog);
-            });
-
-            addButton.on("click", () => {
-                onSelect(selectedItems);
-                dialog.close();
-            });
-
-            carousel.empty();
-            for (const item of filteredItems) {
-                const card = createItemCard(item, html);
-
-                card.on("click", () => {
-                    details.html(`
-                        <strong>${item.name}</strong>
-                        <br>
-                        ${item.description ?? "Sem descrição."}
-                        `);
-                });
-
-                carousel.append(card);
-            }
-        }
-
-        function createItemCard(item, html) {
-            const card = $('<div>', { class: 'item-card' });
-            const checkbox = $('<input>', { type: 'checkbox' });
-            const checkboxWrapper = $('<div>', { class: 'checkbox-wrapper' }).append(checkbox);
-            const img = $('<img>', {
-                src: item.img,
-                alt: item.name,
-            });
-            const name = $('<span>').text(item.name);
-
-            card.append(checkboxWrapper, img, '<br>', name);
-
-            checkbox.on("change", (event) => {
-                if (event.target.checked) {
-                    selectedItems.add(item);
-                    card.addClass("selected");
-                } else {
-                    selectedItems.delete(item);
-                    card.removeClass("selected");
-                }
-                updateSelectionCount(html);
-            });
-
-            return card;
-        }
-
-        function updateSelectionCount(html) {
-            const count = selectedItems.size;
-            const addButton = html.find(".add-item-button");
-            addButton.text(`Adicionar (${count}) ite${count <= 1 ? 'm' : 'ns'}`);
-            addButton.prop("disabled", count === 0);
-        }
-
+        const content = await this.#mountContent();
         const dialog = new Dialog({
             title: "Selecionar Item",
             content: content,
             buttons: {},
-            render: (html) => renderItems(html, items, dialog),
+            render: (html) => this.#initRender(html, items, dialog, onSelect),
             close: () => { }
         });
         dialog.render(true);
+    }
+
+    static #initRender(html, items, dialog, onSelect = () => { }) {
+        const selectedItems = new Set();
+
+        let actualSelectedButton = undefined;
+        html.find("[data-action=\"check\"]").click((event) => {
+            const currentTarget = event.currentTarget;
+            let newList = [];
+            if (actualSelectedButton == currentTarget) {
+                currentTarget.classList.remove('S0-marked');
+                actualSelectedButton = undefined;
+
+                newList = items;
+            } else {
+                actualSelectedButton?.classList.remove('S0-marked')
+                currentTarget.classList.add('S0-marked');
+                actualSelectedButton = currentTarget;
+
+                const type = currentTarget.dataset.type;
+                if(type == 'selected') {
+                    newList = selectedItems;
+                } else {
+                    newList = items.filter(item => item.type.toLowerCase() == type);
+                }
+            }
+
+            this.#renderItems(html, newList, selectedItems);
+        });
+
+        const filterInput = html.find("#filter-input");
+        filterInput.on("input", () => {
+            const query = filterInput.val().toLowerCase();
+
+            let filtered = items;
+            if (actualSelectedButton) {
+                const type = actualSelectedButton.dataset.type;
+                filtered = items.filter(item => item.type.toLowerCase() == type);
+            }
+
+            filtered = filtered.filter(i => i.name.toLowerCase().includes(query));
+            this.#renderItems(html, filtered, selectedItems);
+        });
+
+        const addButton = html.find("#add-item-button");
+        addButton.on("click", () => {
+            onSelect(selectedItems);
+            dialog.close();
+        });
+
+        this.#renderItems(html, items, selectedItems);
+    }
+
+    static #renderItems(html, filteredItems, selectedItems) {
+        const carousel = html.find("#carousel");
+        const addButton = html.find("#add-item-button");
+        const details = html.find("#item-details");
+
+        carousel.empty();
+        for (const item of filteredItems) {
+            const card = this.#createItemCard(item, selectedItems.has(item));
+
+            card.on("click", () => {
+                if (selectedItems.has(item)) {
+                    selectedItems.delete(item);
+                } else {
+                    selectedItems.add(item);
+                }
+                card.toggleClass("S0-selected", selectedItems.has(item));
+                this.#updateSelectionCount(addButton, selectedItems);
+                this.#updateDetails(details, item, selectedItems.size === 0);
+            });
+
+            carousel.append(card);
+        }
+    }
+
+    static #createItemCard(item, isSelected) {
+        const card = $('<div>', { class: 'S0-item-bag S0-clickable' });
+        card.toggleClass("S0-selected", isSelected);
+
+        const img = $('<img>', { src: item.img, alt: item.name });
+        const name = $('<span>', { class: 'S0-item-legend' }).text(item.name);
+        card.append(img, name);
+        return card;
+    }
+
+    static #updateSelectionCount(addButton, selectedItems) {
+        const count = selectedItems.size;
+        addButton.text(`Adicionar (${count}) ite${count <= 1 ? 'm' : 'ns'}`);
+        addButton.prop("disabled", count === 0);
+    }
+
+    static #updateDetails(details, item, isEmpty) {
+        if (isEmpty) {
+            details.html(`Selecione um item para ver detalhes.`);
+            return;
+        }
+
+        const typeString = `<strong>${localize('Tipo')}:</strong> <span>${localizeType('Item.' + item.type)}</span>`
+        const nameString = `<strong>${localize('Nome')}:</strong> <span>${item.name}</span>`
+        details.html(`
+            ${typeString}
+            <br>
+            ${nameString}
+            <br>
+            <strong>${localize('Descricao')}:</strong>
+            <section>
+            ${item.description ?? "Sem descrição."}
+            </section>
+            `);
+    }
+
+    static async #mountContent() {
+        const data = {
+        }
+        return await renderTemplate("systems/setor0OSubmundo/templates/items/add-equipment-dialog.hbs", data);
     }
 }

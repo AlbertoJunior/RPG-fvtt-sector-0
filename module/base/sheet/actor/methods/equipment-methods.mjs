@@ -32,6 +32,9 @@ class EquipmentHandleEvents {
             case 'bag':
                 this.#handleCheckBag(actor, target);
                 return;
+            case 'menu':
+                this.#handleCheckMenu(actor, target);
+                return;
         }
     }
 
@@ -61,8 +64,37 @@ class EquipmentHandleEvents {
             onConfirm: () => {
                 const actualValue = equipment.system.actualQuantity;
                 const newValue = Math.max(0, actualValue - 1);
-                EquipmentUpdater.updateOnActorEquipmentFlag(actor, equipmentId, "quantity", newValue);
+                EquipmentUpdater.updateEquipmentFlags(equipment, "quantity", newValue);
             }
+        });
+    }
+
+    static async #handleCheckMenu(actor, target) {
+        const type = target.dataset.type;
+        const isUnlock = target.dataset.itemType == 'unlock';
+        switch (type) {
+            case 'equipped': {
+                this.#lockUnlockEquippedItems(actor, isUnlock);
+                return;
+            }
+            case 'bag': {
+                this.#lockUnlockBagItems(actor, isUnlock);
+                return;
+            }
+        }
+    }
+
+    static async #lockUnlockBagItems(actor, isUnlock) {
+        const equipments = ActorEquipmentUtils.getActorEquipments(actor);
+        equipments.forEach(async (equip) => {
+            EquipmentUpdater.updateEquipmentFlags(equip, 'editable', isUnlock);
+        });
+    }
+
+    static async #lockUnlockEquippedItems(actor, isUnlock) {
+        const equipments = ActorEquipmentUtils.getActorEquippedItems(actor);
+        equipments.forEach(async (equip) => {
+            EquipmentUpdater.updateEquipmentFlags(equip, 'editable', isUnlock);
         });
     }
 
@@ -72,9 +104,10 @@ class EquipmentHandleEvents {
         const subCharacteristic = dataset.subCharacteristic;
 
         switch (subCharacteristic) {
-            case 'bag':
+            case 'bag': {
                 this.#handleEditBag(actor, target);
                 return;
+            }
         }
     }
 
@@ -89,7 +122,7 @@ class EquipmentHandleEvents {
 
         UpdateEquipmentQuantityDialog.updateQuantityDialog(actualValue, (value) => {
             const newValue = Math.max(0, actualValue + value);
-            EquipmentUpdater.updateOnActorEquipmentFlag(actor, equipmentId, "quantity", newValue);
+            EquipmentUpdater.updateEquipmentFlags(equipment, "quantity", newValue);
         });
     }
 
@@ -118,7 +151,10 @@ class EquipmentHandleEvents {
             }
             case 'bag': {
                 const equipmentId = dataset.itemId;
-                EquipmentUpdater.updateOnActorEquipmentFlag(actor, equipmentId, "equipped", true);
+                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+                if (equipment) {
+                    await ActorEquipmentUtils.equip(actor, equipment);
+                }
                 return;
             }
         }
@@ -140,7 +176,10 @@ class EquipmentHandleEvents {
                 return;
             }
             case 'equipped': {
-                EquipmentUpdater.updateOnActorEquipmentFlag(actor, equipmentId, "equipped", false);
+                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+                if (equipment) {
+                    await ActorEquipmentUtils.unequip(actor, equipment);
+                }
                 return;
             }
         }

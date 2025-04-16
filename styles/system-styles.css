@@ -18,6 +18,7 @@ body {
     --selected-color-hover: rgba(255, 0, 0, 0.6);
     --deletable-color-hover: rgba(255, 0, 0, 0.8);
     --sheet-color: rgba(255, 255, 255, 1);
+    --transparent-color: rgba(255, 255, 255, 0);
     --shadow-color: rgba(0, 0, 0, 0.2);
     --shadow-color-30: rgba(0, 0, 0, 0.3);
     --shadow-hover-color: rgba(130, 0, 255, 0.8);
@@ -61,6 +62,10 @@ button:hover {
     box-shadow: none;
 }
 
+button:disabled {
+    cursor: default;
+}
+
 section {
     margin-inline: 4px;
     border-top: 2px solid var(--color-underline-header);
@@ -72,7 +77,7 @@ h2,
 h3,
 h4 {
     font-family: 'Setor0';
-    letter-spacing: 0.03em;
+    letter-spacing: 0.1em;
     margin: 0.3rem 0;
     border: none;
 }
@@ -210,36 +215,8 @@ img.S0-clickable:hover {
 /* #endregion */
 
 /* #region MY STYLES */
-.window-content.S0-page-transparent {
-    color: var(--primary-color);
-    background-color: var(--primary-color-alpha-50);
-    background: url(/ui/denim075.png) repeat;
-    margin: 0;
-}
 
-.S0-page-transparent-2 {
-    color: var(--primary-color);
-    background-color: var(--shadow-color-30);
-    background: url(/ui/denim.png) repeat;
-}
-
-.S0-page-transparent select,
-.S0-page-transparent input {
-    color: var(--primary-color);
-}
-
-.S0-page-transparent .S0-container label,
-.S0-page-transparent .S0-page label,
-.S0-page-transparent .S0-page label {
-    text-shadow: 0 0 6px var(--primary-color-alpha);
-}
-
-.S0-page-transparent .S0-page h1,
-.S0-page-transparent .S0-page h2,
-.S0-page-transparent .S0-page h3,
-.S0-page-transparent .S0-page h4 {
-    text-shadow: 0 0 6px var(--primary-color-alpha);
-}
+/* #region PAGES */
 
 .S0-page {
     margin-inline: 0;
@@ -261,7 +238,16 @@ img.S0-clickable:hover {
     text-shadow: 0 1px 1px var(--shadow-color-30);
 }
 
+.S0-page hr {
+    border: none;
+    border-top: 1px solid var(--secondary-color-alpha-50);
+    border-bottom: 1px solid var(--secondary-color-alpha);
+}
+
+/* #endregion */
+
 .S0-container label,
+.S0-container strong,
 .S0-page label,
 .S0-page strong {
     text-shadow: 0 1px 4px var(--shadow-color-30);
@@ -309,12 +295,18 @@ img.S0-clickable:hover {
 .S0-container h2,
 .S0-container h3,
 .S0-container h4 {
-    margin: 0px
+    margin: 0px;
 }
 
-.S0-container input {
-    border: 2px solid var(--secondary-color-alpha-50);
-    border-radius: var(--border-radius-large);
+.S0-container h1 input:disabled,
+.S0-container h2 input:disabled,
+.S0-container h3 input:disabled,
+.S0-container h4 input:disabled,
+.S0-container h1 input:disabled:hover,
+.S0-container h2 input:disabled:hover,
+.S0-container h3 input:disabled:hover,
+.S0-container h4 input:disabled:hover {
+    border-color: var(--transparent-color);
 }
 
 .S0-container select {
@@ -326,10 +318,37 @@ img.S0-clickable:hover {
     background: var(--secondary-color-alpha-50);
 }
 
-.S0-container input:focus,
-.S0-container input:hover {
+.S0-container input,
+.S0-container textarea {
+    color: black;
+    height: auto;
+    padding: 2px 6px;
+    border: 2px solid var(--secondary-color-alpha-50);
+    border-radius: var(--border-radius-large);
+    transition: 0.3s ease-in-out;
+}
+
+.S0-container input:disabled {
+    background-color: var(--transparent-color);
+}
+
+.S0-container input:disabled:hover,
+.S0-container textarea:disabled:hover {
+    border: 2px solid var(--secondary-color-alpha-50);
+}
+
+.S0-container input:not(:disabled):hover,
+.S0-container input:not(:disabled):focus,
+.S0-container textarea:not(:read-only):hover,
+.S0-container textarea:not(:read-only):focus {
+    border: 2px solid;
     color: var(--primary-color);
     background: var(--secondary-color-alpha-50);
+}
+
+.S0-container input::placeholder,
+.S0-container textarea::placeholder {
+    color: var(--primary-color-alpha-50);
 }
 
 .S0-actor-sheet section {
@@ -337,9 +356,13 @@ img.S0-clickable:hover {
 }
 
 .S0-actor-sheet img {
+    object-position: center;
+    object-fit: cover;
     max-width: 220px;
+    max-height: 220px;
     border-radius: 50%;
     margin: 6px;
+    aspect-ratio: 1 / 1;
 }
 
 .S0-actor-sheet button {
@@ -358,7 +381,7 @@ img.S0-clickable:hover {
 .S0-float-right-sheet {
     position: absolute;
     left: 100%;
-    margin: 0px;
+    margin: 4px;
     list-style-type: none;
     padding: 0;
 }
@@ -396,12 +419,6 @@ img.S0-clickable:hover {
     background-color: var(--primary-color);
 }
 
-.S0-page hr {
-    border: none;
-    border-top: 1px solid var(--secondary-color-alpha-50);
-    border-bottom: 1px solid var(--secondary-color-alpha);
-}
-
 .S0-infinity-horizontal-menu {
     display: flex;
     flex-wrap: nowrap;
@@ -411,6 +428,22 @@ img.S0-clickable:hover {
     white-space: nowrap;
     align-items: center;
     justify-content: space-between;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 10px;
+}
+
+.S0-infinity-horizontal-menu>* {
+    scroll-snap-align: start;
+}
+
+.S0-infinity-horizontal-menu .S0-simulate-button h4 {
+    font-size: var(--font-size-12);
+}
+
+.S0-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* #region ENHANCEMENT */
@@ -482,7 +515,6 @@ img.S0-clickable:hover {
     box-shadow: inset 0 0 5px 0px rgba(40, 40, 40, 0.6);
     text-align: left;
     font-weight: 500;
-    margin: 0px;
 }
 
 .S0-enhancement .S0-characteristic {
@@ -725,14 +757,6 @@ button.S0-roll-result:not([disabled]):hover {
 /* #endregion */
 
 /* #region EQUIPMENT */
-.S0-full-background {
-    /* background-image: url(../imgs/body.png); */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -100;
-}
-
 .S0-bag {
     display: flex;
     justify-content: space-between;
@@ -758,10 +782,15 @@ button.S0-roll-result:not([disabled]):hover {
     display: flex;
     justify-content: space-around;
     width: 100%;
+    text-shadow: 0 0 3px var(--primary-color);
     background: var(--secondary-color-alpha-50);
     border-top: 1px solid var(--secondary-color-alpha);
     padding-block: 2px;
     border-radius: 0px 0px var(--border-radius-medium) var(--border-radius-medium);
+}
+
+.S0-item-legend a:hover {
+    text-shadow: 0 0 6px var(--primary-color);
 }
 
 .S0-item-container {
@@ -777,17 +806,70 @@ button.S0-roll-result:not([disabled]):hover {
     border-bottom: solid 1px var(--secondary-color-alpha);
     font-size: var(--font-size-10);
     padding-block: 2px;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
 }
 
 .S0-item-name {
-    width: 100%;
     position: absolute;
+    width: 100%;
+    padding: 2px 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-wrap: nowrap;
+    color: var(--primary-color);
+    background-color: var(--secondary-color-alpha);
     font-size: var(--font-size-11);
     font-weight: bold;
-    text-align: end;
+    text-align: center;
     text-shadow: 0 0 6px var(--primary-color-alpha);
+    border-radius: 6px 6px 0px 0px;
     bottom: 22px;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+}
+
+.S0-item-bag:hover .S0-item-name,
+.S0-item-bag:hover .S0-item-type {
+    opacity: 1;
+}
+
+.S0-hide-long-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-wrap: nowrap;
+}
+
+.S0-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 4px;
+    bottom: 0px;
+    min-height: 20px;
+    max-height: 26px;
+    min-width: 20px;
+    max-width: 26px;
+    padding: 3px;
+    font-size: var(--font-size-12);
+    box-shadow: 0 0 6px var(--shadow-color);
+    border-radius: 50%;
+    opacity: 0;
+    background: var(--primary-color);
+    transition: 0.2s ease-in-out;
+    aspect-ratio: 1 / 1;
+}
+
+.S0-badge span {
     padding: 2px;
+}
+
+.S0-item-bag:hover .S0-badge {
+    bottom: 35px;
+    opacity: 1;
 }
 
 .S0-item-bag.S0-clickable {
@@ -802,83 +884,254 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-item-bag img {
+    object-fit: cover;
+    object-position: center;
     width: 100%;
     height: 100%;
-    padding: 2px 4px;
-    max-width: none;
+    padding: 1px;
+    max-width: 100px;
+    max-height: 110px;
+    min-height: 110px;
     border: none;
     margin: 0;
-    border-radius: 0;
+    border-radius: 6px 6px 0px 0px;
     background: none;
 }
+
+.S0-page-transparent .S0-item-type {
+    background-color: rgba(130, 0, 255, 0.7);
+}
+
+.S0-page-transparent .S0-item-bag {
+    border-color: rgba(130, 0, 255);
+}
+
 /* #endregion */
 
 /* #region */
 
-.item-selector-dialog {
+.S0-dialog {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-.item-carousel {
+.S0-item-carousel {
     text-align: center;
     padding: 8px;
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    grid-auto-columns: min-content;
     overflow-x: auto;
     gap: 10px;
     scroll-snap-type: x mandatory;
+    scroll-padding: 10px;
+    white-space: nowrap;
 }
 
-.item-carousel .item-card {
-    background-color: var(--secondary-color-alpha-50);
-    min-width: 100px;
-    flex-shrink: 0;
+.S0-item-carousel>* {
     scroll-snap-align: start;
-    border: 1px solid var(--secondary-color-alpha-50);
-    border-radius: var(--border-radius-medium);
-    padding: 0.5rem;
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.item-card {
-    display: inline-block;
-    position: relative;
-
-}
-
-.item-card.selected {
-    border-color: var(--color-border-highlight);
-    background: rgba(0, 128, 255, 0.1);
-}
-
-.item-carousel .item-card img {
-    border: none;
-    width: 64px;
-    height: 64px;
-}
-
-.item-carousel .item-card:hover {
-    background-color: var(--secondary-color-alpha);
-    transform: scale(1.05);
-    border-color: var(--secondary-color-alpha);
-}
-
-.item-details {
-    min-height: 100px;
-    background-color: #222;
-    padding: 1rem;
-    border-radius: 8px;
     color: white;
 }
 
-.checkbox-wrapper {
-    position: absolute;
-    top: 4px;
-    right: 4px;
+.S0-item-bag.S0-selected {
+    border-color: var(--secondary-color);
+    background: var(--secondary-color-alpha);
 }
 
 /* #endregion */
+
+/* #region ANIMATE ICONS */
+
+/* === ROTAÇÃO DE ÍCONES NO HOVER === */
+
+.S0-icon-rotate i {
+    transition: transform 0.3s ease;
+}
+
+.S0-icon-rotate:hover i {
+    transform: rotate(40deg);
+}
+
+/* === SWAP DE ÍCONES NO HOVER === */
+
+.S0-icon-swaper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    position: relative;
+}
+
+.S0-icon-swaper i {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.S0-icon-swaper .S0-icon-hover {
+    display: none;
+}
+
+.S0-icon-swaper:hover .S0-icon-idle {
+    display: none;
+}
+
+.S0-icon-swaper:hover .S0-icon-hover {
+    display: flex;
+}
+
+/* === ÍCONE COM SLIDER ATIVADO NO HOVER === */
+.S0-icon-hover-slider {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+}
+
+/* Ícone padrão que some no hover */
+.S0-icon-hover-slider .S0-icon-idle {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container dos ícones animados */
+.S0-icon-hover-slider .S0-icon-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Cada ícone do slider */
+.S0-icon-hover-slider .S0-icon-hover i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: icon-slide 3s infinite;
+    transition: opacity 0.3s ease;
+}
+
+/* Delays para o loop */
+.S0-icon-hover-slider .S0-icon-hover i:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.S0-icon-hover-slider .S0-icon-hover i:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.S0-icon-hover-slider .S0-icon-hover i:nth-child(3) {
+    animation-delay: 2s;
+}
+
+/* Hover ativa o slider, esconde o ícone padrão */
+.S0-icon-hover-slider:hover .S0-icon-hover {
+    opacity: 1;
+}
+
+.S0-icon-hover-slider:hover .S0-icon-idle {
+    display: none;
+}
+
+/* Animação de loop entre ícones */
+@keyframes icon-slide {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* #endregion */
+
+/* #region DARK MODE */
+.window-content.S0-page-transparent {
+    color: var(--primary-color);
+    background-color: var(--primary-color-alpha-50);
+    background: url(/ui/denim075.png) repeat;
+    margin: 0;
+}
+
+.S0-page-transparent-2 {
+    color: var(--primary-color);
+    background-color: var(--shadow-color-30);
+    background: url(/ui/denim.png) repeat;
+}
+
+.S0-page-transparent select,
+.S0-page-transparent input,
+.S0-page-transparent .S0-container input,
+.S0-page-transparent textarea {
+    color: var(--primary-color);
+}
+
+.S0-page-transparent .S0-container label,
+.S0-page-transparent .S0-page label,
+.S0-page-transparent .S0-page span {
+    text-shadow: 0 0 6px var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-page h1,
+.S0-page-transparent .S0-page h2,
+.S0-page-transparent .S0-page h3,
+.S0-page-transparent .S0-page h4 {
+    text-shadow: 0 0 6px var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-selected {
+    background-color: var(--primary-color-alpha);
+    border-color: var(--primary-color);
+    box-shadow: 0px 0px 6px var(--primary-color-alpha-50);
+}
+
+.S0-page-transparent .S0-clickable.S0-characteristic.S0-selected {
+    background-color: var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-clickable.S0-characteristic {
+    background-color: rgba(250, 250, 250, 0.5);
+}
+
+.S0-page-transparent .S0-badge span {
+    color: var(--secondary-color);
+}
 
 /* #endregion */

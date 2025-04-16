@@ -22,14 +22,13 @@ export class EquipmentUpdater {
         }
     }
 
-    static async updateOnActorEquipmentFlag(actor, equipmentId, flagKey, value) {
-        return await this.updateOnActorEquipmentFlags(actor, equipmentId, [{ flagKey, value }]);
+    static async updateEquipmentFlags(equipment, flagKey, value) {
+        return await this.updateOnActorEquipmentFlags(equipment, [{ flagKey, value }]);
     }
 
-    static async updateOnActorEquipmentFlags(actor, equipmentId, updates = []) {
-        const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+    static async updateOnActorEquipmentFlags(equipment, updates = []) {
         if (!equipment) {
-            console.warn(`[EquipmentUpdater] Equipamento não encontrado: ${equipmentId}`);
+            console.warn(`[EquipmentUpdater] Equipamento não encontrado: ${equipment}`);
             return;
         }
 

@@ -1,23 +1,32 @@
-<form class="item-sheet" autocomplete="off">
-    <header class="sheet-header">
-        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Equipamento" /></h1>
-    </header>
+<form class="S0-page" autocomplete="off">
+    {{> "systems/setor0OSubmundo/templates/items/common-equipment.hbs" this}}
 
-    <div class="sheet-body">
-        <div class="item-image">
-            <img src="{{item.img}}" data-edit="img" title="{{item.name}}" width="64" height="64" />
+    <div class="S0-page S0-container">
+        <div class="form-group">
+            <label style="flex: 1;">
+                {{localize 'S0.Resistencia'}}:
+            </label>
+            <input style="flex: 1;" type="number" name="system.resistance" value="{{system.resistance}}" />
         </div>
 
-        <label>Descrição:</label>
-        <textarea name="system.description">{{system.description}}</textarea>
+        <div class="form-group">
+            <label style="flex: 1;">
+                {{localize 'S0.Dano'}}:
+            </label>
+            <input style="flex: 1;" type="number" name="system.damage" value="{{system.damage}}" />
+        </div>
 
-        <label>Resistência:</label>
-        <input type="number" name="system.resistance" value="{{system.resistance}}" />
+        <div class="form-group">
+            <label style="flex: 1;">
+                {{localize 'S0.Ocultabilidade'}}:
+            </label>
+            <input style="flex: 1;" type="number" name="system.occultability" value="{{system.occultability}}" />
+        </div>
 
-        <label>Dano:</label>
-        <input type="number" name="system.damage" value="{{system.damage}}" />
-
-        <label>Ocultabilidade:</label>
-        <input type="number" name="system.occultability" value="{{system.occultability}}" />
+        <label style="display: block; margin-block: 5px;">
+            {{localize 'S0.Descricao'}}:
+        </label>
+        <textarea style="resize: none;" name="system.description" type="text" maxlength="150"
+            rows="5">{{system.description}}</textarea>
     </div>
 </form>

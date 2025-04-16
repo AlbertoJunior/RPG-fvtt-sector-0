@@ -1,3 +1,5 @@
+import { TODO } from "../../../scripts/utils/utils.mjs";
+import { EquipmentUpdater } from "../../base/updater/equipment-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
 import { equipmentTypeIdToTypeString, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
 
@@ -59,4 +61,11 @@ export class ActorEquipmentUtils {
         };
     }
 
+    static async equip(actor, equipment) {
+        await EquipmentUpdater.updateEquipmentFlags(equipment, "equipped", true);
+    }
+
+    static async unequip(actor, equipment) {
+        await EquipmentUpdater.updateEquipmentFlags(equipment, "equipped", false);
+    }
 }
