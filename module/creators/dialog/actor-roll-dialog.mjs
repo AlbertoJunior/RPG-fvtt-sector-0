@@ -3,6 +3,7 @@ import { ActorUtils } from "../../../scripts/utils/actor.mjs";
 import { keyJsonToKeyLang, localize, TODO } from "../../../scripts/utils/utils.mjs";
 import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
 import { RollMessageCreator } from "../message/roll-mesage.mjs";
+import { DefaultActions } from "../../utils/default-actions.mjs";
 
 export class ActorRollDialog {
     static async _open(actor) {
@@ -25,36 +26,9 @@ export class ActorRollDialog {
                         const specialist = html.find("#specialist").prop("checked");
                         const difficulty = html.find("#difficulty").val();
 
-                        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, specialist, difficulty });
+                        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, specialist });
 
-                        const rollItems = resultRoll.roll;
-                        const rolls = [];
-                        if (rollItems.default.roll != undefined) {
-                            const objectRoll = rollItems.default.roll;
-                            objectRoll.options.isOverload = false;
-                            objectRoll.options.difficulty = difficulty;
-                            objectRoll.options.specialist = specialist;
-                            rolls.push(objectRoll);
-                        }
-
-                        if (rollItems.overload.roll != undefined) {
-                            const objectRoll = rollItems.overload.roll;
-                            objectRoll.options.isOverload = true;
-                            objectRoll.options.difficulty = difficulty;
-                            objectRoll.options.specialist = specialist;
-                            rolls.push(objectRoll);
-                        }
-
-                        const params = {
-                            rolls: resultRoll.roll,
-                            attrs: resultRoll.attrs,
-                            abilityInfo: resultRoll.abilityInfo,
-                            difficulty: difficulty,
-                            havePerseverance: ActorUtils.havePerseverance(actor),
-                        }
-
-                        const message = await RollMessageCreator.mountContent(params);
-                        ChatCreator._sendToChatTypeRoll(actor, message, rolls);
+                        DefaultActions.sendRollOnChat(actor, resultRoll, difficulty);
                     }
                 }
             }

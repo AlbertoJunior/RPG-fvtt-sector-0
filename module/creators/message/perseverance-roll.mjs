@@ -3,9 +3,9 @@ import { CoreRollMethods } from "../../core/rolls/core-roll-methods.mjs";
 
 export class RollPerseveranceMessageCreator {
     static async mountContent(params) {
-        const { values, removedValues, specialist, difficulty } = params;
+        const { values, removedValues, specialist, difficulty, automatic } = params;
 
-        const successes = CoreRollMethods.calculateSuccess([], values, specialist, difficulty).result;
+        const successes = CoreRollMethods.calculateSuccess([], values, specialist, difficulty, automatic).result;
 
         let resultMessage;
         let resultMessageClasses;

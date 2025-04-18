@@ -1,11 +1,14 @@
 import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
-import { OnEventTypeClickableEvents } from "../../../enums/characteristic-enums.mjs";
+import { CreateRollableTestDialog } from "../../../creators/dialog/create-roll-test-dialog.mjs";
+import { OnEventType, OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
+import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
+import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
 
 export class EquipmentSheet extends ItemSheet {
     #mapEvents = {
         menu: {
-            check: async (item, event) => {
+            [OnEventType.CHECK]: async (item, event) => {
                 const type = event.currentTarget.dataset.type;
                 switch (type) {
                     case 'edit': {
@@ -22,10 +25,37 @@ export class EquipmentSheet extends ItemSheet {
                 }
             }
         },
+        item_roll: handlerEquipmentItemRollEvents,
+        menu_roll: {
+            [OnEventType.ADD]: async (item, event) => {
+                const onConfirm = async (rollable) => {
+                    const current = item.system.possible_tests || [];
+                    current.push(rollable);
+
+                    const characteristicToUpdate = {
+                        "system.possible_tests": current
+                    }
+
+                    if (current.length == 1) {
+                        characteristicToUpdate["system.default_test"] = rollable.id;
+                    }
+
+                    await item.update(characteristicToUpdate);
+                };
+
+                CreateRollableTestDialog._open(null, onConfirm);
+            },
+            [OnEventType.VIEW]: async (item, event) => {
+                const containerList = event.currentTarget.parentElement.parentElement.parentElement.querySelector('#rollable-tests-list');
+                this.isExpanded = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: this.minWindowHeight, maxHeight: 640, marginBottom: 0 });
+            },
+        }
     };
 
     constructor(...args) {
         super(...args);
+        this.minWindowHeight = null;
+        this.isExpanded = false;
     }
 
     static get defaultOptions() {
@@ -68,6 +98,11 @@ export class EquipmentSheet extends ItemSheet {
         super.activateListeners(html);
         this.#setupListeners(html);
         this.#presetSheet(html);
+
+        if (!this.minWindowHeight) {
+            const windowElem = html.closest(".window-app");
+            this.minWindowHeight = windowElem.height();
+        }
     }
 
     #presetSheet(html) {
@@ -76,17 +111,21 @@ export class EquipmentSheet extends ItemSheet {
         parent.classList.toggle('S0-page-transparent', actualMode);
         parent.style.margin = '0';
         parent.style.paddingBlock = '0';
+        parent.style.paddingLeft = '20px';
+        parent.style.overflowY = 'scroll';
+
+        html.find('#rollable-tests-list').toggleClass('S0-expanded', this.isExpanded)
     }
 
     #setupListeners(html) {
-        const actionsClick = OnEventTypeClickableEvents.map(eventType => ({
-            selector: `[data-action="${eventType.id}"]`,
-            method: this.#onActionClick
-        }));
+        const actionsClick = OnEventTypeClickableEvents.map(eventType => (
+            {
+                selector: `[data-action="${eventType}"]`,
+                method: this.#onActionClick
+            }
+        ));
 
-        actionsClick.forEach(action => {
-            html.find(action.selector).click(action.method.bind(this, html));
-        });
+        actionsClick.forEach(action => html.find(action.selector).click(action.method.bind(this, html)));
     }
 
     #onActionClick(html, event) {
@@ -98,7 +137,7 @@ export class EquipmentSheet extends ItemSheet {
         const characteristic = event.currentTarget.dataset.characteristic;
         const method = this.#mapEvents[characteristic]?.[action];
         if (method) {
-            method(this.item, event);
+            method(this.item, event, html);
         } else {
             console.warn(`-> [${action}] não existe para: [${characteristic}]`);
         }
@@ -122,7 +161,8 @@ async function configurePartialTemplates() {
         "projectile",
         "substance",
         "vehicle",
-        "common-equipment"
+        "common-equipment",
+        "rollable-tests"
     ];
 
     const itemTemplatePaths = itemTemplateNames.map(name =>

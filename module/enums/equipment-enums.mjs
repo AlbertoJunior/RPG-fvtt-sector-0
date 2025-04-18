@@ -33,3 +33,11 @@ export const EquipmentHand = Object.freeze({
     ONE_HALF_HAND: 1,
     TWO_HANDS: 2,
 });
+
+export const DamageType = Object.freeze({
+    SUPERFICIAL: 0,
+    LETAL: 1,
+    FIRE: 2,
+    ICE: 3,
+    ELETRIC: 4,
+});

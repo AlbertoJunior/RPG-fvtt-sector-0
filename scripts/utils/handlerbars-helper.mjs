@@ -11,6 +11,7 @@ export async function loadHandlebarsHelpers() {
         "actorLists.mjs",
         "isEmpty.mjs",
         "gameFunc.mjs",
+        "isNull.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {

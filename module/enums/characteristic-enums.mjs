@@ -34,19 +34,3 @@ export function characteristicTypeVirtueByType(type, isUsed) {
     }
     return '';
 }
-
-export const OnEventType = Object.freeze({
-    CHARACTERISTIC: { id: 'characteristic' },
-    ADD: { id: 'add' },
-    REMOVE: { id: 'remove' },
-    EDIT: { id: 'edit' },
-    VIEW: { id: 'view' },
-    CHAT: { id: 'chat' },
-    CHANGE: { id: 'change' },
-    CONTEXTUAL: { id: 'contextual' },
-    CHECK: { id: 'check' },
-    ROLL: { id: 'roll' },
-});
-
-export const OnEventTypeClickableEvents = Object.values(OnEventType)
-    .filter(event => event !== OnEventType.CHANGE && event !== OnEventType.CHARACTERISTIC && event !== OnEventType.CONTEXTUAL)

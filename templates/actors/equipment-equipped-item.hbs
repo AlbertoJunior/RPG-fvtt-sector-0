@@ -7,26 +7,30 @@
             {{localize type}}
         </h4>
 
-        <span class="S0-item-name">
+        <span class="S0-item-name S0-hide-long-text">
             {{name}}
         </span>
     </div>
 
     <div class="S0-item-legend" style="text-shadow: 0 0 3px var(--primary-color);">
-        <a data-action="chat" data-characteristic="equipment" data-type="{{type}}" data-sub-characteristic="equipped"
-            data-item-id="{{id}}" title="{{localize 'S0.Enviar_No_Chat'}}">
-            <i class="fas fa-message-quote"></i>
+        <a class="S0-icon-swaper" data-action="chat" data-characteristic="equipment" data-type="{{type}}"
+            data-sub-characteristic="equipped" data-item-id="{{id}}" title="{{localize 'S0.Enviar_No_Chat'}}">
+            <i class="fas fa-message S0-icon-idle"></i>
+            <i class="fas fa-message-quote S0-icon-hover"></i>
         </a>
 
         {{#if @root/canRoll}}
-        <a data-action="roll" data-characteristic="equipment" data-type="{{type}}" data-sub-characteristic="equipped"
-            data-item-id="{{id}}" title="{{localize 'S0.Rolar'}}">
+        {{#if system.canRoll}}
+        <a class="S0-icon-rotate" data-action="roll" data-characteristic="equipment" data-type="{{type}}"
+            data-sub-characteristic="equipped" data-item-id="{{id}}" title="{{localize 'S0.Rolar'}}">
             <i class="fas fa-dice-d10"></i>
         </a>
+        {{/if}}
 
-        <a data-action="remove" data-characteristic="equipment" data-type="{{type}}" data-sub-characteristic="equipped"
-            data-item-id="{{id}}" title="{{localize 'S0.Desequipar'}}">
-            <i class="fas fa-arrow-down-to-square"></i>
+        <a class="S0-icon-swaper" data-action="remove" data-characteristic="equipment" data-type="{{type}}"
+            data-sub-characteristic="equipped" data-item-id="{{id}}" title="{{localize 'S0.Desequipar'}}">
+            <i class="fas fa-arrow-down-to-bracket S0-icon-idle"></i>
+            <i class="fas fa-arrow-down-to-square S0-icon-hover"></i>
         </a>
         {{/if}}
     </div>

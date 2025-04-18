@@ -1,10 +1,12 @@
 import { TODO } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/equipment/actor-equipment.mjs";
+import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog copy.mjs";
 import { EquipmentType } from "../../../../enums/equipment-enums.mjs";
 import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
+import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 
@@ -15,6 +17,7 @@ export const handlerEquipmentEvents = {
     check: async (actor, event) => EquipmentHandleEvents.handleCheck(actor, event),
     view: async (actor, event) => EquipmentHandleEvents.handleView(actor, event),
     chat: async (actor, event) => EquipmentHandleEvents.handleChat(actor, event),
+    roll: async (actor, event) => EquipmentHandleEvents.handleRoll(actor, event),
 }
 
 class EquipmentHandleEvents {
@@ -62,7 +65,7 @@ class EquipmentHandleEvents {
         ConfirmationDialog.open({
             message: "Usar o Item?",
             onConfirm: () => {
-                const actualValue = equipment.system.actualQuantity;
+                const actualValue = equipment.system.quantity;
                 const newValue = Math.max(0, actualValue - 1);
                 EquipmentUpdater.updateEquipmentFlags(equipment, "quantity", newValue);
             }
@@ -118,7 +121,7 @@ class EquipmentHandleEvents {
             return;
         }
 
-        const actualValue = equipment.system.actualQuantity;
+        const actualValue = equipment.system.quantity;
 
         UpdateEquipmentQuantityDialog.updateQuantityDialog(actualValue, (value) => {
             const newValue = Math.max(0, actualValue + value);
@@ -222,9 +225,7 @@ class EquipmentHandleEvents {
     }
 
     static async handleView(actor, event) {
-        const target = event.currentTarget;
-        const dataset = target.dataset;
-        const equipmentId = dataset.itemId;
+        const equipmentId = event.currentTarget.dataset.itemId;
         const item = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
         if (item) {
             item.sheet.render(true, { editable: false });
@@ -233,5 +234,32 @@ class EquipmentHandleEvents {
 
     static async handleChat(actor, event) {
         TODO('implementar o chat');
+    }
+
+    static async handleRoll(actor, event) {
+        const equipmentId = event.currentTarget.dataset.itemId;
+        const item = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        if (!item) {
+            return;
+        }
+
+        const defaultTestId = item.system.default_test;
+        if (!defaultTestId) {
+            return;
+        }
+
+        const rollTest = item.system.possible_tests.find(test => test.id == defaultTestId);
+        if (!rollTest) {
+            return;
+        }
+
+        let resultRoll;
+        if (item.system.isWeapon) {
+            resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item);
+        } else {
+            resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
+        }
+
+        DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.name);
     }
 }

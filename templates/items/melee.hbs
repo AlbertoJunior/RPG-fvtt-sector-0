@@ -1,4 +1,4 @@
-<form class="S0-page" autocomplete="off">
+<form autocomplete="off">
     {{> "systems/setor0OSubmundo/templates/items/common-equipment.hbs" this}}
 
     <div class="S0-page S0-container">
@@ -22,6 +22,8 @@
             </label>
             <input style="flex: 1;" type="number" name="system.occultability" value="{{system.occultability}}" />
         </div>
+
+        {{> "systems/setor0OSubmundo/templates/items/rollable-tests.hbs" this}}
 
         <label style="display: block; margin-block: 5px;">
             {{localize 'S0.Descricao'}}:

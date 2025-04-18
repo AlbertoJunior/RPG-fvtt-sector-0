@@ -1,6 +1,6 @@
 import { _createLi } from "../../../../scripts/creators/jscript/element-creator-jscript.mjs";
 import { getActorFlag, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
-import { OnEventType } from "../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
 import { EquipmentType } from "../../../enums/equipment-enums.mjs";
@@ -61,20 +61,20 @@ class Setor0ActorSheet extends ActorSheet {
     #setupListeners(html) {
         const actionsClick = [
             { selector: '#roll-button', method: this.#openRollDialog },
-            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#onCharacteristicClick },
+            { selector: `[data-action="${OnEventType.CHARACTERISTIC}"]`, method: this.#onCharacteristicClick },
             ...Object.values(OnEventType)
                 .filter(eventType => eventType !== OnEventType.CHANGE && eventType !== OnEventType.CHARACTERISTIC)
                 .map(eventType => ({
-                    selector: `[data-action="${eventType.id}"]`,
+                    selector: `[data-action="${eventType}"]`,
                     method: this.#onActionClick
                 }))
         ];
         const actionsChange = [
-            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
+            { selector: `[data-action="${OnEventType.CHANGE}"]`, method: this.#onChange },
         ];
         TODO('mudar de CHECK para CONTEXTUAL')
         const actionsContextMenu = [
-            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this.#onContextualClick }
+            { selector: `[data-action="${OnEventType.CHECK}"]`, method: this.#onContextualClick }
         ];
 
         actionsClick.forEach(action => {
@@ -170,7 +170,8 @@ class Setor0ActorSheet extends ActorSheet {
         const parent = html.parent()[0];
         parent.classList.toggle('S0-page-transparent', actualMode);
         parent.style.margin = '0';
-        parent.style.paddingBlock = '0';
+        parent.style.padding = '0px 2px 0px 12px';
+        parent.style.overflowY = 'scroll';
     }
 
     #cleanSheetBeforePreset(html) {

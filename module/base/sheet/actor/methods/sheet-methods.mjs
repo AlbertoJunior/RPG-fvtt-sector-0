@@ -3,12 +3,15 @@ import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/ele
 import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../../repository/language-repository.mjs";
 import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
-import { CharacteristicType, CharacteristicTypeMap, OnEventType } from "../../../../enums/characteristic-enums.mjs";
+import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 import { characteristicOnClick } from "./characteristics-methods.mjs";
 import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
+import { AttributeRepository } from "../../../../repository/attribute-repository.mjs";
+import { AbilityRepository } from "../../../../repository/ability-repository.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
@@ -108,15 +111,7 @@ export class SheetMethods {
     }
 
     static #createAttributes(html, isEditable) {
-        const characteristics = [
-            { id: 'forca', label: 'S0.Forca' },
-            { id: 'destreza', label: 'S0.Destreza' },
-            { id: 'vigor', label: 'S0.Vigor' },
-            { id: 'percepcao', label: 'S0.Percepcao' },
-            { id: 'carisma', label: 'S0.Carisma' },
-            { id: 'inteligencia', label: 'S0.Inteligencia' }
-        ];
-
+        const characteristics = AttributeRepository._getItems();
         const container = html.find('#atributosContainer');
         this.#create(container, characteristics, CharacteristicType.ATTRIBUTE.id, 5, isEditable, true, true);
     }
@@ -145,22 +140,7 @@ export class SheetMethods {
     }
 
     static #createAbilities(html, isEditable) {
-        const characteristics = [
-            { id: 'armas_brancas', label: 'S0.Armas_Brancas' },
-            { id: 'armas_de_projecao', label: 'S0.Armas_De_Projecao' },
-            { id: 'atletismo', label: 'S0.Atletismo' },
-            { id: 'briga', label: 'S0.Briga' },
-            { id: 'engenharia', label: 'S0.Engenharia' },
-            { id: 'expressao', label: 'S0.Expressao' },
-            { id: 'furtividade', label: 'S0.Furtividade' },
-            { id: 'hacking', label: 'S0.Hacking' },
-            { id: 'investigacao', label: 'S0.Investigacao' },
-            { id: 'medicina', label: 'S0.Medicina' },
-            { id: 'manha', label: 'S0.Manha' },
-            { id: 'performance', label: 'S0.Performance' },
-            { id: 'pilotagem', label: 'S0.Pilotagem' },
-            { id: 'quimica', label: 'S0.Quimica' },
-        ];
+        const characteristics = AbilityRepository._getItems();
         const container = html.find('#habilidadesContainer');
         this.#create(container, characteristics, CharacteristicType.ABILITY.id, 5, isEditable, true, false);
     }

@@ -99,9 +99,11 @@
     "S0.Substancias": "Substâncias",
     "S0.Resistencia": "Resistência",
     "S0.Dano": "Dano",
+    "S0.Dano_Automatico": "Dano Automático",
     "S0.Ocultabilidade": "Ocultabilidade",
     "S0.Aceleracao": "Aceleração",
     "S0.Velocidade": "Velocidade",
+    "S0.Arma": "Arma",
 
     "S0.Outros": "Outros",
     "S0.Fama": "Fama",
@@ -121,6 +123,13 @@
     "S0.Uso": "Uso",
     "S0.Nenhum": "Nenhum",
     "S0.Automatico": "Automático",
+    
+    "S0.Testes_Possiveis": "Testes Possíveis",
+    "S0.Teste_Nao_Realizado": "O Teste não foi realizado por falta de Dados",
+    "S0.Atributo_Primario": "Atributo Primário",
+    "S0.Atributo_Secundario": "Atributo Secundário",
+    "S0.Dificuldade": "Dificuldade",
+    "S0.Bonus": "Bônus",
 
     "S0.Total": "Total",
     "S0.Base": "Base",

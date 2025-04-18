@@ -80,6 +80,9 @@ const mapRoll = {
     },
     initiative: async (actor, event) => {
         DefaultActions.processInitiativeRoll(actor);
+    },
+    life: async (actor, event) => {
+        DefaultActions.processLifeRoll(actor);
     }
 }
 

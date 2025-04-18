@@ -17,7 +17,7 @@
                                 <h3>
                                         {{ localize 'S0.Iniciativa'}}
                                         {{#if canRoll}}
-                                        <a data-action="roll" data-characteristic="temporary" data-type="initiative">
+                                        <a class="S0-icon-rotate" data-action="roll" data-characteristic="temporary" data-type="initiative">
                                                 <i class="fas fa-dice-d10"></i>
                                         </a>
                                         {{/if}}
@@ -40,7 +40,7 @@
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="consciencia" class="SO-inner-container">
+                                <div id="consciencia" class="S0-inner-container">
                                         {{#forLoop 0 actor.system.virtudes.consciencia.level}}
                                         {{#with ../canRoll as |canRoll|}}
                                         <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
@@ -63,7 +63,7 @@
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="perseveranca" class="SO-inner-container">
+                                <div id="perseveranca" class="S0-inner-container">
                                         {{#forLoop 0 actor.system.virtudes.perseveranca.level}}
                                         {{#with ../canRoll as |canRoll|}}
                                         <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
@@ -86,7 +86,7 @@
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="quietude" class="SO-inner-container">
+                                <div id="quietude" class="S0-inner-container">
                                         {{#forLoop 0 actor.system.virtudes.quietude.level}}
                                         {{#with ../canRoll as |canRoll|}}
                                         <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
@@ -106,13 +106,13 @@
                                 <h3>
                                         {{ localize 'S0.Vida' }}
                                         {{#if canRoll}}
-                                        <a data-action="roll" data-characteristic="temporary" data-type="overload">
+                                        <a class="S0-icon-rotate" data-action="roll" data-characteristic="temporary" data-type="life">
                                                 <i class="fas fa-dice-d10"></i>
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="vida" class="SO-inner-container">
-                                        {{#forLoop 0 8}}
+                                <div id="vida" class="S0-inner-container">
+                                        {{#forLoop 0 10}}
                                         {{#with ../canRoll as |canRoll|}}
                                         <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                                                 data-action="{{#if canRoll}}check{{/if}}"
@@ -129,7 +129,7 @@
                                 <h3>
                                         {{ localize 'S0.Sobrecarga' }}
                                         {{#if canRoll}}
-                                        <a data-action="roll" data-characteristic="temporary" data-type="overload">
+                                        <a class="S0-icon-rotate" data-action="roll" data-characteristic="temporary" data-type="overload">
                                                 <i class="fas fa-dice-d10"></i>
                                         </a>
                                         <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary"
@@ -138,7 +138,7 @@
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="sobrecarga" class="SO-inner-container">
+                                <div id="sobrecarga" class="S0-inner-container">
                                         {{#forLoop 0 5}}
                                         {{#with ../canRoll as |canRoll|}}
                                         <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
@@ -163,7 +163,7 @@
                                         </a>
                                         {{/if}}
                                 </h3>
-                                <div id="vitalidade" class="SO-inner-container">
+                                <div id="vitalidade" class="S0-inner-container">
                                         {{#forLoop 0 actor.system.vitalidade.total}}
                                         {{#with ../canRoll as |canRoll|}}
                                         <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
