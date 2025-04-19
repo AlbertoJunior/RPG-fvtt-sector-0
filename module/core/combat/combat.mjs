@@ -1,3 +1,5 @@
+import { ActorUtils } from "../../utils/actor-utils.mjs";
+
 export class CombatUtils {
     static async addOrUpdateActorOnCombat(actor, initiative, hidden = false) {
         const currentCombat = game.combat;
@@ -9,7 +11,7 @@ export class CombatUtils {
             return;
         }
 
-        const token = canvas.tokens.placeables.find(t => t.actor.id === actor.id);
+        const token = ActorUtils.getToken(actor);
         if (!token) {
             return;
         }

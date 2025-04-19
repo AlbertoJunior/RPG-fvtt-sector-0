@@ -1,4 +1,13 @@
 export class HtmlJsUtils {
+    static flipClasses(element, classA, classB) {
+        const classes = element.classList;
+        if (classes.contains(classA)) {
+            classes.replace(classA, classB);
+        } else {
+            classes.replace(classB, classA);
+        }
+    }
+
     static getActualHeight(element) {
         const windowElem = element.closest(".window-app");
         if (!windowElem)
@@ -24,7 +33,7 @@ export class HtmlJsUtils {
         return this.#operate(element, windowElem, params);
     }
 
-    static #operate(element, windowElem, params) {
+    static #operate(element, windowElem, params = { minHeight: 0, marginBottom: 0 }) {
         const expanded = element.classList.toggle("S0-expanded");
 
         const { minHeight, maxHeight, marginBottom = 0 } = params;
@@ -43,6 +52,9 @@ export class HtmlJsUtils {
             windowElem.classList.remove("S0-expand-animating");
         }, 300);
 
-        return expanded;
+        return {
+            isExpanded: expanded,
+            newHeight: newHeight
+        };
     }
 }

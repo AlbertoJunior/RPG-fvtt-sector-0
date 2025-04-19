@@ -2,7 +2,7 @@ import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.m
 import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/element-creator.mjs";
 import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
 import { LanguageRepository } from "../../../../repository/language-repository.mjs";
-import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
+import { getActorFlag, getObject, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
@@ -12,13 +12,16 @@ import { characteristicOnClick } from "./characteristics-methods.mjs";
 import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
 import { AttributeRepository } from "../../../../repository/attribute-repository.mjs";
 import { AbilityRepository } from "../../../../repository/ability-repository.mjs";
+import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
+import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
 
     static handleMethods = {
         sheet: {
-            check: async (actor, event) => {
+            [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
+            [OnEventType.CHECK]: async (actor, event) => {
                 const type = event.currentTarget.dataset.type;
                 switch (type) {
                     case 'color': {
@@ -31,14 +34,14 @@ export class SheetMethods {
                         let currentValue = getActorFlag(actor, "editable");
                         currentValue = !currentValue;
 
-                        setActorFlag(actor, "editable", currentValue)
+                        setActorFlag(actor, "editable", currentValue);
                         return;
                     }
                 }
             }
         },
         language: {
-            add: async (actor, event) => {
+            [OnEventType.ADD]: async (actor, event) => {
                 const element = event.target;
                 selectCharacteristic(element);
 
@@ -49,7 +52,7 @@ export class SheetMethods {
                     const parentElement = element.parentElement;
                     const checked = Array.from(parentElement.children).some(el => el.classList.contains('S0-selected'));
 
-                    const updatedLanguages = actor.system.linguas;
+                    const updatedLanguages = getObject(actor, CharacteristicType.LANGUAGE);
                     if (checked) {
                         updatedLanguages.push(parentElement.id);
                     } else {
@@ -68,8 +71,9 @@ export class SheetMethods {
             }
         },
         trait: traitMethods,
+        enhancement: enhancementHandleMethods,
         effects: {
-            remove: async (actor, event) => {
+            [OnEventType.REMOVE]: async (actor, event) => {
                 const currentTarget = event.currentTarget;
                 const removeType = currentTarget.dataset.type;
                 if (removeType == 'single') {
@@ -83,7 +87,7 @@ export class SheetMethods {
                     }
                 }
             },
-            check: async (actor, event) => {
+            [OnEventType.CHECK]: async (actor, event) => {
                 const effects = actor.effects;
                 for (const effect of effects) {
                     const effectDuration = effect.duration.type
@@ -92,8 +96,13 @@ export class SheetMethods {
                     }
                 }
             },
-            view: async (actor, event) => {
-                $(event.currentTarget.parentElement.nextElementSibling).find('ul')[0]?.classList.toggle('hidden')
+            [OnEventType.VIEW]: async (actor, event, html) => {
+                const minHeight = actor.sheet.defaultHeight;
+                const effectsContainer = event.currentTarget.parentElement.parentElement.querySelector('#effects-container');
+                const resultExpand = HtmlJsUtils.expandOrContractElement(effectsContainer, { minHeight: minHeight });
+                HtmlJsUtils.flipClasses(event.currentTarget.children[0], 'fa-chevron-down', 'fa-chevron-up');
+
+                actor.sheet.isExpandedEffects = resultExpand.isExpanded;
             }
         },
         temporary: handleStatusMethods,
@@ -194,10 +203,6 @@ export class SheetMethods {
             );
             container.append(element);
         });
-    }
-
-    static async _openRollDialog(actor) {
-        ActorRollDialog._open(actor);
     }
 
     static async _handleCharacteristicClickEvent(event, actor) {

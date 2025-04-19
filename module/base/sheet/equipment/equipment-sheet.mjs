@@ -1,5 +1,8 @@
+import { getObject, TODO } from "../../../../scripts/utils/utils.mjs";
 import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
 import { CreateRollableTestDialog } from "../../../creators/dialog/create-roll-test-dialog.mjs";
+import { NotificationsUtils } from "../../../creators/message/notifications.mjs";
+import { EquipmentCharacteristicType } from "../../../enums/equipment-enums.mjs";
 import { OnEventType, OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
@@ -29,15 +32,20 @@ export class EquipmentSheet extends ItemSheet {
         menu_roll: {
             [OnEventType.ADD]: async (item, event) => {
                 const onConfirm = async (rollable) => {
-                    const current = item.system.possible_tests || [];
+                    if (!rollable.name) {
+                        NotificationsUtils._error("O Teste precisa de um nome");
+                        return;
+                    }
+
+                    const current = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
                     current.push(rollable);
 
                     const characteristicToUpdate = {
-                        "system.possible_tests": current
+                        [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: current
                     }
 
                     if (current.length == 1) {
-                        characteristicToUpdate["system.default_test"] = rollable.id;
+                        characteristicToUpdate[EquipmentCharacteristicType.POSSIBLE_TESTS.system] = rollable.id;
                     }
 
                     await item.update(characteristicToUpdate);
@@ -47,15 +55,19 @@ export class EquipmentSheet extends ItemSheet {
             },
             [OnEventType.VIEW]: async (item, event) => {
                 const containerList = event.currentTarget.parentElement.parentElement.parentElement.querySelector('#rollable-tests-list');
-                this.isExpanded = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: this.minWindowHeight, maxHeight: 640, marginBottom: 0 });
+                HtmlJsUtils.flipClasses(event.currentTarget.children[0], 'fa-chevron-up', 'fa-chevron-down');
+                const expandResult = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: this.defaultHeight, maxHeight: 640 });
+                this.isExpandedTests = expandResult.isExpanded;
+                this.newHeight = expandResult.newHeight;
             },
         }
     };
 
     constructor(...args) {
         super(...args);
-        this.minWindowHeight = null;
-        this.isExpanded = false;
+        this.isExpandedTests = false;
+        this.defaultHeight = undefined;
+        this.newHeight = undefined;
     }
 
     static get defaultOptions() {
@@ -98,23 +110,6 @@ export class EquipmentSheet extends ItemSheet {
         super.activateListeners(html);
         this.#setupListeners(html);
         this.#presetSheet(html);
-
-        if (!this.minWindowHeight) {
-            const windowElem = html.closest(".window-app");
-            this.minWindowHeight = windowElem.height();
-        }
-    }
-
-    #presetSheet(html) {
-        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
-        const parent = html.parent()[0];
-        parent.classList.toggle('S0-page-transparent', actualMode);
-        parent.style.margin = '0';
-        parent.style.paddingBlock = '0';
-        parent.style.paddingLeft = '20px';
-        parent.style.overflowY = 'scroll';
-
-        html.find('#rollable-tests-list').toggleClass('S0-expanded', this.isExpanded)
     }
 
     #setupListeners(html) {
@@ -141,6 +136,41 @@ export class EquipmentSheet extends ItemSheet {
         } else {
             console.warn(`-> [${action}] não existe para: [${characteristic}]`);
         }
+    }
+
+    #presetSheet(html) {
+        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
+        const parent = html.parent()[0];
+        parent.classList.toggle('S0-page-transparent', actualMode);
+        parent.style.margin = '0';
+        parent.style.paddingBlock = '0';
+        parent.style.paddingLeft = '20px';
+        parent.style.overflowY = 'scroll';
+
+        this.#presetSheetExpandContainer(html);
+    }
+
+    #presetSheetExpandContainer(html) {
+        html.find('#rollable-tests-list').toggleClass('S0-expanded', this.isExpandedTests);
+        if (this.isExpandedTests && html.find('.fa-chevron-down').length > 0) {
+            HtmlJsUtils.flipClasses(html.find('.fa-chevron-down')[0], 'fa-chevron-up', 'fa-chevron-down');
+        }
+
+        requestAnimationFrame(() => {
+            const content = html.parent().parent()[0];
+            if (!this.defaultHeight) {
+                const windowElem = content.closest(".window-app");
+                this.defaultHeight = windowElem?.offsetHeight;
+            }
+
+            if (this.isExpandedTests) {
+                content.style.height = `${Math.max(this.defaultHeight, this.newHeight)}px`
+            }
+
+            const windowElem = content.closest(".window-app");
+            const height = windowElem?.offsetHeight;
+            console.log("Altura final real da ficha:", height);
+        });
     }
 }
 
@@ -176,18 +206,20 @@ async function configurePartialTemplates() {
     }
 
     const partials = [];
-    if (partials.length > 0) {
-        const results = await Promise.all(partials.map(async ({ call, path }) => {
-            const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
+    const results = await Promise.all(partials.map(async ({ call, path }) => {
+        const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
 
-            if (!Handlebars.partials[fullPath]) {
-                return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
-            }
+        if (!Handlebars.partials[fullPath]) {
+            return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
+        }
 
-            Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
-            return { Partial: call, Status: "Sucesso", Path: fullPath };
-        }));
+        Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
+        return { Partial: call, Status: "Sucesso", Path: fullPath };
+    }));
 
-        console.table(results);
+    const errors = results.filter(r => r.Status !== "Sucesso").length;
+    if (errors > 0) {
+        console.error(`Erros [${errors}] ao carregar partials.`)
     }
+    console.table(results);
 }

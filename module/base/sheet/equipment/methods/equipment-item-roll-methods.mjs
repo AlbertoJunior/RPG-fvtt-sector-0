@@ -1,6 +1,7 @@
-import { TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
+import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs"
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 
@@ -21,7 +22,7 @@ class EquipmentSheetItemRollHandle {
             possibleTests[possibleTests.indexOf(rollTest)] = newRollTest;
 
             const characteristicToUpdate = {
-                "system.possible_tests": possibleTests
+                [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: possibleTests
             }
             await item.update(characteristicToUpdate);
         }
@@ -29,7 +30,8 @@ class EquipmentSheetItemRollHandle {
     }
 
     static async remove(item, event) {
-        const rollTest = this.#getItemRollTest(item, this.#getItemRollTestId(event));
+        const rollId = this.#getItemRollTestId(event);
+        const rollTest = this.#getItemRollTest(item, rollId);
         if (!rollTest) {
             return;
         }
@@ -39,11 +41,17 @@ class EquipmentSheetItemRollHandle {
         possibleTests.splice(indexToRemove, 1);
 
         const characteristicToUpdate = {
-            "system.possible_tests": possibleTests
+            [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: possibleTests
         }
 
-        if (item.system.default_test == rollId) {
-            characteristicToUpdate["system.default_test"] = '';
+        const currentDefaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
+        if (currentDefaultTestId == rollId) {
+            let newDefaultTest = ''
+            if (possibleTests.length > 0) {
+                newDefaultTest = possibleTests[0].id;
+            }
+
+            characteristicToUpdate[EquipmentCharacteristicType.DEFAULT_TEST.system] = newDefaultTest;
         }
 
         await item.update(characteristicToUpdate);
@@ -64,15 +72,15 @@ class EquipmentSheetItemRollHandle {
         });
 
         const characteristicToUpdate = {
-            "system.default_test": rollId,
-            "system.possible_tests": sortedTests,
+            [EquipmentCharacteristicType.DEFAULT_TEST.system]: rollId,
+            [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: sortedTests,
         }
         await item.update(characteristicToUpdate);
     }
 
     static async roll(item, event) {
         const rollId = event.currentTarget.dataset.itemId;
-        const possibleTests = item.system.possible_tests || [];
+        const possibleTests = this.#getItemTests(item);
         const rollTest = possibleTests.find(test => test.id == rollId);
         if (!rollTest) {
             return;
@@ -103,6 +111,6 @@ class EquipmentSheetItemRollHandle {
     }
 
     static #getItemTests(item) {
-        return [...item.system.possible_tests] || [];
+        return [...getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS)] || [];
     }
 }

@@ -1,90 +1,76 @@
 import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
-import { ActorUtils } from "../../../scripts/utils/actor.mjs";
-import { keyJsonToKeyLang, localize, TODO } from "../../../scripts/utils/utils.mjs";
-import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
-import { RollMessageCreator } from "../message/roll-mesage.mjs";
+import { getObject, keyJsonToKeyLang, localize } from "../../../scripts/utils/utils.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
+import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { DialogUtils } from "../../utils/dialog-utils.mjs";
 
 export class ActorRollDialog {
     static async _open(actor) {
-        const content = this.#mountContent(actor);
+        const content = await this.#mountContent(actor);
 
         new Dialog({
-            title: "Escolha os Atributos",
+            title: localize("Realizar_Teste"),
             content,
             buttons: {
                 cancel: {
-                    label: "Cancelar",
+                    label: localize("Cancelar"),
                     callback: (html) => { }
                 },
                 confirm: {
-                    label: "Rolar",
+                    label: localize("Rolar"),
                     callback: async (html) => {
                         const attr1 = html.find("#attr1").val();
                         const attr2 = html.find("#attr2").val();
                         const ability = html.find("#ability").val();
                         const specialist = html.find("#specialist").prop("checked");
                         const difficulty = html.find("#difficulty").val();
+                        const rollMode = html.find("#chat_select").val();
 
                         const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, specialist });
 
-                        DefaultActions.sendRollOnChat(actor, resultRoll, difficulty);
+                        DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, undefined, rollMode);
                     }
                 }
-            }
+            },
+            render: (html) => {
+                DialogUtils.presetDialogRender(html);
+            },
+            default: 'confirm',
         }).render(true);
     }
 
-    static #mountContent(actor) {
-        const system = actor.system;
-        const atributoKeys = Object.keys(system.atributos);
-        const abilitiesKeys = Object.keys(system.habilidades);
-
-        TODO('fazer o mount content com arquivos .hbs');
-
-        const options = atributoKeys
+    static async #mountContent(actor) {
+        const attributesOptions = Object.keys(getObject(actor, CharacteristicType.ATTRIBUTE))
             .map(attr => {
-                const label = game.i18n.localize(keyJsonToKeyLang(attr));
-                return `<option value="${attr}">${label}</option>`;
-            })
-            .join("");
+                return {
+                    label: game.i18n.localize(keyJsonToKeyLang(attr)),
+                    value: attr
+                }
+            });
 
-        const options2 = abilitiesKeys
+        const abilitiesOptions = Object.keys(getObject(actor, CharacteristicType.ABILITY))
             .map(attr => {
-                const label = game.i18n.localize(keyJsonToKeyLang(attr));
-                return `<option value="${attr}">${label}</option>`
-            })
-            .join("");
+                return {
+                    label: game.i18n.localize(keyJsonToKeyLang(attr)),
+                    value: attr
+                }
+            });
 
-        const options3 = [5, 6, 7, 8, 9, 10]
-            .map(attr => `<option value="${attr}" ${attr === 6 ? 'selected' : ''}>${attr}</option>`)
-            .join("");
+        const difficultyOptions = [5, 6, 7, 8, 9, 10]
+            .map(attr => {
+                return {
+                    label: attr,
+                    value: attr,
+                    isDefault: attr == 6
+                }
+            });
 
-        return `
-                <form style="margin-block:10px">
-                        <h3>${localize('Atributos')}</h3>
-                        <div class="form-group">
-                            <select id="attr1" style="margin-inline: 4px">${options}</select>
-                            <select id="attr2" style="margin-inline: 4px">${options}</select>
-                        </div>
-                        <h3 style="margin-top:10px">${localize('Habilidades')}</h3>
-                        <div class="form-group">
-                            <select id="ability" style="flex:1; margin-inline:4px">${options2}</select>
-                            <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
-                            <label for="specialist" style="flex:1; margin-inline:4px">${localize('Especialista')}:</label>
-                            <input id="specialist" type="checkbox" style="margin-inline:4px">
-                            </div>
-                        </div>
-                        <h3 style="margin-top: 10px">${localize('Outros')}</h3>
-                        <div class="form-group">
-                            <label for="difficulty" style="flex:1; margin-inline:4px">Dificuldade:</label>
-                            <select id="difficulty" style="margin-inline:4px; flex:1">${options3}</select>
-                        </div>
-                         <div class="form-group">
-                            <label for="bonus"  style="flex:1; margin-inline:4px">Bônus:</label>
-                            <input id="bonus" type="number" style="flex:1; margin-inline:4px">
-                        </div>
-                </form>
-            `;
+        const data = {
+            attributes: attributesOptions,
+            abilities: abilitiesOptions,
+            difficulty: difficultyOptions,
+            isGM: game.user.isGM,
+        }
+        return await renderTemplate("systems/setor0OSubmundo/templates/rolls/default-roll.hbs", data);
     }
 }

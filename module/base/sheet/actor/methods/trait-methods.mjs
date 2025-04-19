@@ -1,19 +1,22 @@
-import { ChatCreator } from "../../../../../scripts/creators/chat-creator.mjs";
+import { ChatCreator } from "../../../../utils/chat-creator.mjs";
 import { TraitDialog } from "../../../../creators/dialog/trait-dialog.mjs";
 import { TraitRepository } from "../../../../repository/trait-repository.mjs";
 import { ActorTraitField } from "../../../../field/actor-trait-field.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { TODO } from "../../../../../scripts/utils/utils.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
+import { OnEventType } from "../../../../enums/on-event-type.mjs";
+import { TraitMessageCreator } from "../../../../creators/message/trait-message.mjs";
 
-function getSystemChar(type) {            
+function getSystemChar(type) {
     return type == 'good' ? 'bons' : 'ruins';
 }
 
 function getSystemTraitCharacteristic(systemChar) {
     const systemCharacteristic = SheetMethods.characteristicTypeMap[CharacteristicType.TRAIT.id];
-    if (!systemCharacteristic)
+    if (!systemCharacteristic) {
         return null;
+    }
     return `${systemCharacteristic}.${systemChar}`;
 }
 
@@ -27,7 +30,7 @@ async function updateTraits(actor, systemChar, updatedTraits) {
 }
 
 export const traitMethods = {
-    async add(actor, event) {
+    [OnEventType.ADD]: async (actor, event) => {
         const traitType = event.currentTarget.dataset.type;
         const systemChar = getSystemChar(traitType);
 
@@ -37,8 +40,7 @@ export const traitMethods = {
             await updateTraits(actor, systemChar, updatedTraits);
         });
     },
-
-    async edit(actor, event) {
+    [OnEventType.EDIT]: async (actor, event) => {
         const target = event.currentTarget;
         const itemIndex = target.parentElement.dataset.itemIndex;
         if (itemIndex == undefined || itemIndex < 0)
@@ -55,8 +57,7 @@ export const traitMethods = {
             await updateTraits(actor, systemChar, updatedTraits);
         });
     },
-
-    async remove(actor, event) {
+    [OnEventType.REMOVE]: async (actor, event) => {
         const target = event.currentTarget;
         const itemIndex = target.parentElement.dataset.itemIndex;
         if (itemIndex == undefined || itemIndex < 0)
@@ -68,24 +69,21 @@ export const traitMethods = {
         updatedTraits.splice(itemIndex, 1);
         await updateTraits(actor, systemChar, updatedTraits);
     },
-
-    async chat(actor, event) {
+    [OnEventType.CHAT]: async (actor, event) => {
         const target = event.currentTarget;
         const itemIndex = target.parentElement.dataset.itemIndex;
-        if (itemIndex == undefined || itemIndex < 0)
+        if (itemIndex == undefined || itemIndex < 0) {
             return;
+        }
 
         const type = target.dataset.type;
         const systemChar = getSystemChar(type);
         const trait = actor.system.tracos[systemChar][itemIndex];
         const fetchedTrait = TraitRepository._getItemByTypeAndId(type, trait.id);
-        const content = fetchedTrait.description;
-
-        TODO("implementar lógica do content");
-        ChatCreator._sendToChat(actor, content);
+        const messageContent = await TraitMessageCreator.mountContent(fetchedTrait);
+        ChatCreator._sendToChat(actor, messageContent);
     },
-
-    async view(actor, event) {
+    [OnEventType.VIEW]: async (actor, event) => {
         const target = event.currentTarget;
         const type = target.dataset.type;
         const itemIndex = target.parentElement.dataset.itemIndex;

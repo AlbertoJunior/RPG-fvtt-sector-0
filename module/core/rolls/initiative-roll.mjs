@@ -1,4 +1,4 @@
-import { ActorUtils } from "../../../scripts/utils/actor.mjs";
+import { ActorUtils } from "../../utils/actor-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollInitiative {

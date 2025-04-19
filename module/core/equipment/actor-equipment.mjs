@@ -1,7 +1,7 @@
-import { TODO } from "../../../scripts/utils/utils.mjs";
+import { getObject } from "../../../scripts/utils/utils.mjs";
 import { EquipmentUpdater } from "../../base/updater/equipment-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
-import { equipmentTypeIdToTypeString, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
+import { EquipmentCharacteristicType, EquipmentType, equipmentTypeIdToTypeString, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
 
 export class ActorEquipmentUtils {
     static #allowedTypes = validEquipmentTypes().map(equipmentTypeIdToTypeString).filter(Boolean);
@@ -34,7 +34,7 @@ export class ActorEquipmentUtils {
 
     static getActorEquippedItems(actor) {
         const items = this.getActorEquipments(actor);
-        return [...items.filter(actorItem => actorItem.flags[SYSTEM_ID].equipped)];
+        return [...items.filter(item => getObject(item, EquipmentCharacteristicType.EQUIPPED))];
     }
 
     static createDataItem(equipment, params = {}) {
@@ -61,11 +61,17 @@ export class ActorEquipmentUtils {
         };
     }
 
+    static getActorEquippedArmorItem(actor) {
+        const equipments = this.getActorEquippedItems(actor);
+        const item = equipments.find(item => getObject(item, EquipmentCharacteristicType.TYPE) == EquipmentType.ARMOR);
+        return item;
+    }
+
     static async equip(actor, equipment) {
-        await EquipmentUpdater.updateEquipmentFlags(equipment, "equipped", true);
+        await EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.EQUIPPED, true);
     }
 
     static async unequip(actor, equipment) {
-        await EquipmentUpdater.updateEquipmentFlags(equipment, "equipped", false);
+        await EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.EQUIPPED, false);
     }
 }

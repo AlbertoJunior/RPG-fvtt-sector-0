@@ -1,4 +1,4 @@
-import { ActorUtils } from "../../../../../scripts/utils/actor.mjs";
+import { ActorUtils } from "../../../../utils/actor-utils.mjs";
 import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
@@ -44,7 +44,7 @@ async function handleOtherwise(actor, systemCharacteristic, characteristicId, le
     if (characteristicId == 'vigor') {
         params.push(
             {
-                systemCharacteristic: CharacteristicType.VITALITY_TOTAL.system,
+                systemCharacteristic: CharacteristicType.VITALITY.TOTAL,
                 value: ActorUtils.calculateVitalityByUpAttribute(actor, level)
             }
         );

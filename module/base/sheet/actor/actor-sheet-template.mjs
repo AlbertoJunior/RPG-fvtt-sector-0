@@ -1,17 +1,20 @@
-import { _createLi } from "../../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { getActorFlag, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
-import { OnEventType } from "../../../enums/on-event-type.mjs";
+import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
+import { getActorFlag, getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
-import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
+import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
 import { EquipmentType } from "../../../enums/equipment-enums.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
+import { REGISTERED_TEMPLATES } from "../../../constants.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
         sheet: SheetMethods.handleMethods.sheet,
         trait: SheetMethods.handleMethods.trait,
-        enhancement: enhancementHandleMethods,
+        enhancement: SheetMethods.handleMethods.enhancement,
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
         temporary: SheetMethods.handleMethods.temporary,
@@ -22,6 +25,8 @@ class Setor0ActorSheet extends ActorSheet {
         super(...args);
         this.currentPage = 1;
         this.filterBag = EquipmentType.UNKNOWM;
+        this.isExpandedEffects = undefined;
+        this.defaultHeight = undefined;
     }
 
     activateListeners(html) {
@@ -60,21 +65,14 @@ class Setor0ActorSheet extends ActorSheet {
 
     #setupListeners(html) {
         const actionsClick = [
-            { selector: '#roll-button', method: this.#openRollDialog },
             { selector: `[data-action="${OnEventType.CHARACTERISTIC}"]`, method: this.#onCharacteristicClick },
-            ...Object.values(OnEventType)
-                .filter(eventType => eventType !== OnEventType.CHANGE && eventType !== OnEventType.CHARACTERISTIC)
-                .map(eventType => ({
-                    selector: `[data-action="${eventType}"]`,
-                    method: this.#onActionClick
-                }))
+            ...OnEventTypeClickableEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: this.#onActionClick }))
         ];
         const actionsChange = [
             { selector: `[data-action="${OnEventType.CHANGE}"]`, method: this.#onChange },
         ];
-        TODO('mudar de CHECK para CONTEXTUAL')
         const actionsContextMenu = [
-            { selector: `[data-action="${OnEventType.CHECK}"]`, method: this.#onContextualClick }
+            ...OnEventTypeContextualEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: this.#onContextualClick }))
         ];
 
         actionsClick.forEach(action => {
@@ -162,16 +160,24 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetLanguages(html);
         this.#presetEnhancement(html);
         this.#presetStatus(html);
+        this.#presetSheetExpandContainers(html);
     }
 
     #verifyDarkMode(html) {
-        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
+        const inDarkMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
 
         const parent = html.parent()[0];
-        parent.classList.toggle('S0-page-transparent', actualMode);
+        parent.classList.toggle('S0-page-transparent', inDarkMode);
         parent.style.margin = '0';
         parent.style.padding = '0px 2px 0px 12px';
         parent.style.overflowY = 'scroll';
+
+        if (inDarkMode) {
+            const header = parent.parentElement.children[0].children;
+            for (const child of header) {
+                child.style.color = 'var(--primary-color)';
+            }
+        }
     }
 
     #cleanSheetBeforePreset(html) {
@@ -181,20 +187,21 @@ class Setor0ActorSheet extends ActorSheet {
         for (const item of classesToRemove) {
             html.find(`.${item}`).removeClass(item);
         }
-        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
+        console.info('-> Setor0ActorSheet[actor-sheet-template]:\nREMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
     }
 
     #presetLanguages(html) {
-        const system = this.actor.system;
         const langContainer = html.find('#linguasContainer')[0].children;
         const langElements = Array.from(langContainer);
-        system.linguas.forEach(language => {
-            const langElement = langElements.find(el => el.id === language)?.querySelector('.S0-characteristic');
 
-            if (langElement) {
-                selectCharacteristic(langElement);
-            }
-        });
+        getObject(this.actor, CharacteristicType.LANGUAGE)
+            .forEach(language => {
+                const langElement = langElements.find(el => el.id === language)?.querySelector('.S0-characteristic');
+
+                if (langElement) {
+                    selectCharacteristic(langElement);
+                }
+            });
     }
 
     #presetEnhancement(html) {
@@ -243,20 +250,44 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
+    #presetSheetExpandContainers(html) {
+        const effectsContainer = html.find('#effects-container');
+        const isExpanded = this.isExpandedEffects;
+
+        if (typeof isExpanded === 'boolean') {
+            effectsContainer.toggleClass('S0-expanded', isExpanded);
+            if (!isExpanded)
+                HtmlJsUtils.flipClasses(html.find('#effects-container-icon')[0], 'fa-chevron-up', 'fa-chevron-down');
+        }
+
+        if (!this.defaultHeight || isExpanded === undefined) {
+            requestAnimationFrame(() => {
+                const content = html.parent().parent()[0];
+                const windowElem = content.closest(".window-app");
+                this.defaultHeight = windowElem?.offsetHeight;
+
+                // Inicializa estado com base na classe atual
+                this.isExpandedEffects = effectsContainer[0].classList.contains('S0-expanded');
+            });
+        }
+    }
+
     async #onCharacteristicClick(html, event) {
         SheetMethods._handleCharacteristicClickEvent(event, this.actor);
     }
 
     async #onActionClick(html, event) {
-        this.#onEvent(event.currentTarget.dataset.action, html, event);
+        const action = verifyAndParseOnEventType(event.currentTarget.dataset.action, OnMethod.CLICK);
+        this.#onEvent(action, html, event);
     }
 
     async #onChange(html, event) {
-        this.#onEvent('change', html, event);
+        this.#onEvent(OnEventType.CHANGE, html, event);
     }
 
     async #onContextualClick(html, event) {
-        this.#onEvent('contextual', html, event);
+        const action = verifyAndParseOnEventType(event.currentTarget.dataset.action, OnMethod.CONTEXTUAL);
+        this.#onEvent(action, html, event);
     }
 
     async #onEvent(action, html, event) {
@@ -264,14 +295,10 @@ class Setor0ActorSheet extends ActorSheet {
         const characteristic = event.currentTarget.dataset.characteristic;
         const method = this.#mapEvents[characteristic]?.[action];
         if (method) {
-            method(this.actor, event);
+            method(this.actor, event, html);
         } else {
             console.warn(`-> [${action}] não existe para: [${characteristic}]`);
         }
-    }
-
-    async #openRollDialog(html, event) {
-        SheetMethods._openRollDialog(this.actor);
     }
 
     async #changePage(pageIndex, pages, buttons, event) {
@@ -297,17 +324,27 @@ export async function actorHtmlTemplateRegister() {
 }
 
 async function configurePartialTemplates() {
-    await loadTemplates([
-        "actors/characteristics",
-        "actors/biography",
-        "actors/biography-trait-partial",
-        "actors/status",
-        "actors/enhancement",
-        "actors/enhancement-partial",
-        "actors/equipment",
-        "actors/equipment-bag-item",
-        "actors/equipment-equipped-item",
-    ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
+    const actorTemplateNames = [
+        "characteristics",
+        "biography",
+        "biography-trait-partial",
+        "status",
+        "enhancement",
+        "enhancement-partial",
+        "equipment",
+        "equipment-bag-item",
+        "equipment-equipped-item"
+    ];
+
+    const actorTemplatePaths = actorTemplateNames.map(name =>
+        `systems/setor0OSubmundo/templates/actors/${name}.hbs`
+    );
+
+    await loadTemplates(actorTemplatePaths);
+
+    for (const path of actorTemplatePaths) {
+        REGISTERED_TEMPLATES.add(path);
+    }
 
     const partials = [
         { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' },
@@ -326,5 +363,9 @@ async function configurePartialTemplates() {
         return { Partial: call, Status: "Sucesso", Path: fullPath };
     }));
 
+    const errors = results.filter(r => r.Status !== "Sucesso").length;
+    if (errors > 0) {
+        console.error(`Erros [${errors}] ao carregar partials.`)
+    }
     console.table(results);
 }

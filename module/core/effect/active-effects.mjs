@@ -2,14 +2,18 @@ import { ActorUpdater } from "../../base/updater/actor-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
 
 export class ActiveEffectsUtils {
+    static KEYS = {
+        TINT_TOKEN: "texture.tint"
+    }
+
     static createEffectData(params) {
         const {
             name = "",
             description = "",
             origin = "",
-            img = "icons/svg/aura.svg",
+            img,
             tint,
-            disabled,
+            disabled = false,
             duration,
             statuses = [],
             changes = [],
@@ -40,8 +44,12 @@ export class ActiveEffectsUtils {
         return activeEffectData;
     }
 
+    static getFlags(activeEffect) {
+        return activeEffect.flags[SYSTEM_ID];
+    }
+
     static async addEffect(actor, activeEffectData) {
-        await ActorUpdater.addDocuments("ActiveEffect", [activeEffectData]);
+        await ActorUpdater.addEffect(actor, [...activeEffectData]);
     }
 
     static async removeActorEffect(actor, effectId) {

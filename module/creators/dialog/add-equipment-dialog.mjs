@@ -1,14 +1,25 @@
 import { localize, localizeType } from "../../../scripts/utils/utils.mjs"
+import { OnEventType } from "../../enums/on-event-type.mjs";
+import { DialogUtils } from "../../utils/dialog-utils.mjs";
+
 export class AddEquipmentDialog {
     static async showItemSelectorDialog(items, onSelect = () => { }) {
         const content = await this.#mountContent();
-        const dialog = new Dialog({
-            title: "Selecionar Item",
-            content: content,
-            buttons: {},
-            render: (html) => this.#initRender(html, items, dialog, onSelect),
-            close: () => { }
-        });
+        const dialog = new Dialog(
+            {
+                title: localize('Selecionar_Item'),
+                content: content,
+                buttons: {},
+                render: (html) => {
+                    DialogUtils.presetDialogRender(html);
+                    this.#initRender(html, items, dialog, onSelect);
+                },
+                close: () => { }
+            },
+            {
+                width: 540,
+            }
+        );
         dialog.render(true);
     }
 
@@ -16,7 +27,7 @@ export class AddEquipmentDialog {
         const selectedItems = new Set();
 
         let actualSelectedButton = undefined;
-        html.find("[data-action=\"check\"]").click((event) => {
+        html.find(`[data-action="${OnEventType.CHECK}"]`).click((event) => {
             const currentTarget = event.currentTarget;
             let newList = [];
             if (actualSelectedButton == currentTarget) {
@@ -30,7 +41,7 @@ export class AddEquipmentDialog {
                 actualSelectedButton = currentTarget;
 
                 const type = currentTarget.dataset.type;
-                if(type == 'selected') {
+                if (type == 'selected') {
                     newList = selectedItems;
                 } else {
                     newList = items.filter(item => item.type.toLowerCase() == type);
@@ -92,8 +103,12 @@ export class AddEquipmentDialog {
         card.toggleClass("S0-selected", isSelected);
 
         const img = $('<img>', { src: item.img, alt: item.name });
-        const name = $('<span>', { class: 'S0-item-legend' }).text(item.name);
-        card.append(img, name);
+        const divName = $('<div>', { class: 'S0-item-legend', style: 'padding-inline: 4px' });
+        const name = $('<span>', { class: 'S0-hide-long-text' }).text(item.name);
+
+        divName.append(name);
+
+        card.append(img, divName);
         return card;
     }
 
@@ -105,7 +120,11 @@ export class AddEquipmentDialog {
 
     static #updateDetails(details, item, isEmpty) {
         if (isEmpty) {
-            details.html(`Selecione um item para ver detalhes.`);
+            details.html(`            
+                <div class="S0-message-simple-text">
+                    Selecione um item para ver detalhes.            
+                </div>
+            `);
             return;
         }
 
@@ -117,9 +136,9 @@ export class AddEquipmentDialog {
             ${nameString}
             <br>
             <strong>${localize('Descricao')}:</strong>
-            <section>
-            ${item.description ?? "Sem descrição."}
-            </section>
+            <div class="S0-message-simple-text">
+                ${item.description ?? "Sem descrição."}            
+            </div>
             `);
     }
 

@@ -1,5 +1,5 @@
-import { CharacteristicType } from "../../module/enums/characteristic-enums.mjs";
-import { getObject, TODO } from "./utils.mjs";
+import { CharacteristicType } from "../enums/characteristic-enums.mjs";
+import { getObject } from "../../scripts/utils/utils.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -12,13 +12,29 @@ export class ActorUtils {
     static getAbilityValue(actor, ability) {
         const system = actor.system;
         const base = system.habilidades[ability] || 0;
-        TODO('colocar o campo de habilidades no bonus');
-        //const bonus = system.bonus.habilidades[ability] || 0;
-        return base;
+        const bonus = system.bonus.habilidades[ability] || 0;
+        return base + bonus;
     }
 
     static getOverload(actor) {
-        return actor.system.sobrecarga || 0;
+        return getObject(actor, CharacteristicType.OVERLOAD) || 0;
+    }
+
+    static getEnhancementLevel(actor, enhancement) {
+        const enhancements = getObject(actor, CharacteristicType.ENHANCEMENT_ALL);
+        const enhancementOnActor = this.#findEnhancementOnActorById(enhancement.id, enhancements);
+        const levelsOnActor = this.#findLevelsWithId(enhancementOnActor);
+        return levelsOnActor.length;
+    }
+
+    static getDamage(actor) {
+        const superficial = getObject(actor, CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
+        const letal = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        return superficial + letal;
+    }
+
+    static getActualLanguages(actor) {
+        return getObject(actor, CharacteristicType.LANGUAGE) || [];
     }
 
     static calculatePenalty(actor) {
@@ -39,27 +55,39 @@ export class ActorUtils {
     static calculateMovimentPoints(actor) {
         const dexValue = this.getAttributeValue(actor, 'destreza');
         const athleticsValue = this.getAbilityValue(actor, 'atletismo');
-        const bonusPM = actor.system.bonus.movimento || 0;
+        const bonusPM = getObject(actor, CharacteristicType.BONUS.PM) || 0;
         return 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
     }
 
     static calculateInitiative(actor) {
         const dexValue = this.getAttributeValue(actor, 'destreza');
         const perValue = this.getAttributeValue(actor, 'percepcao');
-        const bonusInitiative = actor.system.bonus.iniciativa || 0;
+        const bonusInitiative = getObject(actor, CharacteristicType.BONUS.INITIATIVE) || 0;
         return bonusInitiative + Math.floor((dexValue + perValue) / 2);
     }
 
-    static getEnhancementLevel(actor, enhancement) {
-        const enhancementOnActor = this.#findEnhancementOnActorById(enhancement.id, actor.system.aprimoramentos);
-        const levelsOnActor = this.#findLevelsWithId(enhancementOnActor);
-        return levelsOnActor.length;
+    static calculateTotalLanguages(actor) {
+        const abilities = getObject(actor, CharacteristicType.ABILITY);
+        const streetWise = abilities.manha;
+        if (streetWise == 0) {
+            return 1;
+        }
+
+        if (streetWise == 1) {
+            return 2;
+        }
+
+        return 1 + (streetWise - 1) * 2
     }
 
     static havePerseverance(actor) {
-        const level = getObject(actor, CharacteristicType.PERSEVERANCE_LEVEL.system);
-        const used = getObject(actor, CharacteristicType.PERSEVERANCE_USED.system);
+        const level = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.LEVEL);
+        const used = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.USED);
         return used < level;
+    }
+
+    static getToken(actor) {
+        return canvas.tokens.placeables.find(t => t.actor.id === actor.id);
     }
 
     static #findEnhancementOnActorById(selectedId, enhancements) {

@@ -1,5 +1,5 @@
-import { ChatCreator } from "../../scripts/creators/chat-creator.mjs";
-import { ActorUtils } from "../../scripts/utils/actor.mjs";
+import { ChatCreator } from "./chat-creator.mjs";
+import { ActorUtils } from "./actor-utils.mjs";
 import { CombatUtils } from "../core/combat/combat.mjs";
 import { RollInitiative } from "../core/rolls/initiative-roll.mjs";
 import { RollLife } from "../core/rolls/life-roll.mjs";
@@ -29,7 +29,7 @@ export class DefaultActions {
         ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
     }
 
-    static async sendRollOnChat(actor, resultRoll, difficulty, rollMessage) {
+    static async sendRollOnChat(actor, resultRoll, difficulty, rollMessage, mode) {
         const params = {
             rolls: resultRoll.roll,
             attrs: resultRoll.attrs,
@@ -51,12 +51,12 @@ export class DefaultActions {
 
         const overloadRoll = rollItems.overload.roll;
         if (overloadRoll != undefined) {
-            const objectRoll = mountOptions(overloadRoll, {...params, isOverload: true});
+            const objectRoll = this.#mountOptions(overloadRoll, {...params, isOverload: true});
             rolls.push(objectRoll);
         }
 
         const message = await RollMessageCreator.mountContent(params);
-        await ChatCreator._sendToChatTypeRoll(actor, message, rolls);
+        await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
 
     static #mountOptions(objectRoll, params) {

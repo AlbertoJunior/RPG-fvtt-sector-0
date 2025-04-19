@@ -23,7 +23,7 @@
 
             {{#if editable}}
             <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu"
-                data-type="equipped" data-action="remove">
+                data-type="equipped" data-action="remove" title="{{localize 'S0.Desequipar_Itens'}}">
                 <i class="fas fa-arrow-down-to-bracket S0-icon-idle"></i>
                 <i class="fas fa-arrow-down-to-square S0-icon-hover"></i>
             </a>
@@ -59,12 +59,12 @@
 
             {{#if editable}}
             <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag"
-                data-action="remove">
+                data-action="remove" title="{{localize 'S0.Remover_Itens'}}">
                 <i class="fas fa-trash S0-icon-idle"></i>
                 <i class="fas fa-trash-list S0-icon-hover"></i>
             </a>
             <a class="S0-icon-swaper" data-characteristic="equipment" data-sub-characteristic="menu" data-type="bag"
-                data-action="add">
+                data-action="add" title="{{localize 'S0.Adicionar_Itens'}}">
                 <i class="fas fa-bag-shopping S0-icon-idle"></i>
                 <i class="fas fa-bag-shopping-plus S0-icon-hover"></i>
             </a>
@@ -76,7 +76,7 @@
             <li class="S0-simulate-button {{#if (eq @root/document.sheet.filterBag id)}}S0-marked{{/if}}"
                 style="width: auto; padding-inline: 16px" data-action="check" data-characteristic="equipment"
                 data-sub-characteristic="filter" data-type="{{type}}">
-                <h4 style="font-size: var(--font-size-12);">
+                <h4 style="font-size: var(--font-size-13);">
                     {{label}}
                 </h4>
             </li>

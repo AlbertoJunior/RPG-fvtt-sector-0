@@ -80,7 +80,12 @@ export function TODO(message, notify) {
 }
 
 export function getObject(object, path) {
-    return path.split('.').reduce((acc, key) => acc && acc[key], object);
+    let pathHaveSystem = path;
+    if (path.system) {
+        pathHaveSystem = path.system;
+    }
+
+    return pathHaveSystem.split('.').reduce((acc, key) => acc && acc[key], object);
 }
 
 export function randomId() {

@@ -2,6 +2,7 @@ export const EnhancementDuration = Object.freeze({
     PASSIVE: 0,
     SCENE: 1,
     USE: 2,
+    TIME: 3,
 });
 
 export const EnhancementOverload = Object.freeze({
@@ -19,4 +20,6 @@ export const EffectChangeValueType = Object.freeze({
     HALF_ENHANCEMENT_LEVEL: 2,
     ENHANCEMENT_LEVEL_PLUS_FIXED: 3,
     HALF_ENHANCEMENT_LEVEL_PLUS_FIXED: 4,
+    HALF_DEFENSIVE: 5,
+    OTHER_VALUE: 6,
 });

@@ -1,5 +1,5 @@
 import { configureSetor0Combat } from "../core/combat/setor0-combat.mjs";
-import { addListenersOnDOM } from "../../scripts/utils/dom-listeners.mjs";
+import { DOMUtils } from "../utils/dom-listeners.mjs";
 import { createDataModels } from "../../scripts/utils/models.mjs";
 import { GameSettingsUtils } from "../settings/game-settings.mjs";
 import { loadHandlebarsHelpers } from "../../scripts/utils/handlerbars-helper.mjs";
@@ -11,7 +11,7 @@ export class InitHookHandle {
 
         this.#presetConfigs();
 
-        addListenersOnDOM();
+        DOMUtils.addListenersOnDOM();
 
         await createDataModels();
         await configureSetor0Combat();

@@ -1,6 +1,7 @@
 import { AttributeRepository } from "../../repository/attribute-repository.mjs";
 import { AbilityRepository } from "../../repository/ability-repository.mjs";
-import { randomId } from "../../../scripts/utils/utils.mjs"
+import { localize, randomId } from "../../../scripts/utils/utils.mjs"
+import { DialogUtils } from "../../utils/dialog-utils.mjs";
 
 export class CreateRollableTestDialog {
     static async _view(rollableData) {
@@ -16,18 +17,21 @@ export class CreateRollableTestDialog {
         const mode = this.#getDialogMode(isCreate, needConfirmation);
 
         const dialog = new Dialog({
-            title: `${mode} Teste Rolável`,
+            title: `${mode} Teste do Item`,
             content,
+            render: (html) => {
+                DialogUtils.presetDialogRender(html);
+            },
             buttons: {}
         });
 
         if (needConfirmation) {
             dialog.data.buttons = {
                 cancel: {
-                    label: "Cancelar"
+                    label: localize("Cancelar")
                 },
                 confirm: {
-                    label: "Confirmar",
+                    label: localize("Confirmar"),
                     callback: (html) => {
                         const form = html[0].querySelector("form");
                         const formData = new FormData(form);
@@ -48,6 +52,7 @@ export class CreateRollableTestDialog {
                     }
                 }
             }
+            dialog.data.default = 'confirm';
         }
 
         dialog.render(true);

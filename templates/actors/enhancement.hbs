@@ -1,17 +1,17 @@
 <section data-label="{{localize 'S0.Aprimoramentos'}}" class="S0-page" data-icon="fa-solid fa-lungs">
-    <h2> {{localize 'S0.Aprimoramentos'}}
-        <a style="font-size: small;" data-action="remove" data-characteristic="enhancement">
-            <i class="fas fa-refresh"></i>
-        </a>
-    </h2>
+    <div class="S0-container">
+        <h2> {{localize 'S0.Aprimoramentos'}}
+            <a class="S0-icon-rotate" style="font-size: small;" data-action="remove" data-characteristic="enhancement" title="{{localize 'S0.Atualizar_Efeitos'}}">
+                <i class="fas fa-refresh"></i>
+            </a>
+        </h2>
 
-    <section style="padding-block: 4px;">
-        <div class="S0-enhancement-container">
+        <div class="S0-enhancement-container" style="padding-block: 4px;">
             {{> "systems/setor0OSubmundo/templates/actors/enhancement-partial.hbs" enhancement-slot=1}}
             {{> "systems/setor0OSubmundo/templates/actors/enhancement-partial.hbs" enhancement-slot=2}}
             {{> "systems/setor0OSubmundo/templates/actors/enhancement-partial.hbs" enhancement-slot=3}}
             {{> "systems/setor0OSubmundo/templates/actors/enhancement-partial.hbs" enhancement-slot=4}}
         </div>
-    </section>
+    </div>
 
 </section>

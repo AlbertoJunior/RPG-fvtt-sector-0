@@ -4,7 +4,7 @@ import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollLife {
     static async roll(actor, amountOverloadTest = 1) {
-        const life = getObject(actor, CharacteristicType.LIFE.system);
+        const life = getObject(actor, CharacteristicType.LIFE);
         const resultRoll = await CoreRollMethods.rollDice(1);
         const success = this.calculateSuccess(resultRoll.values, life);
         return {
