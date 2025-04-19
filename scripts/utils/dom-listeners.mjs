@@ -2,7 +2,8 @@ import { CoreRollMethods } from "../../module/core/rolls/core-roll-methods.mjs";
 import { RollPerseverance } from "../../module/core/rolls/perseverance-roll.mjs";
 import { RollPerseveranceMessageCreator } from "../../module/creators/message/perseverance-roll.mjs";
 import { ChatCreator } from "../creators/chat-creator.mjs";
-import { MessageRepository } from "../repository/message-repository.mjs";
+import { MessageRepository } from "../../module/repository/message-repository.mjs";
+import { HtmlJsUtils } from "../../module/utils/html-js-utils.mjs";
 
 const mapEventsHandle = {
     'toggle-tooltip': (target) => toggleTooltip(target),
@@ -16,12 +17,14 @@ export function addListenersOnDOM() {
         const target = event.target;
         const eventData = target.dataset;
 
-        if (!eventData)
+        if (!eventData || !eventData.handleOnDom) {
             return;
+        }
 
         const action = eventData.action;
-        if (!action || action == '')
+        if (!action) {
             return;
+        }
 
         const method = mapEventsHandle[action];
         if (typeof method === 'function') {
@@ -34,7 +37,7 @@ export function addListenersOnDOM() {
             return methodOfType(target);
         }
 
-        console.log(`Não existe evento configurado para [${action}]`);
+        console.log(`Não existe evento configurado no DOM para [${action}]`);
     });
 }
 
@@ -42,8 +45,8 @@ function toggleTooltip(target) {
     let tooltip = target.previousElementSibling;
     let hooks = 0;
     while (hooks < 5 && tooltip) {
-        if (tooltip.classList.contains('tooltip-part')) {
-            tooltip.classList.toggle('hidden');
+        if (tooltip.classList.contains('S0-container-contract')) {
+            HtmlJsUtils.expandOrContractMessageElement(tooltip, { minHeight: 300, maxHeight: 600, marginBottom: 0 })
             return;
         } else {
             tooltip = tooltip.previousElementSibling;
@@ -68,6 +71,7 @@ async function perseverance(target) {
 
     newValues.difficulty = roll.options.difficulty || 6;
     newValues.specialist = roll.options.specialist || false;
+    newValues.automatic = (roll.options.automatic || 0) + (roll.options?.weapon?.true_damage || 0);
 
     const messageContent = await RollPerseveranceMessageCreator.mountContent(newValues);
     const actorOnMessage = game.actors.get(message.speaker.actor);

@@ -1,8 +1,10 @@
-import { actorHtmlTemplateRegister } from "../../module/base/sheet/actor-sheet-template.mjs";
+import { actorHtmlTemplateRegister } from "../../module/base/sheet/actor/actor-sheet-template.mjs";
+import { itemsHtmlTemplateRegister } from "../../module/base/sheet/equipment/equipment-sheet.mjs";
 
 export async function registerTemplates() {
     const templates = [
-        { model: 'Actor', method: actorHtmlTemplateRegister() }
+        { model: 'Actor', method: actorHtmlTemplateRegister() },
+        { model: 'Items', method: itemsHtmlTemplateRegister() },
     ];
 
     const results = await Promise.all(templates.map(async (template) => {

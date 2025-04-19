@@ -7,5 +7,5 @@ const map = {
 }
 
 export default function actorValues(actor, value) {
-    return map[value](actor) || 0
+    return map[value](actor) || 0;
 }

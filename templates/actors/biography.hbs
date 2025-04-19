@@ -1,25 +1,30 @@
-<section data-label="Biografia" class="S0-page">
+<section data-label="{{ localize 'S0.Biografia' }}" class="S0-page" data-icon="fa-solid fa-address-book">
     <h2>{{localize 'S0.Descricao'}}</h2>
     <section style="padding-bottom: 4px;">
         <div style="display: flex; justify-content: center; align-items: center;">
             <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}S0-clickable{{/if}}" data-edit="img">
         </div>
 
-        <label for="biography" style="flex: 1">{{ localize 'S0.Biografia' }}</label>
-        <input id="biography" name="system.background.biography" type="text"
-            value="{{actor.system.background.biography}}" placeholder="{{ localize 'S0.Biografia' }}" />
+        <div class="S0-container">
+            <label for="biography" style="display: block; margin: 4px">{{ localize 'S0.Biografia' }}</label>
+            <input id="biography" name="system.background.biography" type="text"
+                value="{{actor.system.background.biography}}" placeholder="{{ localize 'S0.Biografia' }}" />
+        </div>
     </section>
 
-    <h2> {{localize 'S0.Linguas'}} </h2>
-    <section id="linguasContainer" class="S0-language-container"></section>
+    <div class="S0-container">
+        <h2> {{localize 'S0.Linguas'}} </h2>
+        <div id="linguasContainer" class="S0-container-4-column"></div>
+    </div>
 
-    <h2> {{localize 'S0.Tracos'}} </h2>
-    <section id="tracosContainer"
-        style="display: flex; align-items: flex-start; justify-content: space-between; column-gap: 14px;">
+    <div class="S0-container">
+        <h2> {{localize 'S0.Tracos'}} </h2>
+        <section id="tracosContainer" class="S0-container-2-column">
 
-        {{> traitPartialContainer traits=actor.system.tracos.bons type="good" title='S0.Tracos-Bons' }}
+            {{> traitPartialContainer traits=actor.system.tracos.bons type="good" title='S0.Tracos-Bons' }}
 
-        {{> traitPartialContainer traits=actor.system.tracos.ruins type="bad" title='S0.Tracos-Ruins' }}
-    </section>
+            {{> traitPartialContainer traits=actor.system.tracos.ruins type="bad" title='S0.Tracos-Ruins' }}
+        </section>
+    </div>
 
 </section>

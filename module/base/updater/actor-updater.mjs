@@ -17,4 +17,16 @@ export class ActorUpdater {
 
         await actor.update(keysToUpdate);
     }
+
+    static async addDocuments(actor, itemsData = []) {
+        await actor.createEmbeddedDocuments("Item", itemsData);
+    }
+
+    static async removeDocuments(actor, itemsId = []) {
+        await actor.deleteEmbeddedDocuments("Item", itemsId);
+    }
+
+    static async updateDocuments(actor, itemUpdatedData = []) {
+        await actor.updateEmbeddedDocuments("Item", itemUpdatedData);
+    }
 }

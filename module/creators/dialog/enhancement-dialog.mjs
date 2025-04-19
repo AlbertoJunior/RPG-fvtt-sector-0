@@ -1,7 +1,7 @@
-import { sendEffectToChat } from "../../../module/base/sheet/enhancement-methods.mjs";
-import { EnhancementDuration } from "../../../module/enums/enhancement-enums.mjs";
-import { EnhancementRepository } from "../../../module/repository/enhancement-repository.mjs";
-import { EnhancementInfoParser } from "../../parser/enhancement-info.mjs";
+import { sendEffectToChat } from "../../base/sheet/actor/methods/enhancement-methods.mjs";
+import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
+import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
+import { EnhancementInfoParser } from "../../../scripts/parser/enhancement-info.mjs";
 
 export class EnhancementDialog {
     static async _open(enhancementEffect, actor) {

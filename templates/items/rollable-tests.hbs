@@ -1,0 +1,64 @@
+<div class="rollable-tests-container">
+    <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <strong>{{localize 'S0.Testes_Possiveis'}}</strong>
+        <div style="display: flex; gap: 8px;">
+            <a class="add-rollable-test" data-characteristic="menu_roll" data-action="add">
+                <i class="fas fa-plus"></i>
+            </a>
+            <a id="toggle-tests" data-characteristic="menu_roll" data-action="view">
+                <i class="fas fa-eye"></i>
+            </a>
+        </div>
+    </div>
+
+    <section>
+        <div id="rollable-tests-list" class="S0-container-contract">
+            {{#each system.possible_tests}}
+            <div
+                style="padding-block: 8px; padding-inline: 6px; display: flex; align-items: center; column-gap: 4px; border-bottom: 1px solid var(--secondary-color-alpha);">
+
+                <div class="S0-characteristic S0-characteristic-temp {{#if ../owner}}S0-clickable{{/if}} {{#if (eq ../system.default_test this.id)}}S0-selected{{/if}}"
+                    style="height: 18px;" data-characteristic="item_roll" {{#if ../owner}}data-action="check" {{/if}}
+                    data-item-id="{{this.id}}">
+                </div>
+
+                <label
+                    style="width: calc(100% - 30px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap;">
+                    {{this.name}}
+                </label>
+
+                {{#if ../owner}}
+                <div class="S0-menu-float-wrapper">
+                    <a>
+                        <i class="fas fa-ellipsis-h"></i>
+                    </a>
+
+                    <div class="S0-menu-float">
+                        {{#if ../canEdit}}
+                        <a data-characteristic="item_roll" data-action="edit" data-item-id="{{this.id}}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a data-characteristic="item_roll" data-action="remove" data-item-id="{{this.id}}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        {{/if}}
+
+                        <a data-characteristic="item_roll" data-action="chat" data-item-id="{{this.id}}">
+                            <i class="fas fa-message-quote S0-icon-hover"></i>
+                        </a>
+                        <a data-characteristic="item_roll" data-action="view" data-item-id="{{this.id}}">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a data-characteristic="item_roll" data-action="roll" data-item-id="{{this.id}}">
+                            <i class="fas fa-dice-d10"></i>
+                        </a>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+            {{else}}
+            <p style="font-style: italic;">Nenhum teste cadastrado.</p>
+            {{/each}}
+        </div>
+    </section>
+</div>

@@ -1,23 +1,27 @@
-import { _createLi } from "../../../scripts/creators/jscript/element-creator-jscript.mjs";
-import { getActorFlag, selectCharacteristic, setActorFlag } from "../../../scripts/utils/utils.mjs";
-import { OnEventType } from "../../enums/characteristic-enums.mjs";
-import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./enhancement-methods.mjs";
-import { SheetMethods } from "./sheet-methods.mjs";
+import { _createLi } from "../../../../scripts/creators/jscript/element-creator-jscript.mjs";
+import { getActorFlag, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
+import { OnEventType } from "../../../enums/on-event-type.mjs";
+import { SheetMethods } from "./methods/sheet-methods.mjs";
+import { enhancementHandleMethods, selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
+import { EquipmentType } from "../../../enums/equipment-enums.mjs";
+import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
+        sheet: SheetMethods.handleMethods.sheet,
         trait: SheetMethods.handleMethods.trait,
         enhancement: enhancementHandleMethods,
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
-        temporary: SheetMethods.handleMethods.temporary
+        temporary: SheetMethods.handleMethods.temporary,
+        equipment: SheetMethods.handleMethods.equipment
     };
 
     constructor(...args) {
-        super(...args)
+        super(...args);
         this.currentPage = 1;
-        this.enableBlackMode = false;
+        this.filterBag = EquipmentType.UNKNOWM;
     }
 
     activateListeners(html) {
@@ -41,32 +45,36 @@ class Setor0ActorSheet extends ActorSheet {
     getData() {
         const data = super.getData();
         data.editable = this.isEditable;
-        data.canRoll = game.user.isGM || this.actor.isOwner;
-        data.canEdit = game.user.isGM || this.actor.isOwner;
+        data.canRoll = this.canRollOrEdit;
+        data.canEdit = this.canRollOrEdit;
         return data;
     }
 
     get isEditable() {
-        return getActorFlag(this.actor, "editable");
+        return getActorFlag(this.actor, "editable") && this.canRollOrEdit;
+    }
+
+    get canRollOrEdit() {
+        return game.user.isGM || this.actor.isOwner;
     }
 
     #setupListeners(html) {
         const actionsClick = [
-            { selector: '#edit-mode-toggle', method: this.#toggleEditMode },
             { selector: '#roll-button', method: this.#openRollDialog },
-            { selector: `[data-action="${OnEventType.CHARACTERISTIC.id}"]`, method: this.#onCharacteristicClick },
+            { selector: `[data-action="${OnEventType.CHARACTERISTIC}"]`, method: this.#onCharacteristicClick },
             ...Object.values(OnEventType)
                 .filter(eventType => eventType !== OnEventType.CHANGE && eventType !== OnEventType.CHARACTERISTIC)
                 .map(eventType => ({
-                    selector: `[data-action="${eventType.id}"]`,
+                    selector: `[data-action="${eventType}"]`,
                     method: this.#onActionClick
                 }))
         ];
         const actionsChange = [
-            { selector: `[data-action="${OnEventType.CHANGE.id}"]`, method: this.#onChange },
+            { selector: `[data-action="${OnEventType.CHANGE}"]`, method: this.#onChange },
         ];
+        TODO('mudar de CHECK para CONTEXTUAL')
         const actionsContextMenu = [
-            { selector: `[data-action="${OnEventType.CHECK.id}"]`, method: this.#onContextualClick }
+            { selector: `[data-action="${OnEventType.CHECK}"]`, method: this.#onContextualClick }
         ];
 
         actionsClick.forEach(action => {
@@ -88,7 +96,16 @@ class Setor0ActorSheet extends ActorSheet {
             pages.push(page);
 
             const textContent = page?.getAttribute('data-label') || "[Erro]";
-            const button = _createLi(textContent, { classList: 'S0-simulate-button' });
+
+            const iconClass = page?.getAttribute('data-icon');
+            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: '4px', } } : {};
+
+            const options = {
+                classList: 'S0-simulate-button',
+                ...iconOption
+            };
+
+            const button = _createLi(textContent, options);
 
             buttonContainer.appendChild(button);
 
@@ -103,30 +120,11 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    async #toggleEditMode(html, event) {
-        let currentValue = getActorFlag(this.actor, "editable");
-        currentValue = !currentValue;
-
-        await setActorFlag(this.actor, "editable", currentValue)
-    }
-
     #presetSheet(html) {
-        if (this.enableBlackMode) {
-            const parent = html.parent()[0];
-            parent.classList.add('S0-page-transparent')
-        };
-
-        const classesToRemove = [
-            'S0-selected', 'S0-superficial', 'S0-letal'
-        ];
-        for (const item of classesToRemove) {
-            html.find(`.${item}`).removeClass(item);
-        }
-        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
+        this.#verifyDarkMode(html);
+        this.#cleanSheetBeforePreset(html);
 
         const system = this.actor.system;
-        const activeEffects = this.actor.statuses;
-
         [
             {
                 container: html.find('#atributosContainer')[0],
@@ -161,6 +159,33 @@ class Setor0ActorSheet extends ActorSheet {
             virtueElementChild = virtueElementChild.nextElementSibling;
         }
 
+        this.#presetLanguages(html);
+        this.#presetEnhancement(html);
+        this.#presetStatus(html);
+    }
+
+    #verifyDarkMode(html) {
+        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
+
+        const parent = html.parent()[0];
+        parent.classList.toggle('S0-page-transparent', actualMode);
+        parent.style.margin = '0';
+        parent.style.padding = '0px 2px 0px 12px';
+        parent.style.overflowY = 'scroll';
+    }
+
+    #cleanSheetBeforePreset(html) {
+        const classesToRemove = [
+            'S0-selected', 'S0-superficial', 'S0-letal'
+        ];
+        for (const item of classesToRemove) {
+            html.find(`.${item}`).removeClass(item);
+        }
+        console.info('REMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
+    }
+
+    #presetLanguages(html) {
+        const system = this.actor.system;
         const langContainer = html.find('#linguasContainer')[0].children;
         const langElements = Array.from(langContainer);
         system.linguas.forEach(language => {
@@ -170,6 +195,11 @@ class Setor0ActorSheet extends ActorSheet {
                 selectCharacteristic(langElement);
             }
         });
+    }
+
+    #presetEnhancement(html) {
+        const system = this.actor.system;
+        const activeEffects = this.actor.statuses;
 
         html.find('.S0-enhancement').each((index, enhaceContainer) => {
             const enhancement = system.aprimoramentos[`aprimoramento_${index + 1}`];
@@ -185,7 +215,10 @@ class Setor0ActorSheet extends ActorSheet {
                 }
             });
         });
+    }
 
+    #presetStatus(html) {
+        const system = this.actor.system;
         selectCharacteristic(html.find('#statusPage #consciencia .S0-characteristic')[system.virtudes.consciencia.used - 1]);
         selectCharacteristic(html.find('#statusPage #perseveranca .S0-characteristic')[system.virtudes.perseveranca.used - 1]);
         selectCharacteristic(html.find('#statusPage #quietude .S0-characteristic')[system.virtudes.quietude.used - 1]);
@@ -259,7 +292,7 @@ class Setor0ActorSheet extends ActorSheet {
 export async function actorHtmlTemplateRegister() {
     await configurePartialTemplates();
     Actors.unregisterSheet("core", ActorSheet);
-    Actors.registerSheet("Setor 0", Setor0ActorSheet, { makeDefault: true });
+    Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
     console.log('-> Modelos de dados e fichas registrados');
 }
 
@@ -271,10 +304,15 @@ async function configurePartialTemplates() {
         "actors/status",
         "actors/enhancement",
         "actors/enhancement-partial",
+        "actors/equipment",
+        "actors/equipment-bag-item",
+        "actors/equipment-equipped-item",
     ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
 
     const partials = [
-        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' }
+        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' },
+        { call: 'equipamentBagItem', path: 'actors/equipment-bag-item' },
+        { call: 'equipamentEquippedItem', path: 'actors/equipment-equipped-item' },
     ];
 
     const results = await Promise.all(partials.map(async ({ call, path }) => {

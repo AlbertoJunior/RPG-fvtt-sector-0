@@ -1,10 +1,10 @@
-import { OnEventType } from "../../../module/enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../module/enums/on-event-type.mjs";
 
 export class ElementCreatorJQuery {
     static #createCharacteristicDiv(isEditable, safeEventType, characteristicType) {
         return $('<div>', {
             class: isEditable ? `S0-characteristic S0-clickable` : `S0-characteristic`,
-            'data-action': isEditable ? `${safeEventType.id}` : undefined,
+            'data-action': isEditable ? `${safeEventType}` : undefined,
             'data-characteristic': characteristicType
         });
     };

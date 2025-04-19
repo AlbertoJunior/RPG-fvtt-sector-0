@@ -1,4 +1,7 @@
-import { ActorAttributeField, ActorAbilityField, ActorCharacteristicField, ActorEnhancementField, ActorVirtueField, ActorAttribute } from "../field/actor-fields.mjs";
+import {
+    ActorAttributeField, ActorAbilityField, ActorCharacteristicField,
+    ActorEnhancementField, ActorVirtueField, ActorAttribute
+} from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
@@ -26,7 +29,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
 
     static defineSchema() {
         return {
-            name: new StringField({ required: true }),
+            name: new StringField({ required: true, label: "S0.Nome" }),
             morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: 'androide' }),
             bairro: new StringField({ required: true, label: "S0.Bairro", initial: 'alfiran' }),
             background: new SchemaField({
@@ -93,15 +96,15 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             vida: new NumberField({ initial: 8, min: 0, max: 10 }),
             bonus: new SchemaField({
                 atributos: new ActorAttribute(0),
+                habilidades: new SchemaField({}),
                 iniciativa: new NumberField({ integer: true, initial: 0 }),
                 movimento: new NumberField({ integer: true, initial: 0 }),
-            }),
-            equipamentos: new ArrayField(new StringField())
+            })
         };
     }
 }
 
-class BasicEnemyDataModel extends ActorDataModel {
+class NPCDataModel extends ActorDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema()
@@ -123,23 +126,18 @@ class PlayerDataModel extends ActorDataModel {
 
 export async function createActorDataModels() {
     CONFIG.Actor.trackableAttributes = {
-        Jogador: {
+        Player: {
             bar: ["system.vitalidade.total", "system.sobrecarga"],
             value: ["progress"]
         },
-        Mestre: {
-            bar: ["system.vitalidade.total", "system.sobrecarga"],
-            value: ["level"]
-        },
-        Inimigo: {
+        NPC: {
             bar: ["system.vitalidade.total", "system.sobrecarga"],
             value: ["level"]
         }
     };
 
     CONFIG.Actor.dataModels = {
-        Jogador: PlayerDataModel,
-        Mestre: PlayerDataModel,
-        Inimigo: BasicEnemyDataModel,
+        Player: PlayerDataModel,
+        NPC: NPCDataModel
     }
 }

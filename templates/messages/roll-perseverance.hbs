@@ -1,7 +1,7 @@
 <div class="S0-message-content">
     <h4>{{localize 'S0.Perseveranca'}}</h4>
     <hr>
-    <div class="dice-tooltip tooltip-part hidden">
+    <div class="dice-tooltip S0-container-contract">
         <ol class="dice-rolls">
             {{#each diceValues}}
             <li class="S0-d10 roll d10">{{ this }}</li>
@@ -16,7 +16,7 @@
         </ol>
     </div>
 
-    <button class="S0-roll-result {{ resultClassess }}" data-action="toggle-tooltip">
+    <button class="S0-roll-result {{ resultClassess }}" data-action="toggle-tooltip" data-handle-on-dom="true">
         {{ resultMessage }} ( {{ resultValue }} )
     </button>
 </div>

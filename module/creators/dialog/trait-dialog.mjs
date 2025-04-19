@@ -1,9 +1,9 @@
 import { TraitRepository } from "../../repository/trait-repository.mjs";
-import { ChatCreator } from "../chat-creator.mjs";
-import { localize, TODO } from "../../utils/utils.mjs";
+import { ChatCreator } from "../../../scripts/creators/chat-creator.mjs";
+import { localize, TODO } from "../../../scripts/utils/utils.mjs";
 
 export class TraitDialog {
-  static async _open(type, callback) {
+  static async _open(type, callback) {    
     const traits = TraitRepository._getItemsByType(type);
     const content = await this.#mountContent(traits, true, true);
 

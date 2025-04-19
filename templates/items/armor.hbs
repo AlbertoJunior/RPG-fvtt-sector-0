@@ -1,0 +1,18 @@
+<form autocomplete="off">
+    {{> "systems/setor0OSubmundo/templates/items/common-equipment.hbs" this}}
+
+    <div class="S0-page S0-container">
+        <div class="form-group">
+            <label style="flex: 1;">
+                {{localize 'S0.Resistencia'}}:
+            </label>
+            <input style="flex: 1;" type="number" name="system.resistance" value="{{system.resistance}}" />
+        </div>
+
+        <label style="display: block; margin-block: 5px;">
+            {{localize 'S0.Descricao'}}:
+        </label>
+        <textarea style="resize: none;" name="system.description" type="text" maxlength="150"
+            rows="5">{{system.description}}</textarea>
+    </div>
+</form>

@@ -1,7 +1,7 @@
-import { selectCharacteristic } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { DefaultActions } from "../../utils/default-actions.mjs";
-import { ActorUpdater } from "../updater/actor-updater.mjs";
+import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
+import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { DefaultActions } from "../../../../utils/default-actions.mjs";
+import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 
 function selectLifeCharacteristic(event, addClassIfBlank) {
     let toUpdate = event.currentTarget;
@@ -48,7 +48,7 @@ const mapContextual = {
 }
 
 const mapCheck = {
-    virtue: async (actor, event) => {
+    virtue: async (actor, event) => {        
         const itemType = event.currentTarget.dataset.itemType;
         const characteristicKey = `system.virtudes.${itemType}.used`;
         selectCharacteristic(event.currentTarget);
@@ -80,6 +80,9 @@ const mapRoll = {
     },
     initiative: async (actor, event) => {
         DefaultActions.processInitiativeRoll(actor);
+    },
+    life: async (actor, event) => {
+        DefaultActions.processLifeRoll(actor);
     }
 }
 
