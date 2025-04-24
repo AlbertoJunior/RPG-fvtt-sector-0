@@ -83,6 +83,7 @@ button:enabled:hover {
     box-shadow: none;
 }
 
+textarea:read-only,
 button:disabled {
     cursor: default;
 }
@@ -332,10 +333,6 @@ img.S0-clickable:hover {
     margin: 0px;
 }
 
-.S0-container :is(h1, h2, h3, h4) :is(input:disabled, input:disabled:hover) {
-    border-color: var(--transparent-color);
-}
-
 .S0-container :is(input, textarea) {
     color: black;
     height: auto;
@@ -350,15 +347,7 @@ img.S0-clickable:hover {
     width: 18px;
 }
 
-.S0-container input:disabled {
-    background-color: var(--transparent-color);
-}
-
-.S0-container :is(input, textarea):disabled:hover {
-    border: 2px solid var(--secondary-color-alpha-50);
-}
-
-.S0-container :is(input:not(:disabled), textarea:not(:read-only)):is(:hover, :focus) {
+.S0-container :is(input:enabled, textarea:not(:read-only)):is(:hover, :focus) {
     border: 2px solid;
     color: var(--primary-color);
     background: var(--secondary-color-alpha-50);
@@ -368,10 +357,14 @@ img.S0-clickable:hover {
     color: var(--primary-color-alpha-50);
 }
 
-.S0-container select:disabled {
-    color: black;
+.S0-container :is(input:not([type="checkbox"]), textarea, select):disabled,
+.S0-container :is(input:not([type="checkbox"]), textarea, select):disabled:hover {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid;
+    border-radius: 0px;
     appearance: none;
-    padding-inline: 7px;
 }
 
 .S0-actor-sheet section {
@@ -477,10 +470,10 @@ img.S0-clickable:hover {
 
 .S0-enhancement {
     border-radius: var(--border-radius-medium);
-    background-color: rgb(127 127 127 / 34%);
+    background-color: var(--secondary-color-alpha-50);
     padding: 5px;
     box-shadow: 0 1px 2px var(--shadow-color);
-    border: 1px solid rgb(255 255 255 / 50%);
+    border: 1px solid var(--secondary-color-alpha-50);
 }
 
 :is(.S0-select, .S0-enhancement) option {
@@ -684,7 +677,7 @@ img.S0-clickable:hover {
     border-color: var(--primary-color-alpha);
 }
 
-.S0-dialog .S0-container :is(input, textarea):hover {
+.S0-dialog .S0-container :is(input, textarea):enabled:hover {
     box-shadow: 0 0 6px var(--primary-color);
 }
 
@@ -918,7 +911,8 @@ button.S0-roll-result:not([disabled]):hover {
     border-radius: 6px 6px 0px 0px;
     border-bottom: solid 1px var(--secondary-color-alpha);
     font-size: var(--font-size-10);
-    padding-block: 2px;
+    padding-top: 3px;
+    padding-bottom: 2px;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 }
@@ -1242,7 +1236,6 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-expand-animating,
 .window-app.S0-expand-animating {
-    overflow: hidden !important;
     transition: height 0.3s ease;
 }
 
@@ -1255,7 +1248,6 @@ button.S0-roll-result:not([disabled]):hover {
 /* #region DARK MODE */
 .window-content.S0-page-transparent {
     color: var(--primary-color);
-    background-color: var(--primary-color-alpha-50);
     background: url(/ui/denim075.png) repeat;
     margin: 0;
 }
@@ -1341,8 +1333,19 @@ button.S0-roll-result:not([disabled]):hover {
 /* #region ID EDITS */
 
 #effects-container {
-    padding-inline: 10px;
+    padding-block: 4px;
+    padding-left: 12px;
+    padding-right: 2px;
     margin-bottom: 10px;
+}
+
+#effects-container li {
+    padding-block: 4px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+#effects-container li:first-child {
+    border-top: 1px solid var(--secondary-color);
 }
 
 #effects-container.S0-expanded {

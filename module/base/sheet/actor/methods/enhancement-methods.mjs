@@ -12,6 +12,7 @@ import { EnhancementRepository } from "../../../../repository/enhancement-reposi
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
 import { ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
+import { ActorUtils } from "../../../../utils/actor-utils.mjs";
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
@@ -59,6 +60,13 @@ async function updateActorEnhancement(currentTarget, actor) {
         await removeEnhancementEffects(actor, enhancementOnSlot);
     }
 
+    const enhancementsIds = ActorUtils.getAllEnhancements(actor).some(enh => enh.id === enhancementId);
+    if (enhancementId !== '' && enhancementsIds) {
+        NotificationsUtils._error(`O Personagem já possui esse Aprimoramento: <u>${enhancementText}</u>`);
+        currentTarget.options[0].selected = true;
+        currentTarget.blur();
+        return;
+    }
     ActorUpdater._verifyAndUpdateActor(actor, key, characteristic);
 }
 
@@ -72,6 +80,20 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
 
     const effect = EnhancementRepository._getEnhancementEffectById(effectId, enhancementOnSlot.id);
 
+    if (effectId !== '') {
+        const alreadyHasEffect = ActorUtils.getAllEnhancements(actor)
+            .flatMap(o => Object.values(o.levels))
+            .map(e => e.id)
+            .some(ef => ef == effectId);
+
+        if (alreadyHasEffect) {
+            NotificationsUtils._error(`O Personagem já possui esse Efeito: <u>${effect.name}</u>`);
+            currentTarget.options[0].selected = true;
+            currentTarget.blur();
+            return;
+        }
+    }
+
     const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
     if (!effect || oldEffect.id != effect.id) {
         await ActiveEffectsUtils.removeActorEffect(actor, oldEffect.id)
@@ -82,7 +104,7 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
 
     await ActorUpdater._verifyAndUpdateActor(actor, `${enhancementOnSlotKey}.levels`, updatedCharacteristicLevels);
 
-    if (effect && effect.duration == EnhancementDuration.PASSIVE) {
+    if (effect?.duration == EnhancementDuration.PASSIVE) {
         toggleEnhancementEffectOnActor(effect, actor);
     }
 }
@@ -117,6 +139,9 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
     }
 
     const enhancement = await EnhancementRepository._getEnhancementFamilyByEffectId(effect.id);
+    if (!enhancement) {
+        return;
+    }
 
     const activeEffectData = ActiveEffectsUtils.createEffectData({
         name: effect.name,
@@ -160,19 +185,31 @@ async function removeNonePassivesEffects(actor) {
     }
 }
 
+async function removeAllEnhancementEffects(actor) {
+    const effects = actor.effects.filter(effect => ActiveEffectsUtils.getOriginType(effect) == ActiveEffectsOriginTypes.ENHANCEMENT);
+    await Promise.all(effects.map(effect => effect.delete()));
+}
+
+async function activePassiveEffects(actor) {
+    const passiveEffects = ActorUtils.getAllEnhancements(actor)
+        .flatMap(e => Object.values(e.levels))
+        .filter(ef => ef.id !== '' && ef.duration == EnhancementDuration.PASSIVE);
+
+    await Promise.all(passiveEffects.map(effect => toggleEnhancementEffectOnActor(effect, actor)));
+}
+
 export const enhancementHandleMethods = {
     [OnEventType.REMOVE]: async (actor, event) => {
-        removeNonePassivesEffects(actor);
+        await removeAllEnhancementEffects(actor);
+        await activePassiveEffects(actor);
     },
     [OnEventType.CHANGE]: async (actor, event) => {
         const currentTarget = event.currentTarget;
         const type = currentTarget.dataset.type;
 
         if (type == 'enhancement') {
-            TODO('verificar se não está duplicado')
             updateActorEnhancement(currentTarget, actor);
         } else if (type == 'level') {
-            TODO('verificar se não está duplicado')
             updateActorLevelEnhancement(currentTarget, actor);
         } else {
             NotificationsUtils._warning(`enhancement-methods:change:type [${type}] is not mapped`);

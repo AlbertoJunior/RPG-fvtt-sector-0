@@ -10,7 +10,7 @@ export class LanguageRepository {
         { id: 'ptisyan', label: 'Ptisyan', district: 'Ptitsy', color: '#548135' },
         { id: 'tokojhae', label: 'Tokojhae', district: 'Tokojirami', color: '#7030a0' },
         { id: 'tokuma', label: 'Tokumá', district: 'Tokojirami', color: '#7030a0' },
-        { id: 'Zuarur', label: 'Zu\'arur', district: 'Alfiran', color: '#262626' },
+        { id: 'zuarur', label: 'Zu\'arur', district: 'Alfiran', color: '#262626' },
     ];
 
     static #loadedFromPack = [];

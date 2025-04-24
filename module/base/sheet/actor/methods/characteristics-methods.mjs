@@ -41,7 +41,7 @@ async function handleOtherwise(actor, systemCharacteristic, characteristicId, le
         }
     );
 
-    if (characteristicId == 'vigor') {
+    if (characteristicId == CharacteristicType.ATTRIBUTES.STAMINA.id) {
         params.push(
             {
                 systemCharacteristic: CharacteristicType.VITALITY.TOTAL,

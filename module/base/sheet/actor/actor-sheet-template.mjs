@@ -168,7 +168,7 @@ class Setor0ActorSheet extends ActorSheet {
 
         const parent = html.parent()[0];
         parent.classList.toggle('S0-page-transparent', inDarkMode);
-        parent.style.margin = '0';
+        parent.style.margin = '0px';
         parent.style.padding = '0px 2px 0px 12px';
         parent.style.overflowY = 'scroll';
 
@@ -256,8 +256,9 @@ class Setor0ActorSheet extends ActorSheet {
 
         if (typeof isExpanded === 'boolean') {
             effectsContainer.toggleClass('S0-expanded', isExpanded);
-            if (!isExpanded)
+            if (!isExpanded) {
                 HtmlJsUtils.flipClasses(html.find('#effects-container-icon')[0], 'fa-chevron-up', 'fa-chevron-down');
+            }
         }
 
         if (!this.defaultHeight || isExpanded === undefined) {
@@ -266,7 +267,6 @@ class Setor0ActorSheet extends ActorSheet {
                 const windowElem = content.closest(".window-app");
                 this.defaultHeight = windowElem?.offsetHeight;
 
-                // Inicializa estado com base na classe atual
                 this.isExpandedEffects = effectsContainer[0].classList.contains('S0-expanded');
             });
         }
@@ -318,9 +318,8 @@ class Setor0ActorSheet extends ActorSheet {
 
 export async function actorHtmlTemplateRegister() {
     await configurePartialTemplates();
-    Actors.unregisterSheet("core", ActorSheet);
-    Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
-    console.log('-> Modelos de dados e fichas registrados');
+    await Actors.unregisterSheet("core", ActorSheet);
+    await Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
 }
 
 async function configurePartialTemplates() {
@@ -365,7 +364,7 @@ async function configurePartialTemplates() {
 
     const errors = results.filter(r => r.Status !== "Sucesso").length;
     if (errors > 0) {
-        console.error(`Erros [${errors}] ao carregar partials.`)
+        console.error(`Erros [${errors}] ao carregar partials.`);
     }
     console.table(results);
 }

@@ -40,7 +40,7 @@ export class ActorRollDialog {
     }
 
     static async #mountContent(actor) {
-        const attributesOptions = Object.keys(getObject(actor, CharacteristicType.ATTRIBUTE))
+        const attributesOptions = Object.keys(getObject(actor, CharacteristicType.ATTRIBUTES))
             .map(attr => {
                 return {
                     label: game.i18n.localize(keyJsonToKeyLang(attr)),

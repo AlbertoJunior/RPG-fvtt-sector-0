@@ -1,7 +1,5 @@
 import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
 import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/element-creator.mjs";
-import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
-import { LanguageRepository } from "../../../../repository/language-repository.mjs";
 import { getActorFlag, getObject, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
@@ -10,8 +8,6 @@ import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 import { characteristicOnClick } from "./characteristics-methods.mjs";
 import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
-import { AttributeRepository } from "../../../../repository/attribute-repository.mjs";
-import { AbilityRepository } from "../../../../repository/ability-repository.mjs";
 import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 
@@ -110,48 +106,7 @@ export class SheetMethods {
     }
 
     static _createDynamicSheet(html, isEditable) {
-        SheetMethods.#createAttributes(html, isEditable);
-        SheetMethods.#createRepertory(html, isEditable);
-        SheetMethods.#createVirtues(html, isEditable);
-        SheetMethods.#createAbilities(html, isEditable);
-        SheetMethods.#createFame(html, isEditable);
-        SheetMethods.#createLanguages(html, isEditable);
-        SheetMethods.#createEnhancements(html, isEditable);
-    }
-
-    static #createAttributes(html, isEditable) {
-        const characteristics = AttributeRepository._getItems();
-        const container = html.find('#atributosContainer');
-        this.#create(container, characteristics, CharacteristicType.ATTRIBUTE.id, 5, isEditable, true, true);
-    }
-
-    static #createRepertory(html, isEditable) {
-        const characteristics = [
-            { id: 'aliados', label: 'S0.Aliados' },
-            { id: 'arsenal', label: 'S0.Arsenal' },
-            { id: 'informantes', label: 'S0.Informantes' },
-            { id: 'recursos', label: 'S0.Recursos' },
-            { id: 'superequipamentos', label: 'S0.SuperEquipamentos' }
-        ];
-
-        const container = html.find('#repertorioContainer');
-        this.#create(container, characteristics, CharacteristicType.REPERTORY.id, 5, isEditable, false, false);
-    }
-
-    static #createVirtues(html, isEditable) {
-        const characteristics = [
-            { id: 'consciencia', label: 'S0.Consciencia' },
-            { id: 'perseveranca', label: 'S0.Perseveranca' },
-            { id: 'quietude', label: 'S0.Quietude' }
-        ];
-        const container = html.find('#virtudesContainer');
-        this.#create(container, characteristics, CharacteristicType.VIRTUES.id, 5, isEditable, false, true);
-    }
-
-    static #createAbilities(html, isEditable) {
-        const characteristics = AbilityRepository._getItems();
-        const container = html.find('#habilidadesContainer');
-        this.#create(container, characteristics, CharacteristicType.ABILITY.id, 5, isEditable, true, false);
+        this.#createFame(html, isEditable);
     }
 
     static #createFame(html, isEditable) {
@@ -164,42 +119,6 @@ export class SheetMethods {
         ].forEach(char => {
             const element = ElementCreatorJQuery._createCharacteristicContainer(
                 char, CharacteristicType.SIMPLE.id, char.amount, isEditable, char.addLast, char.firstSelected
-            );
-            container.append(element);
-        });
-    }
-
-    static #createLanguages(html, isEditable) {
-        const container = html.find('#linguasContainer');
-        const languages = LanguageRepository._getItems();
-
-        languages.forEach(lang => {
-            const element = ElementCreatorJQuery._createCharacteristicContainer(
-                lang, CharacteristicType.LANGUAGE.id, 1, isEditable, false, lang.checked || false, OnEventType.ADD
-            );
-            container.append(element);
-        });
-    }
-
-    static #createEnhancements(html, isEditable) {
-        const container = html.find('.S0-enhancement select');
-        const filteredElements = container.filter((index, element) => element.dataset.type === 'enhancement');
-        const enhancements = EnhancementRepository._getItems();
-
-        filteredElements.each((index, selectEnhancement) => {
-            $(selectEnhancement).append(ElementCreatorJQuery._createOption(undefined, '', ''));
-
-            const options = enhancements.map(enhance =>
-                ElementCreatorJQuery._createOption(enhance.id, enhance.name, enhance.value)
-            );
-            $(selectEnhancement).append(options);
-        });
-    }
-
-    static #create(container, characteristics, type, amount, isEditable, addLast, firstSelected) {
-        characteristics.forEach(characteristic => {
-            const element = ElementCreatorJQuery._createCharacteristicContainer(
-                characteristic, type, amount, isEditable, addLast, firstSelected
             );
             container.append(element);
         });

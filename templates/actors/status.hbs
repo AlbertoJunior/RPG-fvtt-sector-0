@@ -228,7 +228,7 @@
 
     <ul id="effects-container" class="S0-container S0-container-contract S0-expanded">
         {{#each effects as |item index|}}
-        <li style="padding-block: 4px; border-bottom: 1px solid var(--secondary-color)">
+        <li>
             {{ item.origin }}: {{ item.name }}
             <a class="S0-icon-expand" data-action="remove" data-characteristic="effects" data-type="single"
                 data-item-index="{{ index }}">

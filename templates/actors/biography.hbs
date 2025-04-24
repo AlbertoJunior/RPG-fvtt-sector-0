@@ -18,7 +18,18 @@
                 {{actorValues actor 'actual_languages'}}/{{actorValues actor 'total_languages'}}
             </label>
         </h2>
-        <div id="linguasContainer" class="S0-container-4-column"></div>
+        <div id="linguasContainer" class="S0-container-4-column">
+            {{#each (fetchRepository 'language')}}
+            <div class="S0-characteristic-container" id="{{id}}">
+                <label title="{{district}}">
+                    {{label}}
+                </label>
+                <div class="S0-characteristic {{#if ../editable}}S0-clickable{{/if}}" data-action="add"
+                    data-characteristic="linguas">
+                </div>
+            </div>
+            {{/each}}
+        </div>
     </div>
 
     <div class="S0-container">

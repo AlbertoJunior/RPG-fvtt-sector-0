@@ -34,7 +34,7 @@ export class EnhancementRepository {
     }
 
     static _getItems() {
-        return [... this.#enhancements, ... this.#loadedFromPack];
+        return [... this.#enhancements, ... this.#loadedFromPack].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     static _getEnhancementById(enhancementId) {

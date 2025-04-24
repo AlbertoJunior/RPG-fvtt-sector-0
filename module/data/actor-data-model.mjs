@@ -60,6 +60,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 habilidades: new ActorAbilities(),
                 iniciativa: new NumberField({ integer: true, initial: 0 }),
                 movimento: new NumberField({ integer: true, initial: 0 }),
+                vitalidade: new NumberField({ integer: true, initial: 0 }),
             })
         };
     }

@@ -1,12 +1,9 @@
-import { getObject, TODO } from "../../../../scripts/utils/utils.mjs";
 import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
-import { CreateRollableTestDialog } from "../../../creators/dialog/create-roll-test-dialog.mjs";
-import { NotificationsUtils } from "../../../creators/message/notifications.mjs";
-import { EquipmentCharacteristicType } from "../../../enums/equipment-enums.mjs";
 import { OnEventType, OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
+import { handlerEquipmentMenuRollEvents } from "./methods/equipment-menu-roll-methods.mjs";
 
 export class EquipmentSheet extends ItemSheet {
     #mapEvents = {
@@ -29,38 +26,7 @@ export class EquipmentSheet extends ItemSheet {
             }
         },
         item_roll: handlerEquipmentItemRollEvents,
-        menu_roll: {
-            [OnEventType.ADD]: async (item, event) => {
-                const onConfirm = async (rollable) => {
-                    if (!rollable.name) {
-                        NotificationsUtils._error("O Teste precisa de um nome");
-                        return;
-                    }
-
-                    const current = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
-                    current.push(rollable);
-
-                    const characteristicToUpdate = {
-                        [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: current
-                    }
-
-                    if (current.length == 1) {
-                        characteristicToUpdate[EquipmentCharacteristicType.POSSIBLE_TESTS.system] = rollable.id;
-                    }
-
-                    await item.update(characteristicToUpdate);
-                };
-
-                CreateRollableTestDialog._open(null, onConfirm);
-            },
-            [OnEventType.VIEW]: async (item, event) => {
-                const containerList = event.currentTarget.parentElement.parentElement.parentElement.querySelector('#rollable-tests-list');
-                HtmlJsUtils.flipClasses(event.currentTarget.children[0], 'fa-chevron-up', 'fa-chevron-down');
-                const expandResult = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: this.defaultHeight, maxHeight: 640 });
-                this.isExpandedTests = expandResult.isExpanded;
-                this.newHeight = expandResult.newHeight;
-            },
-        }
+        menu_roll: handlerEquipmentMenuRollEvents
     };
 
     constructor(...args) {
@@ -166,19 +132,14 @@ export class EquipmentSheet extends ItemSheet {
             if (this.isExpandedTests) {
                 content.style.height = `${Math.max(this.defaultHeight, this.newHeight)}px`
             }
-
-            const windowElem = content.closest(".window-app");
-            const height = windowElem?.offsetHeight;
-            console.log("Altura final real da ficha:", height);
         });
     }
 }
 
 export async function itemsHtmlTemplateRegister() {
     await configurePartialTemplates();
-
-    Items.unregisterSheet("core", ItemSheet);
-    Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
+    await Items.unregisterSheet("core", ItemSheet);
+    await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
         types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
         makeDefault: true
     });

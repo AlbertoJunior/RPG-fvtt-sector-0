@@ -17,6 +17,6 @@ export class AbilityRepository {
     ];
 
     static _getItems() {
-        return [... this.#characteristics];
+        return [... this.#characteristics].sort((a, b) => a.label.localeCompare(b.label));
     }
 }

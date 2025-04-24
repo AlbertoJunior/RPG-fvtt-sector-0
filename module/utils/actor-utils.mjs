@@ -3,16 +3,14 @@ import { getObject } from "../../scripts/utils/utils.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
-        const system = actor.system;
-        const base = system.atributos[attr] || 0;
-        const bonus = system.bonus.atributos[attr] || 0;
+        const base = getObject(actor, CharacteristicType.ATTRIBUTES)[attr] || 0;
+        const bonus = getObject(actor, CharacteristicType.BONUS.ATTRIBUTES)[attr] || 0;
         return base + bonus;
     }
 
     static getAbilityValue(actor, ability) {
-        const system = actor.system;
-        const base = system.habilidades[ability] || 0;
-        const bonus = system.bonus.habilidades[ability] || 0;
+        const base = getObject(actor, CharacteristicType.ABILITY)[ability] || 0;
+        const bonus = getObject(actor, CharacteristicType.BONUS.ABILITY)[ability] || 0;
         return base + bonus;
     }
 
@@ -38,37 +36,34 @@ export class ActorUtils {
     }
 
     static calculatePenalty(actor) {
-        const system = actor.system;
-        const stamina = system.atributos.vigor;
-        const damage = system.vitalidade.dano_letal;
-        const calculatedMinor = Math.max(damage - stamina, 0);
-        return Math.min(calculatedMinor, 4);
+        const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA);
+        const letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE);
+        const calculatedMax = Math.max(letalDamage - stamina, 0);
+        return Math.min(calculatedMax, 4);
     }
 
     static calculateVitalityByUpAttribute(actor, level) {
-        const system = actor.system;
         const value = level;
-        const bonus = system.bonus.vitalidade || 0;
+        const bonus = getObject(actor, CharacteristicType.BONUS.VITALITY);
         return 5 + value + bonus;
     }
 
     static calculateMovimentPoints(actor) {
-        const dexValue = this.getAttributeValue(actor, 'destreza');
+        const dexValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.DEXTERITY.id);
         const athleticsValue = this.getAbilityValue(actor, 'atletismo');
         const bonusPM = getObject(actor, CharacteristicType.BONUS.PM) || 0;
         return 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
     }
 
     static calculateInitiative(actor) {
-        const dexValue = this.getAttributeValue(actor, 'destreza');
-        const perValue = this.getAttributeValue(actor, 'percepcao');
+        const dexValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.DEXTERITY.id);
+        const perValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.PERCEPTION.id);
         const bonusInitiative = getObject(actor, CharacteristicType.BONUS.INITIATIVE) || 0;
         return bonusInitiative + Math.floor((dexValue + perValue) / 2);
     }
 
     static calculateTotalLanguages(actor) {
-        const abilities = getObject(actor, CharacteristicType.ABILITY);
-        const streetWise = abilities.manha;
+        const streetWise = getObject(actor, CharacteristicType.ABILITY.STREETWISE);
         if (streetWise == 0) {
             return 1;
         }
@@ -87,7 +82,11 @@ export class ActorUtils {
     }
 
     static getToken(actor) {
-        return canvas.tokens.placeables.find(t => t.actor.id === actor.id);
+        return canvas.tokens.placeables.find(t => t.actor?.id === actor.id);
+    }
+
+    static getAllEnhancements(actor) {
+        return Object.values(getObject(actor, CharacteristicType.ENHANCEMENT_ALL)).filter(enhancement => enhancement.id !== '') || [];
     }
 
     static #findEnhancementOnActorById(selectedId, enhancements) {
