@@ -1,4 +1,6 @@
-import { ActorUtils } from "../../../scripts/utils/actor.mjs";
+import { getObject } from "../../../scripts/utils/utils.mjs";
+import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
+import { ActorUtils } from "../../utils/actor-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
@@ -66,8 +68,8 @@ export class RollAttribute {
         const params = {
             ...this.#mountParamsByRollable(rollable),
             weapon: {
-                damage: weapon.system.damage,
-                true_damage: weapon.system.true_damage
+                damage: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
+                true_damage: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE)
             }
         };
         return this.roll(actor, params);

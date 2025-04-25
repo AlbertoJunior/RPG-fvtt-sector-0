@@ -1,23 +1,24 @@
-import { TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/equipment/actor-equipment.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
-import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog copy.mjs";
-import { EquipmentType } from "../../../../enums/equipment-enums.mjs";
+import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog.mjs";
+import { EquipmentCharacteristicType, EquipmentType } from "../../../../enums/equipment-enums.mjs";
+import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 
 export const handlerEquipmentEvents = {
-    add: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),
-    remove: async (actor, event) => EquipmentHandleEvents.handleRemove(actor, event),
-    edit: async (actor, event) => EquipmentHandleEvents.handleEdit(actor, event),
-    check: async (actor, event) => EquipmentHandleEvents.handleCheck(actor, event),
-    view: async (actor, event) => EquipmentHandleEvents.handleView(actor, event),
-    chat: async (actor, event) => EquipmentHandleEvents.handleChat(actor, event),
-    roll: async (actor, event) => EquipmentHandleEvents.handleRoll(actor, event),
+    [OnEventType.ADD]: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),
+    [OnEventType.REMOVE]: async (actor, event) => EquipmentHandleEvents.handleRemove(actor, event),
+    [OnEventType.EDIT]: async (actor, event) => EquipmentHandleEvents.handleEdit(actor, event),
+    [OnEventType.CHECK]: async (actor, event) => EquipmentHandleEvents.handleCheck(actor, event),
+    [OnEventType.VIEW]: async (actor, event) => EquipmentHandleEvents.handleView(actor, event),
+    [OnEventType.CHAT]: async (actor, event) => EquipmentHandleEvents.handleChat(actor, event),
+    [OnEventType.ROLL]: async (actor, event) => EquipmentHandleEvents.handleRoll(actor, event),
 }
 
 class EquipmentHandleEvents {
@@ -63,11 +64,11 @@ class EquipmentHandleEvents {
         }
 
         ConfirmationDialog.open({
-            message: "Usar o Item?",
+            message: localize('Pergunta_Usar_Item'),
             onConfirm: () => {
-                const actualValue = equipment.system.quantity;
+                const actualValue = getObject(equipment, EquipmentCharacteristicType.QUANTITY);
                 const newValue = Math.max(0, actualValue - 1);
-                EquipmentUpdater.updateEquipmentFlags(equipment, "quantity", newValue);
+                EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.QUANTITY, newValue);
             }
         });
     }
@@ -89,15 +90,15 @@ class EquipmentHandleEvents {
 
     static async #lockUnlockBagItems(actor, isUnlock) {
         const equipments = ActorEquipmentUtils.getActorEquipments(actor);
-        equipments.forEach(async (equip) => {
-            EquipmentUpdater.updateEquipmentFlags(equip, 'editable', isUnlock);
+        equipments.forEach(async (equipment) => {
+            EquipmentUpdater.updateEquipmentFlags(equipment, 'editable', isUnlock);
         });
     }
 
     static async #lockUnlockEquippedItems(actor, isUnlock) {
         const equipments = ActorEquipmentUtils.getActorEquippedItems(actor);
-        equipments.forEach(async (equip) => {
-            EquipmentUpdater.updateEquipmentFlags(equip, 'editable', isUnlock);
+        equipments.forEach(async (equipment) => {
+            EquipmentUpdater.updateEquipmentFlags(equipment, 'editable', isUnlock);
         });
     }
 
@@ -121,11 +122,11 @@ class EquipmentHandleEvents {
             return;
         }
 
-        const actualValue = equipment.system.quantity;
+        const actualValue = getObject(equipment, EquipmentCharacteristicType.QUANTITY);
 
         UpdateEquipmentQuantityDialog.updateQuantityDialog(actualValue, (value) => {
             const newValue = Math.max(0, actualValue + value);
-            EquipmentUpdater.updateEquipmentFlags(equipment, "quantity", newValue);
+            EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.QUANTITY, newValue);
         });
     }
 
@@ -242,13 +243,13 @@ class EquipmentHandleEvents {
         if (!item) {
             return;
         }
-
-        const defaultTestId = item.system.default_test;
+    
+        const defaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
         if (!defaultTestId) {
             return;
-        }
+        }        
 
-        const rollTest = item.system.possible_tests.find(test => test.id == defaultTestId);
+        const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS).find(test => test.id == defaultTestId);
         if (!rollTest) {
             return;
         }

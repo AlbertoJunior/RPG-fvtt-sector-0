@@ -2,14 +2,18 @@ import { ActorUpdater } from "../../base/updater/actor-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
 
 export class ActiveEffectsUtils {
+    static KEYS = {
+        TINT_TOKEN: "texture.tint"
+    }
+
     static createEffectData(params) {
         const {
             name = "",
             description = "",
             origin = "",
-            img = "icons/svg/aura.svg",
+            img,
             tint,
-            disabled,
+            disabled = false,
             duration,
             statuses = [],
             changes = [],
@@ -40,8 +44,20 @@ export class ActiveEffectsUtils {
         return activeEffectData;
     }
 
+    static getFlags(activeEffect) {
+        return activeEffect.flags[SYSTEM_ID] || {};
+    }
+
+    static getOriginType(activeEffect) {
+        return this.getFlags(activeEffect).originType;
+    }
+
+    static getOriginId(activeEffect) {
+        return this.getFlags(activeEffect).originId;
+    }
+
     static async addEffect(actor, activeEffectData) {
-        await ActorUpdater.addDocuments("ActiveEffect", [activeEffectData]);
+        await ActorUpdater.addEffect(actor, [...activeEffectData]);
     }
 
     static async removeActorEffect(actor, effectId) {
@@ -64,7 +80,7 @@ export class ActiveEffectsUtils {
     }
 
     static async removeActorEffectByOriginId(actor, originId) {
-        const effect = actor.effects.find(e => e.getFlag(SYSTEM_ID, "originId") === originId);
+        const effect = actor.effects.find(e => this.getOriginId(e) === originId);
 
         if (effect) {
             await effect.delete();
@@ -73,8 +89,8 @@ export class ActiveEffectsUtils {
 
     static getEffectByOriginId(actor, originId, originType) {
         return actor.effects.find(e => {
-            const origin = e.getFlag(SYSTEM_ID, "originId");
-            const type = e.getFlag(SYSTEM_ID, "originType");
+            const origin = this.getOriginId(e);
+            const type = this.getOriginType(e);
             return origin === originId && type === originType;
         });
     }

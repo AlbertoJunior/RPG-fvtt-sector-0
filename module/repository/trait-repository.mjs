@@ -546,11 +546,8 @@ export class TraitRepository {
     }
 
     static _getItemsByType(type) {
-        if (type === 'good') {
-            return this._getGoodTraits();
-        } else {
-            return this._getBadTraits();
-        }
+        const items = type === 'good' ? this._getGoodTraits() : this._getBadTraits();
+        return items.sort((a, b) => a.xp - b.xp || a.name.localeCompare(b.name));
     }
 
     static _getItemByTypeAndId(type, traitId) {

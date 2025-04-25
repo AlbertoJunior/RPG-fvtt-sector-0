@@ -1,3 +1,30 @@
+export const EquipmentCharacteristicType = Object.freeze({
+    NAME: { id: 'name', system: `system.name` },
+    ID: { id: 'id', system: `system.id` },
+    DESCRIPTION: { id: 'description', system: `system.description` },
+    TYPE: { id: 'type', system: `system.type` },
+    EQUIPPED: { id: 'equipped', system: `system.equipped` },
+    QUANTITY: { id: 'quantity', system: `system.quantity` },
+    RESISTANCE: { id: 'resistance', system: `system.resistance` },
+    ACTUAL_RESISTANCE: { id: 'actual_resistance', system: `system.actual_resistance` },
+    EFFECTS: { id: 'effects', system: `system.effects` },
+    ACCELERATION: { id: 'acceleration', system: `system.acceleration` },
+    SPEED: { id: 'speed', system: `system.speed` },
+    HAND: { id: 'hand', system: `system.hand` },
+    OCCULTABILITY: { id: 'occultability', system: `system.occultability` },
+    DAMAGE: { id: 'damage', system: `system.damage` },
+    TRUE_DAMAGE: { id: 'true_damage', system: `system.true_damage` },
+    DAMAGE_TYPE: { id: 'damage_type', system: `system.damage_type` },
+    CAPACITY: { id: 'capacity', system: `system.capacity` },
+    CADENCE: { id: 'cadence', system: `system.cadence` },
+    SHORT_RANGE: { id: 'short_range', system: `system.short_range` },
+    MEDIUM_RANGE: { id: 'medium_range', system: `system.medium_range` },
+    LONG_RANGE: { id: 'long_range', system: `system.long_range` },
+    SPECIAL: { id: 'special', system: `system.special` },
+    POSSIBLE_TESTS: { id: 'possible_tests', system: `system.possible_tests` },
+    DEFAULT_TEST: { id: 'default_test', system: `system.default_test` }
+});
+
 export const EquipmentType = Object.freeze({
     UNKNOWM: 0,
     ARMOR: 1,

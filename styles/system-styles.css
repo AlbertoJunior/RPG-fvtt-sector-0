@@ -7,23 +7,44 @@ body {
 }
 
 :root {
-    --focus-color: rgba(255, 250, 190, 1);
     --primary-color: rgba(255, 220, 0, 1);
     --primary-color-alpha: rgba(255, 220, 0, 0.8);
     --primary-color-alpha-50: rgba(255, 220, 0, 0.5);
+    --on-primary-color: rgba(20, 20, 20, 1);
+    --on-primary-alternate-color: rgba(20, 20, 20, 1);
+
     --secondary-color: rgba(65, 0, 130, 1);
     --secondary-color-alpha: rgba(65, 0, 130, 0.8);
     --secondary-color-alpha-50: rgba(65, 0, 130, 0.5);
-    --light-secondary-color-alpha-50: rgba(155, 30, 255, 0.5);
-    --selected-color-hover: rgba(255, 0, 0, 0.6);
-    --deletable-color-hover: rgba(255, 0, 0, 0.8);
-    --sheet-color: rgba(255, 255, 255, 1);
-    --transparent-color: rgba(255, 255, 255, 0);
+    --on-secondary-color: rgba(250, 250, 250, 1);
+    --on-secondary-alternate-color: var(--primary-color);
+
+    --tertiary-color: rgb(130, 0, 255);
+    --tertiary-color-alpha: rgba(130, 0, 255, 0.8);
+    --tertiary-color-alpha-50: rgba(130, 0, 255, 0.5);
+    --on-tertiary-color: rgba(250, 250, 250, 1);
+    --on-tertiary-alternate-color: var(--primary-color);
+
+    --color-gray: rgba(80, 80, 80, 1);
+    --color-gray-alpha: rgba(80, 80, 80, 0.8);
+    --color-black-alpha: rgba(0, 0, 0, 0.8);
+    --color-black-alpha-50: rgba(0, 0, 0, 0.5);
+    --alternate-black-color: rgba(50, 50, 50, 1);
+
+    --color-red: rgba(240, 10, 10, 1);
+    --color-red-alpha: rgba(240, 10, 10, 0.8);
+    --color-red-alpha-50: rgba(240, 10, 10, 0.5);
+
+    --focus-color: rgba(255, 250, 190, 1);
+
     --shadow-color: rgba(0, 0, 0, 0.2);
     --shadow-color-30: rgba(0, 0, 0, 0.3);
     --shadow-hover-color: rgba(130, 0, 255, 0.8);
-    --alternate-black-color: rgba(50, 50, 50, 1);
-    --color-gray-alpha: rgba(80, 80, 80, 0.8);
+
+    --light-secondary-color-alpha-50: rgba(155, 30, 255, 0.5);
+    --sheet-color: rgba(255, 255, 255, 1);
+    --transparent-color: rgba(255, 255, 255, 0);
+
     --color-checkbox-checked: var(--secondary-color);
 
     --whisper-color-alpha-50: rgba(20, 20, 60, 0.5);
@@ -56,12 +77,13 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
-    color: black;
+button:enabled:hover {
+    color: var(--on-primary-color);
     background-color: var(--primary-color);
     box-shadow: none;
 }
 
+textarea:read-only,
 button:disabled {
     cursor: default;
 }
@@ -81,11 +103,19 @@ section {
 
 :is(h2, h3) a {
     font-size: small;
-    margin-inline: 3px
+    margin-inline: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    vertical-align: middle;
+    transition: text-shadow 0.2s ease-in-out;
 }
 
 :is(h2, h3) a:hover {
-    text-shadow: 0 0 8px var(--shadow-hover-color);
+    text-shadow: 0 0 6px var(--shadow-hover-color);
 }
 
 /* #endregion */
@@ -108,13 +138,8 @@ section {
     background-size: 40px;
 }
 
-select:disabled {
-    appearance: none;
-    color: var(--color-text-dark-primary);
-}
-
-:is(select, input) :enabled:hover {
-    box-shadow: 0 0 8px var(--shadow-hover-color);
+:is(select, input):enabled:hover {
+    box-shadow: 0 0 6px var(--shadow-hover-color);
 }
 
 .roll.d10.S0-d10 {
@@ -170,22 +195,33 @@ select:disabled {
     box-shadow: 0 0 3px var(--primary-color-alpha);
 }
 
-.dialog .dialog-buttons .cancel,
-.dialog .dialog-buttons .confirm {
+.dialog .dialog-buttons :is(.cancel, .confirm, button.default) {
     background-color: var(--secondary-color-alpha);
-    transition: background-color 0.3s;
     box-shadow: 0 0 6px var(--shadow-color);
+    border-color: var(--secondary-color-alpha);
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.dialog .dialog-buttons .cancel:hover,
-.dialog .dialog-buttons .confirm:hover {
+.dialog .dialog-buttons :is(.cancel, .confirm):hover {
     background-color: var(--primary-color-alpha);
+    box-shadow: 0 0 6px var(--primary-color-alpha-50);
+    border-color: var(--primary-color-alpha);
+}
+
+.dialog .dialog-buttons button.default {
+    flex: 2;
+    max-width: 55%;
 }
 
 .form-group hr {
     width: 100%;
     margin-top: 4px;
     flex: none;
+}
+
+form .form-group,
+form .form-group-stacked {
+    column-gap: 10px;
 }
 
 img.S0-clickable {
@@ -197,7 +233,7 @@ img.S0-clickable {
 
 img.S0-clickable:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 8px var(--shadow-hover-color);
+    box-shadow: 0 0 6px var(--shadow-hover-color);
     background-color: var(--secondary-color);
 }
 
@@ -247,7 +283,6 @@ img.S0-clickable:hover {
 }
 
 /* #endregion */
-
 :is(.S0-container, .S0-page) :is(label, strong) {
     text-shadow: 0 1px 4px var(--shadow-color-30);
 }
@@ -259,6 +294,10 @@ img.S0-clickable:hover {
     border-radius: var(--border-radius-large);
     background-color: var(--secondary-color-alpha-50);
     box-shadow: 0 1px 4px 1px var(--secondary-color-alpha-50);
+}
+
+.S0-container .S0-container {
+    color: var(--on-secondary-alternate-color);
 }
 
 .S0-container-2-column {
@@ -294,12 +333,7 @@ img.S0-clickable:hover {
     margin: 0px;
 }
 
-.S0-container :is(h1, h2, h3, h4) :is(input:disabled, input:disabled:hover) {
-    border-color: var(--transparent-color);
-}
-
-.S0-container input,
-.S0-container textarea {
+.S0-container :is(input, textarea) {
     color: black;
     height: auto;
     padding: 2px 6px;
@@ -308,27 +342,29 @@ img.S0-clickable:hover {
     transition: background-color 0.3s ease-in-out, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.S0-container input:disabled {
-    background-color: var(--transparent-color);
+.S0-container input[type="checkbox"] {
+    height: 18px;
+    width: 18px;
 }
 
-.S0-container input:disabled:hover,
-.S0-container textarea:disabled:hover {
-    border: 2px solid var(--secondary-color-alpha-50);
-}
-
-.S0-container input:not(:disabled):hover,
-.S0-container input:not(:disabled):focus,
-.S0-container textarea:not(:read-only):hover,
-.S0-container textarea:not(:read-only):focus {
+.S0-container :is(input:enabled, textarea:not(:read-only)):is(:hover, :focus) {
     border: 2px solid;
     color: var(--primary-color);
     background: var(--secondary-color-alpha-50);
 }
 
-.S0-container input::placeholder,
-.S0-container textarea::placeholder {
+.S0-container :is(input, textarea)::placeholder {
     color: var(--primary-color-alpha-50);
+}
+
+.S0-container :is(input:not([type="checkbox"]), textarea, select):disabled,
+.S0-container :is(input:not([type="checkbox"]), textarea, select):disabled:hover {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid;
+    border-radius: 0px;
+    appearance: none;
 }
 
 .S0-actor-sheet section {
@@ -372,7 +408,7 @@ img.S0-clickable:hover {
     font-size: var(--font-size-13);
     background-color: var(--secondary-color-alpha);
     width: 130px;
-    color: white;
+    color: var(--on-secondary-color);
     border-radius: var(--border-radius-small);
     box-shadow: 0px 1px 3px 0px var(--shadow-color);
     transition: background-color 0.3s ease-in-out, box-shadow 0.2s ease;
@@ -434,18 +470,23 @@ img.S0-clickable:hover {
 
 .S0-enhancement {
     border-radius: var(--border-radius-medium);
-    background-color: rgb(127 127 127 / 34%);
+    background-color: var(--secondary-color-alpha-50);
     padding: 5px;
     box-shadow: 0 1px 2px var(--shadow-color);
-    border: 1px solid rgb(255 255 255 / 50%);
+    border: 1px solid var(--secondary-color-alpha-50);
 }
 
-.S0-select option,
-.S0-select optgroup,
-.S0-enhancement option,
-.S0-enhancement optgroup {
+:is(.S0-select, .S0-enhancement) option {
     color: white;
-    background: var(--secondary-color);
+    background-color: var(--secondary-color);
+}
+
+:is(.S0-select, .S0-enhancement) optgroup {
+    color: black;
+    background-color: var(--primary-color);
+}
+
+:is(.S0-select, .S0-enhancement) :is(option, optgroup) {
     transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -466,36 +507,38 @@ img.S0-clickable:hover {
     margin-left: 6px;
 }
 
-.S0-select {
+:is(.S0-select, .S0-inner-select) {
     width: 100%;
+    border: 2px solid;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.S0-select {
+    padding: 3px 4px;
     margin: 0px;
     text-align: center;
     font-weight: bold;
     color: var(--primary-color-alpha);
-    border: 2px solid var(--shadow-color);
-    padding: 3px 4px;
-    border-radius: var(--border-radius-medium);
     background-color: var(--shadow-color-30);
+    border-color: var(--shadow-color);
+    border-radius: var(--border-radius-medium);
     box-shadow: 0 1px 4px 1px var(--shadow-color);
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .S0-inner-select {
-    width: 100%;
     text-align: left;
     font-weight: normal;
     color: black;
     background-color: rgba(215, 215, 215, 0.2);
-    border-width: 2px;
+    border-color: var(--secondary-color-alpha-50);
     border-radius: var(--border-radius-small);
     box-shadow: inset 0 0 5px 0px rgba(40, 40, 40, 0.6);
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-:is(.S0-select, .S0-inner-select):not(:disabled):is(:hover, :focus) {
+:is(.S0-select, .S0-inner-select):enabled:is(:hover, :focus) {
     background-color: var(--secondary-color-alpha-50);
     border: 2px solid var(--secondary-color-alpha);
-    box-shadow: 0 0 8px var(--shadow-hover-color);
+    box-shadow: 0 0 6px var(--shadow-hover-color);
 }
 
 .S0-enhancement .S0-characteristic {
@@ -503,7 +546,7 @@ img.S0-clickable:hover {
 }
 
 .S0-enhancement .S0-characteristic:hover {
-    box-shadow: 0 0 8px var(--shadow-hover-color);
+    box-shadow: 0 0 6px var(--shadow-hover-color);
 }
 
 /* #endregion */
@@ -548,7 +591,7 @@ img.S0-clickable:hover {
 .S0-clickable.S0-characteristic:hover {
     cursor: pointer;
     background-color: var(--focus-color);
-    box-shadow: 0 0 8px var(--shadow-hover-color);
+    box-shadow: 0 0 6px var(--shadow-hover-color);
 }
 
 .S0-characteristic-temp {
@@ -579,10 +622,9 @@ img.S0-clickable:hover {
     background-color: var(--primary-color);
 }
 
-.S0-clickable.S0-letal:hover,
-.S0-clickable.S0-selected:hover {
-    background-color: var(--selected-color-hover);
-    box-shadow: 0 0 8px var(--shadow-hover-color);
+.S0-clickable:is(.S0-letal, .S0-selected):hover {
+    background-color: var(--color-red-alpha);
+    box-shadow: 0 0 6px var(--shadow-hover-color);
 }
 
 /* #endregion */
@@ -592,22 +634,80 @@ img.S0-clickable:hover {
 /* endregion */
 
 /* #region DIALOG*/
-.S0-dialog-content {
-    margin: 0;
-    margin-bottom: 5px;
+.S0-content .dialog-content {
+    max-height: 620px;
+    overflow-y: scroll;
+    padding-right: 8px;
+    padding-left: 18px;
 }
 
-.S0-dialog-content h1,
-.S0-dialog-content h2,
-.S0-dialog-content h3,
-.S0-dialog-content h4 {
+.S0-content .dialog-buttons {
+    min-height: 36px;
+    max-height: 46px;
     margin: 0;
-    text-shadow: 0 1px 1px var(--shadow-color-30);
+    padding-block: 6px;
 }
 
-.S0-dialog-content label {
-    display: block;
-    text-shadow: 0 1px 5px var(--shadow-color);
+.S0-content * {
+    scrollbar-color: var(--tertiary-color-alpha-50) var(--color-scrollbar-track);
+}
+
+.window-content.S0-content {
+    max-height: 660px;
+    padding-block: 6px;
+    background: var(--color-black-alpha-50);
+    border-top: 1px solid black;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+    border-image: initial;
+    margin-inline: 0px;
+    border-radius: 0px 0px var(--border-radius-medium) var(--border-radius-medium);
+}
+
+.S0-dialog {
+    display: flex;
+    flex-direction: column;
+    color: var(--primary-color);
+    border-radius: var(--border-radius-medium);
+}
+
+.S0-dialog .S0-container :is(input, textarea, select) {
+    color: var(--primary-color);
+    border-color: var(--primary-color-alpha);
+}
+
+.S0-dialog .S0-container :is(input, textarea):enabled:hover {
+    box-shadow: 0 0 6px var(--primary-color);
+}
+
+.S0-dialog :is(h1, h2, h3, h4) {
+    text-shadow: 0 0 6px var(--primary-color-alpha);
+}
+
+.S0-dialog :is(h1, h2, h3, h4):not(:first-child) {
+    margin-top: 16px;
+}
+
+.S0-dialog :is(label, span, strong) {
+    text-shadow: 0 0 6px var(--primary-color-alpha);
+}
+
+.S0-dialog .S0-container select:disabled {
+    color: var(--primary-color);
+}
+
+.S0-dialog .S0-container .S0-item-bag {
+    border-color: var(--tertiary-color-alpha-50);
+    box-shadow: 0 0 6px 0px var(--shadow-color);
+}
+
+.S0-dialog .S0-container .S0-item-bag.S0-clickable:hover {
+    background-color: var(--tertiary-color-alpha-50);
+}
+
+.S0-dialog label {
+    margin-block: 0.3em;
 }
 
 /* #endregion */
@@ -657,7 +757,7 @@ img.S0-clickable:hover {
 button.S0-roll-result {
     font-family: 'Setor0';
     color: var(--primary-color);
-    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
+    text-shadow: 0 0px 2px var(--color-red);
     padding: 0;
     letter-spacing: 0.1em;
 }
@@ -681,6 +781,18 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-message-content p {
     margin-block: 0.3em;
+}
+
+.S0-message-simple-text {
+    font-family: var(--font-monospace);
+    text-align: justify;
+    margin: 4px;
+    padding: 6px;
+    border: 2px solid #00000080;
+    border-radius: 4px;
+    background: var(--secondary-color-alpha);
+    text-shadow: none;
+    line-height: 1.3;
 }
 
 .S0-dice {
@@ -767,10 +879,10 @@ button.S0-roll-result:not([disabled]):hover {
     display: flex;
     justify-content: space-around;
     width: 100%;
+    padding-block: 3px;
     text-shadow: 0 0 3px var(--primary-color);
     background: var(--secondary-color-alpha-50);
     border-top: 1px solid var(--secondary-color-alpha);
-    padding-block: 2px;
     border-radius: 0px 0px var(--border-radius-medium) var(--border-radius-medium);
 }
 
@@ -799,7 +911,8 @@ button.S0-roll-result:not([disabled]):hover {
     border-radius: 6px 6px 0px 0px;
     border-bottom: solid 1px var(--secondary-color-alpha);
     font-size: var(--font-size-10);
-    padding-block: 2px;
+    padding-top: 3px;
+    padding-bottom: 2px;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 }
@@ -820,8 +933,7 @@ button.S0-roll-result:not([disabled]):hover {
     transition: opacity 0.2s ease-in-out;
 }
 
-.S0-item-bag:hover .S0-item-name,
-.S0-item-bag:hover .S0-item-type {
+.S0-item-bag:hover :is(.S0-item-name, .S0-item-type) {
     opacity: 1;
 }
 
@@ -864,7 +976,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-item-bag.S0-clickable {
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s ease-in-out;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.2s ease-in-out;
 }
 
 .S0-item-bag.S0-clickable:hover {
@@ -888,14 +1000,6 @@ button.S0-roll-result:not([disabled]):hover {
     background: none;
 }
 
-.S0-page-transparent .S0-item-type {
-    background-color: rgba(130, 0, 255, 0.7);
-}
-
-.S0-page-transparent .S0-item-bag {
-    border-color: rgba(130, 0, 255);
-}
-
 #rollable-tests-list.S0-expanded {
     max-height: 140px;
 }
@@ -903,11 +1007,6 @@ button.S0-roll-result:not([disabled]):hover {
 /* #endregion */
 
 /* #region ADD EQUIPMENT DIALOG */
-
-.S0-dialog {
-    display: flex;
-    flex-direction: column;
-}
 
 .S0-item-carousel {
     text-align: center;
@@ -929,8 +1028,8 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-item-bag.S0-selected {
-    border-color: var(--secondary-color);
-    background: var(--secondary-color-alpha);
+    border-color: var(--primary-color);
+    background: var(--primary-color-alpha);
 }
 
 /* #endregion */
@@ -939,6 +1038,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* === MENU PARA ÍCONES NO HOVER === */
 .S0-menu-float {
+    color: black;
     visibility: hidden;
     pointer-events: none;
     position: absolute;
@@ -969,13 +1069,20 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 /* === ROTAÇÃO DE ÍCONES NO HOVER === */
-
 .S0-icon-rotate i {
     transition: transform 0.3s ease;
 }
 
 .S0-icon-rotate:hover i {
     transform: rotate(40deg);
+}
+
+.S0-icon-expand i {
+    transition: scale 0.2s ease-in-out;
+}
+
+.S0-icon-expand:hover i {
+    scale: 1.15;
 }
 
 /* === SWAP DE ÍCONES NO HOVER === */
@@ -1119,7 +1226,7 @@ button.S0-roll-result:not([disabled]):hover {
     overflow-y: scroll;
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
-    max-height: 400px;
+    max-height: 500px;
 }
 
 .S0-container-contract.S0-expanded>* {
@@ -1129,7 +1236,6 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-expand-animating,
 .window-app.S0-expand-animating {
-    overflow: hidden !important;
     transition: height 0.3s ease;
 }
 
@@ -1142,45 +1248,110 @@ button.S0-roll-result:not([disabled]):hover {
 /* #region DARK MODE */
 .window-content.S0-page-transparent {
     color: var(--primary-color);
-    background-color: var(--primary-color-alpha-50);
     background: url(/ui/denim075.png) repeat;
     margin: 0;
 }
 
-.S0-page-transparent-2 {
-    color: var(--primary-color);
-    background-color: var(--shadow-color-30);
-    background: url(/ui/denim.png) repeat;
+.S0-page-transparent :is(.S0-container) {
+    border-color: var(--tertiary-color-alpha-50);
 }
 
-.S0-page-transparent :is(select, input, .S0-container input, textarea) {
+.S0-page-transparent .S0-container :is(select:not(.S0-inner-select), input, textarea) {
+    border-color: var(--tertiary-color-alpha-50);
+}
+
+.S0-page-transparent hr {
+    border-top: 1px solid var(--tertiary-color-alpha-50);
+    border-bottom: 1px solid var(--tertiary-color-alpha);
+}
+
+.S0-page-transparent :is(select, input, textarea) {
     color: var(--primary-color);
 }
 
-.S0-page-transparent :is(.S0-container label, .S0-page label, .S0-page span) {
+.S0-page-transparent .S0-inner-select {
+    border-color: var(--secondary-color-alpha-50);
+}
+
+:is(.S0-page-transparent, .S0-dialog) :is(strong, .S0-container label, .S0-page :is(label, span)) {
     text-shadow: 0 0 6px var(--primary-color-alpha);
 }
 
-.S0-page-transparent .S0-page :is(h1, h2, h3, h4) {
+:is(.S0-page-transparent .S0-page, .S0-dialog) :is(h1, h2, h3, h4) {
     text-shadow: 0 0 6px var(--primary-color-alpha);
 }
 
 .S0-page-transparent .S0-selected {
+    color: var(--on-primary-color);
     background-color: var(--primary-color-alpha);
     border-color: var(--primary-color);
     box-shadow: 0px 0px 6px var(--primary-color-alpha-50);
+}
+
+.S0-page-transparent .S0-clickable.S0-characteristic:hover {
+    background-color: var(--primary-color-alpha);
 }
 
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-selected {
     background-color: var(--primary-color-alpha);
 }
 
+.S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial:hover,
+.S0-page-transparent .S0-clickable.S0-characteristic.S0-letal {
+    background-color: var(--tertiary-color);
+    box-shadow: 0px 0px 6px var(--tertiary-color-alpha);
+}
+
+.S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial {
+    background-color: var(--primary-color);
+    box-shadow: 0px 0px 6px var(--primary-color-alpha-50);
+}
+
 .S0-page-transparent .S0-clickable.S0-characteristic {
     background-color: rgba(250, 250, 250, 0.5);
+}
+
+.S0-page-transparent .S0-clickable:is(.S0-letal, .S0-selected):hover {
+    background-color: var(--color-red-alpha);
+    box-shadow: 0 0 6px var(--color-red-alpha);
 }
 
 .S0-page-transparent .S0-badge span {
     color: var(--secondary-color);
 }
 
+.S0-page-transparent .S0-item-type {
+    background-color: rgba(130, 0, 255, 0.7);
+}
+
+.S0-page-transparent .S0-item-bag {
+    border-color: rgba(130, 0, 255);
+}
+
 /* #endregion */
+
+/* #region ID EDITS */
+
+#effects-container {
+    padding-block: 4px;
+    padding-left: 12px;
+    padding-right: 2px;
+    margin-bottom: 10px;
+}
+
+#effects-container li {
+    padding-block: 4px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+#effects-container li:first-child {
+    border-top: 1px solid var(--secondary-color);
+}
+
+#effects-container.S0-expanded {
+    max-height: 340px;
+}
+
+/* #endregion */
+
+/* styles.css */

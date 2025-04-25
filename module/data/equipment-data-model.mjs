@@ -38,6 +38,7 @@ class EquipmentDataModel extends foundry.abstract.TypeDataModel {
             name: new StringField({ required: true, label: "S0.Nome" }),
             description: new StringField({ required: true, label: "S0.Descricao" }),
             resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia" }),
+            equipped: new BooleanField({ initial: false, label: "S0.Equipado" }),
         };
     }
 }
@@ -47,6 +48,7 @@ class ArmorDataModel extends EquipmentDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.ARMOR, label: "S0.Tipo" }),
+            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
         };
     }
 }
@@ -78,7 +80,7 @@ class RollableDataModel extends EquipmentDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
-            default_test: new StringField({ required: false, blank: true }),
+            default_test: new StringField({ required: false, blank: true, label: "S0.Teste_Padrao" }),
             possible_tests: new ArrayField(new RollTestDataModel()),
         };
     }
@@ -89,8 +91,9 @@ class VehicleDataModel extends RollableDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.VEHICLE, label: "S0.Tipo" }),
-            acceleration: new NumberField({ integer: true, initial: 0 }),
-            speed: new NumberField({ integer: true, initial: 0 })
+            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
+            acceleration: new NumberField({ integer: true, initial: 0, label: "S0.Aceleracao" }),
+            speed: new NumberField({ integer: true, initial: 0, label: "S0.Velocidade" })
         };
     }
 }
@@ -107,11 +110,11 @@ class WeaponDataModel extends RollableDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
-            hand: new NumberField({ integer: true, initial: EquipmentHand.ONE_HAND }),
-            damage: new NumberField({ integer: true, initial: 0 }),
-            true_damage: new NumberField({ integer: true, initial: 0 }),
-            damage_type: new NumberField({ integer: true, initial: DamageType.LETAL }),
-            occultability: new NumberField({ integer: true, initial: EquipmentHidding.POCKET })
+            hand: new NumberField({ integer: true, initial: EquipmentHand.ONE_HAND, label: "S0.Maos" }),
+            damage: new NumberField({ integer: true, initial: 0, label: "S0.Dano" }),
+            true_damage: new NumberField({ integer: true, initial: 0, label: "S0.Dano_Automatico" }),
+            damage_type: new NumberField({ integer: true, initial: DamageType.LETAL, label: "S0.Tipo_Dano" }),
+            occultability: new NumberField({ integer: true, initial: EquipmentHidding.POCKET, label: "S0.Ocultabilidade" })
         };
     }
 }
@@ -130,12 +133,13 @@ class ProjectileDataModel extends WeaponDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.PROJECTILE, label: "S0.Tipo" }),
-            capacity: new NumberField({ integer: true, initial: 1 }),
-            cadence: new NumberField({ integer: true, initial: 1 }),
-            short_range: new NumberField({ integer: true, initial: 1 }),
-            medium_range: new NumberField({ integer: true, initial: 1 }),
-            long_range: new NumberField({ integer: true, initial: 1 }),
-            special: new BooleanField({ initial: false })
+            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
+            capacity: new NumberField({ integer: true, initial: 1, label: "S0.Capacidade" }),
+            cadence: new NumberField({ integer: true, initial: 1, label: "S0.Cadencia" }),
+            short_range: new NumberField({ integer: true, initial: 1, label: "S0.Curto_Alcance" }),
+            medium_range: new NumberField({ integer: true, initial: 1, label: "S0.Medio_Alcance" }),
+            long_range: new NumberField({ integer: true, initial: 1, label: "S0.Longo_Alcance" }),
+            special: new BooleanField({ initial: false, label: "S0.Especial" })
         };
     }
 }

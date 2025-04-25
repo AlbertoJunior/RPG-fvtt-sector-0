@@ -1,6 +1,6 @@
 <section data-label="{{ localize 'S0.Biografia' }}" class="S0-page" data-icon="fa-solid fa-address-book">
-    <h2>{{localize 'S0.Descricao'}}</h2>
-    <section style="padding-bottom: 4px;">
+    <div class="S0-container">
+        <h2>{{localize 'S0.Descricao'}}</h2>
         <div style="display: flex; justify-content: center; align-items: center;">
             <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}S0-clickable{{/if}}" data-edit="img">
         </div>
@@ -10,11 +10,26 @@
             <input id="biography" name="system.background.biography" type="text"
                 value="{{actor.system.background.biography}}" placeholder="{{ localize 'S0.Biografia' }}" />
         </div>
-    </section>
+    </div>
 
     <div class="S0-container">
-        <h2> {{localize 'S0.Linguas'}} </h2>
-        <div id="linguasContainer" class="S0-container-4-column"></div>
+        <h2> {{localize 'S0.Linguas'}}
+            <label style="font-size: var(--font-size-11);">
+                {{actorValues actor 'actual_languages'}}/{{actorValues actor 'total_languages'}}
+            </label>
+        </h2>
+        <div id="linguasContainer" class="S0-container-4-column">
+            {{#each (fetchRepository 'language')}}
+            <div class="S0-characteristic-container" id="{{id}}">
+                <label title="{{district}}">
+                    {{label}}
+                </label>
+                <div class="S0-characteristic {{#if ../editable}}S0-clickable{{/if}}" data-action="add"
+                    data-characteristic="linguas">
+                </div>
+            </div>
+            {{/each}}
+        </div>
     </div>
 
     <div class="S0-container">

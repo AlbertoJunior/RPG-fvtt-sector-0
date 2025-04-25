@@ -1,9 +1,9 @@
 import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
-import { CreateRollableTestDialog } from "../../../creators/dialog/create-roll-test-dialog.mjs";
 import { OnEventType, OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
+import { handlerEquipmentMenuRollEvents } from "./methods/equipment-menu-roll-methods.mjs";
 
 export class EquipmentSheet extends ItemSheet {
     #mapEvents = {
@@ -26,36 +26,14 @@ export class EquipmentSheet extends ItemSheet {
             }
         },
         item_roll: handlerEquipmentItemRollEvents,
-        menu_roll: {
-            [OnEventType.ADD]: async (item, event) => {
-                const onConfirm = async (rollable) => {
-                    const current = item.system.possible_tests || [];
-                    current.push(rollable);
-
-                    const characteristicToUpdate = {
-                        "system.possible_tests": current
-                    }
-
-                    if (current.length == 1) {
-                        characteristicToUpdate["system.default_test"] = rollable.id;
-                    }
-
-                    await item.update(characteristicToUpdate);
-                };
-
-                CreateRollableTestDialog._open(null, onConfirm);
-            },
-            [OnEventType.VIEW]: async (item, event) => {
-                const containerList = event.currentTarget.parentElement.parentElement.parentElement.querySelector('#rollable-tests-list');
-                this.isExpanded = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: this.minWindowHeight, maxHeight: 640, marginBottom: 0 });
-            },
-        }
+        menu_roll: handlerEquipmentMenuRollEvents
     };
 
     constructor(...args) {
         super(...args);
-        this.minWindowHeight = null;
-        this.isExpanded = false;
+        this.isExpandedTests = false;
+        this.defaultHeight = undefined;
+        this.newHeight = undefined;
     }
 
     static get defaultOptions() {
@@ -98,23 +76,6 @@ export class EquipmentSheet extends ItemSheet {
         super.activateListeners(html);
         this.#setupListeners(html);
         this.#presetSheet(html);
-
-        if (!this.minWindowHeight) {
-            const windowElem = html.closest(".window-app");
-            this.minWindowHeight = windowElem.height();
-        }
-    }
-
-    #presetSheet(html) {
-        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
-        const parent = html.parent()[0];
-        parent.classList.toggle('S0-page-transparent', actualMode);
-        parent.style.margin = '0';
-        parent.style.paddingBlock = '0';
-        parent.style.paddingLeft = '20px';
-        parent.style.overflowY = 'scroll';
-
-        html.find('#rollable-tests-list').toggleClass('S0-expanded', this.isExpanded)
     }
 
     #setupListeners(html) {
@@ -142,13 +103,43 @@ export class EquipmentSheet extends ItemSheet {
             console.warn(`-> [${action}] não existe para: [${characteristic}]`);
         }
     }
+
+    #presetSheet(html) {
+        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
+        const parent = html.parent()[0];
+        parent.classList.toggle('S0-page-transparent', actualMode);
+        parent.style.margin = '0';
+        parent.style.paddingBlock = '0';
+        parent.style.paddingLeft = '20px';
+        parent.style.overflowY = 'scroll';
+
+        this.#presetSheetExpandContainer(html);
+    }
+
+    #presetSheetExpandContainer(html) {
+        html.find('#rollable-tests-list').toggleClass('S0-expanded', this.isExpandedTests);
+        if (this.isExpandedTests && html.find('.fa-chevron-down').length > 0) {
+            HtmlJsUtils.flipClasses(html.find('.fa-chevron-down')[0], 'fa-chevron-up', 'fa-chevron-down');
+        }
+
+        requestAnimationFrame(() => {
+            const content = html.parent().parent()[0];
+            if (!this.defaultHeight) {
+                const windowElem = content.closest(".window-app");
+                this.defaultHeight = windowElem?.offsetHeight;
+            }
+
+            if (this.isExpandedTests) {
+                content.style.height = `${Math.max(this.defaultHeight, this.newHeight)}px`
+            }
+        });
+    }
 }
 
 export async function itemsHtmlTemplateRegister() {
     await configurePartialTemplates();
-
-    Items.unregisterSheet("core", ItemSheet);
-    Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
+    await Items.unregisterSheet("core", ItemSheet);
+    await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
         types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
         makeDefault: true
     });
@@ -176,18 +167,20 @@ async function configurePartialTemplates() {
     }
 
     const partials = [];
-    if (partials.length > 0) {
-        const results = await Promise.all(partials.map(async ({ call, path }) => {
-            const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
+    const results = await Promise.all(partials.map(async ({ call, path }) => {
+        const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
 
-            if (!Handlebars.partials[fullPath]) {
-                return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
-            }
+        if (!Handlebars.partials[fullPath]) {
+            return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
+        }
 
-            Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
-            return { Partial: call, Status: "Sucesso", Path: fullPath };
-        }));
+        Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
+        return { Partial: call, Status: "Sucesso", Path: fullPath };
+    }));
 
-        console.table(results);
+    const errors = results.filter(r => r.Status !== "Sucesso").length;
+    if (errors > 0) {
+        console.error(`Erros [${errors}] ao carregar partials.`)
     }
+    console.table(results);
 }

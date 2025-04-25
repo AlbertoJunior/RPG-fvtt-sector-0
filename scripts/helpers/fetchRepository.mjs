@@ -3,12 +3,20 @@ import { EnhancementRepository } from "../../module/repository/enhancement-repos
 import { TraitRepository } from "../../module/repository/trait-repository.mjs";
 import { LanguageRepository } from "../../module/repository/language-repository.mjs";
 import { localizeType } from "../utils/utils.mjs";
+import { AbilityRepository } from "../../module/repository/ability-repository.mjs";
+import { AttributeRepository } from "../../module/repository/attribute-repository.mjs";
+import { RepertoryRepository } from "../../module/repository/repertory-repository.mjs";
+import { VirtuesRepository } from "../../module/repository/virtues-repository.mjs";
 
 const map = {
     'enhancement': EnhancementRepository._getItems(),
     'trait-good': TraitRepository._getGoodTraits(),
     'trait-bad': TraitRepository._getBadTraits(),
     'language': LanguageRepository._getItems(),
+    'attribute': AttributeRepository._getItems(),
+    'ability': AbilityRepository._getItems(),
+    'repertory': RepertoryRepository._getItems(),
+    'virtue': VirtuesRepository._getItems(),
     'equipment-types': getActorEquipmentTypes,
 }
 

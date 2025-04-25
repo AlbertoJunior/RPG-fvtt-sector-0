@@ -8,14 +8,20 @@ export class ActorUpdater {
     static async _verifyKeysAndUpdateActor(actor, params = []) {
         const keysToUpdate = {};
         params.forEach(item => {
-            if (getObject(actor, item.systemCharacteristic) == undefined) {
-                console.warn(`-> [${item.systemCharacteristic}] não existe, impossível atualizar o Actor`);
+            const verifiedSystemCharacteristic = item.systemCharacteristic.system ? item.systemCharacteristic.system : item.systemCharacteristic;
+
+            if (getObject(actor, verifiedSystemCharacteristic) == undefined) {
+                console.warn(`-> [${verifiedSystemCharacteristic}] não existe, impossível atualizar o Actor`);
             } else {
-                keysToUpdate[item.systemCharacteristic] = item.value;
+                keysToUpdate[verifiedSystemCharacteristic] = item.value;
             }
         });
 
         await actor.update(keysToUpdate);
+    }
+
+    static async addEffect(actor, activeEffectData = []) {
+        await actor.createEmbeddedDocuments("ActiveEffect", activeEffectData);
     }
 
     static async addDocuments(actor, itemsData = []) {

@@ -1,3 +1,5 @@
+import { randomId } from "../../scripts/utils/utils.mjs";
+
 const { SchemaField, NumberField, StringField, BooleanField } = foundry.data.fields;
 
 export class RollTestDataModel extends SchemaField {
@@ -13,5 +15,21 @@ export class RollTestDataModel extends SchemaField {
             difficulty: new NumberField({ required: true, initial: 6, maxValue: 10, minValue: 5, label: "S0.Dificuldade" }),
             specialist: new BooleanField({ required: false, initial: false, label: "S0.Especialista" }),
         });
+    }
+
+    static _toJson(params) {
+        const { id, name, primary_attribute, secondary_attribute, ability, bonus = 0, automatic = 0, difficulty = 6, specialist = false } = params;
+
+        const object = new RollTestDataModel();
+        object.id = id || randomId();
+        object.name = name;
+        object.primary_attribute = primary_attribute;
+        object.secondary_attribute = secondary_attribute;
+        object.ability = ability;
+        object.bonus = bonus;
+        object.automatic = automatic;
+        object.difficulty = difficulty;
+        object.specialist = specialist;
+        return object.toObject(object);
     }
 }

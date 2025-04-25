@@ -8,6 +8,14 @@
         </div>
 
         <div class="form-group">
+            <label style="flex: 1;">
+                {{localize 'S0.Resistencia_Atual'}}:
+            </label>
+            <input style="flex: 1;" type="number" min="0" max="{{system.resistance}}" name="system.actual_resistance"
+                value="{{system.actual_resistance}}" />
+        </div>
+
+        <div class="form-group">
             <label style="flex: 1;">{{localize 'S0.Aceleracao'}}:</label>
             <input style="flex: 1;" type="number" name="system.acceleration" value="{{system.acceleration}}" />
         </div>

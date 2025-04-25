@@ -2,6 +2,7 @@ import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { OnEventType } from "../../../../enums/on-event-type.mjs";
 
 function selectLifeCharacteristic(event, addClassIfBlank) {
     let toUpdate = event.currentTarget;
@@ -29,11 +30,11 @@ function mountLifeCharacteristicToUpdate(event) {
     const parentElement = event.currentTarget.parentElement;
     return [
         {
-            systemCharacteristic: CharacteristicType.SUPERFICIAL_DAMAGE.system,
+            systemCharacteristic: CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
             value: parentElement.querySelectorAll('.S0-superficial').length
         },
         {
-            systemCharacteristic: CharacteristicType.LETAL_DAMAGE.system,
+            systemCharacteristic: CharacteristicType.VITALITY.LETAL_DAMAGE,
             value: parentElement.querySelectorAll('.S0-letal').length
         },
     ];
@@ -48,7 +49,7 @@ const mapContextual = {
 }
 
 const mapCheck = {
-    virtue: async (actor, event) => {        
+    virtue: async (actor, event) => {
         const itemType = event.currentTarget.dataset.itemType;
         const characteristicKey = `system.virtudes.${itemType}.used`;
         selectCharacteristic(event.currentTarget);
@@ -56,16 +57,14 @@ const mapCheck = {
         ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, value);
     },
     overload: async (actor, event) => {
-        const characteristicKey = CharacteristicType.OVERLOAD.system;
         selectCharacteristic(event.currentTarget);
         const value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
-        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, value);
+        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, value);
     },
     life: async (actor, event) => {
-        const characteristicKey = CharacteristicType.LIFE.system;
         selectCharacteristic(event.currentTarget);
         const value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
-        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, value);
+        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.LIFE, value);
     },
     health: async (actor, event) => {
         selectLifeCharacteristic(event, 'S0-letal')
@@ -90,27 +89,27 @@ const mapRemove = {
     all: async (actor, event) => {
         const keysToUpdate = [
             {
-                systemCharacteristic: CharacteristicType.CONSCIOUSNESS_USED.system,
+                systemCharacteristic: CharacteristicType.VIRTUES.CONSCIOUSNESS.USED,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.PERSEVERANCE_USED.system,
+                systemCharacteristic: CharacteristicType.VIRTUES.PERSEVERANCE.USED,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.QUIETNESS_USED.system,
+                systemCharacteristic: CharacteristicType.VIRTUES.QUIETNESS.USED,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.OVERLOAD.system,
+                systemCharacteristic: CharacteristicType.OVERLOAD,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.SUPERFICIAL_DAMAGE.system,
+                systemCharacteristic: CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.LETAL_DAMAGE.system,
+                systemCharacteristic: CharacteristicType.VITALITY.LETAL_DAMAGE,
                 value: 0
             },
         ];
@@ -128,11 +127,11 @@ const mapRemove = {
     health: async (actor, event) => {
         const keysToUpdate = [
             {
-                systemCharacteristic: CharacteristicType.SUPERFICIAL_DAMAGE.system,
+                systemCharacteristic: CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.LETAL_DAMAGE.system,
+                systemCharacteristic: CharacteristicType.VITALITY.LETAL_DAMAGE,
                 value: 0
             },
         ];
@@ -151,16 +150,16 @@ function handleMethodOnMap(map, actor, event) {
 }
 
 export const handleStatusMethods = {
-    contextual: async (actor, event) => {
+    [OnEventType.CONTEXTUAL]: async (actor, event) => {
         handleMethodOnMap(mapContextual, actor, event);
     },
-    check: async (actor, event) => {
+    [OnEventType.CHECK]: async (actor, event) => {
         handleMethodOnMap(mapCheck, actor, event);
     },
-    remove: async (actor, event) => {
+    [OnEventType.REMOVE]: async (actor, event) => {
         handleMethodOnMap(mapRemove, actor, event);
     },
-    roll: async (actor, event) => {
+    [OnEventType.ROLL]: async (actor, event) => {
         handleMethodOnMap(mapRoll, actor, event);
     }
 }

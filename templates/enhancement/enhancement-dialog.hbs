@@ -1,19 +1,47 @@
-{{ log this }}
-<div class="S0-dialog-content">
-    <div style="display: flex; column-gap: 5px;">
+<div class="S0-dialog">
+    <div class="S0-container" style="display: flex; column-gap: 5px;">
         <div style="flex: 3;">
             <h3>
-                <label>{{ localize 'S0.Level' }}: {{ level}}</label>
+                {{ localize 'S0.Level' }}: {{ level}}
             </h3>
-            <label style="font-weight: bold;">{{ name }}</label>
+            <label style="font-weight: bold; display: block">{{ name }}</label>
         </div>
 
-        <h3 style="display: flex; flex: 1; min-width: 110px; align-items: center; justify-content: center;">
+        <h3 style="display: flex; flex: 2; max-width: 170px; margin: 0; align-items: center; justify-content: center;">
             {{family}}
         </h3>
     </div>
-    <hr>
 
-    <label><strong>{{ localize 'S0.Sobrecarga' }}</strong>: {{ overload }}</label>
-    <label><strong>{{ localize 'S0.Duracao' }}</strong>: {{ duration }}</label>
+    <div class="S0-container">
+        <label style="display: block;"><strong>{{ localize 'S0.Sobrecarga' }}</strong>: {{ overload }}</label>
+        <label style="display: block;"><strong>{{ localize 'S0.Duracao' }}</strong>: {{ duration }}</label>
+        <label style="display: block; font-weight: bold;">{{ localize 'S0.Testes' }}:</label>
+
+        {{#each possible_tests}}
+        <div
+            style="display: flex; column-gap: 10px; align-items: center; padding: 6px; border-bottom: 1px solid var(--secondary-color-alpha);">
+            <a class="S0-icon-rotate" style="text-shadow: 0 0 6px var(--primary-color-alpha);"
+                data-characteristic="enhancement" data-action="roll" data-item-id="{{this.id}}">
+                <i class="fas fa-dice-d10"></i>
+            </a>
+            <div>
+                <label style="display: block; margin-top: 0px;">{{name}}:</label>
+                <label style="display: block;">
+                    <h4>({{primary_attribute}} + {{secondary_attribute}}) {{ability}}</h4>
+                </label>
+                <label style="display: inline;">{{localize 'S0.Dificuldade'}}:</label>
+                <h4 style="display: inline;">{{difficulty}}</h4>
+            </div>
+        </div>
+        {{else}}
+        <p style="font-style: italic;">{{localize 'S0.Passivo'}}</p>
+        {{/each}}
+    </div>
+
+    <div class="S0-container">
+        <strong style="display: block;">{{ localize 'S0.Descricao' }}:</strong>
+        <div class="S0-message-simple-text">
+            {{ description }}
+        </div>
+    </div>
 </div>

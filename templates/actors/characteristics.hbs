@@ -2,7 +2,21 @@
     <ul>
         <li class="S0-container">
             <h2> {{localize 'S0.Virtudes'}} </h2>
-            <div id="virtudesContainer" class="S0-container-3-column"></div>
+            <div id="virtudesContainer" class="S0-container-3-column">
+                {{#each (fetchRepository 'virtue')}}
+                <div class="S0-characteristic-container" id="{{id}}">
+                    <label>
+                        {{localize label}}
+                    </label>
+
+                    {{#forLoop 0 5}}
+                    <div class="S0-characteristic {{#if ../../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="virtudes">
+                    </div>
+                    {{/forLoop}}
+                </div>
+                {{/each}}
+            </div>
         </li>
 
         <li class="S0-container">
@@ -16,21 +30,71 @@
             <h2>
                 {{localize 'S0.Atributos'}}
             </h2>
-            <div id="atributosContainer" class="S0-container-2-column"></div>
+            <div id="atributosContainer" class="S0-container-2-column">
+                {{#each (fetchRepository 'attribute')}}
+                <div class="S0-characteristic-container" id="{{id}}">
+                    <label>
+                        {{localize label}}
+                    </label>
+
+                    {{#forLoop 0 5}}
+                    <div class="S0-characteristic {{#if ../../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="atributos">
+                    </div>
+                    {{/forLoop}}
+
+                    <div class="S0-characteristic S0-characteristic-6 {{#if ../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="atributos">
+                    </div>
+                </div>
+                {{/each}}
+            </div>
         </li>
 
         <li class="S0-container">
             <h2>
                 {{localize 'S0.Habilidades'}}
             </h2>
-            <div id="habilidadesContainer" class="S0-container-2-column"></div>
+            <div id="habilidadesContainer" class="S0-container-2-column">
+                {{#each (fetchRepository 'ability')}}
+                <div class="S0-characteristic-container" id="{{id}}">
+                    <label>
+                        {{localize label}}
+                    </label>
+
+                    {{#forLoop 0 5}}
+                    <div class="S0-characteristic {{#if ../../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="habilidades">
+                    </div>
+                    {{/forLoop}}
+
+                    <div class="S0-characteristic S0-characteristic-6 {{#if ../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="habilidades">
+                    </div>
+                </div>
+                {{/each}}
+            </div>
         </li>
 
         <li class="S0-container">
             <h2>
                 {{localize 'S0.Repertorio'}}
             </h2>
-            <div id="repertorioContainer"></div>
+            <div id="repertorioContainer">
+                {{#each (fetchRepository 'repertory')}}
+                <div class="S0-characteristic-container" id="{{id}}">
+                    <label>
+                        {{localize label}}
+                    </label>
+
+                    {{#forLoop 0 5}}
+                    <div class="S0-characteristic {{#if ../../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="repertorio">
+                    </div>
+                    {{/forLoop}}
+                </div>
+                {{/each}}
+            </div>
         </li>
     </ul>
 </section>

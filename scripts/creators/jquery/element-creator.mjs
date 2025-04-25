@@ -24,11 +24,11 @@ export class ElementCreatorJQuery {
         divContainer.append(label);
 
         for (let i = 0; i < amount; i++) {
-            const divCaracteristica = this.#createCharacteristicDiv(isEditable, safeEventType, characteristicType);
+            const divCharacteristic = this.#createCharacteristicDiv(isEditable, safeEventType, characteristicType);
             if (firstSelected && i == 0) {
-                divCaracteristica.addClass('S0-selected');
+                divCharacteristic.addClass('S0-selected');
             }
-            divContainer.append(divCaracteristica);
+            divContainer.append(divCharacteristic);
         }
 
         if (addLast) {
