@@ -1,9 +1,20 @@
 import { ICONS_PATH } from "../../constants.mjs";
+import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/actor-enhancement-field.mjs";
 
 const brutalityEffects = [
-    EnhancementEffectField._toJson('18', 'Força Brutal', 1, EnhancementOverload.NONE, EnhancementDuration.PASSIVE, []),
+    EnhancementEffectField._toJson(
+        '18',
+        'Força Brutal',
+        1,
+        EnhancementOverload.NONE,
+        EnhancementDuration.PASSIVE,
+        [],
+        [
+            { key: CharacteristicType.BONUS.ATTRIBUTES.STRENGTH, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+        ]
+    ),
     EnhancementEffectField._toJson('19', 'Fanático', 2, EnhancementOverload.NONE, EnhancementDuration.SCENE, ['18']),
     EnhancementEffectField._toJson('20', 'Força Esmagadora', 2, EnhancementOverload.NONE, EnhancementDuration.SCENE, ['18']),
     EnhancementEffectField._toJson('21', 'Canhão', 3, EnhancementOverload.NONE, EnhancementDuration.SCENE, ['19', '20']),

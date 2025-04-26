@@ -8,7 +8,7 @@ export class CreateRollableTestDialog {
         this._open(rollableData);
     }
 
-    static async _open(rollableData, onConfirm) {
+    static async _open(rollableData, onConfirm, onDelete) {
         const needConfirmation = onConfirm !== undefined;
         const isCreate = rollableData == undefined;
 
@@ -26,35 +26,46 @@ export class CreateRollableTestDialog {
         });
 
         if (needConfirmation) {
-            dialog.data.buttons = {
-                cancel: {
-                    label: localize("Cancelar")
-                },
-                confirm: {
-                    label: localize("Confirmar"),
-                    callback: (html) => {
-                        const form = html[0].querySelector("form");
-                        const formData = new FormData(form);
-                        const data = Object.fromEntries(formData.entries());
+            const buttons = {};
 
-                        const parsed = {
-                            id: rollableData?.id || randomId(),
-                            name: data.name,
-                            primary_attribute: data.primary_attribute,
-                            secondary_attribute: data.secondary_attribute,
-                            ability: data.ability,
-                            bonus: Number(data.bonus || 0),
-                            automatic: Number(data.automatic || 0),
-                            difficulty: Number(data.difficulty || 6),
-                            specialist: Boolean(formData.has("specialist"))
-                        };
-                        onConfirm(parsed);
+            if (onDelete !== undefined) {
+                buttons['delete'] = {
+                    label: localize("Apagar"),
+                    callback: (html) => {
+                        onDelete(rollableData);
                     }
                 }
+            } else {
+                buttons['cancel'] = {
+                    label: localize("Cancelar")
+                }
             }
-            dialog.data.default = 'confirm';
+
+            buttons['confirm'] = {
+                label: localize("Confirmar"),
+                callback: (html) => {
+                    const form = html[0].querySelector("form");
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+
+                    const parsed = {
+                        id: rollableData?.id || randomId(),
+                        name: data.name,
+                        primary_attribute: data.primary_attribute,
+                        secondary_attribute: data.secondary_attribute,
+                        ability: data.ability,
+                        bonus: Number(data.bonus || 0),
+                        automatic: Number(data.automatic || 0),
+                        difficulty: Number(data.difficulty || 6),
+                        specialist: Boolean(formData.has("specialist"))
+                    };
+                    onConfirm(parsed);
+                }
+            }
+            dialog.data.buttons = buttons;
         }
 
+        dialog.data.default = 'confirm';
         dialog.render(true);
     }
 

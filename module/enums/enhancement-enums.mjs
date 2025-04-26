@@ -20,6 +20,5 @@ export const EffectChangeValueType = Object.freeze({
     HALF_ENHANCEMENT_LEVEL: 2,
     ENHANCEMENT_LEVEL_PLUS_FIXED: 3,
     HALF_ENHANCEMENT_LEVEL_PLUS_FIXED: 4,
-    HALF_DEFENSIVE: 5,
     OTHER_VALUE: 6,
 });

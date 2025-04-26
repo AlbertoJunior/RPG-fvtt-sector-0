@@ -48,9 +48,16 @@ export class ActorUtils {
         return 5 + value + bonus;
     }
 
+    static calculateDices(actor, attr1, attr2, ability) {
+        const attr1Value = this.getAttributeValue(actor, attr1);
+        const attr2Value = this.getAttributeValue(actor, attr2);
+        const abilityValue = this.getAbilityValue(actor, ability);
+        return Math.floor((attr1Value + attr2Value) / 2) + abilityValue;
+    }
+
     static calculateMovimentPoints(actor) {
         const dexValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.DEXTERITY.id);
-        const athleticsValue = this.getAbilityValue(actor, 'atletismo');
+        const athleticsValue = this.getAbilityValue(actor, CharacteristicType.ABILITY.ATHLETICS.id);
         const bonusPM = getObject(actor, CharacteristicType.BONUS.PM) || 0;
         return 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
     }
@@ -73,6 +80,12 @@ export class ActorUtils {
         }
 
         return 1 + (streetWise - 1) * 2
+    }
+
+    static calculateTotalExperience(actor) {
+        const currentEperience = getObject(actor, CharacteristicType.EXPERIENCE.CURRENT);
+        const usedExperience = getObject(actor, CharacteristicType.EXPERIENCE.USED);
+        return currentEperience + usedExperience;
     }
 
     static havePerseverance(actor) {
@@ -109,5 +122,59 @@ export class ActorUtils {
             return [];
         }
         return Object.values(enhancement.levels).filter(level => level && level.id !== "");
+    }
+}
+
+export class ActorCombatUtils {
+    static calculateOffensiveProjectileDices(actor) {
+        const dexValue = CharacteristicType.ATTRIBUTES.DEXTERITY.id;
+        const perValue = CharacteristicType.ATTRIBUTES.PERCEPTION.id;
+        const ability = CharacteristicType.ABILITY.PROJECTILE.id;
+
+        const bonus = getObject(actor, CharacteristicType.BONUS.OFENSIVE_PROJECTILE);
+
+        return ActorUtils.calculateDices(actor, dexValue, perValue, ability) + bonus;
+    }
+
+    static calculateOffensiveMeleeDices(actor) {
+        const ability = CharacteristicType.ABILITY.MELEE.id;
+        const bonus = getObject(actor, CharacteristicType.BONUS.OFENSIVE_MELEE);
+        return this.calculateOfensiveDices(actor, ability) + bonus;
+    }
+
+    static calculateOffensiveBrawlDices(actor) {
+        const ability = CharacteristicType.ABILITY.BRAWL.id;
+        const bonus = getObject(actor, CharacteristicType.BONUS.OFENSIVE_MELEE);
+        return this.calculateOfensiveDices(actor, ability) + bonus;
+    }
+
+    static calculateOfensiveDices(actor, ability) {
+        const dexValue = CharacteristicType.ATTRIBUTES.DEXTERITY.id;
+        const strValue = CharacteristicType.ATTRIBUTES.PERCEPTION.id;
+        return ActorUtils.calculateDices(actor, dexValue, strValue, ability);
+    }
+
+    static calculateDefensiveDodgeDices(actor) {
+        const ability = CharacteristicType.ABILITY.ATHLETICS.id;
+        return this.calculateDefensiveDices(actor, ability);
+    }
+
+    static calculateDefensiveBlockMeleeDices(actor) {
+        const ability = CharacteristicType.ABILITY.MELEE.id;
+        return this.calculateDefensiveDices(actor, ability);
+    }
+
+    static calculateDefensiveBlockBrawlDices(actor) {
+        const ability = CharacteristicType.ABILITY.BRAWL.id;
+        return this.calculateDefensiveDices(actor, ability);
+    }
+
+    static calculateDefensiveDices(actor, ability) {
+        const dexValue = CharacteristicType.ATTRIBUTES.DEXTERITY.id;
+        const staValue = CharacteristicType.ATTRIBUTES.STAMINA.id;
+
+        const calculatedDices = ActorUtils.calculateDices(actor, dexValue, staValue, ability);
+        const defensiveTotalBonus = getObject(actor, CharacteristicType.BONUS.DEFENSIVE);
+        return Math.floor((1 + defensiveTotalBonus) * calculatedDices);
     }
 }

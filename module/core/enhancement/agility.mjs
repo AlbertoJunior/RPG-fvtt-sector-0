@@ -53,7 +53,7 @@ const agilityEffects = [
         EnhancementDuration.SCENE,
         ['3'],
         [
-            { key: CharacteristicType.BONUS.DENFESIVE, value: 0, typeOfValue: EffectChangeValueType.HALF_DEFENSIVE },
+            { key: CharacteristicType.BONUS.DEFENSIVE, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
     EnhancementEffectField._toJson(
@@ -70,7 +70,10 @@ const agilityEffects = [
         4,
         EnhancementOverload.ONE_TESTED,
         EnhancementDuration.SCENE,
-        ['4', '5']
+        ['4', '5'],
+        [
+            { key: CharacteristicType.BONUS.DEFENSIVE, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
+        ]
     ),
     EnhancementEffectField._toJson(
         '8',

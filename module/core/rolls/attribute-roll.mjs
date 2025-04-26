@@ -7,14 +7,10 @@ export class RollAttribute {
     static async roll(actor, params) {
         const { attr1, attr2, ability, specialist = false, bonus = 0, automatic = 0, weapon } = params;
 
-        const attrValue1 = ActorUtils.getAttributeValue(actor, attr1);
-        const attrValue2 = ActorUtils.getAttributeValue(actor, attr2);
-        const abilityValue = ActorUtils.getAbilityValue(actor, ability);
+        const bonusWeaponValue = bonus + (weapon?.damage || 0);
         const penalty = ActorUtils.calculatePenalty(actor);
-
-        const abilityBonusWeaponValue = abilityValue + bonus + (weapon?.damage || 0);
-
-        const diceAmount = this.#calculateDiceAmount(attrValue1, attrValue2, abilityBonusWeaponValue, penalty);
+        const diceAmount = this.#calculateDiceAmount(actor, attr1, attr2, ability, penalty) + bonusWeaponValue;
+        
         const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), diceAmount);
 
         const [rollOverloadResults, rollDefaultResults] = await Promise.all([
@@ -30,11 +26,11 @@ export class RollAttribute {
         const attributes = {
             attr1: {
                 label: attr1,
-                value: attrValue1
+                value: ActorUtils.getAttributeValue(actor, attr1)
             },
             attr2: {
                 label: attr2,
-                value: attrValue2
+                value: ActorUtils.getAttributeValue(actor, attr2)
             },
         }
 
@@ -47,7 +43,7 @@ export class RollAttribute {
 
         const abilityInformations = {
             label: ability,
-            value: abilityValue,
+            value: ActorUtils.getAbilityValue(actor, ability),
             specialist: specialist
         };
 
@@ -75,8 +71,8 @@ export class RollAttribute {
         return this.roll(actor, params);
     }
 
-    static #calculateDiceAmount(attribute1, attribute2, ability, penalty) {
-        const amount = Math.floor((attribute1 + attribute2) / 2) + ability;
+    static #calculateDiceAmount(actor, attr1, attr2, ability, penalty) {
+        const amount = ActorUtils.calculateDices(actor, attr1, attr2, ability);
         const finalAmount = Math.max(amount - penalty, 0);
         return finalAmount;
     }

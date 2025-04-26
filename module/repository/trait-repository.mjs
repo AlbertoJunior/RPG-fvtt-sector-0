@@ -1,3 +1,6 @@
+import { CharacteristicType } from "../enums/characteristic-enums.mjs";
+import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
+
 export class TraitRepository {
     static goodTrait = [
         {
@@ -16,7 +19,7 @@ export class TraitRepository {
             id: '3',
             name: 'Bom Senso',
             xp: 3,
-            description: 'Você tem uma quantidade significativa de sabedoria cotidiana prática e costuma pensar antes de agir. Sempre que o personagem estiver a ponto de proceder de modo contrário ao bom senso, o narrador pode fazer sugestões ou avisá-lo sobre as implicações de tal ação — como a conhecida “voz da razão”.\nEste é um traço muito útil para jogadores iniciantes pouco familiarizados com o cenário ou RPG em si e também para personagens com Inteligência 6.'
+            description: 'Você tem uma quantidade significativa de sabedoria cotidiana prática e costuma pensar antes de agir. Sempre que o personagem estiver a ponto de proceder de modo contrário ao bom senso, o narrador pode fazer sugestões ou avisá-lo sobre as implicações de tal ação — como a conhecida “voz da razão”.<br>Este é um traço muito útil para jogadores iniciantes pouco familiarizados com o cenário ou RPG em si e também para personagens com Inteligência 6.'
         },
         {
             id: '4',
@@ -28,7 +31,7 @@ export class TraitRepository {
             id: '5',
             name: 'Estrategista',
             xp: 3,
-            description: 'Você é bom em estratégias e consegue montar planos e táticas eficientes em momentos de tensão ou que exijam raciocínio rápido. Com este traço, o personagem será capaz de usar a ação <i>Comandar Estratégia</i>.\nUsando poucas palavras, você pode motivar seus companheiros e garantir a eles o efeito <i>Inspirado</i>. Os efeitos desta habilidade só podem ser aplicados a um único ser por turno.'
+            description: 'Você é bom em estratégias e consegue montar planos e táticas eficientes em momentos de tensão ou que exijam raciocínio rápido. Com este traço, o personagem será capaz de usar a ação <i>Comandar Estratégia</i>.<br>Usando poucas palavras, você pode motivar seus companheiros e garantir a eles o efeito <i>Inspirado</i>. Os efeitos desta habilidade só podem ser aplicados a um único ser por turno.'
         },
         {
             id: '6',
@@ -40,7 +43,7 @@ export class TraitRepository {
             id: '7',
             name: 'Inspirador',
             xp: 3,
-            description: 'Fora de combates, você consegue motivar qualquer ser a fazer algo melhor, seja para enganar, hackear, executar manobras perigosas ou ações arriscadas. Para qualquer ação que envolva habilidades, bastam algumas palavras e o alvo ficará <i>Inspirado</i> — para isso, usa-se o mesmo sistema de <i>Comandar Estratégia</i>.\nOs efeitos desta habilidade só podem ser aplicados a um único ser por turno.'
+            description: 'Fora de combates, você consegue motivar qualquer ser a fazer algo melhor, seja para enganar, hackear, executar manobras perigosas ou ações arriscadas. Para qualquer ação que envolva habilidades, bastam algumas palavras e o alvo ficará <i>Inspirado</i> — para isso, usa-se o mesmo sistema de <i>Comandar Estratégia</i>.<br>Os efeitos desta habilidade só podem ser aplicados a um único ser por turno.'
         },
         {
             id: '8',
@@ -58,21 +61,23 @@ export class TraitRepository {
             id: '10',
             name: 'Aliado Excepcional',
             xp: 6,
-            description: 'Você possui um aliado que é excelente naquilo que faz e que pode até ser conhecido de forma positiva por algo muito bom que tenha feito. Esse aliado tem 2 dados a mais na área de atuação dele.\n<i>Observação:</i> Para comprar este Traço, o jogador precisa definir algumas características básicas do aliado, tais como nome, bairro, área de atuação (habilidade primária) e possuir pelo menos 1 ponto no Repertorio Aliado.',
-            requirement: 'Possuir pelo menos 1 ponto no Repertorio Aliado.'
+            description: 'Você possui um aliado que é excelente naquilo que faz e que pode até ser conhecido de forma positiva por algo muito bom que tenha feito. Esse aliado tem 2 dados a mais na área de atuação dele.<br><i>Observação:</i> Para comprar este Traço, o jogador precisa definir algumas características básicas do aliado, tais como nome, bairro, área de atuação (habilidade primária) e possuir pelo menos 1 ponto no Repertorio Aliado.',
+            requirement: 'Possuir pelo menos 1 ponto no Repertorio Aliado.',
+            particularity: '',
         },
         {
             id: '11',
             name: 'Aliado Extraordinário',
             xp: 9,
-            description: 'Você possui um aliado que é extraordinário naquilo que faz e que pode até ser conhecido de forma positiva por algo muito bom que tenha feito. Esse aliado tem 4 dados a mais na área de atuação dele.\n<i>Observação:</i> Para comprar este Traço, o jogador precisa definir algumas características básicas do aliado, tais como nome, bairro, área de atuação (habilidade primária) e possuir pelo menos 1 ponto no Repertorio Aliado.',
-            requirement: 'Possuir pelo menos 1 ponto no Repertorio Aliado.'
+            description: 'Você possui um aliado que é extraordinário naquilo que faz e que pode até ser conhecido de forma positiva por algo muito bom que tenha feito. Esse aliado tem 4 dados a mais na área de atuação dele.<br><i>Observação:</i> Para comprar este Traço, o jogador precisa definir algumas características básicas do aliado, tais como nome, bairro, área de atuação (habilidade primária) e possuir pelo menos 1 ponto no Repertorio Aliado.',
+            requirement: 'Possuir pelo menos 1 ponto no Repertorio Aliado.',
+            particularity: '',
         },
         {
             id: '12',
             name: 'Comandante',
             xp: 6,
-            description: 'Por ser um visionário em situações tensas, durante o combate você consegue comandar estratégias, expor pontos fracos, orquestrar táticas de ataque e defesa, entre outros. Já fora dessa situação, você consegue motivar seus aliados a fazerem coisas grandiosas mesmo quando parece impossível.\nQuando utilizar os benefícios de <i>Inspirador</i> ou <i>Estrategista</i>, o personagem aumenta em +1 o limite de 3 dados para o efeito <i>Inspirado</i> , além de poder distribuir os dados entre os aliados que o escutaram da maneira que desejar.',
+            description: 'Por ser um visionário em situações tensas, durante o combate você consegue comandar estratégias, expor pontos fracos, orquestrar táticas de ataque e defesa, entre outros. Já fora dessa situação, você consegue motivar seus aliados a fazerem coisas grandiosas mesmo quando parece impossível.<br>Quando utilizar os benefícios de <i>Inspirador</i> ou <i>Estrategista</i>, o personagem aumenta em +1 o limite de 3 dados para o efeito <i>Inspirado</i> , além de poder distribuir os dados entre os aliados que o escutaram da maneira que desejar.',
             requirement: 'Estrategista ou Inspirador'
         },
         {
@@ -85,14 +90,14 @@ export class TraitRepository {
             id: '14',
             name: 'Honrado',
             xp: 6,
-            description: 'Você tem um código de ética pessoal do qual é adepto. Os detalhes sobre esse código devem ser bem elaborados e descritos e o personagem deve segui-lo à risca.\nOs personagens com este traço ganham dois dados adicionais em todos os testes de Consciência ou de Perseverança quando estiverem agindo diretamente de acordo com seu código ou quando tentarem evitar situações que podem forçá-los a violá-lo.',
+            description: 'Você tem um código de ética pessoal do qual é adepto. Os detalhes sobre esse código devem ser bem elaborados e descritos e o personagem deve segui-lo à risca.<br>Os personagens com este traço ganham dois dados adicionais em todos os testes de Consciência ou de Perseverança quando estiverem agindo diretamente de acordo com seu código ou quando tentarem evitar situações que podem forçá-los a violá-lo.',
             particularity: '',
         },
         {
             id: '15',
             name: 'Inofensivo',
             xp: 6,
-            description: 'Você tem uma aparência ou aura tão inofensiva que não representa qualquer ameaça para aqueles que o veem. Esta característica pode assegurar sua sobrevivência e, às vezes, até uma guarda baixa que facilita seus planos.\nPorém, alguns seres mais mal-intencionados podem tentar se aproveitar da sua suposta ingenuidade e indefesa. Caso suas ações contradigam este traço, provavelmente deixarão de vê-lo desta forma e reagirão à ameaça.'
+            description: 'Você tem uma aparência ou aura tão inofensiva que não representa qualquer ameaça para aqueles que o veem. Esta característica pode assegurar sua sobrevivência e, às vezes, até uma guarda baixa que facilita seus planos.<br>Porém, alguns seres mais mal-intencionados podem tentar se aproveitar da sua suposta ingenuidade e indefesa. Caso suas ações contradigam este traço, provavelmente deixarão de vê-lo desta forma e reagirão à ameaça.'
         },
         {
             id: '16',
@@ -105,7 +110,7 @@ export class TraitRepository {
             id: '17',
             name: 'MedTec',
             xp: 6,
-            description: 'Você dedicou anos de sua vida e se especializou na área da Medicina Tecnológica; agora é capaz de consertar e curar qualquer uma das morfologias, além de poder fazer cirurgias para implantar Aprimoramentos de forma mais fácil. Reduza em 1 a Dificuldade para realizar cirurgias de Aprimoramentos.\n<i>Observação:</i> Para comprar esse Traço é preciso ter Medicina e Tecnologia no nível 3 ou superior em cada uma.'
+            description: 'Você dedicou anos de sua vida e se especializou na área da Medicina Tecnológica; agora é capaz de consertar e curar qualquer uma das morfologias, além de poder fazer cirurgias para implantar Aprimoramentos de forma mais fácil. Reduza em 1 a Dificuldade para realizar cirurgias de Aprimoramentos.<br><i>Observação:</i> Para comprar esse Traço é preciso ter Medicina e Tecnologia no nível 3 ou superior em cada uma.'
         },
         {
             id: '18',
@@ -117,7 +122,7 @@ export class TraitRepository {
             id: '19',
             name: 'Propósito Maior',
             xp: 6,
-            description: 'Você tem um objetivo claro que o conduz em tudo que faz. Não se preocupa com futilidades e problemas cotidianos porque o seu propósito maior é tudo que importa para você. Embora, ocasionalmente, haja a possibilidade de ser conduzido por este desígnio e se ver forçado a se comportar de formas que contrariam as necessidades de sobrevivência pessoal, ele também pode lhe conferir uma grande obstinação.\nVocê adquire dois dados extras em todos os testes que ativamente o deixem mais próximo deste grande objetivo e deve ser bem-sucedido num teste de Consciência + Quietude (Dificuldade 7) para ignorá-lo momentaneamente por uma outra situação mais urgente. Você precisa decidir qual é o seu propósito maior e este deve ser alcançável, por mais difícil que seja.',
+            description: 'Você tem um objetivo claro que o conduz em tudo que faz. Não se preocupa com futilidades e problemas cotidianos porque o seu propósito maior é tudo que importa para você. Embora, ocasionalmente, haja a possibilidade de ser conduzido por este desígnio e se ver forçado a se comportar de formas que contrariam as necessidades de sobrevivência pessoal, ele também pode lhe conferir uma grande obstinação.<br>Você adquire dois dados extras em todos os testes que ativamente o deixem mais próximo deste grande objetivo e deve ser bem-sucedido num teste de Consciência + Quietude (Dificuldade 7) para ignorá-lo momentaneamente por uma outra situação mais urgente. Você precisa decidir qual é o seu propósito maior e este deve ser alcançável, por mais difícil que seja.',
             particularity: '',
         },
         {
@@ -136,14 +141,14 @@ export class TraitRepository {
             id: '22',
             name: 'Aptidão',
             xp: 9,
-            description: 'Você possui um talento natural em uma área de conhecimento específico, seja Medicina, Engenharia ou qualquer outra habilidade não combativa. As Dificuldades de todos os testes feitos para compreender, consertar ou operar qualquer coisa que envolva a área de aptidão é reduzida em um ponto.\n<i>Observação:</i> Este Traço só pode ser adquirido uma única vez.',
+            description: 'Você possui um talento natural em uma área de conhecimento específico, seja Medicina, Engenharia ou qualquer outra habilidade não combativa. As Dificuldades de todos os testes feitos para compreender, consertar ou operar qualquer coisa que envolva a área de aptidão é reduzida em um ponto.<br><i>Observação:</i> Este Traço só pode ser adquirido uma única vez.',
             particularity: '',
         },
         {
             id: '23',
             name: 'Defensor',
             xp: 9,
-            description: 'Quando utilizar o Estilo Defensivo, o jogador poderá dividir sua quantidade total de dados pela metade. Desse modo, ele fará duas Ações de Defesa com metade dos dados em cada, ao invés de uma Ação com todos os dados.\nTambém permite que defenda aliados alvos de ataques, caso seja possível — Armas de Projeção tem regras específicas para defesa e esquiva. Se ainda não tiver usado sua Ação e o aliado estiver próximo o suficiente para alcançá-lo, o jogador poderá consumir sua Ação para fazer um Teste Defensivo. Os Sucessos desse teste são subtraídos dos Sucessos do Ataque.'
+            description: 'Quando utilizar o Estilo Defensivo, o jogador poderá dividir sua quantidade total de dados pela metade. Desse modo, ele fará duas Ações de Defesa com metade dos dados em cada, ao invés de uma Ação com todos os dados.<br>Também permite que defenda aliados alvos de ataques, caso seja possível — Armas de Projeção tem regras específicas para defesa e esquiva. Se ainda não tiver usado sua Ação e o aliado estiver próximo o suficiente para alcançá-lo, o jogador poderá consumir sua Ação para fazer um Teste Defensivo. Os Sucessos desse teste são subtraídos dos Sucessos do Ataque.'
         },
         {
             id: '24',
@@ -167,19 +172,22 @@ export class TraitRepository {
             id: '27',
             name: 'Mente Impenetrável',
             xp: 9,
-            description: 'Sua mente é forte, firme e sólida: aqueles que tentam forçar suas vontades sobre você quase nunca possuem sucesso e dificilmente lhe convencem de algo. As Dificuldades para resistir à coerção mental ou qualquer tipo de persuasão pela Expressão, Hacking ou Performance sofrem um modificador de -1 na Dificuldade. \nAdemais, caso seja necessário um tempo para realizar algum teste para resistir ou para ficar sob o efeito de alguma influência, este é reduzido pela metade.'
+            description: 'Sua mente é forte, firme e sólida: aqueles que tentam forçar suas vontades sobre você quase nunca possuem sucesso e dificilmente lhe convencem de algo. As Dificuldades para resistir à coerção mental ou qualquer tipo de persuasão pela Expressão, Hacking ou Performance sofrem um modificador de -1 na Dificuldade. <br>Ademais, caso seja necessário um tempo para realizar algum teste para resistir ou para ficar sob o efeito de alguma influência, este é reduzido pela metade.'
         },
         {
             id: '28',
             name: 'Montanha de músculos',
             xp: 12,
-            description: 'Para a sua estatura, você possui muito mais músculos e/ou gordura que a maioria dos outros seres. Essa quantia anormal de massa lhe deixa extremamente evidente em locais públicos, porém lhe confere dois níveis a mais de Vitalidade e também +2 dados em testes de Força para carregar, empurrar, puxar e segurar coisas ou seres.'
+            description: 'Para a sua estatura, você possui muito mais músculos e/ou gordura que a maioria dos outros seres. Essa quantia anormal de massa lhe deixa extremamente evidente em locais públicos, porém lhe confere dois níveis a mais de Vitalidade e também +2 dados em testes de Força para carregar, empurrar, puxar e segurar coisas ou seres.',
+            effects: [
+                { key: CharacteristicType.VITALITY.TOTAL, value: 2, typeOfValue: EffectChangeValueType.FIXED },
+            ]
         },
         {
             id: '29',
             name: 'Quatro-braços',
             xp: 12,
-            description: 'De alguma forma estranha, seu corpo reagiu bem à ideia de operar 4 braços simultaneamente; mesmo que estes não respondam com a mesma agilidade que seus braços originais, são totalmente funcionais. A iniciativa deles é equivalente à metade da sua e você pode usá-los para tudo o que seus outros membros idênticos conseguiriam fazer, além de ganhar +4 dados (2 para cada) para usar os braços extras em qualquer teste.\nEles podem ser utilizados em combate, possuindo seu próprio turno em que podem realizar ou uma ação Ofensiva, ou Defensiva. Estes braços possuem 4 dados para realizar a ação.'
+            description: 'De alguma forma estranha, seu corpo reagiu bem à ideia de operar 4 braços simultaneamente; mesmo que estes não respondam com a mesma agilidade que seus braços originais, são totalmente funcionais. A iniciativa deles é equivalente à metade da sua e você pode usá-los para tudo o que seus outros membros idênticos conseguiriam fazer, além de ganhar +4 dados (2 para cada) para usar os braços extras em qualquer teste.<br>Eles podem ser utilizados em combate, possuindo seu próprio turno em que podem realizar ou uma ação Ofensiva, ou Defensiva. Estes braços possuem 4 dados para realizar a ação.'
         },
     ];
 
@@ -196,28 +204,28 @@ export class TraitRepository {
             name: 'Preso às Leis da Robótica de Asimov',
             xp: 4,
             morph: 'Androide',
-            description: 'Talvez por crença, fanatismo ou apenas por uma piada, durante a sua criação lhe impuseram uma ou mais das três famosas Leis da Robótica idealizadas há tempos remotos por um escritor do Mundo Antigo chamado Isaac Asimov, das quais você é incapaz de contradizer — por mais que tente.\n1ª Lei: Você não pode ferir um humano ou, por inação, permitir que um ser humano sofra algum mal.'
+            description: 'Talvez por crença, fanatismo ou apenas por uma piada, durante a sua criação lhe impuseram uma ou mais das três famosas Leis da Robótica idealizadas há tempos remotos por um escritor do Mundo Antigo chamado Isaac Asimov, das quais você é incapaz de contradizer — por mais que tente.<br>1ª Lei: Você não pode ferir um humano ou, por inação, permitir que um ser humano sofra algum mal.'
         },
         {
             id: '32',
             name: 'Preso às Leis da Robótica de Asimov',
             xp: 6,
             morph: 'Androide',
-            description: 'Talvez por crença, fanatismo ou apenas por uma piada, durante a sua criação lhe impuseram uma ou mais das três famosas Leis da Robótica idealizadas há tempos remotos por um escritor do Mundo Antigo chamado Isaac Asimov, das quais você é incapaz de contradizer — por mais que tente.\n1ª Lei: Você não pode ferir um humano ou, por inação, permitir que um ser humano sofra algum mal.\n2ª Lei: Você deve obedecer às ordens que lhe sejam dadas por seres humanos, exceto nos casos em que entrem em conflito com a Primeira Lei.'
+            description: 'Talvez por crença, fanatismo ou apenas por uma piada, durante a sua criação lhe impuseram uma ou mais das três famosas Leis da Robótica idealizadas há tempos remotos por um escritor do Mundo Antigo chamado Isaac Asimov, das quais você é incapaz de contradizer — por mais que tente.<br>1ª Lei: Você não pode ferir um humano ou, por inação, permitir que um ser humano sofra algum mal.<br>2ª Lei: Você deve obedecer às ordens que lhe sejam dadas por seres humanos, exceto nos casos em que entrem em conflito com a Primeira Lei.'
         },
         {
             id: '33',
             name: 'Preso às Leis da Robótica de Asimov',
             xp: 8,
             morph: 'Androide',
-            description: 'Talvez por crença, fanatismo ou apenas por uma piada, durante a sua criação lhe impuseram uma ou mais das três famosas Leis da Robótica idealizadas há tempos remotos por um escritor do Mundo Antigo chamado Isaac Asimov, das quais você é incapaz de contradizer — por mais que tente.\n1ª Lei: Você não pode ferir um humano ou, por inação, permitir que um ser humano sofra algum mal.\n2ª Lei: Você deve obedecer às ordens que lhe sejam dadas por seres humanos, exceto nos casos em que entrem em conflito com a Primeira Lei.\n3ª Lei: Você deve proteger sua própria existência, desde que tal proteção não entre em conflito com a Primeira ou Segunda Leis.'
+            description: 'Talvez por crença, fanatismo ou apenas por uma piada, durante a sua criação lhe impuseram uma ou mais das três famosas Leis da Robótica idealizadas há tempos remotos por um escritor do Mundo Antigo chamado Isaac Asimov, das quais você é incapaz de contradizer — por mais que tente.<br>1ª Lei: Você não pode ferir um humano ou, por inação, permitir que um ser humano sofra algum mal.<br>2ª Lei: Você deve obedecer às ordens que lhe sejam dadas por seres humanos, exceto nos casos em que entrem em conflito com a Primeira Lei.<br>3ª Lei: Você deve proteger sua própria existência, desde que tal proteção não entre em conflito com a Primeira ou Segunda Leis.'
         },
         {
             id: '34',
             name: 'Núcleo das antigas',
             xp: 4,
             morph: 'Ciborgue',
-            description: 'O seu Núcleo não é ruim, mas é antigo demais para dar suporte à novas peças. Você não pode adquirir o ponto extra de {\Proeza} e deve iniciar apenas com 3 pontos, igual às outras morfologias.'
+            description: 'O seu Núcleo não é ruim, mas é antigo demais para dar suporte à novas peças. Você não pode adquirir o ponto extra de Aprimoramentos e deve iniciar apenas com 3 pontos, igual às outras morfologias.'
         },
         {
             id: '35',
@@ -231,7 +239,7 @@ export class TraitRepository {
             name: 'Estrutura infantil',
             xp: 4,
             morph: 'Sintético',
-            description: 'Quando lhe projetaram, sabe-se lá por que, decidiram que você deveria se parecer com uma criança. Sua estrutura física é menor, sua voz é fina e seu corpo não é bem desenvolvido — portanto, não pode ter Força e Vigor acima de 4. Constantemente lhe confundem com uma criança e não permitem que você tenha acesso a locais para adultos.\n<i>Observação:</i> Você não pode comprar o traço <i>Estatura incômoda</i> ou <i>Montanha de Músculos</i>.'
+            description: 'Quando lhe projetaram, sabe-se lá por que, decidiram que você deveria se parecer com uma criança. Sua estrutura física é menor, sua voz é fina e seu corpo não é bem desenvolvido — portanto, não pode ter Força e Vigor acima de 4. Constantemente lhe confundem com uma criança e não permitem que você tenha acesso a locais para adultos.<br><br><i>Observação:</i> Você não pode comprar o traço <i>Estatura incômoda</i> ou <i>Montanha de Músculos</i>.'
         },
         {
             id: '37',
@@ -251,13 +259,15 @@ export class TraitRepository {
             id: '39',
             name: 'Aliado meia boca',
             xp: 2,
-            description: 'Você possui um aliado que é muito ruim naquilo que faz — mas é seu amigo, fazer o quê? Ele também pode ser conhecido de forma negativa por algo ruim que tenha feito. Esse aliado tem 2 dados a menos nos testes em sua área de atuação.\n<i>Observação:</i> Para comprar este Traço, o jogador precisa definir algumas características básicas do aliado, tais como nome, bairro, área de atuação (habilidade primária) e possuir pelo menos 1 ponto no Repertorio Aliado.'
+            description: 'Você possui um aliado que é muito ruim naquilo que faz — mas é seu amigo, fazer o quê? Ele também pode ser conhecido de forma negativa por algo ruim que tenha feito. Esse aliado tem 2 dados a menos nos testes em sua área de atuação.<br><br><i>Observação:</i> Para comprar este Traço, o jogador precisa definir algumas características básicas do aliado, tais como nome, bairro, área de atuação (habilidade primária) e possuir pelo menos 1 ponto no Repertorio Aliado.',
+            particularity: '',
+            requirement: 'Possuir pelo menos 1 ponto no Repertorio Aliado.',
         },
         {
             id: '40',
             name: 'Atormentado',
             xp: 2,
-            description: 'Você fez ou soube de algo que não deveria e isto lhe causa constante tormento, seja por medo de que descubram o que você esconde ou por sofrer ameaça para que não o revele.\nCaso esse segredo viesse à público poderia estragar seu disfarce, se afastarem de você, perderem a confiança ou até mesmo caçá-lo. Converse e defina com seu narrador os detalhes sobre o que lhe atormenta e as implicações disto.',
+            description: 'Você fez ou soube de algo que não deveria e isto lhe causa constante tormento, seja por medo de que descubram o que você esconde ou por sofrer ameaça para que não o revele.<br>Caso esse segredo viesse à público poderia estragar seu disfarce, se afastarem de você, perderem a confiança ou até mesmo caçá-lo. Converse e defina com seu narrador os detalhes sobre o que lhe atormenta e as implicações disto.',
             particularity: '',
         },
         {
@@ -270,13 +280,13 @@ export class TraitRepository {
             id: '42',
             name: 'Carma',
             xp: 2,
-            description: 'É como dizem: tudo que você fizer poderá voltar contra você; seja um segredo contado, uma zombaria desmedida ou um tiro disparado.\nConverse e defina com seu narrador alguns gatilhos que podem fazer com que suas ações voltem contra si de alguma maneira.'
+            description: 'É como dizem: tudo que você fizer poderá voltar contra você; seja um segredo contado, uma zombaria desmedida ou um tiro disparado.<br>Converse e defina com seu narrador alguns gatilhos que podem fazer com que suas ações voltem contra si de alguma maneira.'
         },
         {
             id: '43',
             name: 'Cidadão esnobe',
             xp: 2,
-            description: 'Você desdenha da cultura dos outros e não faz nenhuma questão de ser mais sociável, constantemente fazendo pouco de seus costumes e debochando de suas ritualísticas. Esse tipo de atitude pode lhe trazer muitos problemas e inimigos, caso você decida abrir a boca no momento errado — e geralmente você não vê motivos para ficar calado.\nDefina com seu narrador um ou mais bairros, limitado a 5, que seu personagem não gosta e, para quaisquer situações que os envolvam, você deve ser bem-sucedido em um teste de Perseverança + Quietude (Dificuldade 7) para não ofender os habitantes dos bairros em questão.'
+            description: 'Você desdenha da cultura dos outros e não faz nenhuma questão de ser mais sociável, constantemente fazendo pouco de seus costumes e debochando de suas ritualísticas. Esse tipo de atitude pode lhe trazer muitos problemas e inimigos, caso você decida abrir a boca no momento errado — e geralmente você não vê motivos para ficar calado.<br>Defina com seu narrador um ou mais bairros, limitado a 5, que seu personagem não gosta e, para quaisquer situações que os envolvam, você deve ser bem-sucedido em um teste de Perseverança + Quietude (Dificuldade 7) para não ofender os habitantes dos bairros em questão.'
         },
         {
             id: '44',
@@ -288,7 +298,7 @@ export class TraitRepository {
             id: '45',
             name: 'Compulsão',
             xp: 2,
-            description: 'Em situações que lhe causam aflição, você apresenta um comportamento repetitivo para tentar aliviá-la. No entanto, esta compulsão acaba denunciando a sua identidade de alguma forma: sempre carregar e usar um produto higienizador; ordenar objetos simetricamente; pigarrear ou tossir com frequência; fazer contagens; estalar os dedos; entre outros.\nPor ser uma atitude irracional, para tentar contê-la temporariamente você deve gastar um ponto de Perseverança.',
+            description: 'Em situações que lhe causam aflição, você apresenta um comportamento repetitivo para tentar aliviá-la. No entanto, esta compulsão acaba denunciando a sua identidade de alguma forma: sempre carregar e usar um produto higienizador; ordenar objetos simetricamente; pigarrear ou tossir com frequência; fazer contagens; estalar os dedos; entre outros.<br>Por ser uma atitude irracional, para tentar contê-la temporariamente você deve gastar um ponto de Perseverança.',
             particularity: '',
         },
         {
@@ -325,43 +335,43 @@ export class TraitRepository {
             id: '51',
             name: 'Impaciente',
             xp: 2,
-            description: 'Antigamente diziam que o segredo da natureza era a paciência; no entanto, hoje ela está completamente destruída. O que você poderia pensar disso, então? Que a paciência não serviu para nada — por mais que insistam em lhe dizer o contrário!\nSim, você é inquieto e precipitado, não aguenta ficar muito tempo parado esperando e age no calor do momento sem dar muita atenção às consequências. E também não tem paciência suficiente para se importar com isso.'
+            description: 'Antigamente diziam que o segredo da natureza era a paciência; no entanto, hoje ela está completamente destruída. O que você poderia pensar disso, então? Que a paciência não serviu para nada — por mais que insistam em lhe dizer o contrário!<br>Sim, você é inquieto e precipitado, não aguenta ficar muito tempo parado esperando e age no calor do momento sem dar muita atenção às consequências. E também não tem paciência suficiente para se importar com isso.'
         },
         {
             id: '52',
             name: 'Indiferente',
             xp: 2,
-            description: 'Você não se dá bem com palavras inspiradoras, na verdade não acredita que têm potencial e mal liga para elas. Isso significa que o efeito <i>Inspirado</i> não surte tanto efeito em você ou as vezes não tem efeito nenhum.\n-1 dado quando <i>Inspirado</i>. Caso o personagem que esteja tentando inspirar tenha o Traço <i>Comandante</i>, você ainda poderá ter +3 dado pela grande habilidade dele.'
+            description: 'Você não se dá bem com palavras inspiradoras, na verdade não acredita que têm potencial e mal liga para elas. Isso significa que o efeito <i>Inspirado</i> não surte tanto efeito em você ou as vezes não tem efeito nenhum.<br>-1 dado quando <i>Inspirado</i>. Caso o personagem que esteja tentando inspirar tenha o Traço <i>Comandante</i>, você ainda poderá ter +3 dado pela grande habilidade dele.'
         },
         {
             id: '53',
             name: 'Indiferente',
             xp: 4,
-            description: 'Você não se dá bem com palavras inspiradoras, na verdade não acredita que têm potencial e mal liga para elas. Isso significa que o efeito <i>Inspirado</i> não surte tanto efeito em você ou as vezes não tem efeito nenhum.\n-2 dados quando <i>Inspirado</i>. Caso o personagem que esteja tentando inspirar tenha o Traço <i>Comandante</i>, você ainda poderá ter +2 dado pela grande habilidade dele.'
+            description: 'Você não se dá bem com palavras inspiradoras, na verdade não acredita que têm potencial e mal liga para elas. Isso significa que o efeito <i>Inspirado</i> não surte tanto efeito em você ou as vezes não tem efeito nenhum.<br>-2 dados quando <i>Inspirado</i>. Caso o personagem que esteja tentando inspirar tenha o Traço <i>Comandante</i>, você ainda poderá ter +2 dado pela grande habilidade dele.'
         },
         {
             id: '54',
             name: 'Indiferente',
             xp: 6,
-            description: 'Você não se dá bem com palavras inspiradoras, na verdade não acredita que têm potencial e mal liga para elas. Isso significa que o efeito <i>Inspirado</i> não surte tanto efeito em você ou as vezes não tem efeito nenhum.\n-3 dados quando <i>Inspirado</i>. Caso o personagem que esteja tentando inspirar tenha o Traço <i>Comandante</i>, você ainda poderá ter +1 dado pela grande habilidade dele.'
+            description: 'Você não se dá bem com palavras inspiradoras, na verdade não acredita que têm potencial e mal liga para elas. Isso significa que o efeito <i>Inspirado</i> não surte tanto efeito em você ou as vezes não tem efeito nenhum.<br>-3 dados quando <i>Inspirado</i>. Caso o personagem que esteja tentando inspirar tenha o Traço <i>Comandante</i>, você ainda poderá ter +1 dado pela grande habilidade dele.'
         },
         {
             id: '55',
             name: 'Inimigo',
             xp: 2,
-            description: 'Alguém, desde um ser até um grupo, está com raiva suficiente de você, da sua família, dos seus amigos ou de qualquer outro laço que lhe respingue o sentimento para se declarar como seu inimigo.\nEsses inimigos frequentemente tentam prejudicá-lo e o quão poderosos serão vai depender da quantidade de pontos que o jogador se arrisque a possuir:\n+2 XP — Seu rival possui poder equivalente ao seu; ele não quer lhe matar, mas ficará extremamente feliz em te derrotar no que for possível.'
+            description: 'Alguém, desde um ser até um grupo, está com raiva suficiente de você, da sua família, dos seus amigos ou de qualquer outro laço que lhe respingue o sentimento para se declarar como seu inimigo.<br>Esses inimigos frequentemente tentam prejudicá-lo e o quão poderosos serão vai depender da quantidade de pontos que o jogador se arrisque a possuir:<br>+2 XP — Seu rival possui poder equivalente ao seu; ele não quer lhe matar, mas ficará extremamente feliz em te derrotar no que for possível.'
         },
         {
             id: '56',
             name: 'Inimigo',
             xp: 4,
-            description: 'Alguém, desde um ser até um grupo, está com raiva suficiente de você, da sua família, dos seus amigos ou de qualquer outro laço que lhe respingue o sentimento para se declarar como seu inimigo.\nEsses inimigos frequentemente tentam prejudicá-lo e o quão poderosos serão vai depender da quantidade de pontos que o jogador se arrisque a possuir:\n+4 XP — Esse inimigo procura lesá-lo de todas as formas possíveis. Ele já esteve em seu caminho algumas vezes e sempre se mostrou um pouco melhor que você.'
+            description: 'Alguém, desde um ser até um grupo, está com raiva suficiente de você, da sua família, dos seus amigos ou de qualquer outro laço que lhe respingue o sentimento para se declarar como seu inimigo.<br>Esses inimigos frequentemente tentam prejudicá-lo e o quão poderosos serão vai depender da quantidade de pontos que o jogador se arrisque a possuir:<br>+4 XP — Esse inimigo procura lesá-lo de todas as formas possíveis. Ele já esteve em seu caminho algumas vezes e sempre se mostrou um pouco melhor que você.'
         },
         {
             id: '57',
             name: 'Inimigo',
             xp: 6,
-            description: 'Alguém, desde um ser até um grupo, está com raiva suficiente de você, da sua família, dos seus amigos ou de qualquer outro laço que lhe respingue o sentimento para se declarar como seu inimigo.\nEsses inimigos frequentemente tentam prejudicá-lo e o quão poderosos serão vai depender da quantidade de pontos que o jogador se arrisque a possuir:\n+6 XP — Pode se tratar de uma equipe inteira ou um ser extremamente sagaz, influente e poderoso que vai lhe caçar sempre que possível — com o único objetivo de ver seu fim. Juízes são ótimos inimigos.'
+            description: 'Alguém, desde um ser até um grupo, está com raiva suficiente de você, da sua família, dos seus amigos ou de qualquer outro laço que lhe respingue o sentimento para se declarar como seu inimigo.<br>Esses inimigos frequentemente tentam prejudicá-lo e o quão poderosos serão vai depender da quantidade de pontos que o jogador se arrisque a possuir:<br>+6 XP — Pode se tratar de uma equipe inteira ou um ser extremamente sagaz, influente e poderoso que vai lhe caçar sempre que possível — com o único objetivo de ver seu fim. Juízes são ótimos inimigos.'
         },
         {
             id: '58',
@@ -373,48 +383,48 @@ export class TraitRepository {
             id: '59',
             name: 'Procurado',
             xp: 2,
-            description: 'Você fez algo que irritou alguns seres de um ou vários bairros, por causa disso sua cabeça está a prêmio e eles farão de tudo para conseguir reivindicar este troféu.\nConverse e defina com seu narrador os critérios do contrato, se é procurado vivo ou morto e os bairros em que estão ativos. Enquanto estiver nas regiões escolhidas, você sofrerá uma penalidade de +2 no Nível de Procurado. Este Traço pode ser adquirido até seis vezes.',
+            description: 'Você fez algo que irritou alguns seres de um ou vários bairros, por causa disso sua cabeça está a prêmio e eles farão de tudo para conseguir reivindicar este troféu.<br>Converse e defina com seu narrador os critérios do contrato, se é procurado vivo ou morto e os bairros em que estão ativos. Enquanto estiver nas regiões escolhidas, você sofrerá uma penalidade de +2 no Nível de Procurado. Este Traço pode ser adquirido até seis vezes.',
             particularity: '',
         },
         {
             id: '60',
             name: 'Tolerância zero',
             xp: 2,
-            description: 'Há algo que lhe causa tanta antipatia que suas reações para com isto chegam a ser ilógicas. Pode ser, literalmente, qualquer coisa: uma situação específica; uma organização; um bairro; tipos de atitudes, costumes, objetos, alimentos ou criaturas; até mesmo perguntas que você considere idiotas podem ser o gatilho para uma resposta rude ou pior.\nQuando relacionado com o alvo de sua intolerância, a Dificuldade em todos os testes recebe +1 ponto. Converse e defina com seu narrador sobre o que você não tolera. Este traço pode ser adquirido até 4 vezes.',
+            description: 'Há algo que lhe causa tanta antipatia que suas reações para com isto chegam a ser ilógicas. Pode ser, literalmente, qualquer coisa: uma situação específica; uma organização; um bairro; tipos de atitudes, costumes, objetos, alimentos ou criaturas; até mesmo perguntas que você considere idiotas podem ser o gatilho para uma resposta rude ou pior.<br>Quando relacionado com o alvo de sua intolerância, a Dificuldade em todos os testes recebe +1 ponto. Converse e defina com seu narrador sobre o que você não tolera. Este traço pode ser adquirido até 4 vezes.',
             particularity: '',
         },
         {
             id: '61',
             name: 'Anônimo?',
             xp: 4,
-            description: 'O destino faz questão de deixar algo que mostre que você esteve ali: uma munição com cartucho muito característico; uma frase em um site invadido; uma pichação; uma assinatura digital; ou qualquer coisa que ligue a você.\nEncontrar o que foi deixado geralmente requer dois Sucessos num teste de (Percepção + Inteligência)/2 + Investigação (Dificuldade 7); contudo, uma vez que o investigador encontre tal marca duas vezes, a exigência cai para um Sucesso. Esse padrão também revela algum detalhe pequeno sobre o personagem, como seus hábitos, gostos ou prazeres.',
+            description: 'O destino faz questão de deixar algo que mostre que você esteve ali: uma munição com cartucho muito característico; uma frase em um site invadido; uma pichação; uma assinatura digital; ou qualquer coisa que ligue a você.<br>Encontrar o que foi deixado geralmente requer dois Sucessos num teste de (Percepção + Inteligência)/2 + Investigação (Dificuldade 7); contudo, uma vez que o investigador encontre tal marca duas vezes, a exigência cai para um Sucesso. Esse padrão também revela algum detalhe pequeno sobre o personagem, como seus hábitos, gostos ou prazeres.',
             particularity: '',
         },
         {
             id: '62',
             name: 'Curioso',
             xp: 4,
-            description: 'Você sente uma curiosidade fora do comum, o que constantemente o leva a abrir mão da sensatez para satisfazer esta necessidade. Desde entender o funcionamento de algo até descobrir um grande segredo, você facilmente se deixa levar e pode chegar a ser inconveniente ou a correr riscos.\nPara resistir, faça um teste de Perseverança + Quietude; a Dificuldade deve ser determinada pela gravidade da situação e o potencial de risco para o personagem (mínima 5 e máxima 10).'
+            description: 'Você sente uma curiosidade fora do comum, o que constantemente o leva a abrir mão da sensatez para satisfazer esta necessidade. Desde entender o funcionamento de algo até descobrir um grande segredo, você facilmente se deixa levar e pode chegar a ser inconveniente ou a correr riscos.<br>Para resistir, faça um teste de Perseverança + Quietude; a Dificuldade deve ser determinada pela gravidade da situação e o potencial de risco para o personagem (mínima 5 e máxima 10).'
         },
         {
             id: '63',
             name: 'Em dívida',
             xp: 4,
-            description: 'Você assinou um termo sem ler ou pediu/fez algo que o deixou em débito com um indivíduo — e ele vai cobrar o que achar conveniente. A sua dívida talvez nunca tenha um fim e, caso você se recuse a pagá-la, poderá sofrer as consequências.\nConverse com seu narrador sobre qual é a sua dívida e o motivo dela, lembre-se também de que você deve descrever para quem está devendo. Caso o cobrador perceba que não vai cooperar, poderá colocar atrás de você alguém disposto a resolver este problema, substituindo este defeito por Inimigo (4 de XP).',
+            description: 'Você assinou um termo sem ler ou pediu/fez algo que o deixou em débito com um indivíduo — e ele vai cobrar o que achar conveniente. A sua dívida talvez nunca tenha um fim e, caso você se recuse a pagá-la, poderá sofrer as consequências.<br>Converse com seu narrador sobre qual é a sua dívida e o motivo dela, lembre-se também de que você deve descrever para quem está devendo. Caso o cobrador perceba que não vai cooperar, poderá colocar atrás de você alguém disposto a resolver este problema, substituindo este defeito por Inimigo (4 de XP).',
             particularity: '',
         },
         {
             id: '64',
             name: 'Fobia',
             xp: 4,
-            description: 'Você sente um medo irracional de alguma coisa, geralmente algo improvável de lhe causar danos; mesmo assim, pode chegar a paralisá-lo ou fazê-lo evitar situações em que confronte aquilo que lhe causa tal pavor. Palhaços, robôs e altura são exemplos de fobias comuns.\nSempre que se deparar com o objeto de sua fobia, você pode gastar um ponto temporário de Quietude para controlar o pânico temporariamente ou fazer um teste de Perseverança + Consciência, a Dificuldade do teste é determinada pelo narrador. Se fracassar, deverá afastar-se do motivo imediatamente.',
+            description: 'Você sente um medo irracional de alguma coisa, geralmente algo improvável de lhe causar danos; mesmo assim, pode chegar a paralisá-lo ou fazê-lo evitar situações em que confronte aquilo que lhe causa tal pavor. Palhaços, robôs e altura são exemplos de fobias comuns.<br>Sempre que se deparar com o objeto de sua fobia, você pode gastar um ponto temporário de Quietude para controlar o pânico temporariamente ou fazer um teste de Perseverança + Consciência, a Dificuldade do teste é determinada pelo narrador. Se fracassar, deverá afastar-se do motivo imediatamente.',
             particularity: '',
         },
         {
             id: '65',
             name: 'Inaptidão',
             xp: 4,
-            description: 'Existem habilidades ou conhecimentos em que você simplesmente não tem facilidade para aprender. Precisa de mais tempo e dedicação para aquilo entrar na sua cabeça e fazer sentido a ponto de conseguir usá-las sem mais problemas.\nPor exemplo, você tem dificuldade em falar qualquer língua que seja diferente da usada no bairro onde vive ou continua errando aquela sequência de passos na aula de dança mesmo ensaiando mais que os outros.\nDefina uma habilidade na qual será inapto e ela custará 3 pontos de XP por nível ao invés de 2 XP. Esta deve possuir, no mínimo, nível 1 e fazer sentido com o conceito do personagem, não sendo permitido escolher ter inaptidão numa habilidade que nunca usaria.',
+            description: 'Existem habilidades ou conhecimentos em que você simplesmente não tem facilidade para aprender. Precisa de mais tempo e dedicação para aquilo entrar na sua cabeça e fazer sentido a ponto de conseguir usá-las sem mais problemas.<br>Por exemplo, você tem dificuldade em falar qualquer língua que seja diferente da usada no bairro onde vive ou continua errando aquela sequência de passos na aula de dança mesmo ensaiando mais que os outros.<br>Defina uma habilidade na qual será inapto e ela custará 3 pontos de XP por nível ao invés de 2 XP. Esta deve possuir, no mínimo, nível 1 e fazer sentido com o conceito do personagem, não sendo permitido escolher ter inaptidão numa habilidade que nunca usaria.',
             particularity: '',
         },
         {
@@ -427,21 +437,24 @@ export class TraitRepository {
             id: '67',
             name: 'Obsessão',
             xp: 4,
-            description: 'Existe algo que você ama ou é fascinado ao ponto de desconsiderar o bom senso para suprir essa obsessão. Você reage positivamente a qualquer coisa relacionada à sua obsessão, até mesmo se não estiver em seus planos.\nPor exemplo, se você é obcecado por carros exóticos, sairá do seu caminho para apreciá-los ou coleciona-los, desconsiderando todas as advertências; se você é obcecado por anime, toda a sua casa e pertences são decorados com pôsteres e hologramas e sempre tentará converter o tema da conversa para aquilo que gosta. Há muitas outras obsessões, incluindo artes marciais, armas, culinária, esportes, RPGs, etc. Converse e defina com o narrador qual será e como age em sua vida.\nUm Teste de Consciência + Quietude (Dificuldade 7) pode ser feito para resistir à obsessão de forma temporária.',
+            description: 'Existe algo que você ama ou é fascinado ao ponto de desconsiderar o bom senso para suprir essa obsessão. Você reage positivamente a qualquer coisa relacionada à sua obsessão, até mesmo se não estiver em seus planos.<br>Por exemplo, se você é obcecado por carros exóticos, sairá do seu caminho para apreciá-los ou coleciona-los, desconsiderando todas as advertências; se você é obcecado por anime, toda a sua casa e pertences são decorados com pôsteres e hologramas e sempre tentará converter o tema da conversa para aquilo que gosta. Há muitas outras obsessões, incluindo artes marciais, armas, culinária, esportes, RPGs, etc. Converse e defina com o narrador qual será e como age em sua vida.<br>Um Teste de Consciência + Quietude (Dificuldade 7) pode ser feito para resistir à obsessão de forma temporária.',
             particularity: '',
         },
         {
             id: '68',
             name: 'Insanidade',
             xp: 4,
-            description: 'Você sofre de uma forma de insanidade mental, seja devido a um defeito congênito, de fabricação ou algum trauma do passado.\nConverse com seu narrador e defina qual é e como age na vida do personagem. Alguns exemplos são: Esquizofrenia; Estresse pós-traumático; Transtorno obsessivo-compulsivo (TOC); Transtorno bipolar.\nVocê pode conseguir conviver com sua forma de insanidade, mas sempre que ela estiver no ápice e você precisar se controlar, deve ser bem-sucedido em um teste de Consciência + Perseverança (Dificuldade 7) para superá-la temporariamente.',
+            description: 'Você sofre de uma forma de insanidade mental, seja devido a um defeito congênito, de fabricação ou algum trauma do passado.<br>Converse com seu narrador e defina qual é e como age na vida do personagem. Alguns exemplos são: Esquizofrenia; Estresse pós-traumático; Transtorno obsessivo-compulsivo (TOC); Transtorno bipolar.<br>Você pode conseguir conviver com sua forma de insanidade, mas sempre que ela estiver no ápice e você precisar se controlar, deve ser bem-sucedido em um teste de Consciência + Perseverança (Dificuldade 7) para superá-la temporariamente.',
             particularity: '',
         },
         {
             id: '69',
             name: 'Baixa tolerância à dor',
             xp: 6,
-            description: 'Todo o seu circuito de alerta sensorial, orgânico ou não, é bastante sensível e reage aos menores estímulos, lhe causando dores desproporcionais à causa.\nVocê sofre a penalidade de -1 em seu Vigor para o cálculo de <i>Penalidade por Dano</i>. Caso o personagem adquira o efeito <i>Proeza da Dor</i> (Rigidez), este traço deve ser removido e a XP que ele concede devolvida.'
+            description: 'Todo o seu circuito de alerta sensorial, orgânico ou não, é bastante sensível e reage aos menores estímulos, lhe causando dores desproporcionais à causa.<br>Você sofre a penalidade de -1 em seu Vigor para o cálculo de <i>Penalidade por Dano</i>. Caso o personagem adquira o efeito <i>Proeza da Dor</i> (Rigidez), este traço deve ser removido e a XP que ele concede devolvida.',
+            effects: [
+                { key: CharacteristicType.DAMAGE_PENALTY, value: 1, typeOfValue: EffectChangeValueType.FIXED },
+            ]
         },
         {
             id: '70',
@@ -453,7 +466,7 @@ export class TraitRepository {
             id: '71',
             name: 'Lei de Murphy',
             xp: 6,
-            description: 'Se alguma coisa tem a possibilidade de dar errado, ela vai dar errado — está explicado por que as coisas não dão muito certo para você.\nEm algumas situações a cargo do narrador, quando o personagem precisar fazer algo consideravelmente difícil (Dificuldade 8 ou superior) ou extremamente fácil (Dificuldade 5) deve subtrair 3 do resultado; se ficar negativo, é uma falha crítica.\nCaso o jogador questione, mostre a ele que uma lei universal agiu sobre sua vida e ele não tem controle sobre isso.'
+            description: 'Se alguma coisa tem a possibilidade de dar errado, ela vai dar errado — está explicado por que as coisas não dão muito certo para você.<br>Em algumas situações a cargo do narrador, quando o personagem precisar fazer algo consideravelmente difícil (Dificuldade 8 ou superior) ou extremamente fácil (Dificuldade 5) deve subtrair 3 do resultado; se ficar negativo, é uma falha crítica.<br>Caso o jogador questione, mostre a ele que uma lei universal agiu sobre sua vida e ele não tem controle sobre isso.'
         },
         {
             id: '72',
@@ -466,44 +479,47 @@ export class TraitRepository {
             id: '73',
             name: 'Proteicomania',
             xp: 2,
-            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.\nAssim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.\nVocê acha muito deliciosa a geleia proteica de insetos.'
+            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.<br>Assim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.<br>Você acha muito deliciosa a geleia proteica de insetos.'
         },
         {
             id: '74',
             name: 'Proteicomania',
             xp: 4,
-            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.\nAssim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.\nVocê precisa comer a carne dos peixes-do-lodo para se sentir nutrido.'
+            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.<br>Assim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.<br>Você precisa comer a carne dos peixes-do-lodo para se sentir nutrido.'
         },
         {
             id: '75',
             name: 'Proteicomania',
             xp: 6,
-            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.\nAssim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.\nVocê só se contenta com carnes de aves e está disposto a pagar caro.'
+            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.<br>Assim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.<br>Você só se contenta com carnes de aves e está disposto a pagar caro.'
         },
         {
             id: '76',
             name: 'Proteicomania',
             xp: 8,
-            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.\nAssim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.\nSeu paladar só aceita carne vermelha desde que a provou, até mesmo se alimentar de outras coisas pode embrulhar o seu estômago.'
+            description: 'Desde que os seres passaram a viver na Colmeia, a escassez os privou de diversos tipos de proteína animal e vegetal. Com o tempo, os MedTecs perceberam que alguns indivíduos desenvolveram um sentimento tão exacerbado de prazer pelas poucas opções de proteínas existentes que beirava a loucura.<br>Assim, o nomearam de Transtorno da Proteína, também conhecida como <i>Proteicomania</i> (<i>proteico</i> — referente a ou constituído de proteína — e <i>mania</i> — estado de loucura). Possui quatro níveis de intensidade, começando por crises de abstinência sem danos graves no primeiro estágio até chegar ao mais grave, onde o indivíduo é capaz de praticar atos extremos para saciar sua vontade.<br>Seu paladar só aceita carne vermelha desde que a provou, até mesmo se alimentar de outras coisas pode embrulhar o seu estômago.'
         },
         {
             id: '77',
             name: 'Vício',
             xp: 6,
-            description: 'Você é viciado em alguma substância que precisa estar presente em seu organismo — orgânico ou não — praticamente a todo momento do dia; pode ser álcool, nicotina, drogas pesadas, adrenalina ou qualquer outra.\nEstas substâncias sempre devem enfraquece-lo de alguma maneira e, ao critério do narrador, uma das penalidades abaixo é aplicada considerando a abstinência ou presença da substância no organismo. Por exemplo, um personagem viciado em nicotina sofre +1 na Dificuldade quando estiver em abstinência; após ingeri-la, a Dificuldade volta ao valor normal e ele passa a perder 1 dado em testes de Vigor.\n<ul><li>1 dado a menos em todos os testes que envolvam algum Atributo específico afetado.</li><li>A Dificuldade aumenta em 1 em todos os testes que envolvam algum Atributo específico afetado.</li></ul>',
+            description: 'Você é viciado em alguma substância que precisa estar presente em seu organismo — orgânico ou não — praticamente a todo momento do dia; pode ser álcool, nicotina, drogas pesadas, adrenalina ou qualquer outra.<br>Estas substâncias sempre devem enfraquece-lo de alguma maneira e, ao critério do narrador, uma das penalidades abaixo é aplicada considerando a abstinência ou presença da substância no organismo. Por exemplo, um personagem viciado em nicotina sofre +1 na Dificuldade quando estiver em abstinência; após ingeri-la, a Dificuldade volta ao valor normal e ele passa a perder 1 dado em testes de Vigor.<br><ul><li>1 dado a menos em todos os testes que envolvam algum Atributo específico afetado.</li><li>A Dificuldade aumenta em 1 em todos os testes que envolvam algum Atributo específico afetado.</li></ul>',
             particularity: '',
         },
         {
             id: '78',
             name: 'Aprimoramentos defeituosos',
             xp: 6,
-            description: 'As melhorias que você tanto buscou para o seu corpo se mostraram um pesadelo e sofrimento. Talvez as peças que tenha utilizado não eram as melhores ou a combinação de sistemas distintos não funcionou bem, pode ser até que tenham implantado de forma errada; infelizmente, nada disso importa agora, pois as únicas coisas que você consegue pensar são nos efeitos colaterais que seus Aprimoramentos lhe causam.\nUm MedTec habilidoso pode ser capaz de fazer algo para ajudar, se tiver uma oportunidade de te operar com tempo suficiente para trabalhar com calma e precisão. Se alguém puder consertá-los, você poderá anular este traço e devolver a XP recebida.\nVocê fica fatigado sempre que utiliza algum de seus Aprimoramentos, perdendo 1 dado em todos os testes que faça após ativar algum efeito. Caso possua efeito passivo, você perderá um dado permanentemente.'
+            description: 'As melhorias que você tanto buscou para o seu corpo se mostraram um pesadelo e sofrimento. Talvez as peças que tenha utilizado não eram as melhores ou a combinação de sistemas distintos não funcionou bem, pode ser até que tenham implantado de forma errada; infelizmente, nada disso importa agora, pois as únicas coisas que você consegue pensar são nos efeitos colaterais que seus Aprimoramentos lhe causam.<br>Um MedTec habilidoso pode ser capaz de fazer algo para ajudar, se tiver uma oportunidade de te operar com tempo suficiente para trabalhar com calma e precisão. Se alguém puder consertá-los, você poderá anular este traço e devolver a XP recebida.<br>Você fica fatigado sempre que utiliza algum de seus Aprimoramentos, perdendo 1 dado em todos os testes que faça após ativar algum efeito. Caso possua efeito passivo, você perderá um dado permanentemente.'
         },
         {
             id: '79',
             name: 'Aprimoramentos defeituosos',
             xp: 8,
-            description: 'As melhorias que você tanto buscou para o seu corpo se mostraram um pesadelo e sofrimento. Talvez as peças que tenha utilizado não eram as melhores ou a combinação de sistemas distintos não funcionou bem, pode ser até que tenham implantado de forma errada; infelizmente, nada disso importa agora, pois as únicas coisas que você consegue pensar são nos efeitos colaterais que seus Aprimoramentos lhe causam.\nUm MedTec habilidoso pode ser capaz de fazer algo para ajudar, se tiver uma oportunidade de te operar com tempo suficiente para trabalhar com calma e precisão. Se alguém puder consertá-los, você poderá anular este traço e devolver a XP recebida.\nSeu núcleo não suporta os Aprimoramentos conectados a ele, esquentando facilmente e lhe deixando inconsciente com frequência. Diminua em 1 a quantia máxima de <i>Sobrecarga</i> suportada, totalizando 4.'
+            description: 'As melhorias que você tanto buscou para o seu corpo se mostraram um pesadelo e sofrimento. Talvez as peças que tenha utilizado não eram as melhores ou a combinação de sistemas distintos não funcionou bem, pode ser até que tenham implantado de forma errada; infelizmente, nada disso importa agora, pois as únicas coisas que você consegue pensar são nos efeitos colaterais que seus Aprimoramentos lhe causam.<br>Um MedTec habilidoso pode ser capaz de fazer algo para ajudar, se tiver uma oportunidade de te operar com tempo suficiente para trabalhar com calma e precisão. Se alguém puder consertá-los, você poderá anular este traço e devolver a XP recebida.<br>Seu núcleo não suporta os Aprimoramentos conectados a ele, esquentando facilmente e lhe deixando inconsciente com frequência. Diminua em 1 a quantia máxima de <i>Sobrecarga</i> suportada, totalizando 4.',
+            effects: [
+                { key: CharacteristicType.OVERLOAD, value: -1, typeOfValue: EffectChangeValueType.FIXED },
+            ]
         },
     ];
 

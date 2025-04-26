@@ -95,6 +95,12 @@ export class ActiveEffectsUtils {
         });
     }
 
+    static getEffectsByChangeKey(actor, changeKey) {
+        return actor.effects._source.map(effect => effect.changes)
+            .filter(a => a.length > 0).flat()
+            .filter(a => a.key == changeKey);
+    }
+
     static async enableEffect(effect) {
         if (effect) {
             await effect.update({ disabled: false });

@@ -8,6 +8,7 @@ export class EnhancementInfoParser {
             [EnhancementDuration.PASSIVE]: `${localize('Passivo')}`,
             [EnhancementDuration.SCENE]: `${localize('Cena')}`,
             [EnhancementDuration.USE]: `${localize('Uso')}`,
+            [EnhancementDuration.TIME]: `${localize('Tempo')}`,
         }
         return mapDuration[value] || `<${localize('Erro')}>`;
     }

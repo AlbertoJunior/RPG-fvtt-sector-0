@@ -18,7 +18,8 @@ class Setor0ActorSheet extends ActorSheet {
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
         temporary: SheetMethods.handleMethods.temporary,
-        equipment: SheetMethods.handleMethods.equipment
+        equipment: SheetMethods.handleMethods.equipment,
+        shortcuts: SheetMethods.handleMethods.shortcuts,
     };
 
     constructor(...args) {
@@ -26,6 +27,7 @@ class Setor0ActorSheet extends ActorSheet {
         this.currentPage = 1;
         this.filterBag = EquipmentType.UNKNOWM;
         this.isExpandedEffects = undefined;
+        this.isExpandedShortcuts = undefined;
         this.defaultHeight = undefined;
     }
 
@@ -252,27 +254,38 @@ class Setor0ActorSheet extends ActorSheet {
 
     #presetSheetExpandContainers(html) {
         const effectsContainer = html.find('#effects-container');
-        const isExpanded = this.isExpandedEffects;
+        const isExpandedEffects = this.isExpandedEffects;
+        this.#verifyAndExpandContainers(effectsContainer, isExpandedEffects);
 
-        if (typeof isExpanded === 'boolean') {
-            effectsContainer.toggleClass('S0-expanded', isExpanded);
-            if (!isExpanded) {
-                HtmlJsUtils.flipClasses(html.find('#effects-container-icon')[0], 'fa-chevron-up', 'fa-chevron-down');
-            }
-        }
+        const shortcutsContainer = html.find('#shortcuts-container');
+        const isExpandedShortcuts = this.isExpandedShortcuts;
+        this.#verifyAndExpandContainers(shortcutsContainer, isExpandedShortcuts);
 
-        if (!this.defaultHeight || isExpanded === undefined) {
+        if (!this.defaultHeight || isExpandedEffects === undefined) {
             requestAnimationFrame(() => {
                 const content = html.parent().parent()[0];
                 const windowElem = content.closest(".window-app");
                 this.defaultHeight = windowElem?.offsetHeight;
 
                 this.isExpandedEffects = effectsContainer[0].classList.contains('S0-expanded');
+                this.isExpandedShortcuts = shortcutsContainer[0].classList.contains('S0-expanded');
             });
         }
     }
 
+    #verifyAndExpandContainers(container, isExpanded) {
+        if (typeof isExpanded === 'boolean') {
+            container.toggleClass('S0-expanded', isExpanded);
+            if (!isExpanded) {
+                HtmlJsUtils.flipClasses(html.find('#effects-container-icon')[0], 'fa-chevron-up', 'fa-chevron-down');
+            }
+        }
+    }
+
     async #onCharacteristicClick(html, event) {
+        if (!this.isEditable) {
+            return;
+        }
         SheetMethods._handleCharacteristicClickEvent(event, this.actor);
     }
 
@@ -332,7 +345,9 @@ async function configurePartialTemplates() {
         "enhancement-partial",
         "equipment",
         "equipment-bag-item",
-        "equipment-equipped-item"
+        "equipment-equipped-item",
+        "shortcuts",
+        "shortcut-default-partial"
     ];
 
     const actorTemplatePaths = actorTemplateNames.map(name =>
@@ -346,13 +361,14 @@ async function configurePartialTemplates() {
     }
 
     const partials = [
-        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' },
-        { call: 'equipamentBagItem', path: 'actors/equipment-bag-item' },
-        { call: 'equipamentEquippedItem', path: 'actors/equipment-equipped-item' },
+        { call: 'traitPartialContainer', path: 'biography-trait-partial' },
+        { call: 'equipamentBagItem', path: 'equipment-bag-item' },
+        { call: 'equipamentEquippedItem', path: 'equipment-equipped-item' },
+        { call: 'shortcutDefaultPartial', path: 'shortcut-default-partial' },
     ];
 
     const results = await Promise.all(partials.map(async ({ call, path }) => {
-        const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
+        const fullPath = `systems/setor0OSubmundo/templates/actors/${path}.hbs`;
 
         if (!Handlebars.partials[fullPath]) {
             return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };

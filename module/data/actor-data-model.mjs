@@ -2,6 +2,7 @@ import { ActorEquipmentUtils } from "../core/equipment/actor-equipment.mjs";
 import { ActorCharacteristicField, ActorEnhancementField, ActorVirtueField, ActorAttributes, ActorAbilities } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../utils/actor-utils.mjs";
+import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
@@ -61,7 +62,12 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 iniciativa: new NumberField({ integer: true, initial: 0 }),
                 movimento: new NumberField({ integer: true, initial: 0 }),
                 vitalidade: new NumberField({ integer: true, initial: 0 }),
-            })
+                penalidade_dano: new NumberField({ integer: true, initial: 0 }),
+                ofensivo_corpo_a_corpo: new NumberField({ integer: true, initial: 0 }),
+                ofensivo_longo_alcance: new NumberField({ integer: true, initial: 0 }),
+                defensivo: new NumberField({ integer: true, initial: 0 }),
+            }),
+            atalhos: new ArrayField(new RollTestDataModel())
         };
     }
 
