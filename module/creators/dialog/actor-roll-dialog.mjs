@@ -56,20 +56,9 @@ export class ActorRollDialog {
                 }
             });
 
-        const difficultyOptions = [5, 6, 7, 8, 9, 10]
-            .map(attr => {
-                return {
-                    label: attr,
-                    value: attr,
-                    isDefault: attr == 6
-                }
-            });
-
         const data = {
             attributes: attributesOptions,
             abilities: abilitiesOptions,
-            difficulty: difficultyOptions,
-            isGM: game.user.isGM,
         }
         return await renderTemplate("systems/setor0OSubmundo/templates/rolls/default-roll.hbs", data);
     }

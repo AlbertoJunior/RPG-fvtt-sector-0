@@ -1,5 +1,5 @@
 import { CharacteristicType } from "../enums/characteristic-enums.mjs";
-import { getObject } from "../../scripts/utils/utils.mjs";
+import { getObject, TODO } from "../../scripts/utils/utils.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -39,6 +39,7 @@ export class ActorUtils {
         const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA);
         const letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE);
         const calculatedMax = Math.max(letalDamage - stamina, 0);
+        TODO('buscar nos efeitos se vai ter mais alguma penalidade')
         return Math.min(calculatedMax, 4);
     }
 
@@ -59,7 +60,8 @@ export class ActorUtils {
         const dexValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.DEXTERITY.id);
         const athleticsValue = this.getAbilityValue(actor, CharacteristicType.ABILITY.ATHLETICS.id);
         const bonusPM = getObject(actor, CharacteristicType.BONUS.PM) || 0;
-        return 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
+        const calculated = 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
+        return Math.max(calculated, 0);
     }
 
     static calculateInitiative(actor) {
@@ -126,55 +128,133 @@ export class ActorUtils {
 }
 
 export class ActorCombatUtils {
+    static dataPresetCombatMap = {
+        brawl: {
+            offensive: this.#makeOffensivePreset(
+                CharacteristicType.ATTRIBUTES.STRENGTH,
+                CharacteristicType.ATTRIBUTES.DEXTERITY,
+                CharacteristicType.ABILITY.BRAWL,
+                CharacteristicType.BONUS.OFENSIVE_MELEE
+            ),
+            defensive: this.#makeDefensivePreset(
+                CharacteristicType.ATTRIBUTES.DEXTERITY,
+                CharacteristicType.ATTRIBUTES.STAMINA,
+                CharacteristicType.ABILITY.BRAWL
+            )
+        },
+        melee: {
+            offensive: this.#makeOffensivePreset(
+                CharacteristicType.ATTRIBUTES.STRENGTH,
+                CharacteristicType.ATTRIBUTES.DEXTERITY,
+                CharacteristicType.ABILITY.MELEE,
+                CharacteristicType.BONUS.OFENSIVE_MELEE
+            ),
+            defensive: this.#makeDefensivePreset(
+                CharacteristicType.ATTRIBUTES.DEXTERITY,
+                CharacteristicType.ATTRIBUTES.STAMINA,
+                CharacteristicType.ABILITY.MELEE
+            )
+        },
+        projectile: {
+            offensive: this.#makeOffensivePreset(
+                CharacteristicType.ATTRIBUTES.DEXTERITY,
+                CharacteristicType.ATTRIBUTES.PERCEPTION,
+                CharacteristicType.ABILITY.PROJECTILE,
+                CharacteristicType.BONUS.OFENSIVE_PROJECTILE
+            ),
+            defensive: this.#makeDefensivePreset(
+                CharacteristicType.ATTRIBUTES.DEXTERITY,
+                CharacteristicType.ATTRIBUTES.STAMINA,
+                CharacteristicType.ABILITY.ATHLETICS
+            )
+        }
+    };
+
+    static #makeOffensivePreset(attr1, attr2, ability, bonusType) {
+        return {
+            attr1: attr1.id,
+            attr2: attr2.id,
+            ability: ability.id,
+            getBonus: (actor) => getObject(actor, bonusType) || 0
+        };
+    }
+
+    static #makeDefensivePreset(attr1, attr2, ability) {
+        const attr1Id = attr1.id;
+        const attr2Id = attr2.id;
+        const abilityId = ability.id;
+        return {
+            attr1: attr1Id,
+            attr2: attr2Id,
+            ability: abilityId,
+            getBonus: (actor, dices) => {
+                let safeDices = dices;
+                if (!dices) {
+                    safeDices = ActorUtils.calculateDices(actor, attr1Id, attr2Id, abilityId);
+                }
+                const bonus = getObject(actor, CharacteristicType.BONUS.DEFENSIVE);
+                return Math.floor(safeDices * bonus);
+            }
+        };
+    }
+
     static calculateOffensiveProjectileDices(actor) {
-        const dexValue = CharacteristicType.ATTRIBUTES.DEXTERITY.id;
-        const perValue = CharacteristicType.ATTRIBUTES.PERCEPTION.id;
-        const ability = CharacteristicType.ABILITY.PROJECTILE.id;
-
-        const bonus = getObject(actor, CharacteristicType.BONUS.OFENSIVE_PROJECTILE);
-
-        return ActorUtils.calculateDices(actor, dexValue, perValue, ability) + bonus;
+        const data = this.dataPresetCombatMap.projectile.offensive;
+        return this.calculateOffensiveDices(actor, data);
     }
 
     static calculateOffensiveMeleeDices(actor) {
-        const ability = CharacteristicType.ABILITY.MELEE.id;
-        const bonus = getObject(actor, CharacteristicType.BONUS.OFENSIVE_MELEE);
-        return this.calculateOfensiveDices(actor, ability) + bonus;
+        const data = this.dataPresetCombatMap.melee.offensive;
+        return this.calculateOffensiveDices(actor, data);
     }
 
     static calculateOffensiveBrawlDices(actor) {
-        const ability = CharacteristicType.ABILITY.BRAWL.id;
-        const bonus = getObject(actor, CharacteristicType.BONUS.OFENSIVE_MELEE);
-        return this.calculateOfensiveDices(actor, ability) + bonus;
+        const data = this.dataPresetCombatMap.brawl.offensive;
+        return this.calculateOffensiveDices(actor, data);
     }
 
-    static calculateOfensiveDices(actor, ability) {
-        const dexValue = CharacteristicType.ATTRIBUTES.DEXTERITY.id;
-        const strValue = CharacteristicType.ATTRIBUTES.PERCEPTION.id;
-        return ActorUtils.calculateDices(actor, dexValue, strValue, ability);
+    static calculateOffensiveDices(actor, data) {
+        const bonus = data.getBonus(actor);
+        return ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability) + bonus;
     }
 
     static calculateDefensiveDodgeDices(actor) {
-        const ability = CharacteristicType.ABILITY.ATHLETICS.id;
-        return this.calculateDefensiveDices(actor, ability);
+        const data = this.dataPresetCombatMap.projectile.defensive;
+        return this.#calculateDefensiveDices(actor, data);
+    }
+
+    static calculateDefensiveHalfDodgeDices(actor) {
+        const data = this.dataPresetCombatMap.projectile.defensive;
+        return this.#calculateHalfDefensiveDices(actor, data);
     }
 
     static calculateDefensiveBlockMeleeDices(actor) {
-        const ability = CharacteristicType.ABILITY.MELEE.id;
-        return this.calculateDefensiveDices(actor, ability);
+        const data = this.dataPresetCombatMap.melee.defensive;
+        return this.#calculateDefensiveDices(actor, data);
+    }
+
+    static calculateDefensiveHalfBlockMeleeDices(actor) {
+        const data = this.dataPresetCombatMap.melee.defensive;
+        return this.#calculateHalfDefensiveDices(actor, data);
     }
 
     static calculateDefensiveBlockBrawlDices(actor) {
-        const ability = CharacteristicType.ABILITY.BRAWL.id;
-        return this.calculateDefensiveDices(actor, ability);
+        const data = this.dataPresetCombatMap.brawl.defensive;
+        return this.#calculateDefensiveDices(actor, data);
     }
 
-    static calculateDefensiveDices(actor, ability) {
-        const dexValue = CharacteristicType.ATTRIBUTES.DEXTERITY.id;
-        const staValue = CharacteristicType.ATTRIBUTES.STAMINA.id;
+    static calculateDefensiveHalfBlockBrawlDices(actor) {
+        const data = this.dataPresetCombatMap.brawl.defensive;
+        return this.#calculateHalfDefensiveDices(actor, data);
+    }
 
-        const calculatedDices = ActorUtils.calculateDices(actor, dexValue, staValue, ability);
-        const defensiveTotalBonus = getObject(actor, CharacteristicType.BONUS.DEFENSIVE);
-        return Math.floor((1 + defensiveTotalBonus) * calculatedDices);
+    static #calculateDefensiveDices(actor, data) {
+        const dices = ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability);
+        return dices + data.getBonus(actor, dices);
+    }
+
+    static #calculateHalfDefensiveDices(actor, data) {
+        const dices = ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability);
+        return Math.floor(dices / 2) + data.getBonus(actor, dices);
     }
 }

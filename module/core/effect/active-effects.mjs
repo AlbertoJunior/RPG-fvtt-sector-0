@@ -27,7 +27,8 @@ export class ActiveEffectsUtils {
         };
 
         const activeEffectData = {
-            label: name,
+            id: name.toLowerCase(),
+            name: name,
             description: description,
             origin: origin,
             img: img,

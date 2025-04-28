@@ -58,7 +58,7 @@ export class EnhancementUtils {
                     durationObject = {
                         startRound: combat?.round,
                         startTurn: combat?.turn,
-                        rounds: 10,
+                        rounds: 99,
                         combat: combat
                     };
                 } else {

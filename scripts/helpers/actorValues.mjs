@@ -20,15 +20,15 @@ const map = {
     'offensive_melee_half': (actor) => Math.floor(ActorCombatUtils.calculateOffensiveMeleeDices(actor) / 2),
 
     'defensive_dodge': (actor) => ActorCombatUtils.calculateDefensiveDodgeDices(actor),
-    'defensive_dodge_half': (actor) => Math.floor(ActorCombatUtils.calculateDefensiveDodgeDices(actor) / 2),
+    'defensive_dodge_half': (actor) => ActorCombatUtils.calculateDefensiveHalfDodgeDices(actor),
     'defensive_block_melee': (actor) => ActorCombatUtils.calculateDefensiveBlockMeleeDices(actor),
-    'defensive_block_melee_half': (actor) => Math.floor(ActorCombatUtils.calculateDefensiveBlockMeleeDices(actor) / 2),
+    'defensive_block_melee_half': (actor) => ActorCombatUtils.calculateDefensiveHalfBlockMeleeDices(actor),
     'defensive_block_brawl': (actor) => ActorCombatUtils.calculateDefensiveBlockBrawlDices(actor),
-    'defensive_block_brawl_half': (actor) => Math.floor(ActorCombatUtils.calculateDefensiveBlockBrawlDices(actor) / 2),
+    'defensive_block_brawl_half': (actor) => ActorCombatUtils.calculateDefensiveHalfBlockBrawlDices(actor),
 
     'calculate_dice_pool': (actor, params) => {
-        const { primary_attribute, secondary_attribute, ability } = params;
-        return ActorUtils.calculateDices(actor, primary_attribute, secondary_attribute, ability);
+        const { primary_attribute, secondary_attribute, ability, bonus = 0 } = params;
+        return ActorUtils.calculateDices(actor, primary_attribute, secondary_attribute, ability) + bonus;
     },
 }
 

@@ -26,7 +26,7 @@
         </a>
 
         {{#if system.canEquip}}
-        <a {{#if flags.setor0OSubmundo.equipped}}class="hidden" {{else}}class="S0-icon-swaper" {{/if}} data-action="add"
+        <a {{#if system.equipped}}class="hidden" {{else}}class="S0-icon-swaper" {{/if}} data-action="add"
             data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}" data-item-id="{{id}}"
             title="{{localize 'S0.Equipar'}}">
             <i class="fas fa-arrow-up-from-square S0-icon-idle"></i>

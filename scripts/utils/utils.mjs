@@ -105,3 +105,12 @@ export function randomId() {
 export function convertToCollection(items) {
     return new foundry.utils.Collection(items.map(item => [item.id, item]));
 }
+
+export function snakeToCamel(entries) {
+    const camelCaseData = {};
+    for (const [key, value] of entries) {
+        const camelKey = key.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
+        camelCaseData[camelKey] = value;
+    }
+    return camelCaseData;
+}

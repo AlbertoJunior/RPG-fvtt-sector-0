@@ -35,7 +35,7 @@ export class DefaultActions {
             attrs: resultRoll.attrs,
             abilityInfo: resultRoll.abilityInfo,
             modifiers: resultRoll.modifiers,
-            difficulty: difficulty,
+            difficulty: Number(difficulty),
             messageTest: rollMessage,
             havePerseverance: ActorUtils.havePerseverance(actor),
         }
@@ -45,13 +45,13 @@ export class DefaultActions {
         const rollItems = resultRoll.roll;
         const defaultRoll = rollItems.default.roll;
         if (defaultRoll != undefined) {
-            const objectRoll = this.#mountOptions(defaultRoll, {...params, isOverload: false});
+            const objectRoll = this.#mountOptions(defaultRoll, { ...params, isOverload: false });
             rolls.push(objectRoll);
         }
 
         const overloadRoll = rollItems.overload.roll;
         if (overloadRoll != undefined) {
-            const objectRoll = this.#mountOptions(overloadRoll, {...params, isOverload: true});
+            const objectRoll = this.#mountOptions(overloadRoll, { ...params, isOverload: true });
             rolls.push(objectRoll);
         }
 
@@ -60,17 +60,23 @@ export class DefaultActions {
     }
 
     static #mountOptions(objectRoll, params) {
-        const { difficulty, messageTest, modifiers, isOverload } = params;
+        const { isOverload, difficulty, messageTest, modifiers } = params;
+
         const specialist = modifiers?.specialist || false;
+        const isHalf = modifiers?.isHalf || false;
         const automaticSuccess = modifiers?.automatic;
         const weapon = modifiers?.weapon;
 
-        objectRoll.options.isOverload = isOverload;
-        objectRoll.options.difficulty = difficulty;
-        objectRoll.options.specialist = specialist;
-        objectRoll.options.messageTest = messageTest;
-        objectRoll.options.automatic = automaticSuccess;
-        objectRoll.options.weapon = weapon;
+        objectRoll.options = {
+            ...objectRoll.options,
+            isOverload: isOverload,
+            difficulty: difficulty,
+            messageTest: messageTest,
+            specialist: specialist,
+            isHalf: isHalf,
+            automatic: automaticSuccess,
+            weapon: weapon,
+        }
         return objectRoll;
     }
 }

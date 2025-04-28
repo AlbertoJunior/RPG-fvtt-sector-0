@@ -55,8 +55,14 @@ export function _createLi(textContent, options = {}) {
         }
     }
 
-    const text = document.createTextNode(textContent);
-    li.appendChild(text);
+    if (options.title) {
+        li.title = options.title;
+    }
+
+    if (textContent) {
+        const text = document.createTextNode(textContent);
+        li.appendChild(text);
+    }
     return li;
 }
 

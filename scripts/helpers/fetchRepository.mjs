@@ -1,4 +1,6 @@
 import { equipmentTypeIdToTypeString, validEquipmentTypes } from "../../module/enums/equipment-enums.mjs";
+import { MorphologyRepository } from "../../module/repository/morphology-repository.mjs";
+import { DistrictRepository } from "../../module/repository/district-repository.mjs";
 import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
 import { TraitRepository } from "../../module/repository/trait-repository.mjs";
 import { LanguageRepository } from "../../module/repository/language-repository.mjs";
@@ -9,6 +11,8 @@ import { RepertoryRepository } from "../../module/repository/repertory-repositor
 import { VirtuesRepository } from "../../module/repository/virtues-repository.mjs";
 
 const map = {
+    'morphology': MorphologyRepository._getItems(),
+    'district': DistrictRepository._getItems(),
     'enhancement': EnhancementRepository._getItems(),
     'trait-good': TraitRepository._getGoodTraits(),
     'trait-bad': TraitRepository._getBadTraits(),

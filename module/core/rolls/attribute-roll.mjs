@@ -5,17 +5,27 @@ import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
     static async roll(actor, params) {
-        const { attr1, attr2, ability, specialist = false, bonus = 0, automatic = 0, weapon } = params;
+        const { attr1, attr2, ability, specialist = false,
+            bonus = 0, automatic = 0, weapon
+        } = params;
 
-        const bonusWeaponValue = bonus + (weapon?.damage || 0);
         const penalty = ActorUtils.calculatePenalty(actor);
-        const diceAmount = this.#calculateDiceAmount(actor, attr1, attr2, ability, penalty) + bonusWeaponValue;
-        
-        const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), diceAmount);
+        const diceAmount = ActorUtils.calculateDices(actor, attr1, attr2, ability);
+
+        const diceAmountPlusBonus = diceAmount + Number(bonus);
+        const diceAmountSubtractedPenalty = Math.max(diceAmountPlusBonus - penalty, 0);
+
+        let finalDiceAmount = diceAmountSubtractedPenalty;
+        if (diceAmountSubtractedPenalty > 0) {
+            const weaponDamage = Number(weapon?.damage) || 0
+            finalDiceAmount += weaponDamage;
+        }
+
+        const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), finalDiceAmount);
 
         const [rollOverloadResults, rollDefaultResults] = await Promise.all([
             CoreRollMethods.rollDice(overloadDiceAmount),
-            CoreRollMethods.rollDice(Math.max(diceAmount - overloadDiceAmount, 0))
+            CoreRollMethods.rollDice(Math.max(finalDiceAmount - overloadDiceAmount, 0))
         ]);
 
         const rollsResults = {
@@ -35,8 +45,8 @@ export class RollAttribute {
         }
 
         const modifiersInformations = {
-            automatic: automatic,
-            bonus: bonus,
+            automatic: Number(automatic),
+            bonus: Number(bonus),
             penalty: penalty,
             weapon: weapon
         }
@@ -69,12 +79,6 @@ export class RollAttribute {
             }
         };
         return this.roll(actor, params);
-    }
-
-    static #calculateDiceAmount(actor, attr1, attr2, ability, penalty) {
-        const amount = ActorUtils.calculateDices(actor, attr1, attr2, ability);
-        const finalAmount = Math.max(amount - penalty, 0);
-        return finalAmount;
     }
 
     static #mountParamsByRollable(rollable) {
