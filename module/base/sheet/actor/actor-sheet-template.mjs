@@ -8,6 +8,7 @@ import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { REGISTERED_TEMPLATES } from "../../../constants.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
+import { ActorUpdater } from "../../updater/actor-updater.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -37,6 +38,7 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetSheet(html);
         this.#setupListeners(html);
         this.#addPageButtonsOnFloatingMenu(html);
+        this.#setupSortableListener(html);
     }
 
     static get defaultOptions() {
@@ -92,16 +94,21 @@ class Setor0ActorSheet extends ActorSheet {
         const buttonContainer = html.find("#floating-menu")[0];
         const pages = [];
         const buttons = [];
+
+        const isCompacted = FlagsUtils.getGameUserFlag(game.user, 'isCompactedSheet')
+
         html.find(".S0-page").each((index, page) => {
             pages.push(page);
 
-            const textContent = page?.getAttribute('data-label') || "[Erro]";
+            const pageLabel = page?.getAttribute('data-label') || "[Erro]";
+            const textContent = isCompacted ? undefined : pageLabel;
 
             const iconClass = page?.getAttribute('data-icon');
-            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: '4px', } } : {};
+            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: isCompacted ? '0px' : '4px', } } : {};
 
             const options = {
-                classList: 'S0-simulate-button',
+                title: pageLabel,
+                classList: `S0-simulate-button ${isCompacted ? 'S0-compact' : ''}`,
                 ...iconOption
             };
 
@@ -255,13 +262,17 @@ class Setor0ActorSheet extends ActorSheet {
     #presetSheetExpandContainers(html) {
         const effectsContainer = html.find('#effects-container');
         const isExpandedEffects = this.isExpandedEffects;
-        this.#verifyAndExpandContainers(effectsContainer, isExpandedEffects);
+        this.#verifyAndExpandContainers(effectsContainer, isExpandedEffects, html);
 
-        const shortcutsContainer = html.find('#shortcuts-container');
+        const shortcutsContainer = html.find(`#shortcuts-container-${this.actor.id}`);
+        if (!shortcutsContainer) {
+            return
+        }
+
         const isExpandedShortcuts = this.isExpandedShortcuts;
-        this.#verifyAndExpandContainers(shortcutsContainer, isExpandedShortcuts);
+        this.#verifyAndExpandContainers(shortcutsContainer, isExpandedShortcuts, html);
 
-        if (!this.defaultHeight || isExpandedEffects === undefined) {
+        if (!this.defaultHeight || isExpandedEffects === undefined || isExpandedShortcuts == undefined) {
             requestAnimationFrame(() => {
                 const content = html.parent().parent()[0];
                 const windowElem = content.closest(".window-app");
@@ -273,7 +284,7 @@ class Setor0ActorSheet extends ActorSheet {
         }
     }
 
-    #verifyAndExpandContainers(container, isExpanded) {
+    #verifyAndExpandContainers(container, isExpanded, html) {
         if (typeof isExpanded === 'boolean') {
             container.toggleClass('S0-expanded', isExpanded);
             if (!isExpanded) {
@@ -326,6 +337,76 @@ class Setor0ActorSheet extends ActorSheet {
         buttons[normalizedCurrentIndex].classList.toggle('S0-selected');
         buttons[normalizedIndex].classList.toggle('S0-selected');
         this.currentPage = pageIndex;
+    }
+
+    #setupSortableListener(html) {
+        if (!window.Sortable) {
+            return;
+        }
+
+        const actorId = this.actor.id;
+
+        const containerShortcut = html[0].querySelector(`#shortcuts-container-${actorId}`);
+        if (containerShortcut) {
+            window.Sortable.create(containerShortcut, {
+                animation: 150,
+                handle: ".draggable",
+                draggable: ".draggable",
+                onEnd: (evt) => {
+                    const shortcuts = getObject(this.actor, CharacteristicType.SHORTCUTS);
+                    const newOrder = Array.from(containerShortcut.children)
+                        .map(element => {
+                            const id = element.querySelector("[data-item-id]")?.dataset?.itemId;
+                            return shortcuts.find(shortcut => shortcut.id == id);
+                        }).filter(Boolean);
+
+                    ActorUpdater._verifyAndUpdateActor(this.actor, CharacteristicType.SHORTCUTS, newOrder);
+                }
+            });
+        }
+
+        const equippedList = html[0].querySelector(`#equipped-${actorId}`);
+        const bagList = html[0].querySelector("#bag");
+
+        if (equippedList && bagList) {
+            const sortableOptions = {
+                group: `equipment-move-inner-${actorId}`,
+                animation: 150,
+                draggable: "li",
+                handle: ".S0-item-bag",
+                onEnd: (evt) => {
+                    debugger
+                    const origin = evt.from.id;
+                    const destination = evt.to.id;
+                    const itemElement = evt.item.querySelector("[data-item-id]");
+                    const itemId = itemElement?.dataset?.itemId;
+
+                    if (!itemId) {
+                        return;
+                    }
+
+                    if (origin == destination) {
+                        console.log('ordernar os itens no mesmo inventário');
+                    } else {
+                        console.log('lógica para replace de item');
+                        console.log(`Item ${itemId} movido de ${origin} para ${destination}`);
+
+                        const originId = origin.split('-')[1];
+                        const destinationId = destination.split('-')[1];
+
+                        // Aqui você pode acionar sua lógica para equipar/desequipar
+                        if (origin !== destination) {
+                            const action = destination === "equipped" ? "equipar" : "desequipar";
+                            console.log(`Ação a ser tomada: ${action}`);
+                        }
+                    }
+                }
+            };
+
+            window.Sortable.create(equippedList, sortableOptions);
+            window.Sortable.create(bagList, sortableOptions);
+        }
+
     }
 }
 

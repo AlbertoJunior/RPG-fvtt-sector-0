@@ -195,31 +195,38 @@ section {
     box-shadow: 0 0 3px var(--primary-color-alpha);
 }
 
-.dialog .dialog-buttons .delete {
+:is(.S0-button-delete, .dialog .dialog-buttons .delete) {
+    flex: 1;
+    box-shadow: none;
     background-color: var(--color-red-alpha-50) !important;
-    border-color: var(--color-red-alpha) !important;
+    border: 1px solid var(--color-red-alpha) !important;
 }
 
-.dialog .dialog-buttons .delete:hover {
+:is(.S0-button-delete, .dialog .dialog-buttons .delete):hover {
     color: white !important;
     background-color: var(--color-red-alpha) !important;
     box-shadow: 0 0 6px var(--color-red-alpha-50) !important;
     border-color: var(--color-red) !important;
 }
 
+.S0-button-confirm,
 .dialog .dialog-buttons :is(.cancel, .confirm, .delete, button.default) {
-    background-color: var(--secondary-color-alpha);
-    box-shadow: 0 0 6px var(--shadow-color);
+    flex: 1;
+    box-shadow: none;
+    background-color: var(--secondary-color-alpha-50);
+    border: 1px solid;
     border-color: var(--secondary-color-alpha);
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.S0-button-confirm:hover,
 .dialog .dialog-buttons :is(.cancel, .confirm):hover {
     background-color: var(--primary-color-alpha);
     box-shadow: 0 0 6px var(--primary-color-alpha-50);
     border-color: var(--primary-color-alpha);
 }
 
+button.default,
 .dialog .dialog-buttons button.default {
     flex: 2;
     max-width: 55%;
@@ -382,9 +389,10 @@ img.S0-clickable:hover {
 }
 
 .S0-container :is(input:enabled, textarea:not(:read-only)):is(:hover, :focus) {
-    border: 2px solid;
+    border: 2px solid var(--primary-color) !important;
     color: var(--primary-color);
     background: var(--secondary-color-alpha-50);
+    box-shadow: 0 0 6px var(--primary-color);
 }
 
 .S0-container :is(input, textarea)::placeholder {
@@ -439,34 +447,47 @@ img.S0-clickable:hover {
 }
 
 .S0-simulate-button {
+    width: 130px;
     margin-block: 4px;
     padding: 6px;
     font-size: var(--font-size-13);
     background-color: var(--secondary-color-alpha);
-    width: 130px;
     color: var(--on-secondary-color);
     border-radius: var(--border-radius-small);
-    box-shadow: 0px 1px 3px 0px var(--shadow-color);
-    transition: background-color 0.3s ease-in-out, box-shadow 0.2s ease;
+    border: 1px ridge transparent;
+    transition: width 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, height 0.2s ease;
 }
 
 .S0-simulate-button:hover {
     cursor: pointer;
-    color: black;
     background-color: var(--primary-color-alpha);
+    color: var(--on-primary-color);
+    border-color: var(--primary-color);
 }
 
 .S0-simulate-button.S0-selected {
-    background-color: var(--primary-color-alpha);
-    color: black;
-    box-shadow: 0px 3px 3px 0px var(--shadow-color);
     text-align: center;
     padding-inline: 0;
+    background-color: var(--primary-color-alpha);
+    color: var(--on-primary-color);
+    border-color: var(--primary-color);
 }
 
 .S0-marked {
-    color: black;
     background-color: var(--primary-color);
+    color: var(--on-primary-color);
+}
+
+.S0-simulate-button.S0-compact {
+    width: 34px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.S0-simulate-button.S0-compact li {
+    margin: 0;
 }
 
 .S0-infinity-horizontal-menu {
@@ -565,9 +586,9 @@ img.S0-clickable:hover {
 }
 
 :is(.S0-select, .S0-inner-select):enabled:is(:hover, :focus) {
-    background-color: var(--secondary-color-alpha-50);
-    border: 2px solid var(--secondary-color-alpha);
-    box-shadow: 0 0 6px var(--shadow-hover-color);
+    background-color: var(--secondary-color-alpha-50) !important;
+    border: 2px solid var(--primary-color) !important;
+    box-shadow: 0 0 6px var(--primary-color) !important;
 }
 
 .S0-enhancement .S0-characteristic {
@@ -667,8 +688,8 @@ img.S0-clickable:hover {
 .S0-content .dialog-content {
     max-height: 620px;
     overflow-y: scroll;
-    padding-right: 8px;
-    padding-left: 18px;
+    padding-right: 2px;
+    padding-left: 12px;
 }
 
 .S0-content .dialog-buttons {
@@ -1310,12 +1331,12 @@ button.S0-roll-result:not([disabled]):hover {
     margin: 0;
 }
 
-.S0-page-transparent :is(.S0-container) {
+.S0-page-transparent .S0-container {
     border-color: var(--tertiary-color-alpha-50);
 }
 
 .S0-page-transparent .S0-container :is(select:not(.S0-inner-select), input, textarea) {
-    border-color: var(--tertiary-color-alpha-50);
+    border-color: var(--primary-color-alpha-50);
 }
 
 :is(.S0-page-transparent, .S0-dialog, .S0-message-content) hr {

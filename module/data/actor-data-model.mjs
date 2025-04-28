@@ -1,7 +1,9 @@
 import { ActorEquipmentUtils } from "../core/equipment/actor-equipment.mjs";
+import { Setor0TokenDocument } from "../core/token/setor0-token.mjs";
 import { ActorCharacteristicField, ActorEnhancementField, ActorVirtueField, ActorAttributes, ActorAbilities } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../utils/actor-utils.mjs";
+import { FlagsUtils } from "../utils/flags-utils.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
@@ -94,6 +96,12 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             value: armorEquipped?.actual_resistance || 0,
         };
     }
+
+    get actualPM() {
+        const pm = ActorUtils.calculateMovimentPoints(this.actor);
+        const usedPm = FlagsUtils.getActorFlag(this.actor, 'used_pm') || 0;
+        return Math.max(pm - usedPm, 0);
+    }
 }
 
 class NPCDataModel extends ActorDataModel {
@@ -117,13 +125,20 @@ class PlayerDataModel extends ActorDataModel {
 }
 
 export async function createActorDataModels() {
+    Setor0TokenDocument.mappedLabel.set('actualVitality', 'Vitalidade_Atual');
+    Setor0TokenDocument.mappedLabel.set('actualProtection', 'Protecao_Atual');
+    Setor0TokenDocument.mappedLabel.set('vitalidade.total', 'Vitalidade_Total');
+    Setor0TokenDocument.mappedLabel.set('sobrecarga', 'Sobrecarga');
+    Setor0TokenDocument.mappedLabel.set('actualPM', 'Pontos_De_Movimento_Atuais');
+
     CONFIG.Actor.trackableAttributes = {
         Player: {
             bar: ["actualVitality", "actualProtection"],
-            value: ["vitalidade.total", "sobrecarga"]
+            value: ["vitalidade.total", "sobrecarga", "actualPM"]
         },
         NPC: {
-
+            bar: ["actualVitality", "actualProtection"],
+            value: ["vitalidade.total", "sobrecarga", "actualPM"]
         }
     };
 

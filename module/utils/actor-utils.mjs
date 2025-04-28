@@ -192,7 +192,7 @@ export class ActorCombatUtils {
                 if (!dices) {
                     safeDices = ActorUtils.calculateDices(actor, attr1Id, attr2Id, abilityId);
                 }
-                const bonus = getObject(actor, CharacteristicType.BONUS.DEFENSIVE);
+                const bonus = getObject(actor, CharacteristicType.BONUS.DEFENSIVE) || 0;
                 return Math.floor(safeDices * bonus);
             }
         };

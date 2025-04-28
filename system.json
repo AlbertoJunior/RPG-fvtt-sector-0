@@ -17,6 +17,9 @@
     "esmodules": [
         "setor0OSubmundo.mjs"
     ],
+    "scripts": [
+        "scripts/libs/Sortable.min.js"
+    ],
     "styles": [
         "styles/system-styles.css"
     ],

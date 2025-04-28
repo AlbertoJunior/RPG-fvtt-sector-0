@@ -32,9 +32,9 @@
         <div class="form-group">
             <label for="difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
             <select class="S0-select" id="difficulty" style="flex:1">
-                {{#each difficulty}}
-                <option value="{{value}}" {{#if isDefault}}selected{{/if}}>{{label}}</option>
-                {{/each}}
+                {{#forLoop 5 11}}
+                <option value="{{index}}" {{#if (eq index 6)}}selected{{/if}}>{{index}}</option>
+                {{/forLoop}}
             </select>
         </div>
 
@@ -53,7 +53,7 @@
                 <option value="publicroll" selected="">{{localize 'S0.Rolagem_Publica'}}</option>
                 <option value="gmroll">{{localize 'S0.Rolagem_Privada_GM'}}</option>
                 <option value="blindroll">{{localize 'S0.Rolagem_GM_Oculta'}}</option>
-                {{#if isGM}}
+                {{#if (gameFunc 'isGm')}}
                 <optgroup label="{{localize 'S0.Rolagens_GM'}}">
                     <option value="selfroll">{{localize 'S0.Rolagem_Pessoal'}}</option>
                 </optgroup>

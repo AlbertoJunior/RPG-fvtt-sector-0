@@ -1,0 +1,11 @@
+{{#unless (isNull buttons)}}
+<div class="S0-flex-center" style="column-gap: 4px; margin-block: 6px">
+    {{#each buttons}}
+    <button class="S0-flex-center {{classes}}" data-action="{{key}}">{{label}}
+        {{#unless (isNull icon)}}
+        <i style="margin: 0px; margin-left: 4px;" class="fa-solid {{icon}}"></i>
+        {{/unless}}
+    </button>
+    {{/each}}
+</div>
+{{/unless}}

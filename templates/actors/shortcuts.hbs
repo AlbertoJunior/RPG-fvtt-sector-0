@@ -59,13 +59,14 @@
             {{/if}}
         </h2>
 
-        <div id="shortcuts-container" class="S0-container-2-fixed-column S0-container-contract S0-expanded"
-            style="overflow-y: scroll; grid-row-gap: 0px; grid-column-gap: 4px;">
+        <div id="shortcuts-container-{{actor.id}}" class="S0-container-2-fixed-column S0-container-contract S0-expanded"
+            style="overflow-y: scroll; padding-left: 4px; grid-row-gap: 0px; grid-column-gap: 4px;">
             {{#each actor.system.atalhos as |shortcut|}}
-            <div class="S0-container S0-shortcut-item">
+            <div class="S0-container S0-shortcut-item {{#if ../editable}}draggable{{/if}}">
                 {{#if ../editable}}
-                <a class="S0-icon-expand" data-action="edit" data-characteristic="shortcuts"
-                    data-item-id="{{shortcut.id}}" style="text-align: center; width: 20px; margin-right: 4px">
+                <a class="S0-icon-expand" title="{{localize 'S0.Editar'}}" data-action="edit"
+                    data-characteristic="shortcuts" data-item-id="{{shortcut.id}}"
+                    style="text-align: center; width: 20px; margin-right: 4px">
                     <i class="fas fa-edit"></i>
                 </a>
                 {{/if}}
@@ -75,13 +76,17 @@
                     {{shortcut.name}}
                 </label>
 
-                <h3 class="S0-h-marked"
+                <h3 class="S0-h-marked" {{#if shortcut.specialist}}title="{{localize 'S0.Especialista'}}" {{/if}}
                     style="{{#if shortcut.specialist}}border: 2px ridge var(--primary-color-alpha);{{/if}}">
                     {{actorValues ../actor 'calculate_dice_pool' shortcut}}
+                    {{#unless (lt automatic 1)}}
+                    <span style="display: block; font-size: var(--font-size-10);">{{automatic}}*</span>
+                    {{/unless}}
                 </h3>
 
-                <a class="S0-icon-rotate" data-action="roll" data-characteristic="shortcuts"
-                    data-item-id="{{shortcut.id}}" style="text-align: center; width: 20px;">
+                <a class="S0-icon-rotate" title="{{localize 'S0.Rolar'}}" data-action="roll"
+                    data-characteristic="shortcuts" data-item-id="{{shortcut.id}}"
+                    style="text-align: center; width: 20px;">
                     <i class="fas fa-dice-d10"></i>
                 </a>
             </div>

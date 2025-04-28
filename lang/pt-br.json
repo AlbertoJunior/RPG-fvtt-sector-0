@@ -216,6 +216,11 @@
     "S0.Movimento": "Movimento",
     "S0.Iniciativa": "Iniciativa",
     "S0.Penalidade": "Penalidade",
+    
+    "S0.Vitalidade_Atual": "Vitalidade atual",
+    "S0.Vitalidade_Total": "Vitalidade total",
+    "S0.Protecao_Atual": "Proteção atual",
+    "S0.Pontos_De_Movimento_Atuais": "Pontos de Movimento atuais",
 
     "DOCUMENT.ChatMessages": "Mensagens",
     "DOCUMENT.Combats": "Combates",
@@ -258,6 +263,7 @@
     "COMBAT.EncounterPrevious": "Combate Anterior",
     "COMBAT.ToggleDead": "Definir como Morto",
     "COMBAT.PingCombatant": "Pingar combatente",
+    "COMBAT.PanToCombatant": "Olhar combatente",
     "COMBAT.ToggleVis": "Alternar visibilidade",
     "COMBAT.InitiativeRoll": "Rolar Iniciativa",
     "COMBAT.RollAll": "Rolar para todos",
@@ -278,6 +284,7 @@
     "TOKEN.BarValues": "Valores Únicos",
     "TOKEN.Title": "Configuração de Token",
     "TOKEN.TitlePrototype": "Token Prototípico",
+    "TOKEN.Update": "Atualizar Token",
 
     "EFFECT.StatusDead": "Morto",
     "EFFECT.StatusInvisible": "Invisível",

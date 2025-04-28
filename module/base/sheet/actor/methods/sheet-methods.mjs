@@ -1,6 +1,6 @@
 import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
 import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/element-creator.mjs";
-import { getActorFlag, getObject, localize, onArrayRemove, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
+import { getActorFlag, getObject, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
@@ -11,11 +11,7 @@ import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
 import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
-import { RollTestDataModel } from "../../../../data/roll-test-data-model.mjs";
-import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
-import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
+import { handlerShortcutEvents } from "./shortcut-methods.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
@@ -37,6 +33,12 @@ export class SheetMethods {
                         currentValue = !currentValue;
 
                         setActorFlag(actor, "editable", currentValue);
+                        return;
+                    }
+                    case 'compact': {
+                        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'isCompactedSheet') || false;
+                        await FlagsUtils.setGameUserFlag(game.user, 'isCompactedSheet', !actualMode);
+                        actor.sheet.render();
                         return;
                     }
                 }
@@ -109,62 +111,7 @@ export class SheetMethods {
         },
         temporary: handleStatusMethods,
         equipment: handlerEquipmentEvents,
-        shortcuts: {
-            [OnEventType.ROLL]: async (actor, event) => {
-                const itemId = event.currentTarget.dataset.itemId;
-                const shortcutTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
-                const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-                DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.name);
-            },
-            [OnEventType.ADD]: (actor, event) => {
-                const onConfirm = async (rollable) => {
-                    if (!rollable.name) {
-                        NotificationsUtils._error("O Teste precisa de um nome");
-                        return;
-                    }
-
-                    const current = getObject(actor, CharacteristicType.SHORTCUTS) || [];
-                    current.push(rollable);
-
-                    await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
-                };
-
-                CreateRollableTestDialog._open(null, onConfirm);
-            },
-            [OnEventType.EDIT]: (actor, event) => {
-                const itemId = event.currentTarget.dataset.itemId;
-                const selectedTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
-
-                const onConfirm = async (rollable) => {
-                    if (!rollable.name) {
-                        NotificationsUtils._error("O Teste precisa de um nome");
-                        return;
-                    }
-
-                    const shortcuts = getObject(actor, CharacteristicType.SHORTCUTS) || [];
-                    const index = shortcuts.indexOf(selectedTest);
-                    if(index >= 0){
-                        shortcuts[index] = rollable;
-                        await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
-                    }
-                };
-                const onDelete = async (rollable) => {
-                    const shortcuts = getObject(actor, CharacteristicType.SHORTCUTS) || [];
-                    onArrayRemove(shortcuts, rollable);
-                    await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
-                };
-
-                CreateRollableTestDialog._open(selectedTest, onConfirm, onDelete, true);
-            },
-            [OnEventType.VIEW]: (actor, event) => {
-                const minHeight = actor.sheet.defaultHeight;
-                const container = event.currentTarget.parentElement.parentElement.querySelector('#shortcuts-container');
-                const resultExpand = HtmlJsUtils.expandOrContractElement(container, { minHeight: minHeight });
-                HtmlJsUtils.flipClasses(event.currentTarget.children[0], 'fa-chevron-down', 'fa-chevron-up');
-
-                actor.sheet.isExpandedShortcuts = resultExpand.isExpanded;
-            },
-        },
+        shortcuts: handlerShortcutEvents
     }
 
     static _createDynamicSheet(html, isEditable) {
