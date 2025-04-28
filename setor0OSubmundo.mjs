@@ -2,11 +2,11 @@ import { InitHookHandle } from "./module/hooks/init.mjs";
 import { ReadyHookHandle } from "./module/hooks/ready.mjs";
 import { CreateItemHookHandle } from "./module/hooks/create-item.mjs";
 import { CreateCombatHookHandle } from "./module/hooks/create-combat.mjs";
-import { ActiveEffectHookHandle } from "./module/hooks/active-effects.mjs";
+
+document.getElementById('logo').src="systems/setor0OSubmundo/imgs/logo.png"
 
 Hooks.once('init', async function () {
   await InitHookHandle.handle();
-  ActiveEffectHookHandle.register();
 });
 
 Hooks.on('ready', async () => {

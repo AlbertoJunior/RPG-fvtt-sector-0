@@ -1,4 +1,4 @@
-import { OnEventType } from "../../../module/enums/on-event-type.mjs";
+import { OnEventType } from "../../enums/on-event-type.mjs";
 
 export class ElementCreatorJQuery {
     static #createCharacteristicDiv(isEditable, safeEventType, characteristicType) {

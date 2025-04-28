@@ -16,7 +16,7 @@ export class CreateFormDialog {
             content,
             buttons: {},
             render: (html) => {
-                this.#render(html, dialog, buttons);
+                this.#render(html, dialog, { buttons });
             },
         });
         dialog.render(true);
@@ -69,8 +69,9 @@ export class CreateFormDialog {
         return content.includes("<form");
     }
 
-    static #render(html, dialog, buttons) {
-        DialogUtils.presetDialogRender(html);
+    static #render(html, dialog, params) {
+        const { buttons, header } = params
+        DialogUtils.presetDialogRender(html, header);
         this.#setupButtonsRender(html, dialog, buttons);
     }
 

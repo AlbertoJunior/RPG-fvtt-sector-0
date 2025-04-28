@@ -1,5 +1,5 @@
-import { EnhancementDuration, EnhancementOverload } from "../../module/enums/enhancement-enums.mjs";
-import { localize } from "../utils/utils.mjs";
+import { EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
+import { localize } from "../../../scripts/utils/utils.mjs";
 
 export class EnhancementInfoParser {
 

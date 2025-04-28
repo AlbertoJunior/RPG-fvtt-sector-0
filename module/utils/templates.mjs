@@ -1,5 +1,5 @@
-import { actorHtmlTemplateRegister } from "../../module/base/sheet/actor/actor-sheet-template.mjs";
-import { itemsHtmlTemplateRegister } from "../../module/base/sheet/equipment/equipment-sheet.mjs";
+import { actorHtmlTemplateRegister } from "../base/sheet/actor/actor-sheet-template.mjs";
+import { itemsHtmlTemplateRegister } from "../base/sheet/equipment/equipment-sheet.mjs";
 
 export async function registerTemplates() {
     const templates = [

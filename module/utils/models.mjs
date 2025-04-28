@@ -1,6 +1,6 @@
-import { createActorDataModels } from "../../module/data/actor-data-model.mjs";
-import { createEquipmentDataModels } from "../../module/data/equipment-data-model.mjs";
-import { createTraitDataModels } from "../../module/data/trait-data-model.mjs";
+import { createActorDataModels } from "../data/actor-data-model.mjs";
+import { createEquipmentDataModels } from "../data/equipment-data-model.mjs";
+import { createTraitDataModels } from "../data/trait-data-model.mjs";
 
 export async function createDataModels() {
     const models = [

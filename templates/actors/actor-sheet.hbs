@@ -21,7 +21,7 @@
 
         <li class="S0-simulate-button {{#if (gameFunc 'inDarkMode')}}S0-marked{{/if}} {{#if (gameFunc 'isCompactedSheet')}}S0-compact{{/if}}"
             data-characteristic="sheet" data-action="check" data-type="color" title="{{localize 'S0.Modo_Escuro'}}">
-            <i class="fa-solid fa-circle-half-stroke"></i>
+            <i class="fas fa-circle-half-stroke"></i>
             {{#unless (gameFunc 'isCompactedSheet')}}
             {{localize 'S0.Modo_Escuro'}}
             {{/unless}}
@@ -29,7 +29,7 @@
 
         <li class="S0-simulate-button {{#if (gameFunc 'isCompactedSheet')}}S0-marked{{/if}} {{#if (gameFunc 'isCompactedSheet')}}S0-compact{{/if}}"
             data-characteristic="sheet" data-action="check" data-type="compact" title="{{localize 'S0.Modo_Compacto'}}">
-            <i class="fa-solid fa-arrows-left-right-to-line"></i>
+            <i class="fas fa-arrows-left-right-to-line"></i>
             {{#unless (gameFunc 'isCompactedSheet')}}
             {{localize 'S0.Modo_Compacto'}}
             {{/unless}}

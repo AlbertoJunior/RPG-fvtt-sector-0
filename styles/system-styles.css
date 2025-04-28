@@ -122,6 +122,15 @@ section {
 
 /* #region EDIT FOUNDRY STYLE */
 
+.compendium.directory .directory-list .directory-item {
+    padding-block: 2px;
+    box-shadow: 0px 1px 6px black;
+}
+
+img#logo {
+    object-fit: contain;
+}
+
 #chat-log {
     overflow-y: scroll;
     padding-left: 10px;
@@ -694,7 +703,7 @@ img.S0-clickable:hover {
 
 .S0-content .dialog-buttons {
     min-height: 36px;
-    max-height: 46px;
+    max-height: 44px;
     margin: 0;
     padding-block: 6px;
 }

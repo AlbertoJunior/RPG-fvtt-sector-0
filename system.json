@@ -83,6 +83,16 @@
             "ownership": {
                 "PLAYER": "OBSERVER"
             }
+        },
+        {
+            "name": "macros",
+            "label": "Macros",
+            "system": "setor0OSubmundo",
+            "path": "packs/macros",
+            "type": "Macro",
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
         }
     ],
     "languages": [

@@ -1,5 +1,5 @@
 import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
-import { getActorFlag, getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { getActorFlag, getObject, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
 import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
@@ -365,9 +365,9 @@ class Setor0ActorSheet extends ActorSheet {
             });
         }
 
+        TODO('voltar aqui para terminar isso')
         const equippedList = html[0].querySelector(`#equipped-${actorId}`);
         const bagList = html[0].querySelector("#bag");
-
         if (equippedList && bagList) {
             const sortableOptions = {
                 group: `equipment-move-inner-${actorId}`,

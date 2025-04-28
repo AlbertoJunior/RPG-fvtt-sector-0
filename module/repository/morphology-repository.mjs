@@ -29,7 +29,7 @@ export class MorphologyRepository {
                 id: item.id,
                 label: localize(item.label)
             }
-        })
+        });
     }
 
     static _getItems() {

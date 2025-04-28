@@ -82,3 +82,23 @@ export function _createIcon(options = {}) {
 
     return i;
 }
+
+export function _createA(textContent, options = {}) {
+    const element = document.createElement('a');
+
+    if (options.class) {
+        element.classList = options.class;
+    }
+
+    if (options.icon) {
+        const icon = _createIcon(options.icon);
+        if (icon) {
+            element.appendChild(icon);
+        }
+    }
+
+    if (textContent) {
+        element.appendChild(document.createTextNode(textContent));
+    }
+    return element;
+}

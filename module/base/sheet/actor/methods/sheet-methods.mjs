@@ -1,5 +1,5 @@
 import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
-import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/element-creator.mjs";
+import { ElementCreatorJQuery } from "../../../../creators/element/element-creator-jquery.mjs";
 import { getActorFlag, getObject, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";

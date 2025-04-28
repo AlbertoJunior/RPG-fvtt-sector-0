@@ -114,3 +114,7 @@ export function snakeToCamel(entries) {
     }
     return camelCaseData;
 }
+
+export function normalizeString(str) {
+    return str.replace(/\s+/g, ' ').trim();
+}

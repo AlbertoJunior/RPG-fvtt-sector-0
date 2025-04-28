@@ -24,4 +24,8 @@ export class FlagsUtils {
     static getItemFlag(item, flag) {
         return item.getFlag(SYSTEM_ID, flag);
     }
+
+    static getMacroFlag(macro, flag) {
+        return macro.flags[SYSTEM_ID]?.[flag];
+    }
 }
