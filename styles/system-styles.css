@@ -136,6 +136,15 @@ img#logo {
     padding-left: 10px;
 }
 
+#chat-controls {
+    justify-content: space-around;
+}
+
+#chat-controls .roll-type-select {
+    width: 190px;
+    max-width: 190px;
+}
+
 .combat-sidebar li.combatant .roll {
     background: url(../icons/d10.png) no-repeat 50% 50%;
     background-size: 32px;
@@ -235,8 +244,7 @@ img#logo {
     border-color: var(--primary-color-alpha);
 }
 
-button.default,
-.dialog .dialog-buttons button.default {
+:is(.S0-dialog, .S0-content) :is(.dialog .dialog-buttons button.default, button.default) {
     flex: 2;
     max-width: 55%;
 }

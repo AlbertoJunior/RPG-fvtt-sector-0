@@ -4,7 +4,8 @@
             <label>
                 {{localize 'S0.Nome'}}
             </label>
-            <textarea rows="2" style="resize: none;" maxlength="45" name="name" {{#unless canEdit}}disabled{{/unless}}>{{name}}</textarea>
+            <textarea rows="2" style="resize: none;" maxlength="45" name="name" placeholder="{{localize 'S0.Nome'}}"
+                {{#unless canEdit}}disabled{{/unless}}>{{name}}</textarea>
         </div>
 
         <h3>{{localize 'S0.Atributos'}}</h3>
@@ -54,16 +55,6 @@
         </div>
     </form>
 
-    {{#unless (isNull buttons)}}
-    <div class="S0-flex-center" style="column-gap: 4px; margin-block: 6px;">
-        {{#each buttons}}
-        <button class="S0-flex-center {{classes}}" data-action="{{key}}">{{label}}
-            {{#unless (isNull icon)}}
-            <i style="margin: 0px; margin-left: 4px;" class="fas {{icon}}"></i>
-            {{/unless}}
-        </button>
-        {{/each}}
-    </div>
-    {{/unless}}
+    {{> buttons-dialog buttons}}
 
 </div>

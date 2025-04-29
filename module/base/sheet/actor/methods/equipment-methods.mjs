@@ -243,11 +243,11 @@ class EquipmentHandleEvents {
         if (!item) {
             return;
         }
-    
+
         const defaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
         if (!defaultTestId) {
             return;
-        }        
+        }
 
         const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS).find(test => test.id == defaultTestId);
         if (!rollTest) {

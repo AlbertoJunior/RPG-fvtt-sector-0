@@ -5,10 +5,10 @@ import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
 import { EquipmentType } from "../../../enums/equipment-enums.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
-import { REGISTERED_TEMPLATES } from "../../../constants.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../updater/actor-updater.mjs";
+import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -411,57 +411,26 @@ class Setor0ActorSheet extends ActorSheet {
 }
 
 export async function actorHtmlTemplateRegister() {
-    await configurePartialTemplates();
+    const resultedTemplates = await configurePartialTemplates();
     await Actors.unregisterSheet("core", ActorSheet);
     await Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
+    return resultedTemplates;
 }
 
 async function configurePartialTemplates() {
     const actorTemplateNames = [
-        "characteristics",
-        "biography",
-        "biography-trait-partial",
-        "status",
-        "enhancement",
-        "enhancement-partial",
-        "equipment",
-        "equipment-bag-item",
-        "equipment-equipped-item",
-        "shortcuts",
-        "shortcut-default-partial"
+        { path: "actors/characteristics" },
+        { path: "actors/biography" },
+        { path: "actors/biography-trait-partial", call: 'traitPartialContainer' },
+        { path: "actors/status" },
+        { path: "actors/enhancement" },
+        { path: "actors/enhancement-partial" },
+        { path: "actors/equipment" },
+        { path: "actors/equipment-bag-item", call: 'equipamentBagItem' },
+        { path: "actors/equipment-equipped-item", call: 'equipamentEquippedItem' },
+        { path: "actors/shortcuts" },
+        { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' }
     ];
 
-    const actorTemplatePaths = actorTemplateNames.map(name =>
-        `systems/setor0OSubmundo/templates/actors/${name}.hbs`
-    );
-
-    await loadTemplates(actorTemplatePaths);
-
-    for (const path of actorTemplatePaths) {
-        REGISTERED_TEMPLATES.add(path);
-    }
-
-    const partials = [
-        { call: 'traitPartialContainer', path: 'biography-trait-partial' },
-        { call: 'equipamentBagItem', path: 'equipment-bag-item' },
-        { call: 'equipamentEquippedItem', path: 'equipment-equipped-item' },
-        { call: 'shortcutDefaultPartial', path: 'shortcut-default-partial' },
-    ];
-
-    const results = await Promise.all(partials.map(async ({ call, path }) => {
-        const fullPath = `systems/setor0OSubmundo/templates/actors/${path}.hbs`;
-
-        if (!Handlebars.partials[fullPath]) {
-            return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
-        }
-
-        Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
-        return { Partial: call, Status: "Sucesso", Path: fullPath };
-    }));
-
-    const errors = results.filter(r => r.Status !== "Sucesso").length;
-    if (errors > 0) {
-        console.error(`Erros [${errors}] ao carregar partials.`);
-    }
-    console.table(results);
+    return await loadAndRegisterTemplates(actorTemplateNames);
 }

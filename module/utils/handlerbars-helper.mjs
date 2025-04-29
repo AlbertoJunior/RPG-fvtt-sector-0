@@ -12,6 +12,7 @@ export async function loadHandlebarsHelpers() {
         "isEmpty.mjs",
         "gameFunc.mjs",
         "isNull.mjs",
+        "concat.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {

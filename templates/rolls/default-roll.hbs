@@ -47,18 +47,6 @@
 
         <hr>
 
-        <div class="form-group">
-            <label for="chat_select" style="flex:1;">{{localize 'S0.Enviar_No_Chat'}}:</label>
-            <select id="chat_select" class="S0-select" style="flex:1; text-align: start;">
-                <option value="publicroll" selected="">{{localize 'S0.Rolagem_Publica'}}</option>
-                <option value="gmroll">{{localize 'S0.Rolagem_Privada_GM'}}</option>
-                <option value="blindroll">{{localize 'S0.Rolagem_GM_Oculta'}}</option>
-                {{#if (gameFunc 'isGm')}}
-                <optgroup label="{{localize 'S0.Rolagens_GM'}}">
-                    <option value="selfroll">{{localize 'S0.Rolagem_Pessoal'}}</option>
-                </optgroup>
-                {{/if}}
-            </select>
-        </div>
+        {{> roll-chat-mode}}
     </div>
 </form>
