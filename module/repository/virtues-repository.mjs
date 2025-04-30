@@ -1,11 +1,20 @@
+import { localize } from "../../scripts/utils/utils.mjs";
+
 export class VirtuesRepository {
     static #characteristics = [
-        { id: 'consciencia', label: 'S0.Consciencia' },
-        { id: 'perseveranca', label: 'S0.Perseveranca' },
-        { id: 'quietude', label: 'S0.Quietude' }
+        { id: 'consciencia', label: 'Consciencia' },
+        { id: 'perseveranca', label: 'Perseveranca' },
+        { id: 'quietude', label: 'Quietude' }
     ];
 
     static _getItems() {
-        return [... this.#characteristics].sort((a, b) => a.label.localeCompare(b.label));
+        return [... this.#characteristics]
+        .map(item=> {
+            return {
+                ...item,
+                label: localize(item.label)
+            };
+        })
+        .sort((a, b) => a.label.localeCompare(b.label));
     }
 }

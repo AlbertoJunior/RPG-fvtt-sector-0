@@ -1,13 +1,15 @@
 import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
-import { getActorFlag, getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { getActorFlag, getObject, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
 import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
 import { EquipmentType } from "../../../enums/equipment-enums.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
-import { REGISTERED_TEMPLATES } from "../../../constants.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
+import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
+import { SYSTEM_ID } from "../../../constants.mjs";
+import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -18,7 +20,8 @@ class Setor0ActorSheet extends ActorSheet {
         linguas: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
         temporary: SheetMethods.handleMethods.temporary,
-        equipment: SheetMethods.handleMethods.equipment
+        equipment: SheetMethods.handleMethods.equipment,
+        shortcuts: SheetMethods.handleMethods.shortcuts,
     };
 
     constructor(...args) {
@@ -26,6 +29,7 @@ class Setor0ActorSheet extends ActorSheet {
         this.currentPage = 1;
         this.filterBag = EquipmentType.UNKNOWM;
         this.isExpandedEffects = undefined;
+        this.isExpandedShortcuts = undefined;
         this.defaultHeight = undefined;
     }
 
@@ -35,6 +39,7 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetSheet(html);
         this.#setupListeners(html);
         this.#addPageButtonsOnFloatingMenu(html);
+        SheetActorDragabbleMethods.setup(html, this.actor);
     }
 
     static get defaultOptions() {
@@ -53,6 +58,14 @@ class Setor0ActorSheet extends ActorSheet {
         data.canRoll = this.canRollOrEdit;
         data.canEdit = this.canRollOrEdit;
         return data;
+    }
+
+    async _onDropActor(event, data) {
+        console.log('-> On Drop Actor');
+    }
+    
+    async _onDropItem(event, data) {
+        console.log('-> On Drop Item');
     }
 
     get isEditable() {
@@ -90,16 +103,21 @@ class Setor0ActorSheet extends ActorSheet {
         const buttonContainer = html.find("#floating-menu")[0];
         const pages = [];
         const buttons = [];
+
+        const isCompacted = FlagsUtils.getGameUserFlag(game.user, 'isCompactedSheet')
+
         html.find(".S0-page").each((index, page) => {
             pages.push(page);
 
-            const textContent = page?.getAttribute('data-label') || "[Erro]";
+            const pageLabel = page?.getAttribute('data-label') || "[Erro]";
+            const textContent = isCompacted ? undefined : pageLabel;
 
             const iconClass = page?.getAttribute('data-icon');
-            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: '4px', } } : {};
+            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: isCompacted ? '0px' : '4px', } } : {};
 
             const options = {
-                classList: 'S0-simulate-button',
+                title: pageLabel,
+                classList: `S0-simulate-button ${isCompacted ? 'S0-compact' : ''}`,
                 ...iconOption
             };
 
@@ -252,27 +270,42 @@ class Setor0ActorSheet extends ActorSheet {
 
     #presetSheetExpandContainers(html) {
         const effectsContainer = html.find('#effects-container');
-        const isExpanded = this.isExpandedEffects;
+        const isExpandedEffects = this.isExpandedEffects;
+        this.#verifyAndExpandContainers(effectsContainer, isExpandedEffects, html);
 
-        if (typeof isExpanded === 'boolean') {
-            effectsContainer.toggleClass('S0-expanded', isExpanded);
-            if (!isExpanded) {
-                HtmlJsUtils.flipClasses(html.find('#effects-container-icon')[0], 'fa-chevron-up', 'fa-chevron-down');
-            }
+        const shortcutsContainer = html.find(`#shortcuts-container-${this.actor.id}`);
+        if (!shortcutsContainer) {
+            return
         }
 
-        if (!this.defaultHeight || isExpanded === undefined) {
+        const isExpandedShortcuts = this.isExpandedShortcuts;
+        this.#verifyAndExpandContainers(shortcutsContainer, isExpandedShortcuts, html);
+
+        if (!this.defaultHeight || isExpandedEffects === undefined || isExpandedShortcuts == undefined) {
             requestAnimationFrame(() => {
                 const content = html.parent().parent()[0];
                 const windowElem = content.closest(".window-app");
                 this.defaultHeight = windowElem?.offsetHeight;
 
                 this.isExpandedEffects = effectsContainer[0].classList.contains('S0-expanded');
+                this.isExpandedShortcuts = shortcutsContainer[0].classList.contains('S0-expanded');
             });
         }
     }
 
+    #verifyAndExpandContainers(container, isExpanded, html) {
+        if (typeof isExpanded === 'boolean') {
+            container.toggleClass('S0-expanded', isExpanded);
+            if (!isExpanded) {
+                HtmlJsUtils.flipClasses(html.find('#effects-container-icon')[0], 'fa-chevron-up', 'fa-chevron-down');
+            }
+        }
+    }
+
     async #onCharacteristicClick(html, event) {
+        if (!this.isEditable) {
+            return;
+        }
         SheetMethods._handleCharacteristicClickEvent(event, this.actor);
     }
 
@@ -316,55 +349,25 @@ class Setor0ActorSheet extends ActorSheet {
     }
 }
 
-export async function actorHtmlTemplateRegister() {
-    await configurePartialTemplates();
-    await Actors.unregisterSheet("core", ActorSheet);
-    await Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
+export async function actorTemplatesRegister() {
+    const templates = [
+        { path: "actors/characteristics" },
+        { path: "actors/biography" },
+        { path: "actors/biography-trait-partial", call: 'traitPartialContainer' },
+        { path: "actors/status" },
+        { path: "actors/enhancement" },
+        { path: "actors/enhancement-partial" },
+        { path: "actors/equipment" },
+        { path: "items/equipment-bag-item", call: 'equipamentBagItem' },
+        { path: "items/equipment-equipped-item", call: 'equipamentEquippedItem' },
+        { path: "actors/shortcuts" },
+        { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' }
+    ];
+
+    return await loadAndRegisterTemplates(templates);;
 }
 
-async function configurePartialTemplates() {
-    const actorTemplateNames = [
-        "characteristics",
-        "biography",
-        "biography-trait-partial",
-        "status",
-        "enhancement",
-        "enhancement-partial",
-        "equipment",
-        "equipment-bag-item",
-        "equipment-equipped-item"
-    ];
-
-    const actorTemplatePaths = actorTemplateNames.map(name =>
-        `systems/setor0OSubmundo/templates/actors/${name}.hbs`
-    );
-
-    await loadTemplates(actorTemplatePaths);
-
-    for (const path of actorTemplatePaths) {
-        REGISTERED_TEMPLATES.add(path);
-    }
-
-    const partials = [
-        { call: 'traitPartialContainer', path: 'actors/biography-trait-partial' },
-        { call: 'equipamentBagItem', path: 'actors/equipment-bag-item' },
-        { call: 'equipamentEquippedItem', path: 'actors/equipment-equipped-item' },
-    ];
-
-    const results = await Promise.all(partials.map(async ({ call, path }) => {
-        const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
-
-        if (!Handlebars.partials[fullPath]) {
-            return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
-        }
-
-        Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
-        return { Partial: call, Status: "Sucesso", Path: fullPath };
-    }));
-
-    const errors = results.filter(r => r.Status !== "Sucesso").length;
-    if (errors > 0) {
-        console.error(`Erros [${errors}] ao carregar partials.`);
-    }
-    console.table(results);
+export async function registerActor() {
+    await Actors.unregisterSheet("core", ActorSheet);
+    await Actors.registerSheet(SYSTEM_ID, Setor0ActorSheet, { makeDefault: true });
 }

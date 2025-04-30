@@ -1,10 +1,11 @@
-<form class="S0-dialog">
-    <div class="S0-container">
+<div class="S0-dialog">
+    <form class="S0-container">
         <div class="form-group">
             <label>
                 {{localize 'S0.Nome'}}
             </label>
-            <input type="text" name="name" value="{{name}}" {{#unless canEdit}}disabled{{/unless}} />
+            <textarea rows="2" style="resize: none;" maxlength="45" name="name" placeholder="{{localize 'S0.Nome'}}"
+                {{#unless canEdit}}disabled{{/unless}}>{{name}}</textarea>
         </div>
 
         <h3>{{localize 'S0.Atributos'}}</h3>
@@ -52,5 +53,8 @@
             <input id="automatic" type="number" name="automatic" value="{{automatic}}" min="0" {{#unless
                 canEdit}}disabled{{/unless}} />
         </div>
-    </div>
-</form>
+    </form>
+
+    {{> buttons-dialog buttons}}
+
+</div>

@@ -1,13 +1,66 @@
-<section data-label="{{ localize 'S0.Status' }}" class="S0-page" id="statusPage" data-icon="fa-solid fa-heart-pulse">
-    <h2> {{localize 'S0.Situacao'}}
-        {{#if canRoll}}
-        <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary" data-type="all">
-            <i class="fas fa-refresh"></i>
-        </a>
-        {{/if}}
-    </h2>
+<section data-label="{{ localize 'S0.Status' }}" class="S0-page" id="statusPage" data-icon="fas fa-heart-pulse">
 
-    <section>
+    {{#unless (isNull actor.system.experiencia)}}
+    <div class="S0-container">
+        <h2>
+            {{localize 'S0.Experiencia'}}
+        </h2>
+
+        <ul class="S0-ul-flex">
+            {{#if editable}}
+            {{#if (gameFunc 'isGm')}}
+            <li class="S0-container">
+                <h3>
+                    <label for="experiencia.atual">{{localize 'S0.Disponivel'}}</label>
+                </h3>
+                <h4>
+                    <input id="experiencia.atual" name="system.experiencia.atual" type="text"
+                        value="{{actor.system.experiencia.atual}}" placeholder="0" />
+                </h4>
+            </li>
+            {{else}}
+            <li class="S0-container">
+                <h3>{{localize 'S0.Disponivel'}}</h3>
+                <h4>{{actor.system.experiencia.atual}}</h4>
+            </li>
+            {{/if}}
+            <li class="S0-container">
+                <h3>
+                    <label for="experiencia.usada">{{localize 'S0.Usada'}}</label>
+                </h3>
+                <h4>
+                    <input id="experiencia.usada" name="system.experiencia.usada" type="text"
+                        value="{{actor.system.experiencia.usada}}" placeholder="0" />
+                </h4>
+            </li>
+            {{else}}
+            <li class="S0-container">
+                <h3>{{localize 'S0.Disponivel'}}</h3>
+                <h4>{{actor.system.experiencia.atual}}</h4>
+            </li>
+            <li class="S0-container">
+                <h3>{{localize 'S0.Usada'}}</h3>
+                <h4>{{actor.system.experiencia.usada}}</h4>
+            </li>
+            {{/if}}
+
+            <li class="S0-container">
+                <h3>{{localize 'S0.Total'}}</h3>
+                <h4>{{actorValues actor 'total_experience'}}</h4>
+            </li>
+        </ul>
+    </div>
+    {{/unless}}
+
+    <div class="S0-container">
+        <h2> {{localize 'S0.Situacao'}}
+            {{#if canRoll}}
+            <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary" data-type="all">
+                <i class="fas fa-refresh"></i>
+            </a>
+            {{/if}}
+        </h2>
+
         <ul class="S0-ul-flex">
             <li class="S0-container">
                 <h3>{{ localize 'S0.Movimento'}}</h3>
@@ -29,6 +82,7 @@
                 <h4>{{actorValues actor 'penalty'}}</h4>
             </li>
         </ul>
+
         <ul class="S0-ul-flex">
             <li class="S0-container">
                 <h3>
@@ -147,7 +201,7 @@
         </ul>
 
         <ul class="S0-ul-flex">
-            <li class="S0-container">
+            <li class="S0-container" style="flex: 3">
                 <h3>
                     {{ localize 'S0.Vitalidade' }}
                     <label style="font-size: var(--font-size-11);">
@@ -170,8 +224,7 @@
                     {{/forLoop}}
                 </div>
 
-                <div class="S0-container"
-                    style="display: flex; justify-content: space-around; padding: 6px; margin-bottom: 2px;">
+                <div class="S0-container" style="display: flex; justify-content: space-around; margin-bottom: 2px;">
                     <div class="S0-inner-li">
                         <label><strong>{{localize 'S0.Clique_Esquerdo'}}:</strong> {{localize 'S0.Letal'}}</label>
                         <div class="S0-characteristic S0-characteristic-temp"
@@ -186,55 +239,58 @@
                     </div>
                 </div>
             </li>
-        </ul>
-    </section>
 
-    {{#unless (isNull actor.system.equipedProtectItem) }}
+            {{#unless (isNull actor.system.equipedProtectItem) }}
+            <div class="S0-container" style="flex: 1;">
+                <h3>
+                    {{ localize 'S0.Protecao' }}
+                    {{#if canRoll}}
+                    <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary" data-type="protect">
+                        <i class="fas fa-refresh"></i>
+                    </a>
+                    {{/if}}
+                </h3>
+
+                <div id="protect" class="S0-inner-container" style="flex-wrap: wrap; column-gap: 26px; row-gap:10px">
+                    {{#forLoop 0 actor.system.equipedProtectItem.system.resistance}}
+                    {{#with ../canRoll as |canRoll|}}
+                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="protect">
+                    </div>
+                    {{/with}}
+                    {{/forLoop}}
+                </div>
+            </div>
+            {{/unless}}
+
+        </ul>
+    </div>
+
     <div class="S0-container">
-        <h3>
-            {{ localize 'S0.Protecao' }}
+        <h2>
+            {{localize 'S0.Efeitos_Ativos'}}
+            <a class="S0-icon-expand" data-action="view" data-characteristic="effects">
+                <i id="effects-container-icon" class="fas fa-chevron-up"></i>
+            </a>
             {{#if canRoll}}
-            <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary" data-type="protect">
+            <a class="S0-icon-rotate" data-action="check" data-characteristic="effects">
                 <i class="fas fa-refresh"></i>
             </a>
+            <a class="S0-icon-expand" data-action="remove" data-characteristic="effects" data-type="all"> <i
+                    class="fas fa-trash"></i> </a>
             {{/if}}
-        </h3>
+        </h2>
 
-        <div id="protect" class="S0-inner-container">
-            {{#forLoop 0 actor.system.equipedProtectItem.system.resistance}}
-            {{#with ../canRoll as |canRoll|}}
-            <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="protect">
-            </div>
-            {{/with}}
-            {{/forLoop}}
-        </div>
+        <ul id="effects-container" class="S0-container S0-container-contract S0-expanded">
+            {{#each effects as |item index|}}
+            <li>
+                {{ item.origin }}: {{ item.name }}
+                <a class="S0-icon-expand" data-action="remove" data-characteristic="effects" data-type="single"
+                    data-item-index="{{ index }}">
+                    <i class="fas fa-remove"></i>
+                </a>
+            </li>
+            {{/each}}
+        </ul>
     </div>
-    {{/unless}}
-
-    <h2>
-        {{localize 'S0.Efeitos_Ativos'}}
-        <a class="S0-icon-expand" data-action="view" data-characteristic="effects">
-            <i id="effects-container-icon" class="fa-solid fa-chevron-up"></i>
-        </a>
-        {{#if canRoll}}
-        <a class="S0-icon-rotate" data-action="check" data-characteristic="effects">
-            <i class="fas fa-refresh"></i>
-        </a>
-        <a class="S0-icon-expand" data-action="remove" data-characteristic="effects" data-type="all"> <i
-                class="fas fa-trash"></i> </a>
-        {{/if}}
-    </h2>
-
-    <ul id="effects-container" class="S0-container S0-container-contract S0-expanded">
-        {{#each effects as |item index|}}
-        <li>
-            {{ item.origin }}: {{ item.name }}
-            <a class="S0-icon-expand" data-action="remove" data-characteristic="effects" data-type="single"
-                data-item-index="{{ index }}">
-                <i class="fas fa-remove"></i>
-            </a>
-        </li>
-        {{/each}}
-    </ul>
 </section>

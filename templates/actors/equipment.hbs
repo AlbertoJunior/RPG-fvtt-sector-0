@@ -1,4 +1,4 @@
-<section data-label="{{localize 'S0.Equipamentos'}}" class="S0-page" data-icon="fa-solid fa-swords-laser">
+<section data-label="{{localize 'S0.Equipamentos'}}" class="S0-page" data-icon="fas fa-backpack">
     <div class="S0-container">
         <h3> {{localize 'S0.Equipados'}} </h3>
 
@@ -32,7 +32,7 @@
 
         <hr>
 
-        <ul class="S0-container-5-column">
+        <ul id="equipped-{{actor.id}}" class="S0-container-5-column">
             {{#each (actorLists actor 'equipment-equipped') as |item|}}
             <li>{{> equipamentEquippedItem item }}</li>
             {{/each}}
@@ -85,7 +85,7 @@
 
         <hr>
 
-        <ul class="S0-container-5-column" style="row-gap: 10px;">
+        <ul id="bag-{{actor.id}}" class="S0-container-5-column" style="row-gap: 10px;">
             {{#each (actorLists actor 'equipment-filtered') as |item|}}
             <li>
                 {{> equipamentBagItem item }}

@@ -68,6 +68,15 @@ export function localize(key) {
     return game.i18n.localize(`S0.${key}`)
 }
 
+export function onArrayRemove(array, item) {
+    const indexToRemove = array.indexOf(item);
+    if (indexToRemove !== -1) {
+        array.splice(indexToRemove, 1);
+        return true;
+    }
+    return false;
+}
+
 export function localizeType(key) {
     return game.i18n.localize(`TYPES.${key}`)
 }
@@ -95,4 +104,17 @@ export function randomId() {
 
 export function convertToCollection(items) {
     return new foundry.utils.Collection(items.map(item => [item.id, item]));
+}
+
+export function snakeToCamel(entries) {
+    const camelCaseData = {};
+    for (const [key, value] of entries) {
+        const camelKey = key.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
+        camelCaseData[camelKey] = value;
+    }
+    return camelCaseData;
+}
+
+export function normalizeString(str) {
+    return str.replace(/\s+/g, ' ').trim();
 }

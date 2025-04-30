@@ -1,7 +1,7 @@
 import { sendEffectToChat } from "../../base/sheet/actor/methods/enhancement-methods.mjs";
 import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
-import { EnhancementInfoParser } from "../../../scripts/parser/enhancement-info.mjs";
+import { EnhancementInfoParser } from "../../core/enhancement/enhancement-info.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { localize } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";

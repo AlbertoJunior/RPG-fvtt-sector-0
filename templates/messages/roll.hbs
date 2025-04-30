@@ -34,7 +34,11 @@
 
         <hr>
 
-        <label style="display: block; margin-block: 6px;">{{localize 'S0.Sucessos'}}: {{ resultValue }}</label>
+        <div
+            style="display: flex; column-gap: 4px; margin-block: 6px; align-items: center; justify-content: space-around;">
+            <label>{{localize 'S0.Sucessos'}}: {{ resultValue }} </label>
+            <label>{{localize 'S0.Dificuldade'}}: {{ difficulty }}</label>
+        </div>
 
         <section>
             {{#unless (lt penalty 1)}}

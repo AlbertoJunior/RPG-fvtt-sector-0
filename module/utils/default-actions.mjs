@@ -1,6 +1,6 @@
 import { ChatCreator } from "./chat-creator.mjs";
-import { ActorUtils } from "./actor-utils.mjs";
-import { CombatUtils } from "../core/combat/combat.mjs";
+import { ActorUtils } from "../core/actor/actor-utils.mjs";
+import { CombatUtils } from "../core/combat/combat-utils.mjs";
 import { RollInitiative } from "../core/rolls/initiative-roll.mjs";
 import { RollLife } from "../core/rolls/life-roll.mjs";
 import { RollOverload } from "../core/rolls/overload-roll.mjs";
@@ -8,6 +8,7 @@ import { RollInitiativeMessageCreator } from "../creators/message/initiative-rol
 import { RollLifeMessageCreator } from "../creators/message/life-roll.mjs";
 import { RollOverloadMessageCreator } from "../creators/message/overload-roll.mjs";
 import { RollMessageCreator } from "../creators/message/roll-mesage.mjs";
+import { RollVirtueMessageCreator } from "../creators/message/virtue-roll.mjs";
 
 export class DefaultActions {
     static async processInitiativeRoll(actor) {
@@ -29,13 +30,18 @@ export class DefaultActions {
         ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
     }
 
+    static async processVirtueRoll(actor, resultRoll, difficulty, mode) {
+        const contentMessage = await RollVirtueMessageCreator.mountContent({ resultRoll, difficulty });
+        ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll.roll], mode);
+    }
+
     static async sendRollOnChat(actor, resultRoll, difficulty, rollMessage, mode) {
         const params = {
             rolls: resultRoll.roll,
             attrs: resultRoll.attrs,
             abilityInfo: resultRoll.abilityInfo,
             modifiers: resultRoll.modifiers,
-            difficulty: difficulty,
+            difficulty: Number(difficulty),
             messageTest: rollMessage,
             havePerseverance: ActorUtils.havePerseverance(actor),
         }
@@ -45,13 +51,13 @@ export class DefaultActions {
         const rollItems = resultRoll.roll;
         const defaultRoll = rollItems.default.roll;
         if (defaultRoll != undefined) {
-            const objectRoll = this.#mountOptions(defaultRoll, {...params, isOverload: false});
+            const objectRoll = this.#mountOptions(defaultRoll, { ...params, isOverload: false });
             rolls.push(objectRoll);
         }
 
         const overloadRoll = rollItems.overload.roll;
         if (overloadRoll != undefined) {
-            const objectRoll = this.#mountOptions(overloadRoll, {...params, isOverload: true});
+            const objectRoll = this.#mountOptions(overloadRoll, { ...params, isOverload: true });
             rolls.push(objectRoll);
         }
 
@@ -60,17 +66,23 @@ export class DefaultActions {
     }
 
     static #mountOptions(objectRoll, params) {
-        const { difficulty, messageTest, modifiers, isOverload } = params;
+        const { isOverload, difficulty, messageTest, modifiers } = params;
+
         const specialist = modifiers?.specialist || false;
+        const isHalf = modifiers?.isHalf || false;
         const automaticSuccess = modifiers?.automatic;
         const weapon = modifiers?.weapon;
 
-        objectRoll.options.isOverload = isOverload;
-        objectRoll.options.difficulty = difficulty;
-        objectRoll.options.specialist = specialist;
-        objectRoll.options.messageTest = messageTest;
-        objectRoll.options.automatic = automaticSuccess;
-        objectRoll.options.weapon = weapon;
+        objectRoll.options = {
+            ...objectRoll.options,
+            isOverload: isOverload,
+            difficulty: difficulty,
+            messageTest: messageTest,
+            specialist: specialist,
+            isHalf: isHalf,
+            automatic: automaticSuccess,
+            weapon: weapon,
+        }
         return objectRoll;
     }
 }

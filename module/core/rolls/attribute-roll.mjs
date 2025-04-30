@@ -1,25 +1,33 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
-import { ActorUtils } from "../../utils/actor-utils.mjs";
+import { ActorUtils } from "../actor/actor-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
     static async roll(actor, params) {
-        const { attr1, attr2, ability, specialist = false, bonus = 0, automatic = 0, weapon } = params;
+        const { attr1, attr2, ability, specialist = false,
+            bonus = 0, automatic = 0, weapon,
+            isHalf = false
+        } = params;
 
-        const attrValue1 = ActorUtils.getAttributeValue(actor, attr1);
-        const attrValue2 = ActorUtils.getAttributeValue(actor, attr2);
-        const abilityValue = ActorUtils.getAbilityValue(actor, ability);
         const penalty = ActorUtils.calculatePenalty(actor);
+        const diceAmount = ActorUtils.calculateDices(actor, attr1, attr2, ability);
+        
+        const diceAmountVerifiedHalf = isHalf ? Math.floor(diceAmount / 2) : diceAmount;
+        const diceAmountPlusBonus = diceAmountVerifiedHalf + Number(bonus);
+        const diceAmountSubtractedPenalty = Math.max(diceAmountPlusBonus - penalty, 0);
 
-        const abilityBonusWeaponValue = abilityValue + bonus + (weapon?.damage || 0);
+        let finalDiceAmount = diceAmountSubtractedPenalty;
+        if (diceAmountSubtractedPenalty > 0) {
+            const weaponDamage = Number(weapon?.damage) || 0
+            finalDiceAmount += weaponDamage;
+        }
 
-        const diceAmount = this.#calculateDiceAmount(attrValue1, attrValue2, abilityBonusWeaponValue, penalty);
-        const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), diceAmount);
+        const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), finalDiceAmount);
 
         const [rollOverloadResults, rollDefaultResults] = await Promise.all([
             CoreRollMethods.rollDice(overloadDiceAmount),
-            CoreRollMethods.rollDice(Math.max(diceAmount - overloadDiceAmount, 0))
+            CoreRollMethods.rollDice(Math.max(finalDiceAmount - overloadDiceAmount, 0))
         ]);
 
         const rollsResults = {
@@ -30,24 +38,24 @@ export class RollAttribute {
         const attributes = {
             attr1: {
                 label: attr1,
-                value: attrValue1
+                value: ActorUtils.getAttributeValue(actor, attr1)
             },
             attr2: {
                 label: attr2,
-                value: attrValue2
+                value: ActorUtils.getAttributeValue(actor, attr2)
             },
         }
 
         const modifiersInformations = {
-            automatic: automatic,
-            bonus: bonus,
+            automatic: Number(automatic),
+            bonus: Number(bonus),
             penalty: penalty,
             weapon: weapon
         }
 
         const abilityInformations = {
             label: ability,
-            value: abilityValue,
+            value: ActorUtils.getAbilityValue(actor, ability),
             specialist: specialist
         };
 
@@ -73,12 +81,6 @@ export class RollAttribute {
             }
         };
         return this.roll(actor, params);
-    }
-
-    static #calculateDiceAmount(attribute1, attribute2, ability, penalty) {
-        const amount = Math.floor((attribute1 + attribute2) / 2) + ability;
-        const finalAmount = Math.max(amount - penalty, 0);
-        return finalAmount;
     }
 
     static #mountParamsByRollable(rollable) {

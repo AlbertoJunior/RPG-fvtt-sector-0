@@ -27,7 +27,8 @@ export class ActiveEffectsUtils {
         };
 
         const activeEffectData = {
-            label: name,
+            id: name.toLowerCase(),
+            name: name,
             description: description,
             origin: origin,
             img: img,
@@ -93,6 +94,12 @@ export class ActiveEffectsUtils {
             const type = this.getOriginType(e);
             return origin === originId && type === originType;
         });
+    }
+
+    static getEffectsByChangeKey(actor, changeKey) {
+        return actor.effects._source.map(effect => effect.changes)
+            .filter(a => a.length > 0).flat()
+            .filter(a => a.key == changeKey);
     }
 
     static async enableEffect(effect) {

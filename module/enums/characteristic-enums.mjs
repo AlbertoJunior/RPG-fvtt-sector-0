@@ -40,11 +40,11 @@ export const CharacteristicType = Object.freeze({
     ABILITY: {
         id: 'habilidades',
         system: 'system.habilidades',
-        MELEE: { id: 'habilidades_armas_brancas', system: 'system.habilidades.armas_brancas' },
-        PROJECTILE: { id: 'habilidades_armas_de_projecao', system: 'system.habilidades.armas_de_projecao' },
-        BRAWL: { id: 'habilidades_briga', system: 'system.habilidades.briga' },
-        STREETWISE: { id: 'habilidades_manha', system: 'system.habilidades.manha' },
-        ATHLETICS: { id: 'habilidades_atletismo', system: 'system.habilidades.atletismo' },
+        MELEE: { id: 'armas_brancas', system: 'system.habilidades.armas_brancas' },
+        PROJECTILE: { id: 'armas_de_projecao', system: 'system.habilidades.armas_de_projecao' },
+        BRAWL: { id: 'briga', system: 'system.habilidades.briga' },
+        STREETWISE: { id: 'manha', system: 'system.habilidades.manha' },
+        ATHLETICS: { id: 'atletismo', system: 'system.habilidades.atletismo' },
     },
     LANGUAGE: { id: 'linguas', system: 'system.linguas' },
     TRAIT: { id: 'tracos', system: 'system.tracos' },
@@ -77,7 +77,26 @@ export const CharacteristicType = Object.freeze({
         PM: { id: 'bonus_pm', system: 'system.bonus.movimento' },
         INITIATIVE: { id: 'bonus_initiative', system: 'system.bonus.iniciativa' },
         VITALITY: { id: 'bonus_vitality', system: 'system.bonus.vitalidade' },
-        DENFESIVE: { id: 'bonus_defensive', system: 'system.bonus.defensive' }
+        DAMAGE_PENALTY: { id: 'bonus_damage_penalty', system: 'system.bonus.penalidade_dano' },
+        OFENSIVE_MELEE: { id: 'bonus_ofensivo_corpo_a_corpo', system: 'system.bonus.ofensivo_corpo_a_corpo' },
+        OFENSIVE_PROJECTILE: { id: 'bonus_ofensivo_longo_alcance', system: 'system.bonus.ofensivo_longo_alcance' },
+        DEFENSIVE: { id: 'bonus_defensivo', system: 'system.bonus.defensivo' },
+    },
+    SHORTCUTS: {
+        id: 'atalhos',
+        system: 'system.atalhos',
+    },
+    EXPERIENCE: {
+        id: 'experiencia',
+        system: 'system.experiencia',
+        CURRENT: {
+            id: 'experiencia_atual',
+            system: 'system.experiencia.atual',
+        },
+        USED: {
+            id: 'experiencia_usada',
+            system: 'system.experiencia.usada',
+        }
     },
     SIMPLE: { id: '', system: 'system' },
 });

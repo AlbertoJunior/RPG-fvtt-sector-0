@@ -1,5 +1,5 @@
 import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
-import { ElementCreatorJQuery } from "../../../../../scripts/creators/jquery/element-creator.mjs";
+import { ElementCreatorJQuery } from "../../../../creators/element/element-creator-jquery.mjs";
 import { getActorFlag, getObject, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
@@ -10,6 +10,8 @@ import { characteristicOnClick } from "./characteristics-methods.mjs";
 import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
 import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
+import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { handlerShortcutEvents } from "./shortcut-methods.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
@@ -33,11 +35,21 @@ export class SheetMethods {
                         setActorFlag(actor, "editable", currentValue);
                         return;
                     }
+                    case 'compact': {
+                        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'isCompactedSheet') || false;
+                        await FlagsUtils.setGameUserFlag(game.user, 'isCompactedSheet', !actualMode);
+                        actor.sheet.render();
+                        return;
+                    }
                 }
             }
         },
         language: {
             [OnEventType.ADD]: async (actor, event) => {
+                if (!actor.sheet.isEditable) {
+                    return;
+                }
+
                 const element = event.target;
                 selectCharacteristic(element);
 
@@ -58,11 +70,7 @@ export class SheetMethods {
                         }
                     }
 
-                    const characteristic = {
-                        [`${systemCharacteristic}`]: [... new Set(updatedLanguages)]
-                    };
-
-                    await actor.update(characteristic);
+                    await ActorUpdater._verifyAndUpdateActor(actor, systemCharacteristic, new Set(updatedLanguages))
                 }
             }
         },
@@ -94,15 +102,16 @@ export class SheetMethods {
             },
             [OnEventType.VIEW]: async (actor, event, html) => {
                 const minHeight = actor.sheet.defaultHeight;
-                const effectsContainer = event.currentTarget.parentElement.parentElement.querySelector('#effects-container');
-                const resultExpand = HtmlJsUtils.expandOrContractElement(effectsContainer, { minHeight: minHeight });
+                const container = event.currentTarget.parentElement.parentElement.querySelector('#effects-container');
+                const resultExpand = HtmlJsUtils.expandOrContractElement(container, { minHeight: minHeight });
                 HtmlJsUtils.flipClasses(event.currentTarget.children[0], 'fa-chevron-down', 'fa-chevron-up');
 
                 actor.sheet.isExpandedEffects = resultExpand.isExpanded;
             }
         },
         temporary: handleStatusMethods,
-        equipment: handlerEquipmentEvents
+        equipment: handlerEquipmentEvents,
+        shortcuts: handlerShortcutEvents
     }
 
     static _createDynamicSheet(html, isEditable) {

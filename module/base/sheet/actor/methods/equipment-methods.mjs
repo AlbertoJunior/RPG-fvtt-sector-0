@@ -1,9 +1,10 @@
 import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../../core/equipment/actor-equipment.mjs";
+import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog.mjs";
+import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { EquipmentCharacteristicType, EquipmentType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
@@ -211,18 +212,9 @@ class EquipmentHandleEvents {
     }
 
     static async #unequipAllItems(actor) {
-        const equipmentsData = ActorEquipmentUtils.getActorEquippedItems(actor).map(equipment => {
-            return {
-                equipmentId: equipment.id,
-                flagsToUpdate: [
-                    {
-                        flagKey: "equipped",
-                        value: false
-                    }
-                ]
-            }
-        });
-        await EquipmentUpdater.updateOnActorMultipleEquipments(actor, equipmentsData);
+        const equipmentsUnequipPromises = ActorEquipmentUtils.getActorEquippedItems(actor)
+            .map(async equipment => await ActorEquipmentUtils.unequip(actor, equipment));
+        await Promise.all(equipmentsUnequipPromises);
     }
 
     static async handleView(actor, event) {
@@ -243,11 +235,12 @@ class EquipmentHandleEvents {
         if (!item) {
             return;
         }
-    
+
         const defaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
         if (!defaultTestId) {
+            NotificationsUtils._warning("É preciso definir um teste padrão para o item");
             return;
-        }        
+        }
 
         const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS).find(test => test.id == defaultTestId);
         if (!rollTest) {

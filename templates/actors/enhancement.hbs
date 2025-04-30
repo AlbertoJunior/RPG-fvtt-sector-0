@@ -1,4 +1,4 @@
-<section data-label="{{localize 'S0.Aprimoramentos'}}" class="S0-page" data-icon="fa-solid fa-lungs">
+<section data-label="{{localize 'S0.Aprimoramentos'}}" class="S0-page" data-icon="fas fa-lungs">
     <div class="S0-container">
         <h2> {{localize 'S0.Aprimoramentos'}}
             <a class="S0-icon-rotate" style="font-size: small;" data-action="remove" data-characteristic="enhancement"
@@ -7,7 +7,7 @@
             </a>
         </h2>
 
-        <div class="S0-enhancement-container" style="padding-block: 4px;">
+        <div class="S0-container-2-column" style="margin-block: 2px; padding-block: 2px; row-gap: 8px">
             {{#forLoop 1 5}}
             {{> "systems/setor0OSubmundo/templates/actors/enhancement-partial.hbs" enhancement-slot=index}}
             {{/forLoop}}

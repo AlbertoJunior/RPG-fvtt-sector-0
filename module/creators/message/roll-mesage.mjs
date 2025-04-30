@@ -14,7 +14,7 @@ export class RollMessageCreator {
         const attr2 = attrs.attr2;
 
         let automatic = 0;
-        if(modifiers) {
+        if (modifiers) {
             automatic += modifiers.automatic || 0;
             automatic += modifiers.weapon?.true_damage || 0;
         }
@@ -39,6 +39,7 @@ export class RollMessageCreator {
             resultMessageClasses: result.message.classes,
             resultMessage: result.message.message,
             resultValue: result.result,
+            difficulty: difficulty,
             penalty: modifiers.penalty,
             bonus: modifiers.bonus,
             automatic: modifiers.automatic,

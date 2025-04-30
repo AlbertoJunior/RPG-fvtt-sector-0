@@ -1,6 +1,6 @@
 import { ActiveEffectsUtils } from "../core/effect/active-effects.mjs";
 import { OscillatingTintManager } from "../core/effect/oscilating-effect.mjs";
-import { ActorUtils } from "../utils/actor-utils.mjs";
+import { ActorUtils } from "../core/actor/actor-utils.mjs";
 
 export class ActiveEffectHookHandle {
     static register() {

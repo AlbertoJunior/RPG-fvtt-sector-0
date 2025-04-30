@@ -2,6 +2,7 @@ import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
 import { OnEventType, OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
+import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
 import { handlerEquipmentMenuRollEvents } from "./methods/equipment-menu-roll-methods.mjs";
 
@@ -47,13 +48,13 @@ export class EquipmentSheet extends ItemSheet {
 
     get template() {
         const type = this.item.type.toLowerCase();
-        const path = `systems/setor0OSubmundo/templates/items/${type}.hbs`;
+        const path = `systems/${SYSTEM_ID}/templates/items/${type}.hbs`;
 
         if (REGISTERED_TEMPLATES.has(path)) {
             return path;
         }
 
-        return `systems/setor0OSubmundo/templates/items/default.hbs`
+        return `systems/${SYSTEM_ID}/templates/items/default.hbs`
     }
 
     getData() {
@@ -136,51 +137,24 @@ export class EquipmentSheet extends ItemSheet {
     }
 }
 
-export async function itemsHtmlTemplateRegister() {
-    await configurePartialTemplates();
+export async function equipmentTemplatesRegister() {
+    const templates = [
+        { path: "items/armor" },
+        { path: "items/melee" },
+        { path: "items/projectile" },
+        { path: "items/substance" },
+        { path: "items/vehicle" },
+        { path: "items/common-equipment" },
+        { path: "items/rollable-tests" }
+    ];
+
+    return await loadAndRegisterTemplates(templates);
+}
+
+export async function registerEquipment() {
     await Items.unregisterSheet("core", ItemSheet);
     await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
         types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
         makeDefault: true
     });
-}
-
-async function configurePartialTemplates() {
-    const itemTemplateNames = [
-        "armor",
-        "melee",
-        "projectile",
-        "substance",
-        "vehicle",
-        "common-equipment",
-        "rollable-tests"
-    ];
-
-    const itemTemplatePaths = itemTemplateNames.map(name =>
-        `systems/setor0OSubmundo/templates/items/${name}.hbs`
-    );
-
-    await loadTemplates(itemTemplatePaths);
-
-    for (const path of itemTemplatePaths) {
-        REGISTERED_TEMPLATES.add(path);
-    }
-
-    const partials = [];
-    const results = await Promise.all(partials.map(async ({ call, path }) => {
-        const fullPath = `systems/setor0OSubmundo/templates/${path}.hbs`;
-
-        if (!Handlebars.partials[fullPath]) {
-            return { Partial: call, Status: "Falha (não encontrado)", Path: fullPath };
-        }
-
-        Handlebars.registerPartial(call, Handlebars.partials[fullPath]);
-        return { Partial: call, Status: "Sucesso", Path: fullPath };
-    }));
-
-    const errors = results.filter(r => r.Status !== "Sucesso").length;
-    if (errors > 0) {
-        console.error(`Erros [${errors}] ao carregar partials.`)
-    }
-    console.table(results);
 }

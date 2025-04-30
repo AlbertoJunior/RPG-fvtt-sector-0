@@ -17,6 +17,9 @@
     "esmodules": [
         "setor0OSubmundo.mjs"
     ],
+    "scripts": [
+        "scripts/libs/Sortable.min.js"
+    ],
     "styles": [
         "styles/system-styles.css"
     ],
@@ -77,6 +80,16 @@
                     ]
                 }
             },
+            "ownership": {
+                "PLAYER": "OBSERVER"
+            }
+        },
+        {
+            "name": "macros",
+            "label": "Macros",
+            "system": "setor0OSubmundo",
+            "path": "packs/macros",
+            "type": "Macro",
             "ownership": {
                 "PLAYER": "OBSERVER"
             }

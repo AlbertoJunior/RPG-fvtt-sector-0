@@ -27,6 +27,13 @@ export class EquipmentRepository {
         }
     }
 
+    static async refresh() {
+        this.#loadedFromPack.splice(0, arr.length);
+        this.#loadedFromGame.splice(0, arr.length);
+        this._loadFromPack();
+        this._loadFromGame();
+    }
+
     static getItems() {
         return [... this.#loadedFromPack, ... this.#loadedFromGame];
     }

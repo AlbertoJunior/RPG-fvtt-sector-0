@@ -1,6 +1,6 @@
 import { EffectChangeValueType, EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
-import { ActorUtils } from "../../utils/actor-utils.mjs";
+import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 export class EnhancementUtils {
@@ -13,11 +13,11 @@ export class EnhancementUtils {
         [EffectChangeValueType.OTHER_VALUE]: (value, enhancementLevel, otherValue) => otherValue,
     };
 
-    static valueCalculator(change, enhancementLevel) {
+    static #valueCalculator(change, enhancementLevel, actor) {
         const typeOfValue = change.typeOfValue;
         const value = change.value;
         const otherValue = change.otherValue;
-        return this.valueCalculators[typeOfValue]?.(value, enhancementLevel, otherValue) || 0;
+        return this.valueCalculators[typeOfValue]?.(value, enhancementLevel, otherValue, actor) || 0;
     }
 
     static verifyAndSetEffectChanges(actor, activeEffectData, effectChanges, enhancement) {
@@ -25,7 +25,7 @@ export class EnhancementUtils {
             const enhancementLevel = ActorUtils.getEnhancementLevel(actor, enhancement);
 
             activeEffectData.changes = effectChanges.map(change => {
-                const value = this.valueCalculator(change, enhancementLevel);
+                const value = this.#valueCalculator(change, enhancementLevel, actor);
                 const verifiedKey = change.key.system ? change.key.system : change.key;
                 const verifiedMode = change.mode ? change.mode : CONST.ACTIVE_EFFECT_MODES.ADD;
 
@@ -58,7 +58,7 @@ export class EnhancementUtils {
                     durationObject = {
                         startRound: combat?.round,
                         startTurn: combat?.turn,
-                        rounds: 10,
+                        rounds: 99,
                         combat: combat
                     };
                 } else {
@@ -66,6 +66,7 @@ export class EnhancementUtils {
                 }
                 break;
             }
+            case EnhancementDuration.TIME:
             case EnhancementDuration.USE: {
                 durationObject = { rounds: 1, startRound: 0 };
                 break;
