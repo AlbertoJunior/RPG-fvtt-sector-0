@@ -14,6 +14,10 @@ export class ActorUtils {
         return base + bonus;
     }
 
+    static getVirtueLevel(actor, virtue) {
+        return getObject(actor, CharacteristicType.VIRTUES)[virtue].level;
+    }
+
     static getOverload(actor) {
         return getObject(actor, CharacteristicType.OVERLOAD) || 0;
     }

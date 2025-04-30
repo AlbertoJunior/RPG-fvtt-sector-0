@@ -8,6 +8,8 @@ export class DialogUtils {
 
         this.#setupHeaderParams(div, params);
         this.#setupDialogButtons(div);
+
+        return div.closest('.window-app');
     }
 
     static #setupHeaderParams(div, params) {

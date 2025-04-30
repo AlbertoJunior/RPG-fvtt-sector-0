@@ -8,6 +8,7 @@ import { RollInitiativeMessageCreator } from "../creators/message/initiative-rol
 import { RollLifeMessageCreator } from "../creators/message/life-roll.mjs";
 import { RollOverloadMessageCreator } from "../creators/message/overload-roll.mjs";
 import { RollMessageCreator } from "../creators/message/roll-mesage.mjs";
+import { RollVirtueMessageCreator } from "../creators/message/virtue-roll.mjs";
 
 export class DefaultActions {
     static async processInitiativeRoll(actor) {
@@ -27,6 +28,11 @@ export class DefaultActions {
         const resultRoll = await RollLife.roll(actor);
         const contentMessage = await RollLifeMessageCreator.mountContent(resultRoll);
         ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
+    }
+
+    static async processVirtueRoll(actor, resultRoll, difficulty, mode) {
+        const contentMessage = await RollVirtueMessageCreator.mountContent({ resultRoll, difficulty });
+        ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll.roll], mode);
     }
 
     static async sendRollOnChat(actor, resultRoll, difficulty, rollMessage, mode) {

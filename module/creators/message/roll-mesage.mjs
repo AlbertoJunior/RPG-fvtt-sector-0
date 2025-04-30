@@ -39,6 +39,7 @@ export class RollMessageCreator {
             resultMessageClasses: result.message.classes,
             resultMessage: result.message.message,
             resultValue: result.result,
+            difficulty: difficulty,
             penalty: modifiers.penalty,
             bonus: modifiers.bonus,
             automatic: modifiers.automatic,

@@ -1,48 +1,98 @@
 <form class="S0-dialog">
-    <div class="S0-container">
-        <h3>{{localize 'S0.Atributos'}}</h3>
-        <div class="form-group">
-            <select class="S0-select" id="attr1" style="margin-inline: 4px">
-                {{#each attributes}}
-                <option value="{{value}}">{{label}}</option>
-                {{/each}}
-            </select>
 
-            <select class="S0-select" id="attr2" style="margin-inline: 4px">
-                {{#each attributes}}
-                <option value="{{value}}">{{label}}</option>
-                {{/each}}
-            </select>
-        </div>
+    <div style="display: flex; column-gap: 4px; align-items: center;">
+        <button class="S0-button-confirm" data-action="check" data-item="0">Atributos</button>
+        <button class="S0-button-confirm" data-action="check" data-item="1">Virtudes</button>
+    </div>
 
-        <h3 style="margin-top:10px">{{localize 'S0.Habilidade'}}</h3>
-        <div class="form-group">
-            <select class="S0-select" id="ability" style="flex:1;">
-                {{#each abilities}}
-                <option value="{{value}}">{{label}}</option>
-                {{/each}}
-            </select>
-            <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
-                <label for="specialist" style="flex:1;">{{localize 'S0.Especialista'}}:</label>
-                <input id="specialist" type="checkbox">
+    <div class="S0-container">            
+        <div data-characteristic="page" data-item="0">
+            <h3>{{localize 'S0.Atributos'}}</h3>
+            <div class="form-group">
+                <select class="S0-select" id="attr1" style="margin-inline: 4px">
+                    {{#each attributes}}
+                    <option value="{{id}}">{{label}}</option>
+                    {{/each}}
+                </select>
+
+                <select class="S0-select" id="attr2" style="margin-inline: 4px">
+                    {{#each attributes}}
+                    <option value="{{id}}">{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <h3 style="margin-top:10px">{{localize 'S0.Habilidade'}}</h3>
+            <div class="form-group">
+                <select class="S0-select" id="ability" style="flex:1;">
+                    {{#each abilities}}
+                    <option value="{{id}}">{{label}}</option>
+                    {{/each}}
+                </select>
+                <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
+                    <label for="specialist" style="flex:1;">{{localize 'S0.Especialista'}}:</label>
+                    <input id="specialist" type="checkbox">
+                </div>
+            </div>
+
+            <h3 style="margin-top: 10px">{{localize 'S0.Outros'}}</h3>
+            <div class="form-group">
+                <label for="difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
+                <select class="S0-select" id="difficulty" style="flex:1">
+                    {{#forLoop 5 11}}
+                    <option value="{{index}}" {{#if (eq index 6)}}selected{{/if}}>{{index}}</option>
+                    {{/forLoop}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
+                <input id="bonus" type="number" style="flex:1;" value="0">
+                <label for="automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
+                <input id="automatic" type="number" style="flex:1;" value="0">
             </div>
         </div>
 
-        <h3 style="margin-top: 10px">{{localize 'S0.Outros'}}</h3>
-        <div class="form-group">
-            <label for="difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
-            <select class="S0-select" id="difficulty" style="flex:1">
-                {{#forLoop 5 11}}
-                <option value="{{index}}" {{#if (eq index 6)}}selected{{/if}}>{{index}}</option>
-                {{/forLoop}}
-            </select>
-        </div>
+        <div data-characteristic="page" data-item="1">
+            <h3>{{localize 'S0.Virtudes'}}</h3>
+            <div class="form-group">
+                <select class="S0-select" id="virtue1" style="margin-inline: 4px">
+                    {{#each virtues}}
+                    <option value="{{id}}">{{label}}</option>
+                    {{/each}}
+                </select>
 
-        <div class="form-group">
-            <label for="bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
-            <input id="bonus" type="number" style="flex:1;" value="0">
-            <label for="automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
-            <input id="automatic" type="number" style="flex:1;" value="0">
+                <select class="S0-select" id="virtue2" style="margin-inline: 4px">
+                    {{#each virtues}}
+                    <option value="{{id}}">{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <h3 style="margin-top: 10px">{{localize 'S0.Outros'}}</h3>
+            <div class="form-group">
+                <label for="difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
+                <select class="S0-select" id="difficulty" style="flex:1">
+                    {{#forLoop 5 11}}
+                    <option value="{{index}}" {{#if (eq index 6)}}selected{{/if}}>{{index}}</option>
+                    {{/forLoop}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
+                <input id="bonus" type="number" style="flex:1;" value="0">
+            </div>
+
+            <div class="form-group">
+                <label for="penalty" style="flex:1;">{{localize 'S0.Penalidade'}}:</label>
+                <input id="penalty" type="number" style="flex:1;" value="0">
+            </div>
+
+            <div class="form-group">
+                <label for="automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
+                <input id="automatic" type="number" style="flex:1;" value="0">
+            </div>
         </div>
 
         <hr>
