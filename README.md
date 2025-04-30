@@ -25,13 +25,19 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 <summary>Legenda de ícones</summary>
 
 ```
+🧩 Instalação
+🧬 Funcionalidades
+🎨 Interfaces de Usuário
+📜 Licença
+🤝 Contribuindo
 ✅ (pronto)
+⚠️ (aviso)
 🛠️ (em desenvolvimento)
 🚧 (planejado)
 ```
 </details>
 
-## Funcionalidades
+## 🧬 Funcionalidades
 <details>
   <summary>Idiomas suportados</summary>
   
@@ -126,7 +132,7 @@ O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. To
   ```
 </details>
 
-## Interfaces de Usuário
+## 🎨 Interfaces de Usuário
 <details>
 
 - Tema escuro para fichas de Personagens [WIP].
