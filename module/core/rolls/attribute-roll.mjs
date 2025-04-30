@@ -1,6 +1,6 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
-import { ActorUtils } from "../../utils/actor-utils.mjs";
+import { ActorUtils } from "../actor/actor-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {

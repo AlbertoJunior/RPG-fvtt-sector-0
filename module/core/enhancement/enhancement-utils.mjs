@@ -1,6 +1,6 @@
 import { EffectChangeValueType, EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
-import { ActorUtils } from "../../utils/actor-utils.mjs";
+import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 export class EnhancementUtils {

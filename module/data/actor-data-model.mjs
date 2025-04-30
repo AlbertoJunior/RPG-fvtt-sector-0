@@ -1,8 +1,8 @@
-import { ActorEquipmentUtils } from "../core/equipment/actor-equipment.mjs";
+import { ActorEquipmentUtils } from "../core/actor/actor-equipment.mjs";
 import { Setor0TokenDocument } from "../core/token/setor0-token.mjs";
 import { ActorCharacteristicField, ActorEnhancementField, ActorVirtueField, ActorAttributes, ActorAbilities } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
-import { ActorUtils } from "../utils/actor-utils.mjs";
+import { ActorUtils } from "../core/actor/actor-utils.mjs";
 import { FlagsUtils } from "../utils/flags-utils.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 

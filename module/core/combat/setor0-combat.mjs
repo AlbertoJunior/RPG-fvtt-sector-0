@@ -1,4 +1,4 @@
-import { ActorUtils } from "../../utils/actor-utils.mjs";
+import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
 
 class Setor0Combat extends Combat {

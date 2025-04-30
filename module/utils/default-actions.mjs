@@ -1,6 +1,6 @@
 import { ChatCreator } from "./chat-creator.mjs";
-import { ActorUtils } from "./actor-utils.mjs";
-import { CombatUtils } from "../core/combat/combat.mjs";
+import { ActorUtils } from "../core/actor/actor-utils.mjs";
+import { CombatUtils } from "../core/combat/combat-utils.mjs";
 import { RollInitiative } from "../core/rolls/initiative-roll.mjs";
 import { RollLife } from "../core/rolls/life-roll.mjs";
 import { RollOverload } from "../core/rolls/overload-roll.mjs";

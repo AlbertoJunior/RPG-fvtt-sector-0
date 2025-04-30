@@ -1,7 +1,7 @@
-import { ActorUtils } from "../../utils/actor-utils.mjs";
+import { ActorUtils } from "../actor/actor-utils.mjs";
 
-export class CombatUtils {
-    static async addOrUpdateActorOnCombat(actor, initiative, hidden = false) {
+export class CombatUtils {    
+    static async addOrUpdateActorOnCombat(actor, initiative, hidden = false) {        
         const currentCombat = game.combat;
         if (!currentCombat) {
             return;

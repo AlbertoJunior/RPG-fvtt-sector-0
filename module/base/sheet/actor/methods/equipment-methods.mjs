@@ -1,5 +1,5 @@
 import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../../core/equipment/actor-equipment.mjs";
+import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";

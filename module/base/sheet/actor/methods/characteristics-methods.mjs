@@ -1,11 +1,11 @@
-import { ActorUtils } from "../../../../utils/actor-utils.mjs";
+import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 
 export async function characteristicOnClick(event, actor) {
-    const element = event.target;
+    const element = event.target;    
 
     selectCharacteristic(element);
 

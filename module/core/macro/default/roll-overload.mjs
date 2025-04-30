@@ -1,4 +1,5 @@
 import { ICONS_PATH, SYSTEM_ID } from "../../../constants.mjs";
+import { verifyAndReturnActor, verifyAndReturnSelectedToken } from "../commands/macro-utils-commands.mjs";
 
 export const rollOverloadMacroData = {
   flags: {
@@ -9,17 +10,9 @@ export const rollOverloadMacroData = {
   },
   name: "Teste de Sobrecarga",
   command: `
-const selectedToken = canvas.tokens.controlled[0];
-if (!selectedToken) {
-  ui.notifications.warn("Selecione um token primeiro.");
-  return;
-}
+${verifyAndReturnSelectedToken}
 
-const actor = selectedToken.actor;
-if(!actor.sheet.canRollOrEdit) {
-  ui.notifications.warn("Sem permissão para esse personagem.");
-  return;
-}
+${verifyAndReturnActor}
 
 await globalThis.MacroMethods.overload(actor);
 `,

@@ -2,10 +2,12 @@
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
         <strong>{{localize 'S0.Testes_Possiveis'}}</strong>
         <div style="display: flex; gap: 8px;">
-            <a id="add-rollable-test" class="S0-icon-expand" data-characteristic="menu_roll" data-action="add" title="{{localize 'S0.Adicionar'}}">
+            <a id="add-rollable-test" class="S0-icon-expand" data-characteristic="menu_roll" data-action="add"
+                title="{{localize 'S0.Adicionar'}}">
                 <i class="fas fa-plus"></i>
             </a>
-            <a id="toggle-tests" class="S0-icon-expand" data-characteristic="menu_roll" data-action="view" title="{{localize 'S0.Expandir_Contrair'}}">
+            <a id="toggle-tests" class="S0-icon-expand" data-characteristic="menu_roll" data-action="view"
+                title="{{localize 'S0.Expandir_Contrair'}}">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </div>
@@ -34,21 +36,30 @@
 
                     <div class="S0-menu-float">
                         {{#if ../canEdit}}
-                        <a data-characteristic="item_roll" data-action="edit" data-item-id="{{this.id}}" title="{{localize 'S0.Editar'}}">
+                        <a class="S0-icon-expand" data-characteristic="item_roll" data-action="edit"
+                            data-item-id="{{this.id}}" title="{{localize 'S0.Editar'}}">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a data-characteristic="item_roll" data-action="remove" data-item-id="{{this.id}}" title="{{localize 'S0.Remover'}}">
+                        <a class="S0-icon-expand" data-characteristic="item_roll" data-action="remove"
+                            data-item-id="{{this.id}}" title="{{localize 'S0.Remover'}}">
                             <i class="fas fa-trash"></i>
                         </a>
                         {{/if}}
 
-                        <a data-characteristic="item_roll" data-action="chat" data-item-id="{{this.id}}" title="{{localize 'S0.Enviar_No_Chat'}}">
-                            <i class="fas fa-message-quote S0-icon-hover"></i>
+                        <a class="S0-icon-expand" data-characteristic="item_roll" data-action="add"
+                            data-item-id="{{this.id}}" title="{{localize 'S0.Criar_Macro'}}">
+                            <i class="fas fa-code"></i>
                         </a>
-                        <a data-characteristic="item_roll" data-action="view" data-item-id="{{this.id}}" title="{{localize 'S0.Ver_Informacoes'}}">
+                        <a class="S0-icon-expand" data-characteristic="item_roll" data-action="chat"
+                            data-item-id="{{this.id}}" title="{{localize 'S0.Enviar_No_Chat'}}">
+                            <i class="fas fa-message-quote"></i>
+                        </a>
+                        <a class="S0-icon-expand" data-characteristic="item_roll" data-action="view"
+                            data-item-id="{{this.id}}" title="{{localize 'S0.Ver_Informacoes'}}">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a data-characteristic="item_roll" data-action="roll" data-item-id="{{this.id}}" title="{{localize 'S0.Rolar'}}">
+                        <a class="S0-icon-expand" data-characteristic="item_roll" data-action="roll"
+                            data-item-id="{{this.id}}" title="{{localize 'S0.Rolar'}}">
                             <i class="fas fa-dice-d10"></i>
                         </a>
                     </div>

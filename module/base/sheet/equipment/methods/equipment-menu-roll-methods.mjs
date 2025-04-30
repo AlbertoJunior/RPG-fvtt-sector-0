@@ -1,9 +1,10 @@
-import { getObject, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject } from "../../../../../scripts/utils/utils.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
+import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 
 export const handlerEquipmentMenuRollEvents = {
     [OnEventType.ADD]: async (item, event) => EquipmentSheetMenuRollHandle.add(item, event),
@@ -11,25 +12,23 @@ export const handlerEquipmentMenuRollEvents = {
 }
 
 class EquipmentSheetMenuRollHandle {
-    static add(item, event) {        
+    static add(item, event) {
         const onConfirm = async (rollable) => {
             if (!rollable.name) {
                 NotificationsUtils._error("O Teste precisa de um nome");
                 return;
             }
-            
-            const current = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
+
+            const current = [...getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS)] || [];
             current.push(rollable);
 
-            const characteristicToUpdate = {
-                [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: current
-            }
+            const changes = [];
+            changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.POSSIBLE_TESTS, current));
 
             if (current.length == 1) {
-                characteristicToUpdate[EquipmentCharacteristicType.DEFAULT_TEST.system] = rollable.id;
+                changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.DEFAULT_TEST, rollable.id));
             }
-            TODO('colocar com ItemUpdater')
-            await item.update(characteristicToUpdate);
+            await EquipmentUpdater.updateEquipmentData(item, changes);
         };
 
         CreateRollableTestDialog._open(null, onConfirm);
@@ -39,7 +38,7 @@ class EquipmentSheetMenuRollHandle {
         const target = event.currentTarget;
 
         HtmlJsUtils.flipClasses(target.children[0], 'fa-chevron-up', 'fa-chevron-down');
-        
+
         const containerList = target.parentElement.parentElement.parentElement.querySelector('#rollable-tests-list');
         const expandResult = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: item.sheet.defaultHeight, maxHeight: 640 });
         item.sheet.isExpandedTests = expandResult.isExpanded;

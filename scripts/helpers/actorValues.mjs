@@ -1,5 +1,6 @@
+import { ActorUtils } from "../../module/core/actor/actor-utils.mjs";
+import { ActorCombatUtils } from "../../module/core/actor/actor-combat-utils.mjs";
 import { CharacteristicType } from "../../module/enums/characteristic-enums.mjs";
-import { ActorUtils, ActorCombatUtils } from "../../module/utils/actor-utils.mjs";
 import { getObject } from "../utils/utils.mjs";
 
 const map = {
@@ -32,6 +33,6 @@ const map = {
     },
 }
 
-export default function actorValues(actor, value, ...params) {
+export default function actorValues(actor, value, ...params) {        
     return map[value](actor, params[0]) || 0;
 }

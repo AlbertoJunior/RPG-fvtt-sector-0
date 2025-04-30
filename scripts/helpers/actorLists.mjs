@@ -1,4 +1,4 @@
-import { ActorEquipmentUtils } from "../../module/core/equipment/actor-equipment.mjs";
+import { ActorEquipmentUtils } from "../../module/core/actor/actor-equipment.mjs";
 
 const map = {
     'equipment-filtered': (actor) => {

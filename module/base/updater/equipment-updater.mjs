@@ -1,21 +1,25 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
-import { ActorEquipmentUtils } from "../../core/equipment/actor-equipment.mjs";
+import { ActorEquipmentUtils } from "../../core/actor/actor-equipment.mjs";
 import { ActorUpdater } from "./actor-updater.mjs";
 
 export class EquipmentUpdater {
     static async updateEquipment(equipment, characteristic, value) {
+        const change = this.createChange(characteristic, value);
+        return await this.updateEquipmentData(equipment, [change]);
+    }
+
+    static createChange(characteristic, value) {
         let haveSystem = characteristic;
         if (characteristic.system) {
             haveSystem = characteristic.system;
         }
-
-        return await this.updateEquipmentData(equipment, [{ characteristic: haveSystem, value }]);
+        return { characteristic: haveSystem, value };
     }
 
     static async updateEquipmentData(equipment, changes = []) {
         const dataToUpdate = {};
-        for (const { characteristic, value } of changes) {            
+        for (const { characteristic, value } of changes) {
             if (getObject(equipment, characteristic) === undefined) {
                 console.warn(`-> [${characteristic}] não existe, impossível atualizar o Equipamento`);
             } else {

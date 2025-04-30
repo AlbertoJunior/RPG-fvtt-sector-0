@@ -426,8 +426,8 @@ async function configurePartialTemplates() {
         { path: "actors/enhancement" },
         { path: "actors/enhancement-partial" },
         { path: "actors/equipment" },
-        { path: "actors/equipment-bag-item", call: 'equipamentBagItem' },
-        { path: "actors/equipment-equipped-item", call: 'equipamentEquippedItem' },
+        { path: "items/equipment-bag-item", call: 'equipamentBagItem' },
+        { path: "items/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "actors/shortcuts" },
         { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' }
     ];

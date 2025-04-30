@@ -5,7 +5,7 @@ import { CreateRollableTestDialog } from "../../../../creators/dialog/create-rol
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { ActorCombatUtils } from "../../../../utils/actor-utils.mjs";
+import { ActorCombatUtils } from "../../../../core/actor/actor-combat-utils.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
@@ -15,6 +15,10 @@ export const handlerShortcutEvents = {
     [OnEventType.EDIT]: async (actor, event) => ShortcutHandleEvents.handleEdit(actor, event),
     [OnEventType.VIEW]: async (actor, event) => ShortcutHandleEvents.handleView(actor, event),
     [OnEventType.ROLL]: async (actor, event) => ShortcutHandleEvents.handleRoll(actor, event),
+}
+
+export async function shortcutCustomRoll(actor, rollableId) {
+    ShortcutHandleEvents.rollCustomShortcut(actor, rollableId);
 }
 
 class ShortcutHandleEvents {
@@ -110,7 +114,7 @@ class ShortcutHandleEvents {
             this.#rollDefaultShortcut(actor, type, subCharacteristic);
         } else {
             const itemId = dataset.itemId;
-            this.#rollCustomShortcut(actor, itemId);
+            this.rollCustomShortcut(actor, itemId);
         }
     }
 
@@ -148,7 +152,7 @@ class ShortcutHandleEvents {
         });
     }
 
-    static async #rollCustomShortcut(actor, itemId) {
+    static async rollCustomShortcut(actor, itemId) {
         const shortcutTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
         const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
         DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.name);

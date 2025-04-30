@@ -1,11 +1,15 @@
-import { getObject, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, onArrayRemove, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
+import { RollTestUtils } from "../../../../core/rolls/roll-test-utils.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
+import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs"
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
+import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 
 export const handlerEquipmentItemRollEvents = {
+    [OnEventType.ADD]: async (item, event) => EquipmentSheetItemRollHandle.add(item, event),
     [OnEventType.EDIT]: async (item, event) => EquipmentSheetItemRollHandle.edit(item, event),
     [OnEventType.REMOVE]: async (item, event) => EquipmentSheetItemRollHandle.remove(item, event),
     [OnEventType.CHECK]: async (item, event) => EquipmentSheetItemRollHandle.check(item, event),
@@ -14,17 +18,26 @@ export const handlerEquipmentItemRollEvents = {
     [OnEventType.VIEW]: async (item, event) => EquipmentSheetItemRollHandle.view(item, event),
 }
 
+export async function rollByItemAndRollId(item, rollId) {
+    await EquipmentSheetItemRollHandle.rollById(item, rollId);
+}
+
 class EquipmentSheetItemRollHandle {
+    static async add(item, event) {
+        const rollTest = this.#getItemRollTest(item, this.#getItemRollTestId(event));
+        if (!rollTest) {
+            NotificationsUtils._error("Erro ao carregar o teste");
+            return;
+        }
+        RollTestUtils.createMacroByRollTestData(rollTest, { parentName: item.name, img: item.img });
+    }
+
     static async edit(item, event) {
         const rollTest = this.#getItemRollTest(item, this.#getItemRollTestId(event));
         const onConfirm = async (newRollTest) => {
             const possibleTests = this.#getItemTests(item);
             possibleTests[possibleTests.indexOf(rollTest)] = newRollTest;
-
-            const characteristicToUpdate = {
-                [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: possibleTests
-            }
-            await item.update(characteristicToUpdate);
+            await EquipmentUpdater.updateEquipment(item, EquipmentCharacteristicType.POSSIBLE_TESTS, possibleTests)
         }
         CreateRollableTestDialog._open(rollTest, onConfirm);
     }
@@ -37,12 +50,9 @@ class EquipmentSheetItemRollHandle {
         }
 
         const possibleTests = this.#getItemTests(item);
-        const indexToRemove = possibleTests.indexOf(rollTest);
-        possibleTests.splice(indexToRemove, 1);
+        onArrayRemove(possibleTests, rollTest);
 
-        const characteristicToUpdate = {
-            [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: possibleTests
-        }
+        const changes = [EquipmentUpdater.createChange(EquipmentCharacteristicType.POSSIBLE_TESTS, possibleTests)];
 
         const currentDefaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
         if (currentDefaultTestId == rollId) {
@@ -51,10 +61,10 @@ class EquipmentSheetItemRollHandle {
                 newDefaultTest = possibleTests[0].id;
             }
 
-            characteristicToUpdate[EquipmentCharacteristicType.DEFAULT_TEST.system] = newDefaultTest;
+            changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.DEFAULT_TEST, newDefaultTest));
         }
 
-        await item.update(characteristicToUpdate);
+        await EquipmentUpdater.updateEquipmentData(item, changes);
     }
 
     static async check(item, event) {
@@ -71,15 +81,20 @@ class EquipmentSheetItemRollHandle {
             }
         });
 
-        const characteristicToUpdate = {
-            [EquipmentCharacteristicType.DEFAULT_TEST.system]: rollId,
-            [EquipmentCharacteristicType.POSSIBLE_TESTS.system]: sortedTests,
-        }
-        await item.update(characteristicToUpdate);
+        const changes = [
+            EquipmentUpdater.createChange(EquipmentCharacteristicType.DEFAULT_TEST, rollId),
+            EquipmentUpdater.createChange(EquipmentCharacteristicType.POSSIBLE_TESTS, sortedTests)
+        ];
+
+        await EquipmentUpdater.updateEquipmentData(item, changes);
     }
 
     static async roll(item, event) {
         const rollId = event.currentTarget.dataset.itemId;
+        this.rollById(item, rollId);
+    }
+
+    static async rollById(item, rollId) {
         const possibleTests = this.#getItemTests(item);
         const rollTest = possibleTests.find(test => test.id == rollId);
         if (!rollTest) {

@@ -1,4 +1,5 @@
 import { SYSTEM_ID } from "../../../constants.mjs";
+import { verifyAndReturnActor, verifyAndReturnSelectedToken } from "../commands/macro-utils-commands.mjs";
 
 export const openBagMacroData = {
   flags: {
@@ -11,17 +12,9 @@ export const openBagMacroData = {
   command: `
 const targetPage = 4;
 
-const selectedToken = canvas.tokens.controlled[0];
-if (!selectedToken) {
-  ui.notifications.warn("Selecione um token primeiro.");
-  return;
-}
+${verifyAndReturnSelectedToken}
 
-const actor = selectedToken.actor;
-if(!actor.sheet.canRollOrEdit) {
-  ui.notifications.warn("Sem permissão para ver esse personagem.");
-  return;
-}
+${verifyAndReturnActor}
 
 actor.sheet.render(true);
 setTimeout(() => {
