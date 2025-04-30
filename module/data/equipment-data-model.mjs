@@ -80,7 +80,7 @@ class RollableDataModel extends EquipmentDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
-            default_test: new StringField({ required: false, blank: true, label: "S0.Teste_Padrao" }),
+            default_test: new StringField({ initial: "", required: false, blank: true, label: "S0.Teste_Padrao" }),
             possible_tests: new ArrayField(new RollTestDataModel()),
         };
     }

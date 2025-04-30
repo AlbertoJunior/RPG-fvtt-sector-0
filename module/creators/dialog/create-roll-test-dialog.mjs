@@ -38,7 +38,7 @@ export class CreateRollableTestDialog {
         const { confirm: onConfirm, delete: onDelete } = eventButtons;
         const haveOnConfirm = onConfirm !== undefined;
         const haveOnDelete = onDelete !== undefined;
-        const inEdit = rollableData !== undefined && haveOnConfirm;
+        const inCreate = !rollableData && haveOnConfirm;
 
         let buttons;
         if (haveOnConfirm) {
@@ -67,9 +67,9 @@ export class CreateRollableTestDialog {
             }
 
             buttons['confirm'] = {
-                label: inEdit ? localize("Editar") : localize("Criar"),
+                label: inCreate ? localize("Criar") : localize("Editar"),
                 classes: 'S0-button-confirm default',
-                icon: inEdit ? 'fa-edit' : 'fa-square-plus',
+                icon: inCreate ? 'fa-square-plus' : 'fa-edit',
                 callback: (html, dialog) => {
                     const form = html[0].querySelector("form");
                     const formData = new FormData(form);

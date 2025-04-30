@@ -4,29 +4,47 @@ import { ActiveEffectRepository } from "../repository/active-effects-repository.
 import { MacroSync } from "../core/macro/macro-sync.mjs";
 import { MacroInstaller } from "../core/macro/macro-installer.mjs";
 import { MacroUtils } from "../core/macro/macro-utils.mjs";
+import { registerEquipment } from "../base/sheet/equipment/equipment-sheet.mjs";
+import { registerActor } from "../base/sheet/actor/actor-sheet-template.mjs";
 
 export class ReadyHookHandle {
     static async handle() {
-        await RepositoriesUtils.loadFromPackages();
-        await RepositoriesUtils.loadFromGame();
-
-        CONFIG.statusEffects = ActiveEffectRepository._getItems();
-
-        await MacroSync.verifyDefaultMacroCompendium();
-        await MacroInstaller.installDefaultMacrosOnUser();
-        await MacroUtils.exposeMethodsForMacros();
+        await this.#repositories();
+        await this.#sheets();
+        this.#effects();
+        await this.#macro();
 
         if (!game.user.isGM) {
             console.log('-> Setor 0 - O Submundo | Sistema Pronto');
             return;
         }
 
-        await MacroInstaller.installDefaultMacrosOnGm();
-
         this.#loadOnlyForGm();
     }
 
+    static async #repositories() {
+        await RepositoriesUtils.loadFromPackages();
+        await RepositoriesUtils.loadFromGame();
+    }
+
+    static async #sheets() {
+        await registerEquipment();
+        await registerActor();
+    }
+
+    static #effects() {
+        CONFIG.statusEffects = ActiveEffectRepository._getItems();
+    }
+
+    static async #macro() {
+        await MacroSync.verifyDefaultMacroCompendium();
+        await MacroInstaller.installDefaultMacrosOnUser();
+        await MacroUtils.exposeMethodsForMacros();
+    }
+    
     static async #loadOnlyForGm() {
+        await MacroInstaller.installDefaultMacrosOnGm();
+
         OscillatingTintManager.verifyOscilatingTokens();
         console.log('-> Setor 0 - O Submundo | Sistema Pronto');
     }

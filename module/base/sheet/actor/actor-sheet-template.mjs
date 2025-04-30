@@ -9,6 +9,7 @@ import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../updater/actor-updater.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
+import { SYSTEM_ID } from "../../../constants.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -410,15 +411,8 @@ class Setor0ActorSheet extends ActorSheet {
     }
 }
 
-export async function actorHtmlTemplateRegister() {
-    const resultedTemplates = await configurePartialTemplates();
-    await Actors.unregisterSheet("core", ActorSheet);
-    await Actors.registerSheet("setor0OSubmundo", Setor0ActorSheet, { makeDefault: true });
-    return resultedTemplates;
-}
-
-async function configurePartialTemplates() {
-    const actorTemplateNames = [
+export async function actorTemplatesRegister() {
+    const templates = [
         { path: "actors/characteristics" },
         { path: "actors/biography" },
         { path: "actors/biography-trait-partial", call: 'traitPartialContainer' },
@@ -432,5 +426,10 @@ async function configurePartialTemplates() {
         { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' }
     ];
 
-    return await loadAndRegisterTemplates(actorTemplateNames);
+    return await loadAndRegisterTemplates(templates);;
+}
+
+export async function registerActor() {
+    await Actors.unregisterSheet("core", ActorSheet);
+    await Actors.registerSheet(SYSTEM_ID, Setor0ActorSheet, { makeDefault: true });
 }

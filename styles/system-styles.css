@@ -717,7 +717,7 @@ img.S0-clickable:hover {
 
 /* #region DIALOG*/
 .S0-content .dialog-content {
-    max-height: 620px;
+    max-height: 640px;
     overflow-y: scroll;
     padding-right: 2px;
     padding-left: 12px;

@@ -137,19 +137,8 @@ export class EquipmentSheet extends ItemSheet {
     }
 }
 
-export async function itemsHtmlTemplateRegister() {
-    const loadedTemplates = await configurePartialTemplates();
-    await Items.unregisterSheet("core", ItemSheet);
-    await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
-        types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
-        makeDefault: true
-    });
-
-    return loadedTemplates;
-}
-
-async function configurePartialTemplates() {
-    const itemTemplateNames = [
+export async function equipmentTemplatesRegister() {
+    const templates = [
         { path: "items/armor" },
         { path: "items/melee" },
         { path: "items/projectile" },
@@ -159,5 +148,13 @@ async function configurePartialTemplates() {
         { path: "items/rollable-tests" }
     ];
 
-    return await loadAndRegisterTemplates(itemTemplateNames);
+    return await loadAndRegisterTemplates(templates);
+}
+
+export async function registerEquipment() {
+    await Items.unregisterSheet("core", ItemSheet);
+    await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
+        types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
+        makeDefault: true
+    });
 }
