@@ -85,7 +85,7 @@
 
         <hr>
 
-        <ul id="bag" class="S0-container-5-column" style="row-gap: 10px;">
+        <ul id="bag-{{actor.id}}" class="S0-container-5-column" style="row-gap: 10px;">
             {{#each (actorLists actor 'equipment-filtered') as |item|}}
             <li>
                 {{> equipamentBagItem item }}

@@ -7,9 +7,9 @@ import { EquipmentType } from "../../../enums/equipment-enums.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
-import { ActorUpdater } from "../../updater/actor-updater.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { SYSTEM_ID } from "../../../constants.mjs";
+import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -39,7 +39,7 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetSheet(html);
         this.#setupListeners(html);
         this.#addPageButtonsOnFloatingMenu(html);
-        this.#setupSortableListener(html);
+        SheetActorDragabbleMethods.setup(html, this.actor);
     }
 
     static get defaultOptions() {
@@ -58,6 +58,14 @@ class Setor0ActorSheet extends ActorSheet {
         data.canRoll = this.canRollOrEdit;
         data.canEdit = this.canRollOrEdit;
         return data;
+    }
+
+    async _onDropActor(event, data) {
+        console.log('-> On Drop Actor');
+    }
+    
+    async _onDropItem(event, data) {
+        console.log('-> On Drop Item');
     }
 
     get isEditable() {
@@ -338,76 +346,6 @@ class Setor0ActorSheet extends ActorSheet {
         buttons[normalizedCurrentIndex].classList.toggle('S0-selected');
         buttons[normalizedIndex].classList.toggle('S0-selected');
         this.currentPage = pageIndex;
-    }
-
-    #setupSortableListener(html) {
-        if (!window.Sortable) {
-            return;
-        }
-
-        const actorId = this.actor.id;
-
-        const containerShortcut = html[0].querySelector(`#shortcuts-container-${actorId}`);
-        if (containerShortcut) {
-            window.Sortable.create(containerShortcut, {
-                animation: 150,
-                handle: ".draggable",
-                draggable: ".draggable",
-                onEnd: (evt) => {
-                    const shortcuts = getObject(this.actor, CharacteristicType.SHORTCUTS);
-                    const newOrder = Array.from(containerShortcut.children)
-                        .map(element => {
-                            const id = element.querySelector("[data-item-id]")?.dataset?.itemId;
-                            return shortcuts.find(shortcut => shortcut.id == id);
-                        }).filter(Boolean);
-
-                    ActorUpdater._verifyAndUpdateActor(this.actor, CharacteristicType.SHORTCUTS, newOrder);
-                }
-            });
-        }
-
-        TODO('voltar aqui para terminar isso')
-        const equippedList = html[0].querySelector(`#equipped-${actorId}`);
-        const bagList = html[0].querySelector("#bag");
-        if (equippedList && bagList) {
-            const sortableOptions = {
-                group: `equipment-move-inner-${actorId}`,
-                animation: 150,
-                draggable: "li",
-                handle: ".S0-item-bag",
-                onEnd: (evt) => {
-                    debugger
-                    const origin = evt.from.id;
-                    const destination = evt.to.id;
-                    const itemElement = evt.item.querySelector("[data-item-id]");
-                    const itemId = itemElement?.dataset?.itemId;
-
-                    if (!itemId) {
-                        return;
-                    }
-
-                    if (origin == destination) {
-                        console.log('ordernar os itens no mesmo inventário');
-                    } else {
-                        console.log('lógica para replace de item');
-                        console.log(`Item ${itemId} movido de ${origin} para ${destination}`);
-
-                        const originId = origin.split('-')[1];
-                        const destinationId = destination.split('-')[1];
-
-                        // Aqui você pode acionar sua lógica para equipar/desequipar
-                        if (origin !== destination) {
-                            const action = destination === "equipped" ? "equipar" : "desequipar";
-                            console.log(`Ação a ser tomada: ${action}`);
-                        }
-                    }
-                }
-            };
-
-            window.Sortable.create(equippedList, sortableOptions);
-            window.Sortable.create(bagList, sortableOptions);
-        }
-
     }
 }
 

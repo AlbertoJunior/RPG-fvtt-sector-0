@@ -15,7 +15,7 @@ export class ActorEquipmentUtils {
         for (const items of Object.values(object)) {
             allItems.push(...items);
         }
-        return allItems;
+        return allItems.sort((a, b) => a.sort - b.sort);
     }
 
     static getActorFilteredEquipment(actor, equipmentTypeId) {
@@ -26,6 +26,11 @@ export class ActorEquipmentUtils {
 
         const itemTypeString = equipmentTypeIdToTypeString(equipmentTypeId);
         return [...actor.itemTypes[itemTypeString]];
+    }
+
+    static getActorFilteredUnequippedEquipment(actor, equipmentTypeId) {
+        const equipments = this.getActorFilteredEquipment(actor, equipmentTypeId);
+        return [...equipments.filter(item => !getObject(item, EquipmentCharacteristicType.EQUIPPED))];
     }
 
     static getActorEquipmentById(actor, equipmentId) {
