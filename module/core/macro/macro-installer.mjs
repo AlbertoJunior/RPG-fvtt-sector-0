@@ -1,5 +1,6 @@
 import { SYSTEM_ID } from "../../constants.mjs";
 import { NotificationsUtils } from "../../creators/message/notifications.mjs";
+import { SystemFlags } from "../../enums/flags-enums.mjs";
 import { FlagsUtils } from "../../utils/flags-utils.mjs";
 import { MacroUtils } from "./macro-utils.mjs";
 
@@ -14,13 +15,13 @@ export class MacroInstaller {
 
     static async installList(list) {
         for (const macro of list) {
-            await this.installMacroOnce(macro.name, FlagsUtils.getMacroFlag(macro, 'sourceId'));
+            await this.installMacroOnce(macro.name, FlagsUtils.getMacroFlag(macro, SystemFlags.MACRO.SOURCE_ID));
         }
     }
 
     static async installMacroOnce(macroName, sourceId) {
         const user = game.user;
-        const installedMacros = FlagsUtils.getGameUserFlag(user, 'macroInstalled') || [];
+        const installedMacros = FlagsUtils.getItemFlag(user, SystemFlags.MACRO.INSTALLED) || [];
         const macroKey = `${macroName}_${sourceId}`;
 
         if (installedMacros.includes(macroKey)) {
@@ -35,7 +36,7 @@ export class MacroInstaller {
         }
 
         const macros = await pack.getDocuments();
-        const macro = macros.find(m => m.name === macroName && FlagsUtils.getMacroFlag(m, 'sourceId') && sourceId);
+        const macro = macros.find(m => m.name === macroName && FlagsUtils.getMacroFlag(m, SystemFlags.MACRO.SOURCE_ID) && sourceId);
         if (!macro) {
             console.warn(`Macro "${macroName}" não encontrada no compêndio ${packId}.`);
             return;

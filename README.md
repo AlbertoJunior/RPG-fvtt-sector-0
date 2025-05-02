@@ -56,6 +56,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 
 ### Sistemas
 * 🚧 Bônus de Nível 6.
+* 🚧 Rolagem com Crítico variável.
 * ✅ Aprimoramentos.
 * ✅ Traços Bons e Ruins.
 * ✅ Inventário.
@@ -135,11 +136,11 @@ O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. To
 ## 🎨 Interfaces de Usuário
 <details>
 
-- Tema escuro para fichas de Personagens [WIP].
-- Botões compactos na ficha de Personagem.
-- Botões compactos na ficha de Items [WIP].
-- Botões compactos nos cabeçalhos [WIP].
-- Tradução de alguns elementos do Foundry.
+- 🛠️ Tema escuro para fichas de Personagens.
+- ✅ Botões compactos na ficha de Personagem.
+- 🚧 Botões compactos na ficha de Items.
+- 🚧 Botões compactos nos cabeçalhos.
+- 🛠️ Tradução de alguns elementos do Foundry.
 </details>
 
 ### Telas
@@ -177,8 +178,10 @@ Consulte o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
 Este é um projeto com direitos reservados.  
 Sugestões, correções e contribuições são bem-vindas, mas devem ser discutidas e aprovadas previamente.  
 Se você deseja contribuir, entre em contato pelos canais oficiais ou abra uma issue neste repositório.
+Consulte o arquivo [`CONTRIBUTING`](./CONTRIBUTING) para mais detalhes.
 
 ---
+## ⚠️ P.S.
 
 Desenvolvimento: 90% dedicação, 5% gambiarras e 5% que provavelmente estão perdidos por aí —  
 afinal, nem todo Aprimoramento precisa ser balanceado. Fiquem atentos, mas se der pau, é feature. Se funcionar, foi planejado.  

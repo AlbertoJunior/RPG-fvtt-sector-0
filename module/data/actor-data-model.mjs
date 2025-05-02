@@ -69,7 +69,9 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 ofensivo_longo_alcance: new NumberField({ integer: true, initial: 0 }),
                 defensivo: new NumberField({ integer: true, initial: 0 }),
             }),
-            atalhos: new ArrayField(new RollTestDataModel())
+            aliados: new ArrayField(new StringField()),
+            informantes: new ArrayField(new StringField()),
+            atalhos: new ArrayField(new RollTestDataModel()),
         };
     }
 
@@ -125,11 +127,13 @@ class PlayerDataModel extends ActorDataModel {
 }
 
 export async function createActorDataModels() {
-    Setor0TokenDocument.mappedLabel.set('actualVitality', 'Vitalidade_Atual');
-    Setor0TokenDocument.mappedLabel.set('actualProtection', 'Protecao_Atual');
-    Setor0TokenDocument.mappedLabel.set('vitalidade.total', 'Vitalidade_Total');
-    Setor0TokenDocument.mappedLabel.set('sobrecarga', 'Sobrecarga');
-    Setor0TokenDocument.mappedLabel.set('actualPM', 'Pontos_De_Movimento_Atuais');
+    Setor0TokenDocument.setValuesOnMapped([
+        { id: 'actualVitality', label: 'Vitalidade_Atual' },
+        { id: 'actualProtection', label: 'Protecao_Atual' },
+        { id: 'vitalidade.total', label: 'Vitalidade_Total' },
+        { id: 'sobrecarga', label: 'Sobrecarga' },
+        { id: 'actualPM', label: 'Pontos_De_Movimento_Atuais' },
+    ])
 
     CONFIG.Actor.trackableAttributes = {
         Player: {

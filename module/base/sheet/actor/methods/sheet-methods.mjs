@@ -1,48 +1,25 @@
 import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
 import { ElementCreatorJQuery } from "../../../../creators/element/element-creator-jquery.mjs";
-import { getActorFlag, getObject, selectCharacteristic, setActorFlag } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, selectCharacteristic, } from "../../../../../scripts/utils/utils.mjs";
 import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 import { characteristicOnClick } from "./characteristics-methods.mjs";
-import { FlagsUtils } from "../../../../utils/flags-utils.mjs";
 import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { handlerShortcutEvents } from "./shortcut-methods.mjs";
+import { menuHandleMethods } from "../../../menu-default-methods.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
 
     static handleMethods = {
-        sheet: {
+        menu: {
             [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
-            [OnEventType.CHECK]: async (actor, event) => {
-                const type = event.currentTarget.dataset.type;
-                switch (type) {
-                    case 'color': {
-                        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
-                        await FlagsUtils.setGameUserFlag(game.user, 'darkMode', !actualMode);
-                        actor.sheet.render();
-                        return;
-                    }
-                    case 'edit': {
-                        let currentValue = getActorFlag(actor, "editable");
-                        currentValue = !currentValue;
-
-                        setActorFlag(actor, "editable", currentValue);
-                        return;
-                    }
-                    case 'compact': {
-                        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'isCompactedSheet') || false;
-                        await FlagsUtils.setGameUserFlag(game.user, 'isCompactedSheet', !actualMode);
-                        actor.sheet.render();
-                        return;
-                    }
-                }
-            }
+            [OnEventType.CHECK]: async (actor, event) => { menuHandleMethods.check(actor, event); },
         },
         language: {
             [OnEventType.ADD]: async (actor, event) => {

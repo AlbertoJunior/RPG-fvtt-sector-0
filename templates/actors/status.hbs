@@ -152,7 +152,7 @@
         </ul>
 
         <ul class="S0-ul-flex">
-            {{#if (eq actor.system.morfologia 'sintetico')}}
+            {{#if (operators 'eq' actor.system.morfologia 'sintetico')}}
             <li class="S0-container">
                 <h3>
                     {{ localize 'S0.Vida' }}
@@ -174,7 +174,7 @@
             </li>
             {{/if}}
 
-            {{#unless (eq actor.system.nucleo 0)}}
+            {{#if (operators 'gt' actor.system.nucleo 0)}}
             <li class="S0-container">
                 <h3>
                     {{ localize 'S0.Sobrecarga' }}
@@ -197,7 +197,7 @@
                     {{/forLoop}}
                 </div>
             </li>
-            {{/unless}}
+            {{/if}}
         </ul>
 
         <ul class="S0-ul-flex">

@@ -73,7 +73,7 @@
 
         <ul class="S0-infinity-horizontal-menu">
             {{#each (fetchRepository 'equipment-types')}}
-            <li class="S0-simulate-button {{#if (eq @root/document.sheet.filterBag id)}}S0-marked{{/if}}"
+            <li class="S0-simulate-button {{#if (operators 'eq' @root/document.sheet.filterBag id)}}S0-marked{{/if}}"
                 style="width: auto; padding-inline: 16px" data-action="check" data-characteristic="equipment"
                 data-sub-characteristic="filter" data-type="{{type}}">
                 <h4 style="font-size: var(--font-size-13);">

@@ -360,7 +360,7 @@
         "BarAttributes": "Barras de Atributos",
         "BarValues": "Valores Únicos",
         "Title": "Configuração de Token",
-        "TitlePrototype": "Token Prototípico",
+        "TitlePrototype": "Protótipo de Token",
         "Update": "Atualizar Token",
         "CharActor": "Representa o Personagem",
         "CharLink": "Conectar com os Dados do Personagem",
@@ -480,6 +480,17 @@
         "PlayerAvatar": "Avatar",
         "PlayerPronouns": "Pronomes"
     },
+    "SHEETS": {
+        "ConfigureSheet": "Configurar Ficha",
+        "ThisSheet": "Esta Ficha",
+        "DefaultDocumentSheet": "Default {document} Sheet",
+        "DocumentSheetHint": "Override which sheet type you would like to use for this specific document.",
+        "TypeSheetHint": "Definir o tipo de ficha padrão utilizado para este tipo de documento (Apenas para o Mestre).",
+        "DocumentSheetPrivate": "You do not have sufficient permission to view the sheet for this {type}.",
+        "Save": "Salvar configuração",
+        "FormNavLabel": "Form Tab Navigation",
+        "CopyUuid": "Copiar UUID"
+    },
     "CHAT": {
         "Chat": "Chat",
         "FlushTitle": "Limpar Chat",
@@ -505,6 +516,9 @@
     },
     "SCENES": {
         "Configure": "Configure"
+    },
+    "ITEM": {
+        "ViewArt": "Ver arte do Item"
     },
     "RULER": {
         "MovementNotAllowed": "O trajeto de movimento medido não é permitido",
@@ -572,5 +586,6 @@
     "Maximum": "Máximo",
     "Permissions": "Permissões",
     "Position": "Posição",
-    "Result": "Resultado"
+    "Result": "Resultado",
+    "HeaderDetails": "Configuração"
 }

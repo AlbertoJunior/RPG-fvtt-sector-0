@@ -4,7 +4,7 @@
         <label for="difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
         <select class="S0-select" id="difficulty" name="difficulty" style="flex:1">
             {{#forLoop 5 11}}
-            <option value="{{index}}" {{#if (eq index 6)}}selected{{/if}}>{{index}}</option>
+            <option value="{{index}}" {{#if (operators 'eq' index 6)}}selected{{/if}}>{{index}}</option>
             {{/forLoop}}
         </select>
     </div>

@@ -1052,6 +1052,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-badge span {
     padding: 2px;
+    font-weight: bold;
 }
 
 .S0-item-bag:hover .S0-badge {
@@ -1174,7 +1175,7 @@ button.S0-roll-result:not([disabled]):hover {
     pointer-events: auto;
     display: flex;
     gap: 5px;
-    top: -4px;
+    top: -3px;
     opacity: 1;
 }
 
@@ -1366,7 +1367,7 @@ button.S0-roll-result:not([disabled]):hover {
     border-color: var(--tertiary-color-alpha-50);
 }
 
-.S0-page-transparent .S0-container :is(select:not(.S0-inner-select), input, textarea) {
+.S0-page-transparent .S0-container :is(select:not(.S0-inner-select), input, textarea):is(:disabled, *) {
     border-color: var(--primary-color-alpha-50);
 }
 

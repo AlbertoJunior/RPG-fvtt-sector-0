@@ -35,6 +35,78 @@ Isso significa que nem tudo pode ser modificado ou redistribuído livremente, ma
 
 ---
 
+## 🛠️ Estrutura e Ferramentas de Desenvolvimento
+Se você pretende contribuir com o código, aqui estão alguns pontos importantes:
+
+### Estrutura de Pastas
+<details>
+   <summary>module</summary>
+
+   * module/ – Contém todos os códigos referentes ao sistema.
+   * module/base – Scripts referentes as fichas (sheet) e atualizações (updater) dos elementos.
+   * module/core – Scripts referentes as lógicas do sistema, rolagens, aprimoramentos, efeitos, combate e tudo que precise de lógica.
+   * * Modificações em configurações do Foundry normalmente são feitas nesses arquivos, como o combate e token.
+   * module/creators – São scripts que servem como utilitários para construção de elemementos, geralmente HBS (HTML).
+   * module/enums – Enums que são muito utilizados para referênciar as caracterísiticas dos elementos (Tipos, Atributos, Efeitos...).
+   * module/hooks – Todo gerênciamento que envolve Hooks deve ser feito aqui, criando arquivos específicos para cada coisa, como o 'init', 'ready', 'createItem' e outros.
+   * module/repository – Tudo que for referente a busca de arquivos e documentos devem estar nessa pasta.
+   * module/utils – Qualquer classe utilitária que seja genérica.
+</details>
+
+<details>
+   <summary>lang</summary>
+
+   * lang/ – Contém os arquivos de tradução para os idiomas
+</details>
+
+<details>
+   <summary>styles</summary>
+
+   * styles/ – Estilos CSS ou elementos de fonte utilizados na interface.
+</details>
+
+<details>
+   <summary>templates</summary>
+
+   * templates/ – Todos os elementos .hbs ou .html devem estar nessa pasta, separado em subpasta por tema.
+</details>
+
+### Padrões
+O projeto segue as boas práticas do `Clean Code`, com foco em reduzir repetições de código (seguindo o princípio `DRY - Don't Repeat Yourself`) e mantendo a separação de responsabilidades de forma clara, organizando o código em arquivos específicos, evitando exposições desnecessárias.
+
+Esse padrão é aplicado de forma consistente em várias partes do projeto. Seja ao atualizar elementos do personagem, criar `dialogs`, exibir mensagens no chat ou até mesmo nas rolagens de dados, é fácil identificar trechos de código responsáveis por ações específicas, como `add`, `remove`, `roll`, `open`, etc.
+
+O principal objetivo é garantir que a manutenção do código seja **simples e eficiente**, com o mínimo de impacto possível em outros arquivos ao realizar alterações.
+
+Um exemplo desse padrão em ação é o uso do script `getObject` (localizado em `utils`). Esse script é responsável por recuperar elementos do sistema Foundry, como a ficha do personagem. O `getObject` é utilizado em conjunto com um enum que representa a característica desejada. Com esse padrão, é possível modificar os nomes das características no DataModel do personagem sem precisar alterar os arquivos de código em múltiplos lugares. Basta ajustar o enum e o próprio DataModel, com exceção apenas para os arquivos .hbs (template de interface).
+
+```mjs
+static async handleAdd(actor, event) {
+   export const CharacteristicType = Object.freeze({
+      SHORTCUTS: {
+         id: 'atalhos',
+         system: 'system.atalhos',
+      },
+   });
+   ...
+   const onConfirm = async (rollable) => {
+      if (!rollable.name) {
+            NotificationsUtils._error("O Teste precisa de um nome");
+            return;
+      }
+
+      const current = getObject(actor, CharacteristicType.SHORTCUTS) || [];
+      current.push(rollable);
+
+      await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
+   };
+
+   CreateRollableTestDialog._open(null, onConfirm);
+}
+```
+
+---
+
 ## ❤️ Agradecimento
 
 Mesmo com todas as restrições, agradecemos profundamente cada pessoa que contribui, reporta ou compartilha o sistema. O `Setor 0` é feito com carinho (e um pouco de loucura), e toda ajuda é bem-vinda — desde que respeitando os limites do Domo.
