@@ -8,10 +8,11 @@ import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
 import { characteristicOnClick } from "./characteristics-methods.mjs";
 import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
-import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { handlerShortcutEvents } from "./shortcut-methods.mjs";
 import { menuHandleMethods } from "../../../menu-default-methods.mjs";
+import { alliesHandleEvents, informantsHandleEvents } from "./network-methods.mjs"
+import { effectsHandleEvents } from "./effects-methods.mjs";
 
 export class SheetMethods {
     static characteristicTypeMap = CharacteristicTypeMap;
@@ -20,6 +21,7 @@ export class SheetMethods {
         menu: {
             [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
             [OnEventType.CHECK]: async (actor, event) => { menuHandleMethods.check(actor, event); },
+            [OnEventType.VIEW]: async (actor, event) => { menuHandleMethods.view(actor, event); },
         },
         language: {
             [OnEventType.ADD]: async (actor, event) => {
@@ -30,64 +32,29 @@ export class SheetMethods {
                 const element = event.target;
                 selectCharacteristic(element);
 
-                const characteristicType = event.currentTarget.dataset.characteristic;
-                const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
+                const parentElement = element.parentElement;
+                const checked = Array.from(parentElement.children).some(el => el.classList.contains('S0-selected'));
 
-                if (systemCharacteristic) {
-                    const parentElement = element.parentElement;
-                    const checked = Array.from(parentElement.children).some(el => el.classList.contains('S0-selected'));
-
-                    const updatedLanguages = getObject(actor, CharacteristicType.LANGUAGE);
-                    if (checked) {
-                        updatedLanguages.push(parentElement.id);
-                    } else {
-                        const indexToRemove = updatedLanguages.indexOf(parentElement.id);
-                        if (indexToRemove !== -1) {
-                            updatedLanguages.splice(indexToRemove, 1);
-                        }
+                const updatedLanguages = getObject(actor, CharacteristicType.LANGUAGE);
+                if (checked) {
+                    updatedLanguages.push(parentElement.id);
+                } else {
+                    const indexToRemove = updatedLanguages.indexOf(parentElement.id);
+                    if (indexToRemove !== -1) {
+                        updatedLanguages.splice(indexToRemove, 1);
                     }
-
-                    await ActorUpdater._verifyAndUpdateActor(actor, systemCharacteristic, new Set(updatedLanguages))
                 }
+
+                await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.LANGUAGE, new Set(updatedLanguages))
             }
         },
         trait: traitMethods,
         enhancement: enhancementHandleMethods,
-        effects: {
-            [OnEventType.REMOVE]: async (actor, event) => {
-                const currentTarget = event.currentTarget;
-                const removeType = currentTarget.dataset.type;
-                if (removeType == 'single') {
-                    const index = currentTarget.dataset.itemIndex;
-                    const effect = Array.from(actor.effects.values())[index];
-                    effect.delete();
-                } else if (removeType == 'all') {
-                    const effects = actor.effects;
-                    for (const effect of effects) {
-                        await effect.delete();
-                    }
-                }
-            },
-            [OnEventType.CHECK]: async (actor, event) => {
-                const effects = actor.effects;
-                for (const effect of effects) {
-                    const effectDuration = effect.duration.type
-                    if (effectDuration !== 'none') {
-                        effect.delete();
-                    }
-                }
-            },
-            [OnEventType.VIEW]: async (actor, event, html) => {
-                const minHeight = actor.sheet.defaultHeight;
-                const container = event.currentTarget.parentElement.parentElement.querySelector('#effects-container');
-                const resultExpand = HtmlJsUtils.expandOrContractElement(container, { minHeight: minHeight });
-                HtmlJsUtils.flipClasses(event.currentTarget.children[0], 'fa-chevron-down', 'fa-chevron-up');
-
-                actor.sheet.isExpandedEffects = resultExpand.isExpanded;
-            }
-        },
+        effects: effectsHandleEvents,
         temporary: handleStatusMethods,
         equipment: handlerEquipmentEvents,
+        allies: alliesHandleEvents,
+        informants: informantsHandleEvents,
         shortcuts: handlerShortcutEvents
     }
 

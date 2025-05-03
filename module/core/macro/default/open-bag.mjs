@@ -11,11 +11,8 @@ export const openBagMacroData = {
   name: "Abrir Mochila",
   command: `
 const targetPage = 4;
-
 ${verifyAndReturnSelectedToken}
-
 ${verifyAndReturnActor}
-
 actor.sheet.render(true);
 setTimeout(() => {
   if (actor.sheet.currentPage !== undefined) {

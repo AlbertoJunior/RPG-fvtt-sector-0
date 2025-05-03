@@ -283,10 +283,10 @@
 
         <ul id="effects-container" class="S0-container S0-container-contract S0-expanded">
             {{#each effects as |item index|}}
-            <li>
-                {{ item.origin }}: {{ item.name }}
-                <a class="S0-icon-expand" data-action="remove" data-characteristic="effects" data-type="single"
-                    data-item-index="{{ index }}">
+            <li style="display: flex; gap: 4px; align-items: center;">
+                <span class="S0-hide-long-text" style="flex: 1">{{ item.origin }}: {{ item.name }}</span>
+                <a class="S0-icon-expand S0-centralized-icon" data-action="remove" data-characteristic="effects"
+                    data-type="single" data-item-index="{{ index }}">
                     <i class="fas fa-remove"></i>
                 </a>
             </li>

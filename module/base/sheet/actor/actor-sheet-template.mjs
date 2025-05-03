@@ -18,11 +18,13 @@ class Setor0ActorSheet extends ActorSheet {
         menu: SheetMethods.handleMethods.menu,
         trait: SheetMethods.handleMethods.trait,
         enhancement: SheetMethods.handleMethods.enhancement,
-        linguas: SheetMethods.handleMethods.language,
+        language: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
         temporary: SheetMethods.handleMethods.temporary,
         equipment: SheetMethods.handleMethods.equipment,
         shortcuts: SheetMethods.handleMethods.shortcuts,
+        allies: SheetMethods.handleMethods.allies,
+        informants: SheetMethods.handleMethods.informants,
     };
 
     constructor(...args) {
@@ -350,7 +352,9 @@ export async function actorTemplatesRegister() {
         { path: "items/equipment-bag-item", call: 'equipamentBagItem' },
         { path: "items/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "actors/shortcuts" },
-        { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' }
+        { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' },
+        { path: "actors/network" },
+        { path: "actors/network-partial", call: 'networkPartial' },
     ];
 
     return await loadAndRegisterTemplates(templates);;

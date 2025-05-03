@@ -1,8 +1,22 @@
 <section data-label="{{ localize 'S0.Biografia' }}" class="S0-page" data-icon="fas fa-address-book">
-    <div class="S0-container">
+    <div class="S0-container" style="position: relative;">
         <h2>{{localize 'S0.Descricao'}}</h2>
         <div style="display: flex; justify-content: center; align-items: center;">
             <img id="actor-image" src="{{actor.img}}" class="{{#if editable}}S0-clickable{{/if}}" data-edit="img">
+        </div>
+
+        <div class="S0-biography-container-button">
+            <a class="S0-icon-expand" data-action="view" data-characteristic="menu" data-type="actor"
+                title="{{localize 'SIDEBAR.CharArt'}}">
+                <i class="fas fa-eye"></i>
+                <span style="margin-left: 10px;">{{localize 'SIDEBAR.CharArt'}}</span>
+            </a>
+
+            <a class="S0-icon-expand" data-action="view" data-characteristic="menu" data-type="token"
+                title="{{localize 'SIDEBAR.TokenArt'}}">
+                <i class="fas fa-eye"></i>
+                <span style="margin-left: 10px;">{{localize 'SIDEBAR.TokenArt'}}</span>
+            </a>
         </div>
 
         <div class="S0-container">
@@ -25,7 +39,7 @@
                     {{label}}
                 </label>
                 <div class="S0-characteristic {{#if ../editable}}S0-clickable{{/if}}" data-action="add"
-                    data-characteristic="linguas">
+                    data-characteristic="language">
                 </div>
             </div>
             {{/each}}

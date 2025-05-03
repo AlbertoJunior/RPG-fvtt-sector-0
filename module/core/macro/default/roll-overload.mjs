@@ -11,9 +11,7 @@ export const rollOverloadMacroData = {
   name: "Teste de Sobrecarga",
   command: `
 ${verifyAndReturnSelectedToken}
-
 ${verifyAndReturnActor}
-
 await globalThis.MacroMethods.overload(actor);
 `,
   img: `${ICONS_PATH}/overload.svg`,

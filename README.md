@@ -19,7 +19,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 2. Mova a pasta para o diretório `Data/systems` do seu Foundry VTT.
 3. Reinicie o Foundry e ative o sistema ao criar um novo mundo.
 
-> 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL [WIP].
+> 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL.
 
 <details>
 <summary>Legenda de ícones</summary>
@@ -30,10 +30,10 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 🎨 Interfaces de Usuário
 📜 Licença
 🤝 Contribuindo
-✅ (pronto)
-⚠️ (aviso)
-🛠️ (em desenvolvimento)
-🚧 (planejado)
+✅ Pronto
+⚠️ Aviso
+🛠️ Em desenvolvimento
+🚧 Planejado
 ```
 </details>
 
@@ -67,6 +67,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * 🛠️ Aliados e Informantes.
 
 ### Efeitos
+* ✅ Efeitos específicos do Setor 0.
 * ✅ Efeitos ativos baseado em Aprimoramentos.
 * 🚧 Efeitos ativos baseado em Traços.
 * 🚧 Efeitos ativos baseado em Equipamentos.
@@ -136,10 +137,10 @@ O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. To
 ## 🎨 Interfaces de Usuário
 <details>
 
-- 🛠️ Tema escuro para fichas de Personagens.
+- ✅ Tema escuro para fichas de Personagens.
 - ✅ Botões compactos na ficha de Personagem.
-- 🚧 Botões compactos na ficha de Items.
-- 🚧 Botões compactos nos cabeçalhos.
+- ✅ Botões compactos na ficha de Items.
+- ✅ Botões compactos nos cabeçalhos.
 - 🛠️ Tradução de alguns elementos do Foundry.
 </details>
 
