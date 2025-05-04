@@ -1,7 +1,6 @@
 {
     "S0": {
         "Title": "Setor 0 - O Submundo",
-        
         "Fechar": "Fechar",
         "Editar": "Editar",
         "Editando": "Editando",
@@ -37,7 +36,6 @@
         "Modificadores": "Modificadores",
         "Atalhos": "Atalhos",
         "Atalho": "Atalho",
-        
         "Realizar_Teste": "Realizar Teste",
         "Rolagens_Player": "Modo de Rolagem",
         "Rolagem": "Rolagem",
@@ -47,7 +45,6 @@
         "Rolagem_GM_Oculta": "Oculto",
         "Rolagens_GM": "Rolagens do Mestre",
         "Rolagem_Pessoal": "Pessoal",
-
         "Id": "Identificador",
         "Nome": "Nome",
         "Caracteristicas": "Características",
@@ -57,6 +54,7 @@
         "Androide": "Androide",
         "Ciborgue": "Ciborgue",
         "Sintetico": "Sintético",
+        "Humano": "Humano",
         "Atributos": "Atributos",
         "Forca": "Força",
         "Destreza": "Destreza",
@@ -158,12 +156,10 @@
         "Movimento": "Movimento",
         "Iniciativa": "Iniciativa",
         "Penalidade": "Penalidade",
-
         "Modo_Escuro": "Modo Escuro",
         "Modo_Compacto": "Modo Compacto",
         "Enviar_No_Chat": "Enviar no Chat",
         "Outros_Atalhos": "Outros Atalhos",
-
         "Permitir_Edicao": "Permitir Edição",
         "Bloquear_Edicao": "Bloquear Edição",
         "Alterar_Quantidade": "Alterar quantidade",
@@ -207,7 +203,8 @@
         "Vitalidade_Total": "Vitalidade total",
         "Protecao_Atual": "Proteção atual",
         "Pontos_De_Movimento_Atuais": "Pontos de Movimento atuais",
-        "Criar_Macro": "Criar Macro"
+        "Criar_Macro": "Criar Macro",
+        "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa."
     },
     "TYPES": {
         "Actor": {
@@ -224,7 +221,6 @@
             "Trait": "Traço"
         }
     },
-
     "DOCUMENT": {
         "ChatMessages": "Mensagens",
         "Combats": "Combates",
@@ -262,6 +258,19 @@
         "CollapseToggle": "Contrair ou Expandir",
         "SortModeAlpha": "Ordernar Alfabeticamente",
         "SortModeManual": "Ordernar Manualmente"
+    },
+    "JOURNAL": {
+        "ModeText": "Texto",
+        "ModeImage": "Imagem",
+        "ActionShow": "Mostrar para os Jogadores",
+        "ActionShowSuccess": "Mostrou o conteúdo de {title} para {which} jogadores.",
+        "AnchorCenter": "Centro",
+        "AnchorBottom": "Baixo",
+        "AnchorTop": "Cima",
+        "AnchorLeft": "Esquerda",
+        "AnchorRight": "Direita",
+        "ShowTo": "Mostrar para",
+        "ShowEntry": "Mostrar {name}"
     },
     "HUD": {
         "WarningEffectNoActor": "Você não pode aplicar um Efeito em um Token que não está associado a um Personagem.",
@@ -330,15 +339,15 @@
         "CombatantImage": "Imagem Miniatura",
         "SidebarTitle": "Rastreador do Combate",
         "SettingsSave": "Salvar configurações",
-        "NavLabel": "Combat Encounters Navigation",
-        "NoneRemaining": "There are no Combatants remaining in this Encounter which are not defeated.",
+        "NavLabel": "Navegação de Combates",
+        "NoneRemaining": "Não há Combatentes restantes neste Combate que ainda não foram derrotados.",
         "Sounds": {
             "Epic": "Epic",
             "MC": "Fight Commentator"
         },
-        "CannotLinkToScene": "You cannot link the Combat to a Scene that doesn't contain all its Combatants.",
+        "CannotLinkToScene": "Você não pode vincular o Combate a uma Cena que não contenha todos os seus Combatentes.",
         "CombatantStatus": "Status",
-        "CombatantScene": "Combatant Scene"
+        "CombatantScene": "Cena do Combatente"
     },
     "COMPENDIUM": {
         "ClearFilters": "Limpar Filtros",
@@ -360,7 +369,7 @@
         "BarAttributes": "Barras de Atributos",
         "BarValues": "Valores Únicos",
         "Title": "Configuração de Token",
-        "TitlePrototype": "Token Prototípico",
+        "TitlePrototype": "Protótipo de Token",
         "Update": "Atualizar Token",
         "CharActor": "Representa o Personagem",
         "CharLink": "Conectar com os Dados do Personagem",
@@ -390,7 +399,9 @@
         "DISPLAY_OWNER": "Sempre para o Dono",
         "DISPLAY_ALWAYS": "Sempre para Todos",
         "OcclusionRadius": "Raio de Oclusão",
-        "OcclusionRadiusHint": "Quando este Token estiver abaixo de um Tyle que usa oclusão radial, este valor controla o tamanho do buraco cortado no Tyle para permitir que o Token seja visto através dela."
+        "OcclusionRadiusHint": "Quando este Token estiver abaixo de um Tyle que usa oclusão radial, este valor controla o tamanho do buraco cortado no Tyle para permitir que o Token seja visto através dela.",
+        "WarningNoActor": "Este Token faz referência a um Personagem que não existe mais no Mundo.",
+        "WarningNoVision": "Não há nenhum Token nesta Cena que lhe conceda visibilidade da área."
     },
     "EFFECT": {
         "StatusDead": "Morto",
@@ -480,6 +491,17 @@
         "PlayerAvatar": "Avatar",
         "PlayerPronouns": "Pronomes"
     },
+    "SHEETS": {
+        "ConfigureSheet": "Configurar Ficha",
+        "ThisSheet": "Esta Ficha",
+        "DefaultDocumentSheet": "Default {document} Sheet",
+        "DocumentSheetHint": "Override which sheet type you would like to use for this specific document.",
+        "TypeSheetHint": "Definir o tipo de ficha padrão utilizado para este tipo de documento (Apenas para o Mestre).",
+        "DocumentSheetPrivate": "You do not have sufficient permission to view the sheet for this {type}.",
+        "Save": "Salvar configuração",
+        "FormNavLabel": "Form Tab Navigation",
+        "CopyUuid": "Copiar UUID"
+    },
     "CHAT": {
         "Chat": "Chat",
         "FlushTitle": "Limpar Chat",
@@ -506,13 +528,15 @@
     "SCENES": {
         "Configure": "Configure"
     },
+    "ITEM": {
+        "ViewArt": "Ver arte do Item"
+    },
     "RULER": {
         "MovementNotAllowed": "O trajeto de movimento medido não é permitido",
         "MovementCollision": "O movimento tentado colide com pelo menos uma Parede.",
         "MovementNoPermission": "Você não tem permissão para mover este Token.",
         "MovementLocked": "Este Token não pode ser movido porque está travado."
     },
-    
     "AreYouSure": "Tem certeza?",
     "Yes": "Sim",
     "No": "Não",
@@ -572,5 +596,6 @@
     "Maximum": "Máximo",
     "Permissions": "Permissões",
     "Position": "Posição",
-    "Result": "Resultado"
+    "Result": "Resultado",
+    "HeaderDetails": "Configuração"
 }

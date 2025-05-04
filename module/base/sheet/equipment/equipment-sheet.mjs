@@ -1,31 +1,15 @@
 import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
-import { OnEventType, OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
+import { OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
+import { menuHandleMethods } from "../../menu-default-methods.mjs";
 import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
 import { handlerEquipmentMenuRollEvents } from "./methods/equipment-menu-roll-methods.mjs";
 
 export class EquipmentSheet extends ItemSheet {
     #mapEvents = {
-        menu: {
-            [OnEventType.CHECK]: async (item, event) => {
-                const type = event.currentTarget.dataset.type;
-                switch (type) {
-                    case 'edit': {
-                        const actualMode = item.getFlag(SYSTEM_ID, 'editable');
-                        FlagsUtils.setItemFlag(item, 'editable', !actualMode);
-                        return;
-                    }
-                    case 'color': {
-                        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
-                        await FlagsUtils.setGameUserFlag(game.user, 'darkMode', !actualMode);
-                        this.render();
-                        return;
-                    }
-                }
-            }
-        },
+        menu: menuHandleMethods,
         item_roll: handlerEquipmentItemRollEvents,
         menu_roll: handlerEquipmentMenuRollEvents
     };
@@ -70,7 +54,7 @@ export class EquipmentSheet extends ItemSheet {
     }
 
     get isEditable() {
-        return this.item.getFlag(SYSTEM_ID, 'editable') || false;
+        return FlagsUtils.getItemFlag(this.item, 'editable', false);
     }
 
     activateListeners(html) {
@@ -106,14 +90,8 @@ export class EquipmentSheet extends ItemSheet {
     }
 
     #presetSheet(html) {
-        const actualMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
-        const parent = html.parent()[0];
-        parent.classList.toggle('S0-page-transparent', actualMode);
-        parent.style.margin = '0';
-        parent.style.paddingBlock = '0';
-        parent.style.paddingLeft = '20px';
-        parent.style.overflowY = 'scroll';
-
+        HtmlJsUtils.setupContent(html);
+        HtmlJsUtils.setupHeader(html);
         this.#presetSheetExpandContainer(html);
     }
 

@@ -6,6 +6,7 @@ export class MorphologyRepository {
         { id: 'androide', label: 'Androide' },
         { id: 'ciborgue', label: 'Ciborgue' },
         { id: 'sintetico', label: 'Sintetico' },
+        { id: 'humano', label: 'Humano' },
     ];
 
     static #loadedFromPack = [];

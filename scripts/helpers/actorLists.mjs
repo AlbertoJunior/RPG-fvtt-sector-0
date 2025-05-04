@@ -1,4 +1,5 @@
 import { ActorEquipmentUtils } from "../../module/core/actor/actor-equipment.mjs";
+import { ActorUtils } from "../../module/core/actor/actor-utils.mjs";
 
 const map = {
     'equipment-filtered': (actor) => {
@@ -7,7 +8,13 @@ const map = {
     },
     'equipment-equipped': (actor) => {
         return ActorEquipmentUtils.getActorEquippedItems(actor);
-    }
+    },
+    'allies': (actor) => {
+        return ActorUtils.getAllies(actor);
+    },
+    'informants': (actor) => {
+        return ActorUtils.getInformants(actor);
+    },
 }
 
 export default function actorLists(actor, value) {

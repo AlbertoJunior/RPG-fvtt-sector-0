@@ -59,7 +59,7 @@
             {{/if}}
         </h2>
 
-        <div id="shortcuts-container-{{actor.id}}" class="S0-container-2-fixed-column S0-container-contract S0-expanded"
+        <div id="shortcuts-container-{{actor.id}}" class="S0-container-2-fixed-column S0-container-contract S0-drop-container S0-expanded"
             style="overflow-y: scroll; padding-left: 4px; grid-row-gap: 0px; grid-column-gap: 4px;">
             {{#each actor.system.atalhos as |shortcut|}}
             <div class="S0-container S0-shortcut-item {{#if ../editable}}draggable{{/if}}">
@@ -72,7 +72,7 @@
                 {{/if}}
 
                 <label class="S0-max-2-line-text"
-                    style="text-align: start; flex: 1; max-width: 160px; margin-right: 4px;">
+                    style="pointer-events: none; text-align: start; flex: 1; max-width: 160px; margin-right: 4px;">
                     {{shortcut.name}}
                 </label>
 

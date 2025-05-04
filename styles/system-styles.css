@@ -276,14 +276,15 @@ form .form-group-stacked {
 img.S0-clickable {
     cursor: pointer;
     background-color: var(--secondary-color-alpha-50);
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    border-color: var(--secondary-color-alpha);
+    border: 2px solid var(--primary-color-alpha-50);
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 img.S0-clickable:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 6px var(--shadow-hover-color);
-    background-color: var(--secondary-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 8px var(--primary-color-alpha);
+    background-color: var(--secondary-color-alpha);
+    border-color: var(--primary-color);
 }
 
 .sheet img[data-edit]:not(.S0-clickable) {
@@ -374,7 +375,6 @@ img.S0-clickable:hover {
     grid-template-columns: repeat(auto-fit, minmax(31%, 1fr));
 }
 
-
 .S0-container-3-fixed-column {
     display: grid;
     grid-column-gap: 10px;
@@ -442,6 +442,8 @@ img.S0-clickable:hover {
 
 /* #endregion */
 
+/* #region BASE STYLES */
+
 .S0-actor-sheet section {
     margin-inline: 0px;
 }
@@ -449,11 +451,6 @@ img.S0-clickable:hover {
 .S0-actor-sheet img {
     object-position: center;
     object-fit: cover;
-    max-width: 220px;
-    max-height: 220px;
-    border-radius: 50%;
-    margin: 6px;
-    aspect-ratio: 1 / 1;
 }
 
 .S0-actor-sheet button {
@@ -548,6 +545,8 @@ img.S0-clickable:hover {
     justify-content: center;
 }
 
+/* #endregion */
+
 /* #region ENHANCEMENT */
 .S0-enhancement {
     border-radius: var(--border-radius-medium);
@@ -600,10 +599,13 @@ img.S0-clickable:hover {
     text-align: center;
     font-weight: bold;
     color: var(--primary-color-alpha);
-    background-color: var(--shadow-color-30);
-    border-color: var(--shadow-color);
+    border-color: var(--secondary-color-alpha-50);
     border-radius: var(--border-radius-medium);
     box-shadow: 0 1px 4px 1px var(--shadow-color);
+}
+
+.S0-enhancement .S0-select {
+    background-color: var(--secondary-color-alpha-50);
 }
 
 .S0-inner-select {
@@ -941,7 +943,7 @@ button.S0-roll-result:not([disabled]):hover {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--shadow-color-30);
+    background-color: var(--color-black-alpha-50);
     justify-items: center;
     justify-content: center;
     width: 100px;
@@ -1052,6 +1054,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-badge span {
     padding: 2px;
+    font-weight: bold;
 }
 
 .S0-item-bag:hover .S0-badge {
@@ -1119,7 +1122,130 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* #endregion */
 
-/* region SHORTCUT */
+/* #region ALLIES AND INFORMANTS */
+
+.S0-actor-images-container h4 {
+    padding-right: 16px;
+}
+
+.S0-actor-images-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block: 4px;
+    width: 130px;
+    height: 214px;
+    background-color: var(--color-black-alpha-50);
+    border: 2px solid var(--secondary-color-alpha-50);
+    border-radius: 30px 0px;
+    overflow: hidden;
+    transition: border-color 0.1s ease, box-shadow 0.1s ease, scale 0.3s ease;
+}
+
+.S0-actor-images-container:hover {
+    border-color: var(--secondary-color-alpha);
+    box-shadow: 0px 0px 6px var(--secondary-color-alpha);
+}
+
+.S0-actor-images {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.S0-actor-images-name {
+    pointer-events: none;
+    background-color: var(--secondary-color-alpha);
+    color: var(--on-secondary-color);
+    font-size: var(--font-size-11);
+    padding: 4px 8px;
+    border-top: 1px ridge black;
+    opacity: 0;
+    transition: translate 0.3s ease-in-out, opacity 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.S0-actor-images-morph {
+    pointer-events: none;
+    position: absolute;
+    right: -150px;
+    transform: translateY(160px);
+    background-color: var(--secondary-color-alpha);
+    color: var(--on-secondary-color);
+    font-size: var(--font-size-11);
+    padding: 4px 8px;
+    border: 1px ridge black;
+    border-radius: 6px 0px 0px 6px;
+    opacity: 0;
+    transition: right 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+.S0-actor-container-button {
+    position: absolute;
+    width: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 4px;
+    right: 0;
+    margin-top: 5px;
+}
+
+.S0-actor-button {
+    width: 100%;
+    pointer-events: none;
+    height: 25px;
+    transform: translateX(30px);
+    background-color: var(--secondary-color-alpha);
+    color: var(--on-secondary-color);
+    font-size: var(--font-size-11);
+    padding: 6px;
+    border-radius: 6px 0px 0px 6px;
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.S0-actor-button:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.S0-actor-images-container:hover .S0-actor-images-name {
+    opacity: 1;
+    translate: 0px -23px;
+    box-shadow: 0px -2px 6px var(--color-black-alpha-50);
+}
+
+.S0-actor-images-container:hover .S0-actor-images-morph {
+    right: -10px;
+    opacity: 1;
+    box-shadow: 0px 0px 6px var(--color-black-alpha-50);
+}
+
+.S0-actor-images-container:hover .S0-actor-button {
+    pointer-events: auto;
+    transform: translateX(0px);
+    opacity: 1;
+    box-shadow: 0px 0px 6px var(--color-black-alpha-50);
+}
+
+.S0-drop-target-hover {
+    background-color: var(--tertiary-color-alpha-50);
+}
+
+.S0-container-contract.S0-drop-container:not(.S0-expanded) {
+    padding: 0 !important;
+    transition: max-height 0.3s ease, background-color 0.2s ease-in-out, padding 0.2s ease;
+}
+
+.S0-drop-container {
+    padding: var(--border-radius-medium) !important;
+    border-radius: var(--border-radius-large);
+    transition: background-color 0.2s ease-in-out, padding 0.2s ease-in-out;
+}
+
+/* #endregion */
+
+/* #region SHORTCUT */
 .S0-shortcut-item {
     height: 50px;
     display: flex;
@@ -1138,11 +1264,40 @@ button.S0-roll-result:not([disabled]):hover {
     padding-inline: 8px;
 }
 
-.S0-page-transparent .S0-h-marked {
-    background-color: var(--tertiary-color-alpha);
+/* #endregion */
+
+/* #region BIOGRAPHY */
+.S0-biography-container-button {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding-block: 4px;
+    row-gap: 4px;
+    right: 0;
+    top: 40px;
+    overflow: hidden;
 }
 
-/* endregion */
+.S0-biography-container-button>* {
+    position: relative;
+    right: -150px;
+    background: var(--secondary-color-alpha-50);
+    padding-block: 4px;
+    padding-inline: 8px;
+    box-shadow: 2px 1px 2px var(--shadow-color-30);
+    border-radius: 6px 0px 0px 6px;
+    transition: right 0.2s ease-in-out;
+}
+
+.S0-biography-container-button>*:hover {
+    right: 0px;
+}
+
+.S0-page-transparent .S0-biography-container-button>* {
+    background: var(--tertiary-color-alpha-50);
+}
+
+/* #endregion */
 
 /* #region ANIMATE ICONS */
 
@@ -1174,11 +1329,19 @@ button.S0-roll-result:not([disabled]):hover {
     pointer-events: auto;
     display: flex;
     gap: 5px;
-    top: -4px;
+    top: -3px;
     opacity: 1;
 }
 
 /* === ROTAÇÃO DE ÍCONES NO HOVER === */
+.S0-centralized-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .S0-icon-rotate i {
     transition: transform 0.3s ease;
 }
@@ -1362,11 +1525,12 @@ button.S0-roll-result:not([disabled]):hover {
     margin: 0;
 }
 
+
 .S0-page-transparent .S0-container {
     border-color: var(--tertiary-color-alpha-50);
 }
 
-.S0-page-transparent .S0-container :is(select:not(.S0-inner-select), input, textarea) {
+.S0-page-transparent .S0-container :is(select:not(.S0-inner-select), input, textarea):is(:disabled, *) {
     border-color: var(--primary-color-alpha-50);
 }
 
@@ -1385,7 +1549,7 @@ button.S0-roll-result:not([disabled]):hover {
     border-color: var(--secondary-color-alpha-50);
 }
 
-:is(.S0-page-transparent, .S0-dialog) :is(strong, .S0-container label, .S0-page :is(label, span)) {
+:is(.S0-page-transparent, .S0-dialog) :is(strong, .S0-container label, .S0-page :is(label, span, a)) {
     text-shadow: 0 0 6px var(--primary-color-alpha);
 }
 
@@ -1440,16 +1604,53 @@ button.S0-roll-result:not([disabled]):hover {
     border-color: rgba(130, 0, 255);
 }
 
+.S0-page-transparent .S0-actor-images-container {
+    border-color: var(--primary-color-alpha-50);
+}
+
+.S0-page-transparent .S0-actor-images-container:hover {
+    border-color: var(--primary-color-alpha);
+    box-shadow: 0px 0px 6px var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-actor-images-name {
+    background-color: var(--primary-color-alpha);
+    color: var(--on-primary-color);
+}
+
+.S0-page-transparent .S0-actor-images-morph {
+    background-color: var(--primary-color-alpha);
+    color: var(--on-primary-color);
+}
+
+.S0-page-transparent .S0-actor-button {
+    background-color: var(--primary-color-alpha);
+    color: var(--on-primary-color);
+}
+
+.S0-page-transparent .S0-h-marked {
+    background-color: var(--tertiary-color-alpha);
+}
+
 /* #endregion */
 
 /* #region ID EDITS */
 
+#actor-image {
+    object-position: top;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    margin: 6px;
+}
+
 #effects-container {
-    padding-block: 4px;
     padding-left: 12px;
     padding-right: 2px;
     margin-top: 6px;
     margin-bottom: 2px;
+    transition: max-height 0.3s ease, padding 0.2s ease-in-out;
 }
 
 #effects-container li {
@@ -1462,6 +1663,7 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 #effects-container.S0-expanded {
+    padding-block: 4px;
     max-height: 340px;
 }
 

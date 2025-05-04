@@ -11,11 +11,8 @@ export const openShortcutMacroData = {
   name: "Abrir Atalhos",
   command: `
 const targetPage = 5;
-
 ${verifyAndReturnSelectedToken}
-
 ${verifyAndReturnActor}
-
 actor.sheet.render(true);
 setTimeout(() => {
   if (actor.sheet.currentPage !== undefined) {

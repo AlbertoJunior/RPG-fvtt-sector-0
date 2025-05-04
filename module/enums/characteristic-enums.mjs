@@ -82,6 +82,14 @@ export const CharacteristicType = Object.freeze({
         OFENSIVE_PROJECTILE: { id: 'bonus_ofensivo_longo_alcance', system: 'system.bonus.ofensivo_longo_alcance' },
         DEFENSIVE: { id: 'bonus_defensivo', system: 'system.bonus.defensivo' },
     },
+    ALLIES: {
+        id: 'aliados',
+        system: 'system.aliados',
+    },
+    INFORMANTS: {
+        id: 'informantes',
+        system: 'system.informantes',
+    },
     SHORTCUTS: {
         id: 'atalhos',
         system: 'system.atalhos',

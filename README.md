@@ -19,7 +19,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 2. Mova a pasta para o diretório `Data/systems` do seu Foundry VTT.
 3. Reinicie o Foundry e ative o sistema ao criar um novo mundo.
 
-> 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL [WIP].
+> 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL.
 
 <details>
 <summary>Legenda de ícones</summary>
@@ -30,10 +30,10 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 🎨 Interfaces de Usuário
 📜 Licença
 🤝 Contribuindo
-✅ (pronto)
-⚠️ (aviso)
-🛠️ (em desenvolvimento)
-🚧 (planejado)
+✅ Pronto
+⚠️ Aviso
+🛠️ Em desenvolvimento
+🚧 Planejado
 ```
 </details>
 
@@ -56,6 +56,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 
 ### Sistemas
 * 🚧 Bônus de Nível 6.
+* 🚧 Rolagem com Crítico variável.
 * ✅ Aprimoramentos.
 * ✅ Traços Bons e Ruins.
 * ✅ Inventário.
@@ -66,6 +67,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * 🛠️ Aliados e Informantes.
 
 ### Efeitos
+* ✅ Efeitos específicos do Setor 0.
 * ✅ Efeitos ativos baseado em Aprimoramentos.
 * 🚧 Efeitos ativos baseado em Traços.
 * 🚧 Efeitos ativos baseado em Equipamentos.
@@ -135,11 +137,11 @@ O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. To
 ## 🎨 Interfaces de Usuário
 <details>
 
-- Tema escuro para fichas de Personagens [WIP].
-- Botões compactos na ficha de Personagem.
-- Botões compactos na ficha de Items [WIP].
-- Botões compactos nos cabeçalhos [WIP].
-- Tradução de alguns elementos do Foundry.
+- ✅ Tema escuro para fichas de Personagens.
+- ✅ Botões compactos na ficha de Personagem.
+- ✅ Botões compactos na ficha de Items.
+- ✅ Botões compactos nos cabeçalhos.
+- 🛠️ Tradução de alguns elementos do Foundry.
 </details>
 
 ### Telas
@@ -177,8 +179,10 @@ Consulte o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
 Este é um projeto com direitos reservados.  
 Sugestões, correções e contribuições são bem-vindas, mas devem ser discutidas e aprovadas previamente.  
 Se você deseja contribuir, entre em contato pelos canais oficiais ou abra uma issue neste repositório.
+Consulte o arquivo [`CONTRIBUTING`](./CONTRIBUTING) para mais detalhes.
 
 ---
+## ⚠️ P.S.
 
 Desenvolvimento: 90% dedicação, 5% gambiarras e 5% que provavelmente estão perdidos por aí —  
 afinal, nem todo Aprimoramento precisa ser balanceado. Fiquem atentos, mas se der pau, é feature. Se funcionar, foi planejado.  

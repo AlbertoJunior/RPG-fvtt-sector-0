@@ -1,5 +1,5 @@
 import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
-import { getActorFlag, getObject, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
+import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
 import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
@@ -10,18 +10,21 @@ import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { SYSTEM_ID } from "../../../constants.mjs";
 import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
+import { SystemFlags } from "../../../enums/flags-enums.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
     #mapEvents = {
-        sheet: SheetMethods.handleMethods.sheet,
+        menu: SheetMethods.handleMethods.menu,
         trait: SheetMethods.handleMethods.trait,
         enhancement: SheetMethods.handleMethods.enhancement,
-        linguas: SheetMethods.handleMethods.language,
+        language: SheetMethods.handleMethods.language,
         effects: SheetMethods.handleMethods.effects,
         temporary: SheetMethods.handleMethods.temporary,
         equipment: SheetMethods.handleMethods.equipment,
         shortcuts: SheetMethods.handleMethods.shortcuts,
+        allies: SheetMethods.handleMethods.allies,
+        informants: SheetMethods.handleMethods.informants,
     };
 
     constructor(...args) {
@@ -35,6 +38,7 @@ class Setor0ActorSheet extends ActorSheet {
 
     activateListeners(html) {
         super.activateListeners(html);
+        this.setupContentAndHeader(html);
         SheetMethods._createDynamicSheet(html, this.isEditable);
         this.#presetSheet(html);
         this.#setupListeners(html);
@@ -63,13 +67,13 @@ class Setor0ActorSheet extends ActorSheet {
     async _onDropActor(event, data) {
         console.log('-> On Drop Actor');
     }
-    
+
     async _onDropItem(event, data) {
         console.log('-> On Drop Item');
     }
 
     get isEditable() {
-        return getActorFlag(this.actor, "editable") && this.canRollOrEdit;
+        return FlagsUtils.getActorFlag(this.actor, "editable") && this.canRollOrEdit;
     }
 
     get canRollOrEdit() {
@@ -104,7 +108,7 @@ class Setor0ActorSheet extends ActorSheet {
         const pages = [];
         const buttons = [];
 
-        const isCompacted = FlagsUtils.getGameUserFlag(game.user, 'isCompactedSheet')
+        const isCompacted = FlagsUtils.getItemFlag(game.user, SystemFlags.MODE.COMPACT)
 
         html.find(".S0-page").each((index, page) => {
             pages.push(page);
@@ -137,7 +141,6 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetSheet(html) {
-        this.#verifyDarkMode(html);
         this.#cleanSheetBeforePreset(html);
 
         const system = this.actor.system;
@@ -181,21 +184,9 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetSheetExpandContainers(html);
     }
 
-    #verifyDarkMode(html) {
-        const inDarkMode = FlagsUtils.getGameUserFlag(game.user, 'darkMode') || false;
-
-        const parent = html.parent()[0];
-        parent.classList.toggle('S0-page-transparent', inDarkMode);
-        parent.style.margin = '0px';
-        parent.style.padding = '0px 2px 0px 12px';
-        parent.style.overflowY = 'scroll';
-
-        if (inDarkMode) {
-            const header = parent.parentElement.children[0].children;
-            for (const child of header) {
-                child.style.color = 'var(--primary-color)';
-            }
-        }
+    setupContentAndHeader(html) {
+        HtmlJsUtils.setupContent(html);
+        HtmlJsUtils.setupHeader(html);
     }
 
     #cleanSheetBeforePreset(html) {
@@ -361,7 +352,9 @@ export async function actorTemplatesRegister() {
         { path: "items/equipment-bag-item", call: 'equipamentBagItem' },
         { path: "items/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "actors/shortcuts" },
-        { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' }
+        { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' },
+        { path: "actors/network" },
+        { path: "actors/network-partial", call: 'networkPartial' },
     ];
 
     return await loadAndRegisterTemplates(templates);;

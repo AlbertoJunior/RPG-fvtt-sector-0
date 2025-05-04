@@ -48,4 +48,12 @@ export class DialogUtils {
             div.querySelector('.dialog-buttons').remove();
         }
     }
+
+    static showArtWork(title, imgPath, shareable, uuid) {
+        new ImagePopout(imgPath, {
+            title: title || "Título da Imagem",
+            shareable: shareable || false,
+            uuid: uuid,
+        }).render(true);
+    }
 }

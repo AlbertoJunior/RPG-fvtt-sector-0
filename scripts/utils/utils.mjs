@@ -1,4 +1,3 @@
-import { SYSTEM_ID } from "../../module/constants.mjs";
 import { NotificationsUtils } from "../../module/creators/message/notifications.mjs";
 
 function containClass(element, cls) {
@@ -37,14 +36,6 @@ export function selectCharacteristic(element) {
     }
 
     element.blur();
-}
-
-export async function setActorFlag(actor, flag, value) {
-    await actor.setFlag(SYSTEM_ID, flag, value);
-}
-
-export function getActorFlag(actor, flag) {
-    return actor.getFlag(SYSTEM_ID, flag) || false;
 }
 
 export function toTitleCase(str) {

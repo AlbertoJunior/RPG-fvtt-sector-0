@@ -1,21 +1,6 @@
 {{ log this }}
 <ul id="floating-menu" class="S0-float-right-sheet">
-    {{#if canEdit}}
-    <li class="S0-simulate-button {{#if editable}}S0-marked{{/if}}" data-characteristic="menu" data-action="check"
-        data-type="edit">
-        {{#if editable}}
-        <i class="fas fa-toggle-on" style="margin-right: 4px;"></i>
-        {{ localize 'S0.Editando' }}
-        {{else}}
-        <i class="fas fa-toggle-off" style="margin-right: 4px;"></i>
-        {{ localize 'S0.Editar' }}
-        {{/if}}
-    </li>
-    {{/if}}
-    <li class="S0-simulate-button" data-characteristic="menu" data-action="check" data-type="color">
-        <i class="fas fa-circle-half-stroke"></i>
-        {{localize 'S0.Modo_Escuro'}}
-    </li>
+    {{> "buttons-float-menu" canEdit=canEdit editable=editable}}
 </ul>
 
 <div class="S0-page">

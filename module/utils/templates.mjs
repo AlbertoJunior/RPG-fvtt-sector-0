@@ -18,6 +18,7 @@ async function loadAuxiliaryTemplates() {
     const configTemplates = [
         { call: "buttons-dialog", path: "others/buttons-dialog" },
         { call: "roll-chat-mode", path: "others/roll-chat-mode" },
+        { call: "buttons-float-menu", path: "others/list-default-buttons-float-menu" },
     ];
 
     const loadedAuxiliaryTemplates = await loadAndRegisterTemplates(configTemplates);

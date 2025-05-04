@@ -129,4 +129,26 @@ export class ActorUtils {
         }
         return Object.values(enhancement.levels).filter(level => level && level.id !== "");
     }
+
+    static getAllies(actor) {
+        const allies = getObject(actor, CharacteristicType.ALLIES) || [];
+        return this.#getNetworkByList(allies);
+    }
+
+    static getInformants(actor) {
+        const informants = getObject(actor, CharacteristicType.INFORMANTS) || [];
+        return this.#getNetworkByList(informants);
+    }
+
+    static #getNetworkByList(list) {
+        return game.actors.filter(actor => list.includes(actor.id))
+            .map(actor => {
+                return {
+                    id: actor.id,
+                    name: actor.name,
+                    img: actor.img,
+                    system: actor.system
+                }
+            });
+    }
 }

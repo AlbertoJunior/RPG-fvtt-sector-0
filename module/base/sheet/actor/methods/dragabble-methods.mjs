@@ -2,79 +2,136 @@ import { getObject } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs"
+import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 
 export class SheetActorDragabbleMethods {
     static async setup(html, actor) {
+        this.#findUsingActorId(html, 'bag', actor).on('drop', this.#onDropOnBag.bind(this, actor));
+        this.#setupNetworkDrag(html, actor);
+
         if (!window.Sortable) {
             return;
         }
-
-        html.find(`#bag-${actor.id}`).on('drop', this._onDropOnBag.bind(this, actor))
 
         this.#setupShortcutDrag(html, actor);
         this.#setupBagDrag(html, actor);
     }
 
-    static #setupShortcutDrag(html, actor) {
-        const containerShortcut = html[0].querySelector(`#shortcuts-container-${actor.id}`);
-        if (containerShortcut) {
-            window.Sortable.create(containerShortcut, {
-                animation: 150,
-                handle: ".draggable",
-                draggable: ".draggable",
-                onEnd: (evt) => {
-                    const shortcuts = getObject(actor, CharacteristicType.SHORTCUTS);
-                    const newOrder = Array.from(containerShortcut.children)
-                        .map(element => {
-                            const id = element.querySelector("[data-item-id]")?.dataset?.itemId;
-                            return shortcuts.find(shortcut => shortcut.id == id);
-                        }).filter(Boolean);
+    static #findUsingActorId(html, id, actor) {
+        return html.find(`#${id}-${actor.id}`);
+    }
 
-                    ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, newOrder);
-                }
-            });
+    static async #setupNetworkDrag(html, actor) {
+        const containerAllies = this.#findUsingActorId(html, 'allies', actor);
+        this.#presetAllDragEvents(
+            containerAllies, actor, (actor, event) => { this.#onDropOnAlliesInformants(actor, CharacteristicType.ALLIES, event); }
+        );
+
+        const containerInformants = this.#findUsingActorId(html, 'informants', actor);
+        this.#presetAllDragEvents(
+            containerInformants, actor, (actor, event) => { this.#onDropOnAlliesInformants(actor, CharacteristicType.INFORMANTS, event); }
+        );
+    }
+
+    static #presetAllDragEvents(containerTarget, actor, onDrop = (actor, event) => { }) {
+        if (!containerTarget) {
+            return;
         }
+
+        containerTarget.on('dragover', (event) => {
+            containerTarget.addClass('S0-drop-target-hover');
+        });
+
+        containerTarget.on('dragenter', () => {
+            containerTarget.addClass('S0-drop-target-hover');
+        });
+
+        containerTarget.on('dragleave', () => {
+            containerTarget.removeClass('S0-drop-target-hover');
+        });
+
+        containerTarget.on('drop', (event) => {
+            containerTarget.removeClass('S0-drop-target-hover');
+            onDrop(actor, event);
+        });
+    }
+
+    static #setupShortcutDrag(html, actor) {
+        const containerShortcut = this.#findUsingActorId(html, `shortcuts-container`, actor)[0];
+        if (!containerShortcut) {
+            return;
+        }
+
+        window.Sortable.create(containerShortcut, {
+            animation: 150,
+            handle: ".draggable",
+            draggable: ".draggable",
+            onStart: (evt) => {
+                containerShortcut.classList.add('S0-drop-target-hover');
+            },
+            onEnd: (evt) => {
+                containerShortcut.classList.remove('S0-drop-target-hover');
+
+                const shortcuts = getObject(actor, CharacteristicType.SHORTCUTS);
+                const newOrder = Array.from(containerShortcut.children)
+                    .map(element => {
+                        const id = element.querySelector("[data-item-id]")?.dataset?.itemId;
+                        return shortcuts.find(shortcut => shortcut.id == id);
+                    }).filter(Boolean);
+
+                ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, newOrder);
+            }
+        });
     }
 
     static #setupBagDrag(html, actor) {
         const actorId = actor.id;
-        const equippedList = html[0].querySelector(`#equipped-${actorId}`);
-        const bagList = html[0].querySelector(`#bag-${actorId}`);
-        if (equippedList && bagList) {
-            const sortableOptions = {
-                group: `equipment-move-inner-${actorId}`,
-                animation: 150,
-                draggable: "li",
-                handle: ".S0-item-bag",
-                onEnd: async (evt) => {
-                    const origin = evt.from.id;
-                    const destination = evt.to.id;
-                    const itemElement = evt.item.querySelector("[data-item-id]");
-                    const itemId = itemElement?.dataset?.itemId;
-
-                    if (!itemId) {
-                        console.warn("-> possível erro ao pegar o id");
-                        return;
-                    }
-
-                    const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, itemId);
-                    if (!equipment) {
-                        console.warn("-> possível erro ao pegar o equipamento");
-                        return
-                    }
-                    const originSource = origin.split('-')[0];
-
-                    if (origin == destination) {
-                        this.#sortEquipments(actor, originSource, bagList, equippedList);
-                    } else {
-                        this.#equipOrUnequip(actor, originSource, equipment);
-                    }
-                }
-            };
-
-            window.Sortable.create(equippedList, sortableOptions);
-            window.Sortable.create(bagList, sortableOptions);
+        const equippedList = this.#findUsingActorId(html, 'equipped', actor)[0];
+        const bagList = this.#findUsingActorId(html, 'bag', actor)[0];
+        if (!equippedList || !bagList) {
+            return;
         }
+
+        const sortableOptions = {
+            group: `equipment-move-inner-${actorId}`,
+            animation: 150,
+            draggable: "li",
+            handle: ".S0-item-bag",
+            onStart: (evt) => {
+                bagList.classList.add('S0-drop-target-hover');
+                equippedList.classList.add('S0-drop-target-hover');
+            },
+            onEnd: async (evt) => {
+                bagList.classList.remove('S0-drop-target-hover');
+                equippedList.classList.remove('S0-drop-target-hover');
+
+                const itemElement = evt.item.querySelector("[data-item-id]");
+                const itemId = itemElement?.dataset?.itemId;
+                if (!itemId) {
+                    console.warn("-> possível erro ao pegar o id");
+                    return;
+                }
+
+                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, itemId);
+                if (!equipment) {
+                    console.warn("-> possível erro ao pegar o equipamento");
+                    return
+                }
+
+                const origin = evt.from.id;
+                const destination = evt.to.id;
+
+                const originSource = origin.split('-')[0];
+                if (origin == destination) {
+                    this.#sortEquipments(actor, originSource, bagList, equippedList);
+                } else {
+                    this.#equipOrUnequip(actor, originSource, equipment);
+                }
+            }
+        };
+
+        window.Sortable.create(equippedList, sortableOptions);
+        window.Sortable.create(bagList, sortableOptions);
     }
 
     static async #sortEquipments(actor, originSource, bagList, equippedList) {
@@ -115,7 +172,11 @@ export class SheetActorDragabbleMethods {
 
     static async #equipOrUnequip(actor, originSource, equipment) {
         if (originSource == 'bag') {
-            await ActorEquipmentUtils.equip(actor, equipment);
+            if (equipment.system.canEquip) {
+                await ActorEquipmentUtils.equip(actor, equipment);
+            } else {
+                NotificationsUtils._info("Este Item não pode ser equipado");
+            }
         } else if (originSource == 'equipped') {
             await ActorEquipmentUtils.unequip(actor, equipment);
         } else {
@@ -123,27 +184,70 @@ export class SheetActorDragabbleMethods {
         }
     }
 
-    static async _onDropOnBag(actor, event) {
+    static #verifyDropAndReturnData(actor, event) {
         if (!actor.isOwner) {
-            return;
+            return null;
         }
 
         const textPlain = event.originalEvent.dataTransfer.getData("text/plain");
-        let data;
         try {
-            data = JSON.parse(textPlain);
+            return JSON.parse(textPlain);
         } catch (error) {
+            return null;
+        }
+    }
+
+    static async #onDropOnBag(actor, event) {
+        const data = this.#verifyDropAndReturnData(actor, event);
+        if (!data) {
             return;
         }
 
-        if (data?.type !== "Item") {
+        if (data.type !== "Item") {
+            NotificationsUtils._warning("Este campo só aceita Equipamentos");
             return;
         }
 
         event.preventDefault();
         event.originalEvent.preventDefault();
+
         const item = await Item.implementation.fromDropData(data);
+        if (!item) {
+            console.warn("-> possível erro ao criar o Item");
+            return;
+        }
+
         const itemData = ActorEquipmentUtils.createDataItem(item);
         ActorUpdater.addDocuments(actor, [itemData]);
+    }
+
+    static async #onDropOnAlliesInformants(actor, characteristic, event) {
+        const data = this.#verifyDropAndReturnData(actor, event);
+        if (!data) {
+            return;
+        }
+
+        event.preventDefault();
+        event.originalEvent.preventDefault();
+
+        if (data.type !== "Actor") {
+            NotificationsUtils._warning("Este campo só aceita Personagens");
+            return;
+        }
+
+        const actorCreated = await Actor.implementation.fromDropData(data);
+        if (!actorCreated || !characteristic) {
+            console.warn("-> possível erro ao criar o Actor ou na Characteristic");
+            NotificationsUtils._warning("Não foi possível adicionar este Personagem.");
+            return;
+        }
+
+        if (actorCreated.id == actor.id) {
+            NotificationsUtils._error("O personagem não pode se adicionar como Aliado ou Informante.")
+            return;
+        }
+
+        const list = getObject(actor, characteristic) || [];
+        await ActorUpdater._verifyAndUpdateActor(actor, characteristic, new Set([...list, actorCreated.id]));
     }
 }

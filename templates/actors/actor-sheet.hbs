@@ -1,49 +1,7 @@
 <form class="S0-actor-sheet" autocomplete="off">
     {{ log this }}
     <ul id="floating-menu" class="S0-float-right-sheet">
-        {{#if canEdit}}
-        <li class="S0-simulate-button {{#if editable}}S0-marked{{/if}} {{#if (gameFunc 'isCompactedSheet')}}S0-compact{{/if}}"
-            data-characteristic="sheet" data-action="check" data-type="edit"
-            title="{{#if editable}}{{ localize 'S0.Editando' }}{{else}}{{ localize 'S0.Editar' }}{{/if}}">
-            {{#if editable}}
-            <i class="fas fa-toggle-on"></i>
-            {{#unless (gameFunc 'isCompactedSheet')}}
-            {{ localize 'S0.Editando' }}
-            {{/unless}}
-            {{else}}
-            <i class="fas fa-toggle-off"></i>
-            {{#unless (gameFunc 'isCompactedSheet')}}
-            {{ localize 'S0.Editar' }}
-            {{/unless}}
-            {{/if}}
-        </li>
-        {{/if}}
-
-        <li class="S0-simulate-button {{#if (gameFunc 'inDarkMode')}}S0-marked{{/if}} {{#if (gameFunc 'isCompactedSheet')}}S0-compact{{/if}}"
-            data-characteristic="sheet" data-action="check" data-type="color" title="{{localize 'S0.Modo_Escuro'}}">
-            <i class="fas fa-circle-half-stroke"></i>
-            {{#unless (gameFunc 'isCompactedSheet')}}
-            {{localize 'S0.Modo_Escuro'}}
-            {{/unless}}
-        </li>
-
-        <li class="S0-simulate-button {{#if (gameFunc 'isCompactedSheet')}}S0-marked{{/if}} {{#if (gameFunc 'isCompactedSheet')}}S0-compact{{/if}}"
-            data-characteristic="sheet" data-action="check" data-type="compact" title="{{localize 'S0.Modo_Compacto'}}">
-            <i class="fas fa-arrows-left-right-to-line"></i>
-            {{#unless (gameFunc 'isCompactedSheet')}}
-            {{localize 'S0.Modo_Compacto'}}
-            {{/unless}}
-        </li>
-
-        {{#if canRoll}}
-        <li class="S0-simulate-button {{#if (gameFunc 'isCompactedSheet')}}S0-compact{{/if}}"
-            data-characteristic="sheet" data-action="roll" title="{{localize 'S0.Rolagem'}}">
-            <i class="fas fa-dice-d10"></i>
-            {{#unless (gameFunc 'isCompactedSheet')}}
-            {{ localize 'S0.Rolagem' }}
-            {{/unless}}
-        </li>
-        {{/if}}
+        {{> "buttons-float-menu" canEdit=canEdit editable=editable canRoll=canRoll}}
     </ul>
 
     <header class="S0-container" {{#unless editable}}
@@ -95,5 +53,6 @@
     {{> "systems/setor0OSubmundo/templates/actors/enhancement.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/equipment.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/status.hbs"}}
+    {{> "systems/setor0OSubmundo/templates/actors/network.hbs"}}
     {{> "systems/setor0OSubmundo/templates/actors/shortcuts.hbs"}}
 </form>
