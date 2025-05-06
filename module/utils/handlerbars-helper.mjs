@@ -2,7 +2,6 @@ export async function loadHandlebarsHelpers() {
     console.log("-> Carregando helpers do Handlebars...");
     const helpersPath = "/scripts/helpers/";
     const helperFiles = [
-        "lt.mjs",
         "selectIfEq.mjs",
         "fetchRepository.mjs",
         "forLoop.mjs",
@@ -14,6 +13,7 @@ export async function loadHandlebarsHelpers() {
         "concat.mjs",
         "operators.mjs",
         "htmlUtils.mjs",
+        "parse.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {

@@ -20,7 +20,7 @@ export class ActorUpdater {
         await actor.update(keysToUpdate);
     }
 
-    static async addEffect(actor, activeEffectData = []) {
+    static async addEffects(actor, activeEffectData = []) {
         await actor.createEmbeddedDocuments("ActiveEffect", activeEffectData);
     }
 

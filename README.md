@@ -63,8 +63,7 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * ✅ Atalhos customizados por Personagem.
 * ✅ Atalhos customizados por Equipamento.
 * ✅ Rolagens considerando as penalidades e todos os bônus.
-* 🚧 SuperEquipamentos.
-* 🛠️ Aliados e Informantes.
+* ✅ Aliados e Informantes.
 
 ### Efeitos
 * ✅ Efeitos específicos do Setor 0.
@@ -72,6 +71,10 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * 🚧 Efeitos ativos baseado em Traços.
 * 🚧 Efeitos ativos baseado em Equipamentos.
 * ✅ Efeitos que são ativados durante um combate são desativados automaticamente ao final dele.
+
+### Equipamentos
+* 🚧 Teste com Rolagem Dividida.
+* 🚧 SuperEquipamentos.
 
 ### Rolagens
 * ✅ Atributos + Habilidade.
@@ -179,7 +182,7 @@ Consulte o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
 Este é um projeto com direitos reservados.  
 Sugestões, correções e contribuições são bem-vindas, mas devem ser discutidas e aprovadas previamente.  
 Se você deseja contribuir, entre em contato pelos canais oficiais ou abra uma issue neste repositório.
-Consulte o arquivo [`CONTRIBUTING`](./CONTRIBUTING) para mais detalhes.
+Consulte o arquivo [`CONTRIBUTING`](./CONTRIBUTING.md) para mais detalhes.
 
 ---
 ## ⚠️ P.S.

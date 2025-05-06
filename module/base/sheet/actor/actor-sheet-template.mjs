@@ -11,6 +11,7 @@ import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { SYSTEM_ID } from "../../../constants.mjs";
 import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
 import { SystemFlags } from "../../../enums/flags-enums.mjs";
+import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
 
 class Setor0ActorSheet extends ActorSheet {
 
@@ -34,16 +35,6 @@ class Setor0ActorSheet extends ActorSheet {
         this.isExpandedEffects = undefined;
         this.isExpandedShortcuts = undefined;
         this.defaultHeight = undefined;
-    }
-
-    activateListeners(html) {
-        super.activateListeners(html);
-        this.setupContentAndHeader(html);
-        SheetMethods._createDynamicSheet(html, this.isEditable);
-        this.#presetSheet(html);
-        this.#setupListeners(html);
-        this.#addPageButtonsOnFloatingMenu(html);
-        SheetActorDragabbleMethods.setup(html, this.actor);
     }
 
     static get defaultOptions() {
@@ -78,6 +69,21 @@ class Setor0ActorSheet extends ActorSheet {
 
     get canRollOrEdit() {
         return game.user.isGM || this.actor.isOwner;
+    }
+
+    activateListeners(html) {
+        super.activateListeners(html);
+        this.setupContentAndHeader(html);
+        SheetMethods.createDynamicSheet(html, this.isEditable);
+        this.#presetSheet(html);
+        this.#setupListeners(html);
+        this.#addPageButtonsOnFloatingMenu(html);
+        SheetActorDragabbleMethods.setup(html, this.actor);
+    }
+
+    setupContentAndHeader(html) {
+        HtmlJsUtils.setupContent(html);
+        HtmlJsUtils.setupHeader(html);
     }
 
     #setupListeners(html) {
@@ -141,31 +147,29 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetSheet(html) {
-        this.#cleanSheetBeforePreset(html);
-
-        const system = this.actor.system;
+        const actor = this.actor;
         [
             {
                 container: html.find('#atributosContainer')[0],
-                systemCharacteristic: system.atributos
+                systemCharacteristic: getObject(actor, CharacteristicType.ATTRIBUTES)
             },
             {
                 container: html.find('#repertorioContainer')[0],
-                systemCharacteristic: system.repertorio
+                systemCharacteristic: getObject(actor, CharacteristicType.REPERTORY)
             },
             {
-                container: html.find('#habilidadesContainer')[0],
-                systemCharacteristic: system.habilidades
+                container: html.find('#skillsContainer')[0],
+                systemCharacteristic: getObject(actor, CharacteristicType.SKILLS)
             },
             {
-                container: html.find('#famaContainer')[0],
-                systemCharacteristic: system
+                container: html.find('#fameContainer')[0],
+                systemCharacteristic: getObject(actor, CharacteristicType.SIMPLE)
             }
-        ].forEach((element) => {
-            let hasNext = element.container?.firstElementChild;
+        ].forEach(({container, systemCharacteristic}) => {
+            let hasNext = container?.firstElementChild;
             while (hasNext) {
                 const children = hasNext.querySelectorAll('.S0-characteristic');
-                const level = element.systemCharacteristic[hasNext.id];
+                const level = systemCharacteristic[hasNext.id];
                 selectCharacteristic(children[Math.min(level - 1, children.length - 1)]);
                 hasNext = hasNext.nextElementSibling;
             }
@@ -174,7 +178,8 @@ class Setor0ActorSheet extends ActorSheet {
         const virtueContainer = html.find('#virtudesContainer')[0];
         let virtueElementChild = virtueContainer.firstElementChild;
         while (virtueElementChild) {
-            selectCharacteristic(virtueElementChild.children[system.virtudes[virtueElementChild.id].level]);
+            const virtueLevel = ActorUtils.getVirtueLevel(actor, virtueElementChild.id);
+            selectCharacteristic(virtueElementChild.children[virtueLevel]);
             virtueElementChild = virtueElementChild.nextElementSibling;
         }
 
@@ -182,21 +187,6 @@ class Setor0ActorSheet extends ActorSheet {
         this.#presetEnhancement(html);
         this.#presetStatus(html);
         this.#presetSheetExpandContainers(html);
-    }
-
-    setupContentAndHeader(html) {
-        HtmlJsUtils.setupContent(html);
-        HtmlJsUtils.setupHeader(html);
-    }
-
-    #cleanSheetBeforePreset(html) {
-        const classesToRemove = [
-            'S0-selected', 'S0-superficial', 'S0-letal'
-        ];
-        for (const item of classesToRemove) {
-            html.find(`.${item}`).removeClass(item);
-        }
-        console.info('-> Setor0ActorSheet[actor-sheet-template]:\nREMOVENDO TODOS OS ELEMENTOS COM S0-selected, S0-superficial e S0-letal');
     }
 
     #presetLanguages(html) {
@@ -234,18 +224,21 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetStatus(html) {
-        const system = this.actor.system;
-        selectCharacteristic(html.find('#statusPage #consciencia .S0-characteristic')[system.virtudes.consciencia.used - 1]);
-        selectCharacteristic(html.find('#statusPage #perseveranca .S0-characteristic')[system.virtudes.perseveranca.used - 1]);
-        selectCharacteristic(html.find('#statusPage #quietude .S0-characteristic')[system.virtudes.quietude.used - 1]);
-        selectCharacteristic(html.find('#statusPage #sobrecarga .S0-characteristic')[system.sobrecarga - 1]);
+        const actor = this.actor;
 
-        const life = html.find('#statusPage #vida .S0-characteristic');
-        life.addClass('S0-selected');
-        selectCharacteristic(life[system.vida]);
+        function select(id, characteristic) {
+            const value = getObject(actor, characteristic) || 0;
+            selectCharacteristic(html.find(`#statusPage #${id} .S0-characteristic`)[value - 1]);
+        }
 
-        let letalDamage = system.vitalidade.dano_letal || 0;
-        let superFicialDamage = system.vitalidade.dano_superficial || 0;
+        select('consciencia', CharacteristicType.VIRTUES.CONSCIOUSNESS.USED);
+        select('perseveranca', CharacteristicType.VIRTUES.PERSEVERANCE.USED);
+        select('quietude', CharacteristicType.VIRTUES.QUIETNESS.USED);
+        select('sobrecarga', CharacteristicType.OVERLOAD);
+        select('vida', CharacteristicType.LIFE);
+
+        let letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        let superFicialDamage = getObject(actor, CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
         html.find('#vitalidade .S0-characteristic-temp').each((index, item) => {
             if (superFicialDamage > 0) {
                 item.classList.add('S0-superficial');

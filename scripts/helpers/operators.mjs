@@ -6,9 +6,14 @@ const operators = {
     gt: ([a, b]) => a > b,
     gte: ([a, b]) => a >= b,
     isNull: ([value]) => value === null || value === undefined,
+    isEmpty: (collection) => {
+        if (!collection)
+            return true;
+        return collection.length == 0
+    },
 };
 
 export default function operator(op, ...params) {
-    params.pop();    
+    params.pop();
     return operators[op](Object.values(params));
 }

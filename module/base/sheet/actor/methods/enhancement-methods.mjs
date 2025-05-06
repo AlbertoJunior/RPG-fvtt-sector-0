@@ -11,8 +11,13 @@ import { ActorEnhancementField } from "../../../../field/actor-fields.mjs";
 import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
-import { ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
+import { ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
+
+export async function sendEffectToChat(effect, actor) {
+    TODO('criar o envio para o chat');
+    ChatCreator._sendToChat(actor, effect.name);
+}
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
@@ -39,11 +44,7 @@ function setupViewButtonIsVisibleAndItemIsChecked(select, levelId, activeEffects
     $(parent).find(`a[data-action=${OnEventType.VIEW}]`).toggleClass('hidden');
     $(parent).find(`a[data-action=${OnEventType.CHECK}]`)
         .toggleClass('hidden')
-        .toggleClass('S0-selected', checkHasEffect(levelId, activeEffects));
-}
-
-function checkHasEffect(effectId, activeEffects) {
-    return activeEffects.some(aEffect => aEffect == effectId);
+        .toggleClass('S0-selected', activeEffects.some(effect => effect == levelId));
 }
 
 async function updateActorEnhancement(currentTarget, actor) {
@@ -82,9 +83,9 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
 
     if (effectId !== '') {
         const alreadyHasEffect = ActorUtils.getAllEnhancements(actor)
-            .flatMap(o => Object.values(o.levels))
-            .map(e => e.id)
-            .some(ef => ef == effectId);
+            .flatMap(enhacement => Object.values(enhacement.levels))
+            .map(levelEnhancement => levelEnhancement.id)
+            .some(levelEnhancementId => levelEnhancementId == effectId);
 
         if (alreadyHasEffect) {
             NotificationsUtils._error(`O Personagem já possui esse Efeito: <u>${effect.name}</u>`);
@@ -95,7 +96,7 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
     }
 
     const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
-    if (!effect || oldEffect.id != effect.id) {
+    if (!effect && oldEffect.id != effect.id) {
         await ActiveEffectsUtils.removeActorEffect(actor, oldEffect.id)
     }
 
@@ -115,12 +116,7 @@ function getEffectSelectedId(event) {
     return select.selectedOptions[0]?.value;
 }
 
-export async function sendEffectToChat(effect, actor) {
-    TODO('criar o envio para o chat');
-    ChatCreator._sendToChat(actor, effect.name);
-}
-
-export async function toggleEnhancementEffectOnActor(effect, actor) {
+async function toggleEnhancementEffectOnActor(effect, actor) {
     if (!effect) {
         NotificationsUtils._error(`Efeito inválido`);
         return;
@@ -131,10 +127,10 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
         return;
     }
 
-    const haveEffect = actor.effects.find(ef => ef.name == effect.name);
+    const haveEffect = actor.effects.find(ef => ActiveEffectsUtils.getOriginId(ef) == effect.id);
     if (haveEffect) {
-        await haveEffect.delete();
-        ChatCreator._sendToChat(actor, `${localize("Desativou")} ${effect.name}`);
+        await ActiveEffectsUtils.removeActorEffect(actor, ActiveEffectsUtils.getOriginId(haveEffect));
+        await ChatCreator._sendToChat(actor, `${localize("Desativou")} ${effect.name}`);
         return;
     }
 
@@ -143,22 +139,31 @@ export async function toggleEnhancementEffectOnActor(effect, actor) {
         return;
     }
 
-    const activeEffectData = ActiveEffectsUtils.createEffectData({
-        name: effect.name,
-        description: localize('Aprimoramento'),
-        origin: `${localize('Aprimoramento')}: ${enhancement.name}`,
-        statuses: [effect.id],
-        flags: {
-            originId: effect.id,
-            originType: ActiveEffectsOriginTypes.ENHANCEMENT,
-            originTypeLabel: localize('Aprimoramento'),
-            combatId: game.combat?.id
-        }
-    });
+    if (effect.duration == EnhancementDuration.USE) {
+        TODO("criar uma mensagem de Usou melhor")
+        await NotificationsUtils._info(`${localize("Voce")} ${localize("Usou")} ${effect.name}`)
+        await ChatCreator._sendToChat(actor, `${localize("Usou")} ${effect.name}`);
+        return;
+    } else {
+        const activeEffectData = ActiveEffectsUtils.createEffectData({
+            name: effect.name,
+            description: localize('Aprimoramento'),
+            origin: `${localize('Aprimoramento')}: ${enhancement.name}`,
+            statuses: [effect.id],
+            flags: {
+                [ActiveEffectsFlags.ORIGIN_ID]: effect.id,
+                [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ENHANCEMENT,
+                [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: localize('Aprimoramento'),
+                ...(effect.duration !== EnhancementDuration.PASSIVE && {
+                    [ActiveEffectsFlags.COMBAT_ID]: game.combat?.id
+                })
+            }
+        });
 
-    EnhancementUtils.verifyAndSetEffectChanges(actor, activeEffectData, effect.effectChanges, enhancement);
-    EnhancementUtils.configureActiveEffect(activeEffectData, effect, enhancement);
-    await ActorUpdater.addEffect(actor, [activeEffectData]);
+        EnhancementUtils.verifyAndSetEffectChanges(actor, activeEffectData, effect.effectChanges, enhancement);
+        EnhancementUtils.configureActiveEffect(activeEffectData, effect, enhancement);
+        await ActorUpdater.addEffects(actor, [activeEffectData]);
+    }
 }
 
 async function removeEnhancementEffects(actor, enhancement) {
@@ -167,27 +172,16 @@ async function removeEnhancementEffects(actor, enhancement) {
         return;
     }
 
-    const ids = new Set(Object.values(levels).map(item => item.id).filter(Boolean));
-    const promises = actor.effects
-        .filter(effect => ids.has(effect.statuses.first()))
-        .map(effect => effect.delete());
-
-    await Promise.all(promises);
-}
-
-async function removeNonePassivesEffects(actor) {
-    const effects = actor.effects;
-    for (const effect of effects) {
-        const effectDuration = effect.duration.type;
-        if (effectDuration !== 'none') {
-            effect.delete();
-        }
-    }
+    const ids = Object.values(levels).map(item => item.id).filter(Boolean);
+    await ActiveEffectsUtils.removeActorEffects(actor, ids);
 }
 
 async function removeAllEnhancementEffects(actor) {
-    const effects = actor.effects.filter(effect => ActiveEffectsUtils.getOriginType(effect) == ActiveEffectsOriginTypes.ENHANCEMENT);
-    await Promise.all(effects.map(effect => effect.delete()));
+    const effects = actor.effects
+        .filter(effect => ActiveEffectsUtils.getOriginType(effect) == ActiveEffectsOriginTypes.ENHANCEMENT)
+        .map(effect => ActiveEffectsUtils.getOriginId(effect))
+        .filter(Boolean);
+    await ActiveEffectsUtils.removeActorEffects(actor, effects);
 }
 
 async function activePassiveEffects(actor) {
@@ -232,5 +226,5 @@ export const enhancementHandleMethods = {
         } else {
             NotificationsUtils._warning('enhancement-methods:check:effect is null');
         }
-    }
+    },
 }

@@ -1,5 +1,6 @@
 import { ActorUpdater } from "../../base/updater/actor-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
+import { ActiveEffectsFlags } from "../../enums/active-effects-enums.mjs";
 
 export class ActiveEffectsUtils {
     static KEYS = {
@@ -26,6 +27,11 @@ export class ActiveEffectsUtils {
             ...flags
         };
 
+        if (!fullFlags.originId?.trim()) {
+            console.warn('Origin ID é OBRIGATÓRIO')
+            return null;
+        }
+
         const activeEffectData = {
             id: name.toLowerCase(),
             name: name,
@@ -35,7 +41,7 @@ export class ActiveEffectsUtils {
             tint: tint,
             disabled: disabled,
             duration: duration,
-            statuses: statuses,
+            statuses: new Set(statuses),
             changes: changes,
             flags: {
                 [SYSTEM_ID]: fullFlags
@@ -49,57 +55,31 @@ export class ActiveEffectsUtils {
         return activeEffect.flags[SYSTEM_ID] || {};
     }
 
-    static getOriginType(activeEffect) {
-        return this.getFlags(activeEffect).originType;
+    static getOriginId(activeEffect) {
+        return this.getFlags(activeEffect)[ActiveEffectsFlags.ORIGIN_ID];
     }
 
-    static getOriginId(activeEffect) {
-        return this.getFlags(activeEffect).originId;
+    static getOriginType(activeEffect) {
+        return this.getFlags(activeEffect)[ActiveEffectsFlags.ORIGIN_TYPE];
     }
 
     static async addEffect(actor, activeEffectData) {
-        await ActorUpdater.addEffect(actor, [...activeEffectData]);
+        await ActorUpdater.addEffects(actor, [...activeEffectData]);
     }
 
     static async removeActorEffect(actor, effectId) {
-        const effects = actor.effects;
-        for (const effect of effects) {
-            const effectOnStatusId = effect.statuses.first();
-            if (effectId == effectOnStatusId) {
-                await effect.delete();
-                return;
-            }
+        this.removeActorEffects(actor, [effectId]);
+    }
+
+    static async removeActorEffects(actor, effectsId = []) {
+        if (!actor || !Array.isArray(effectsId) || effectsId.length === 0) {
+            return;
         }
-    }
 
-    static async removeActorEffectByStatus(actor, statusId) {
-        const effect = actor.effects.find(ef => ef.statuses.has(statusId));
+        const effectsSet = new Set(effectsId);
+        const effectsToRemove = actor.effects.filter(effect => effectsSet.has(ActiveEffectsUtils.getOriginId(effect)));
 
-        if (effect) {
-            await effect.delete();
-        }
-    }
-
-    static async removeActorEffectByOriginId(actor, originId) {
-        const effect = actor.effects.find(e => this.getOriginId(e) === originId);
-
-        if (effect) {
-            await effect.delete();
-        }
-    }
-
-    static getEffectByOriginId(actor, originId, originType) {
-        return actor.effects.find(e => {
-            const origin = this.getOriginId(e);
-            const type = this.getOriginType(e);
-            return origin === originId && type === originType;
-        });
-    }
-
-    static getEffectsByChangeKey(actor, changeKey) {
-        return actor.effects._source.map(effect => effect.changes)
-            .filter(a => a.length > 0).flat()
-            .filter(a => a.key == changeKey);
+        await Promise.all(effectsToRemove.map(effect => effect.delete()));
     }
 
     static async enableEffect(effect) {

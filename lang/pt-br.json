@@ -22,6 +22,9 @@
         "Disponivel": "Disponível",
         "Atual": "Atual",
         "Usada": "Usada",
+        "Usou": "Usou",
+        "Voce": "Você",
+        "Detalhes": "Detalhes",
         "Selecionados": "Selecionados",
         "Desativou": "Desativou",
         "Atualizar": "Atualizar",
@@ -36,6 +39,7 @@
         "Modificadores": "Modificadores",
         "Atalhos": "Atalhos",
         "Atalho": "Atalho",
+
         "Realizar_Teste": "Realizar Teste",
         "Rolagens_Player": "Modo de Rolagem",
         "Rolagem": "Rolagem",
@@ -45,6 +49,7 @@
         "Rolagem_GM_Oculta": "Oculto",
         "Rolagens_GM": "Rolagens do Mestre",
         "Rolagem_Pessoal": "Pessoal",
+
         "Id": "Identificador",
         "Nome": "Nome",
         "Caracteristicas": "Características",
@@ -144,6 +149,7 @@
         "Letal": "Letal",
         "Superficial": "Superficial",
         "Dificuldade": "Dificuldade",
+        "Critico": "Crítico",
         "Bonus": "Bônus",
         "Total": "Total",
         "Base": "Base",

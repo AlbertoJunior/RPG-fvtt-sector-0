@@ -39,7 +39,6 @@ export class EnhancementRepository {
 
     static _getEnhancementById(enhancementId) {
         if (enhancementId) {
-            const a = this._getItems();
             const fetchedEnhancement = this._getItems().filter(item => item.id == enhancementId)[0];
             if (fetchedEnhancement) {
                 return fetchedEnhancement;

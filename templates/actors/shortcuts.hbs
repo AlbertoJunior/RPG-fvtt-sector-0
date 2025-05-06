@@ -79,9 +79,9 @@
                 <h3 class="S0-h-marked" {{#if shortcut.specialist}}title="{{localize 'S0.Especialista'}}" {{/if}}
                     style="{{#if shortcut.specialist}}border: 2px ridge var(--primary-color-alpha);{{/if}}">
                     {{actorValues ../actor 'calculate_dice_pool' shortcut}}
-                    {{#unless (lt automatic 1)}}
+                    {{#if (operators 'gt' automatic 0)}}
                     <span style="display: block; font-size: var(--font-size-10);">{{automatic}}*</span>
-                    {{/unless}}
+                    {{/if}}
                 </h3>
 
                 <a class="S0-icon-rotate" title="{{localize 'S0.Rolar'}}" data-action="roll"

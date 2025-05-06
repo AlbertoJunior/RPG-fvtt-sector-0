@@ -1,5 +1,6 @@
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
+import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 class Setor0Combat extends Combat {
     getData() {
@@ -59,18 +60,19 @@ class Setor0Combat extends Combat {
     }
 
     async #removeActorCombatEffects() {
+        const combatId = this.id;
         for (const combatant of this.combatants) {
             const actor = combatant.actor;
             if (!actor) {
                 continue;
             }
 
-            const effectsToRemove = actor.effects.filter(effect => {
-                const duration = effect.duration;
-                return duration?.combat?.id === this.id;
-            });
+            const effectsToRemove = actor.effects
+                .filter(effect => effect.duration?.combat?.id === combatId)
+                .map(effect => ActiveEffectsUtils.getOriginId(effect))
+                .filter(Boolean);
 
-            await Promise.all(effectsToRemove.map(effect => effect.delete()));
+            ActiveEffectsUtils.removeActorEffects(actor, effectsToRemove);
         }
     }
 }

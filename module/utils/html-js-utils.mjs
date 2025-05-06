@@ -103,4 +103,28 @@ export class HtmlJsUtils {
             newHeight: newHeight
         };
     }
+
+
+    static presetAllDragEvents(containerTarget, actor, onDrop = (actor, event) => { }) {
+        if (!containerTarget) {
+            return;
+        }
+
+        containerTarget.on('dragover', (event) => {
+            containerTarget.addClass('S0-drop-target-hover');
+        });
+
+        containerTarget.on('dragenter', () => {
+            containerTarget.addClass('S0-drop-target-hover');
+        });
+
+        containerTarget.on('dragleave', () => {
+            containerTarget.removeClass('S0-drop-target-hover');
+        });
+
+        containerTarget.on('drop', (event) => {
+            containerTarget.removeClass('S0-drop-target-hover');
+            onDrop(actor, event);
+        });
+    }
 }

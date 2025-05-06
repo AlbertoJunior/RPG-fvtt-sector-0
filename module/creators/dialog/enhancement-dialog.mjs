@@ -54,6 +54,7 @@ export class EnhancementDialog {
             overload: EnhancementInfoParser.overloadValueToString(enhancementEffect.overload),
             duration: EnhancementInfoParser.durationValueToString(enhancementEffect.duration),
             family: enhancementFamily.name,
+            familyId: enhancementFamily.id,
         };
         return await renderTemplate("systems/setor0OSubmundo/templates/enhancement/enhancement-dialog.hbs", data);
     }

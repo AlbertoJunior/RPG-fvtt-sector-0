@@ -1,5 +1,5 @@
 import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
-import { keyJsonToKeyLang, localize } from "../../../scripts/utils/utils.mjs";
+import { keyJsonToKeyLang, localize, TODO } from "../../../scripts/utils/utils.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { AttributeRepository } from "../../repository/attribute-repository.mjs";
@@ -95,10 +95,13 @@ export class ActorRollDialog {
         const ability = jHtml.find("#ability").val();
         const specialist = jHtml.find("#specialist").prop("checked");
         const difficulty = jHtml.find("#difficulty").val();
+        const critic = jHtml.find("#critic").val();
+        const bonus = jHtml.find("#bonus").val();
+        const automatic = jHtml.find("#automatic").val();
         const rollMode = jHtml.find("#chat_select").val();
 
-        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, specialist });
-
+        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, bonus, automatic, specialist });
+        TODO('enviar o crítico')
         DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, undefined, rollMode);
     }
 

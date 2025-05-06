@@ -3,13 +3,13 @@ import { ReadyHookHandle } from "./module/hooks/ready.mjs";
 import { CreateItemHookHandle } from "./module/hooks/create-item.mjs";
 import { CreateCombatHookHandle } from "./module/hooks/create-combat.mjs";
 
-document.getElementById('logo').src="systems/setor0OSubmundo/imgs/logo.png"
+document.getElementById('logo').src = "systems/setor0OSubmundo/imgs/logo.png"
 
 Hooks.once('init', async function () {
   await InitHookHandle.handle();
 });
 
-Hooks.on('ready', async () => {
+Hooks.once('ready', async () => {
   await ReadyHookHandle.handle();
 });
 

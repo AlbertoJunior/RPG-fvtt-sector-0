@@ -1,5 +1,6 @@
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { getObject, TODO } from "../../../scripts/utils/utils.mjs";
+import { getObject } from "../../../scripts/utils/utils.mjs";
+import { MorphologyRepository } from "../../repository/morphology-repository.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -9,7 +10,7 @@ export class ActorUtils {
     }
 
     static getAbilityValue(actor, ability) {
-        const base = getObject(actor, CharacteristicType.ABILITY)[ability] || 0;
+        const base = getObject(actor, CharacteristicType.SKILLS)[ability] || 0;
         const bonus = getObject(actor, CharacteristicType.BONUS.ABILITY)[ability] || 0;
         return base + bonus;
     }
@@ -25,7 +26,7 @@ export class ActorUtils {
     static getEnhancementLevel(actor, enhancement) {
         const enhancements = getObject(actor, CharacteristicType.ENHANCEMENT_ALL);
         const enhancementOnActor = this.#findEnhancementOnActorById(enhancement.id, enhancements);
-        const levelsOnActor = this.#findLevelsWithId(enhancementOnActor);
+        const levelsOnActor = this.#findEnhancementLevelsWithId(enhancementOnActor);
         return levelsOnActor.length;
     }
 
@@ -40,11 +41,16 @@ export class ActorUtils {
     }
 
     static calculatePenalty(actor) {
-        const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA);
-        const letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE);
-        const calculatedMax = Math.max(letalDamage - stamina, 0);
-        TODO('buscar nos efeitos se vai ter mais alguma penalidade')
-        return Math.min(calculatedMax, 4);
+        const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA) || 0;
+        const letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        const bonusPenalty = getObject(actor, CharacteristicType.BONUS.DAMAGE_PENALTY) || 0;
+        const sintheticBonus = getObject(actor, CharacteristicType.MORPHOLOGY) == MorphologyRepository.TYPES.SYNTHETIC.id ? 1 : 0;
+
+        const calculateTotal = letalDamage - (stamina + sintheticBonus) + bonusPenalty;
+        const safeMinValue = Math.max(calculateTotal, 0);
+
+        const fixedPenalty = getObject(actor, CharacteristicType.BONUS.DAMAGE_PENALTY_FLAT) || 0;
+        return Math.min(safeMinValue, 4) + fixedPenalty;
     }
 
     static calculateVitalityByUpAttribute(actor, level) {
@@ -62,7 +68,7 @@ export class ActorUtils {
 
     static calculateMovimentPoints(actor) {
         const dexValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.DEXTERITY.id);
-        const athleticsValue = this.getAbilityValue(actor, CharacteristicType.ABILITY.ATHLETICS.id);
+        const athleticsValue = this.getAbilityValue(actor, CharacteristicType.SKILLS.ATHLETICS.id);
         const bonusPM = getObject(actor, CharacteristicType.BONUS.PM) || 0;
         const calculated = 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
         return Math.max(calculated, 0);
@@ -76,7 +82,7 @@ export class ActorUtils {
     }
 
     static calculateTotalLanguages(actor) {
-        const streetWise = getObject(actor, CharacteristicType.ABILITY.STREETWISE);
+        const streetWise = getObject(actor, CharacteristicType.SKILLS.STREETWISE);
         if (streetWise == 0) {
             return 1;
         }
@@ -123,7 +129,7 @@ export class ActorUtils {
         return null;
     }
 
-    static #findLevelsWithId(enhancement) {
+    static #findEnhancementLevelsWithId(enhancement) {
         if (!enhancement || !enhancement.levels || typeof enhancement.levels !== 'object') {
             return [];
         }

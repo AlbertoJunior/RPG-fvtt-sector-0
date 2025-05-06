@@ -1,5 +1,6 @@
 import { onArrayRemove } from "../../scripts/utils/utils.mjs";
 import { _createA } from "../creators/element/element-creator-jscript.mjs";
+import { HtmlJsUtils } from "./html-js-utils.mjs";
 
 export class DialogUtils {
     static presetDialogRender(html, params = {}) {
@@ -8,6 +9,8 @@ export class DialogUtils {
 
         this.#setupHeaderParams(div, params);
         this.#setupDialogButtons(div);
+
+        HtmlJsUtils.setupHeader(html);
 
         return div.closest('.window-app');
     }

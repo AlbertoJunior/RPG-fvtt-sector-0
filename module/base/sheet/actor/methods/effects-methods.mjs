@@ -1,3 +1,4 @@
+import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 
@@ -9,27 +10,23 @@ export const effectsHandleEvents = {
 
 class EffectsHandleEvents {
     static async handleCheck(actor, event) {
-        const effects = actor.effects;
-        for (const effect of effects) {
-            const effectDuration = effect.duration.type
-            if (effectDuration !== 'none') {
-                effect.delete();
-            }
-        }
+        const effects = actor.effects
+            .filter(effect => effect.duration.type !== 'none')
+            .map(effect => ActiveEffectsUtils.getOriginId(effect));
+
+        ActiveEffectsUtils.removeActorEffects(actor, effects);
     }
 
-    static async handleRemove(actor, event) {
+    static handleRemove(actor, event) {
         const currentTarget = event.currentTarget;
         const removeType = currentTarget.dataset.type;
         if (removeType == 'single') {
             const index = currentTarget.dataset.itemIndex;
             const effect = Array.from(actor.effects.values())[index];
-            effect.delete();
+            ActiveEffectsUtils.removeActorEffect(actor, ActiveEffectsUtils.getOriginId(effect));
         } else if (removeType == 'all') {
-            const effects = actor.effects;
-            for (const effect of effects) {
-                await effect.delete();
-            }
+            const effects = actor.effects.map(effect => ActiveEffectsUtils.getOriginId(effect));
+            ActiveEffectsUtils.removeActorEffects(actor, effects);
         }
     }
 

@@ -58,12 +58,12 @@ export class SheetMethods {
         shortcuts: handlerShortcutEvents
     }
 
-    static _createDynamicSheet(html, isEditable) {
+    static createDynamicSheet(html, isEditable) {
         this.#createFame(html, isEditable);
     }
 
     static #createFame(html, isEditable) {
-        const container = html.find('#famaContainer');
+        const container = html.find('#fameContainer');
 
         [
             { id: 'nucleo', label: 'S0.Nucleo', amount: 4, addLast: true, firstSelected: true },

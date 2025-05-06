@@ -22,14 +22,34 @@ const assimilationEffects = [
         1,
         EnhancementOverload.NONE,
         EnhancementDuration.SCENE,
-        []
+        [],
+        [],
+        [
+            RollTestDataModel._toJson(
+                {
+                    name: "Perceber Camuflagem",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.INVESTIGATION.id,
+                    difficulty: 6
+                }
+            ),
+            RollTestDataModel._toJson(
+                {
+                    name: "(Rede) Perceber Camuflagem",
+                    primary_attribute: CharacteristicType.VIRTUES.CONSCIOUSNESS.id,
+                    secondary_attribute: CharacteristicType.ENHANCEMENT.id,
+                    difficulty: 6
+                }
+            ),
+        ]
     ),
     EnhancementEffectField._toJson(
         '11',
         'Simulação',
         2,
         EnhancementOverload.ONE_TESTED,
-        EnhancementDuration.SCENE,
+        EnhancementDuration.PASSIVE,
         ['9', '10']
     ),
     EnhancementEffectField._toJson(
@@ -38,7 +58,19 @@ const assimilationEffects = [
         3,
         EnhancementOverload.ONE_TESTED,
         EnhancementDuration.USE,
-        ['11']
+        ['11'],
+        [],
+        [
+            RollTestDataModel._toJson(
+                {
+                    name: "Identificar",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.INVESTIGATION.id,
+                    difficulty: 7
+                }
+            ),
+        ]
     ),
     EnhancementEffectField._toJson(
         '13',
@@ -46,7 +78,28 @@ const assimilationEffects = [
         3,
         EnhancementOverload.ONE_TESTED,
         EnhancementDuration.SCENE,
-        ['11']
+        ['11'],
+        [],
+        [
+            RollTestDataModel._toJson(
+                {
+                    name: "Hackear Sistema",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.HACKING.id,
+                    difficulty: 7
+                }
+            ),
+            RollTestDataModel._toJson(
+                {
+                    name: "Hackear Aprimoramento",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.HACKING.id,
+                    difficulty: 7
+                }
+            ),
+        ]
     ),
     EnhancementEffectField._toJson(
         '14',
@@ -54,7 +107,28 @@ const assimilationEffects = [
         4,
         EnhancementOverload.ONE_TESTED,
         EnhancementDuration.SCENE,
-        ['12', '13']
+        ['12', '13'],
+        [],
+        [
+            RollTestDataModel._toJson(
+                {
+                    name: "Compartilhar Sentidos",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.HACKING.id,
+                    difficulty: 7
+                }
+            ),
+            RollTestDataModel._toJson(
+                {
+                    name: "Ilusão",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.HACKING.id,
+                    difficulty: 8
+                }
+            ),
+        ]
     ),
     EnhancementEffectField._toJson(
         '15',
@@ -68,7 +142,13 @@ const assimilationEffects = [
         ],
         [
             RollTestDataModel._toJson(
-                { name: "Teste", primary_attribute: "inteligencia", secondary_attribute: "percepcao", ability: "investigacao", difficulty: 6 }
+                {
+                    name: "Simular Alvo",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.INVESTIGATION.id,
+                    difficulty: 6
+                }
             ),
         ]
     ),
@@ -78,15 +158,39 @@ const assimilationEffects = [
         5,
         EnhancementOverload.ONE_FIXED_ONE_TEST,
         EnhancementDuration.TIME,
-        ['14', '15']
+        ['14', '15'],
+        [],
+        [
+            RollTestDataModel._toJson(
+                {
+                    name: "Compreensão Total",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.INVESTIGATION.id,
+                    difficulty: 7
+                }
+            ),
+        ]
     ),
     EnhancementEffectField._toJson(
         '17',
         'Dedução e Indução Mental',
         5,
         EnhancementOverload.ONE_FIXED_ONE_TEST,
-        EnhancementDuration.SCENE,
-        ['14', '15']
+        EnhancementDuration.TIME,
+        ['14', '15'],
+        [],
+        [
+            RollTestDataModel._toJson(
+                {
+                    name: "Invadir Memória",
+                    primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
+                    secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
+                    ability: CharacteristicType.SKILLS.HACKING.id,
+                    difficulty: 7
+                }
+            ),
+        ]
     )
 ];
 

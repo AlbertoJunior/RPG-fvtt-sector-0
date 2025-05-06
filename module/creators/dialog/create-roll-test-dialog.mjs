@@ -83,6 +83,7 @@ export class CreateRollableTestDialog {
                         bonus: Number(data.bonus || 0),
                         automatic: Number(data.automatic || 0),
                         difficulty: Number(data.difficulty || 6),
+                        critic: Number(data.critic || 10),
                         specialist: Boolean(formData.has("specialist"))
                     };
                     onConfirm(parsed);
@@ -103,6 +104,7 @@ export class CreateRollableTestDialog {
             attributes: AttributeRepository._getItems(),
             abilities: AbilityRepository._getItems(),
             difficulty: 6,
+            critic: 10,
             bonus: 0,
             automatic: 0,
             specialist: false,

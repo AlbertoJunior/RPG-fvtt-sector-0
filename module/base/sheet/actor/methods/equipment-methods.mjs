@@ -212,8 +212,7 @@ class EquipmentHandleEvents {
     }
 
     static async #unequipAllItems(actor) {
-        const equipmentsUnequipPromises = ActorEquipmentUtils.getActorEquippedItems(actor)
-            .map(async equipment => await ActorEquipmentUtils.unequip(actor, equipment));
+        const equipmentsUnequipPromises = ActorEquipmentUtils.getActorEquippedItems(actor).map(equipment => ActorEquipmentUtils.unequip(actor, equipment));
         await Promise.all(equipmentsUnequipPromises);
     }
 

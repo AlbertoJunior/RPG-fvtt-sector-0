@@ -201,6 +201,29 @@
         </ul>
 
         <ul class="S0-ul-flex">
+            {{#unless (isNull actor.system.equipedProtectItem) }}
+            <div class="S0-container" style="flex: 1;">
+                <h3>
+                    {{ localize 'S0.Protecao' }}
+                    {{#if canRoll}}
+                    <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary" data-type="protect">
+                        <i class="fas fa-refresh"></i>
+                    </a>
+                    {{/if}}
+                </h3>
+
+                <div id="protect" class="S0-inner-container" style="flex-wrap: wrap; column-gap: 26px; row-gap:10px">
+                    {{#forLoop 0 actor.system.equipedProtectItem.system.resistance}}
+                    {{#with ../canRoll as |canRoll|}}
+                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
+                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="protect">
+                    </div>
+                    {{/with}}
+                    {{/forLoop}}
+                </div>
+            </div>
+            {{/unless}}
+
             <li class="S0-container" style="flex: 3">
                 <h3>
                     {{ localize 'S0.Vitalidade' }}
@@ -239,30 +262,6 @@
                     </div>
                 </div>
             </li>
-
-            {{#unless (isNull actor.system.equipedProtectItem) }}
-            <div class="S0-container" style="flex: 1;">
-                <h3>
-                    {{ localize 'S0.Protecao' }}
-                    {{#if canRoll}}
-                    <a class="S0-icon-rotate" data-action="remove" data-characteristic="temporary" data-type="protect">
-                        <i class="fas fa-refresh"></i>
-                    </a>
-                    {{/if}}
-                </h3>
-
-                <div id="protect" class="S0-inner-container" style="flex-wrap: wrap; column-gap: 26px; row-gap:10px">
-                    {{#forLoop 0 actor.system.equipedProtectItem.system.resistance}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="protect">
-                    </div>
-                    {{/with}}
-                    {{/forLoop}}
-                </div>
-            </div>
-            {{/unless}}
-
         </ul>
     </div>
 
@@ -284,9 +283,9 @@
         <ul id="effects-container" class="S0-container S0-container-contract S0-expanded">
             {{#each effects as |item index|}}
             <li style="display: flex; gap: 4px; align-items: center;">
-                <span class="S0-hide-long-text" style="flex: 1">{{ item.origin }}: {{ item.name }}</span>
+                <span class="S0-hide-long-text" style="flex: 1">{{parse 'effect-on-status' item}}</span>
                 <a class="S0-icon-expand S0-centralized-icon" data-action="remove" data-characteristic="effects"
-                    data-type="single" data-item-index="{{ index }}">
+                    data-type="single" data-item-index="{{index}}">
                     <i class="fas fa-remove"></i>
                 </a>
             </li>

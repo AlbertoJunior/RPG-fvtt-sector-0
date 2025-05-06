@@ -41,35 +41,35 @@
         </div>
 
         <section>
-            {{#unless (lt penalty 1)}}
+            {{#if (operators 'gt' penalty 0)}}
             <label style="display: block; margin-block: 4px;">{{localize 'S0.Penalidade'}}: {{ penalty }}</label>
-            {{/unless}}
+            {{/if}}
 
-            {{#unless (lt bonus 1)}}
+            {{#if (operators 'gt' bonus 0)}}
             <label style="display: block; margin-block: 4px;">{{localize 'S0.Bonus'}}: {{ bonus }}</label>
-            {{/unless}}
+            {{/if}}
 
-            {{#unless (lt automatic 1)}}
+            {{#if (operators 'gt' automatic 0)}}
             <label style="display: block; margin-block: 4px;">{{localize 'S0.Automatico'}}: {{ automatic }}</label>
-            {{/unless}}
+            {{/if}}
 
-            {{#unless (isNull weapon)}}
+            {{#unless (operators 'isNull' weapon)}}
             <div>
                 <label style="display: block; margin-block: 4px;">
                     {{localize 'S0.Arma'}}:
                 </label>
 
-                {{#unless (lt weapon.damage 1)}}
+                {{#if (operators 'gt' weapon.damage 0)}}
                 <label style="display: block; margin-block: 4px;">
                     {{localize 'S0.Dano'}}: {{ weapon.damage }}
                 </label>
-                {{/unless}}
+                {{/if}}
 
-                {{#unless (lt weapon.true_damage 1)}}
+                {{#if (operators 'gt' weapon.true_damage 0)}}
                 <label style="display: block; margin-block: 4px;">
                     {{localize 'S0.Dano_Automatico'}}: {{ weapon.true_damage }}
                 </label>
-                {{/unless}}
+                {{/if}}
             </div>
             {{/unless}}
         </section>
@@ -84,9 +84,30 @@
     <button class="S0-roll-result {{ resultMessageClasses }}" data-action="toggle-tooltip" data-handle-on-dom="true">
         {{ resultMessage }} ( {{ resultValue }} )
     </button>
+
     {{else}}
 
-    <p>{{localize 'S0.Teste_Nao_Realizado'}}</p>
+    <p style="text-align: center;">{{localize 'S0.Teste_Nao_Realizado'}}</p>
+
+    <section class="dice-tooltip S0-container-contract">
+        <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
+        <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
+
+        {{#if (operators 'gt' penalty 0)}}
+        <label style="display: block; margin-block: 4px;">{{localize 'S0.Penalidade'}}: {{ penalty }}</label>
+        {{/if}}
+
+        {{#if (operators 'gt' bonus 0)}}
+        <label style="display: block; margin-block: 4px;">{{localize 'S0.Bonus'}}: {{ bonus }}</label>
+        {{/if}}
+
+        {{#if (operators 'gt' automatic 0)}}
+        <label style="display: block; margin-block: 4px;">{{localize 'S0.Automatico'}}: {{ automatic }}</label>
+        {{/if}}
+    </section>
+
+    <button class="S0-roll-result" data-action="toggle-tooltip" data-handle-on-dom="true">{{localize
+        'S0.Detalhes'}}</button>
 
     {{/if}}
 </div>

@@ -1,4 +1,5 @@
 import { localize, snakeToCamel } from "../../../scripts/utils/utils.mjs"
+import { TEMPLATES_PATH } from "../../constants.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 
 export class CreateFormDialog {
@@ -52,11 +53,11 @@ export class CreateFormDialog {
         const dataForm = {
         };
         const dataButtons = {
-            buttons: buttons !== undefined ? Object.values(buttons) : null,
+            buttons: buttons && typeof buttons == 'object' ? Object.values(buttons) : null,
         };
 
-        const formHtml = await renderTemplate(`systems/setor0OSubmundo/templates/${fileHtml}.hbs`, dataForm);
-        const buttonsHtml = await renderTemplate(`systems/setor0OSubmundo/templates/others/buttons-dialog.hbs`, dataButtons);
+        const formHtml = await renderTemplate(`${TEMPLATES_PATH}/${fileHtml}.hbs`, dataForm);
+        const buttonsHtml = await renderTemplate(`${TEMPLATES_PATH}/others/buttons-dialog.hbs`, dataButtons);
 
         return `<div class="S0-dialog">
         ${formHtml}
