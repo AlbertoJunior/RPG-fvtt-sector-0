@@ -45,8 +45,10 @@
             {{/if}}
 
             <li class="S0-container">
-                <h3>{{localize 'S0.Total'}}</h3>
-                <h4>{{actorValues actor 'total_experience'}}</h4>
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                    <h3>{{localize 'S0.Total'}}</h3>
+                    <h4>{{actorValues actor 'total_experience'}}</h4>
+                </div>
             </li>
         </ul>
     </div>
@@ -95,7 +97,7 @@
                     {{/if}}
                 </h3>
                 <div id="consciencia" class="S0-inner-container">
-                    {{#forLoop 0 actor.system.virtudes.consciencia.level}}
+                    {{#forLoop 0 (actorValues actor 'actual_consciousness')}}
                     {{#with ../canRoll as |canRoll|}}
                     <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                         data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="virtue"
@@ -117,7 +119,7 @@
                     {{/if}}
                 </h3>
                 <div id="perseveranca" class="S0-inner-container">
-                    {{#forLoop 0 actor.system.virtudes.perseveranca.level}}
+                    {{#forLoop 0 (actorValues actor 'actual_perseverance')}}
                     {{#with ../canRoll as |canRoll|}}
                     <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                         data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="virtue"
@@ -139,7 +141,7 @@
                     {{/if}}
                 </h3>
                 <div id="quietude" class="S0-inner-container">
-                    {{#forLoop 0 actor.system.virtudes.quietude.level}}
+                    {{#forLoop 0 (actorValues actor 'actual_quietness')}}
                     {{#with ../canRoll as |canRoll|}}
                     <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                         data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="virtue"
@@ -250,14 +252,12 @@
                 <div class="S0-container" style="display: flex; justify-content: space-around; margin-bottom: 2px;">
                     <div class="S0-inner-li">
                         <label><strong>{{localize 'S0.Clique_Esquerdo'}}:</strong> {{localize 'S0.Letal'}}</label>
-                        <div class="S0-characteristic S0-characteristic-temp"
-                            style="background-color: var(--secondary-color);">
+                        <div class="S0-characteristic S0-characteristic-temp S0-letal">
                         </div>
                     </div>
                     <div class="S0-inner-li">
                         <label><strong>{{localize 'S0.Clique_Direito'}}:</strong> {{localize 'S0.Superficial'}}</label>
-                        <div class="S0-characteristic S0-characteristic-temp"
-                            style="background-color: var(--primary-color);">
+                        <div class="S0-characteristic S0-characteristic-temp S0-superficial">
                         </div>
                     </div>
                 </div>

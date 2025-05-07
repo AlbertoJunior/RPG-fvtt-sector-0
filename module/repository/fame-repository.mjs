@@ -1,10 +1,10 @@
 import { localize } from "../../scripts/utils/utils.mjs";
 
-export class VirtuesRepository {
+export class FameRepository {
     static #characteristics = [
-        { id: 'consciencia', label: 'Consciencia' },
-        { id: 'perseveranca', label: 'Perseveranca' },
-        { id: 'quietude', label: 'Quietude' }
+        { id: 'nucleo', label: 'Nucleo' },
+        { id: 'influencia', label: 'Influencia' },
+        { id: 'nivel_de_procurado', label: 'Procurado' }
     ];
 
     static _getItems() {
@@ -14,7 +14,6 @@ export class VirtuesRepository {
                     ...item,
                     label: localize(item.label)
                 };
-            })
-            .sort((a, b) => a.label.localeCompare(b.label));
+            });
     }
 }

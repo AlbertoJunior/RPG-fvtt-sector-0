@@ -9,6 +9,7 @@ import { AbilityRepository } from "../../module/repository/ability-repository.mj
 import { AttributeRepository } from "../../module/repository/attribute-repository.mjs";
 import { RepertoryRepository } from "../../module/repository/repertory-repository.mjs";
 import { VirtuesRepository } from "../../module/repository/virtues-repository.mjs";
+import { FameRepository } from "../../module/repository/fame-repository.mjs";
 
 const map = {
     'morphology': MorphologyRepository._getItems(),
@@ -21,6 +22,7 @@ const map = {
     'ability': AbilityRepository._getItems(),
     'repertory': RepertoryRepository._getItems(),
     'virtue': VirtuesRepository._getItems(),
+    'fame': FameRepository._getItems(),
     'equipment-types': getActorEquipmentTypes,
 }
 

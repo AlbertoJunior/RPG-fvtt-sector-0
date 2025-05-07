@@ -100,6 +100,27 @@ export class ActorUtils {
         return currentEperience + usedExperience;
     }
 
+    static calculateActualVirtue(actor, characteristicType) {
+        switch (characteristicType) {
+            case CharacteristicType.VIRTUES.CONSCIOUSNESS: {
+                const level = getObject(actor, CharacteristicType.VIRTUES.CONSCIOUSNESS.LEVEL);
+                const buffOrDebuff = getObject(actor, CharacteristicType.BONUS.VIRTUES.CONSCIOUSNESS);
+                return level + buffOrDebuff;
+            }
+            case CharacteristicType.VIRTUES.PERSEVERANCE: {
+                const level = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.LEVEL);
+                const buffOrDebuff = getObject(actor, CharacteristicType.BONUS.VIRTUES.PERSEVERANCE);
+                return level + buffOrDebuff;
+            }
+            case CharacteristicType.VIRTUES.QUIETNESS: {
+                const level = getObject(actor, CharacteristicType.VIRTUES.QUIETNESS.LEVEL);
+                const buffOrDebuff = getObject(actor, CharacteristicType.BONUS.VIRTUES.QUIETNESS);
+                return level + buffOrDebuff;
+            }
+        }
+        return 0;
+    }
+
     static havePerseverance(actor) {
         const level = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.LEVEL);
         const used = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.USED);

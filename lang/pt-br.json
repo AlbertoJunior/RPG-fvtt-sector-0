@@ -53,6 +53,7 @@
         "Id": "Identificador",
         "Nome": "Nome",
         "Caracteristicas": "Características",
+       
         "Personagem": "Personagem",
         "Bairro": "Bairro",
         "Morfologia": "Morfologia",
@@ -60,6 +61,7 @@
         "Ciborgue": "Ciborgue",
         "Sintetico": "Sintético",
         "Humano": "Humano",
+        
         "Atributos": "Atributos",
         "Forca": "Força",
         "Destreza": "Destreza",
@@ -67,6 +69,7 @@
         "Percepcao": "Percepção",
         "Carisma": "Carisma",
         "Inteligencia": "Inteligência",
+       
         "Habilidade": "Habilidade",
         "Habilidades": "Habilidades",
         "Armas_Brancas": "Armas Brancas",
@@ -84,31 +87,36 @@
         "Pilotagem": "Pilotagem",
         "Quimica": "Química",
         "Especialista": "Especialista",
+        
         "Repertorio": "Repertório",
         "Aliados": "Aliados",
         "Arsenal": "Arsenal",
         "Informantes": "Informantes",
         "Recursos": "Recursos",
         "SuperEquipamentos": "SuperEquipamentos",
+        
         "Virtudes": "Virtudes",
         "Consciencia": "Consciência",
         "Perseveranca": "Perseverança",
         "Quietude": "Quietude",
         "Procurado": "Procurado",
         "Influencia": "Influência",
-        "Status": "Status",
         "Nucleo": "Núcleo",
         "Sobrecarga": "Sobrecarga",
         "Aprimoramento": "Aprimoramento",
         "Aprimoramentos": "Aprimoramentos",
+        
+        "Status": "Status",
         "Vida": "Vida",
         "Vitalidade": "Vitalidade",
         "Experiencia": "Experiência",
+
         "Traco": "Traço",
         "Tracos": "Traços",
+        
+        "Mochila": "Mochila",
         "Equipados": "Equipados",
         "Equipado": "Equipado",
-        "Mochila": "Mochila",
         "Equipamentos": "Equipamentos",
         "Equipamento": "Equipamento",
         "Protecao": "Proteção",
@@ -127,10 +135,12 @@
         "Cadencia": "Cadência",
         "Capacidade": "Capacidade",
         "Alcance": "Alcance",
+        
         "Outros": "Outros",
         "Fama": "Fama",
         "Biografia": "Biografia",
         "Linguas": "Línguas",
+        
         "Custo": "Custo",
         "Valor": "Valor",
         "Descricao": "Descrição",
@@ -189,14 +199,19 @@
         "Resistencia_Atual": "Resistencia Atual",
         "Dano_Automatico": "Dano Automático",
         "Tipo_Dano": "Tipo de Dano",
+        "Efeito_Utilizado": "Efeito Utilizado",
+        
         "Curto_Alcance": "Curto Alcance",
         "Medio_Alcance": "Médio Alcance",
         "Longo_Alcance": "Longo Alcance",
+        
         "Teste_Padrao": "Teste Padrão",
         "Atualizar_Efeitos": "Atualizar Efeitos",
         "Efeitos_Ativos": "Efeitos Ativos",
+        
         "Clique_Esquerdo": "Clique esquerdo",
         "Clique_Direito": "Clique direito",
+        
         "Testes_Possiveis": "Testes Possíveis",
         "Teste_Nao_Realizado": "O Teste não foi realizado por falta de Dados",
         "Atributo_Primario": "Atributo Primário",
@@ -205,10 +220,12 @@
         "Falha_Critica": "Falha Crítica",
         "Falha_Caotica": "Falha Caótica",
         "Usar_Perseveranca": "Usar Perseverança",
+        
         "Vitalidade_Atual": "Vitalidade atual",
         "Vitalidade_Total": "Vitalidade total",
         "Protecao_Atual": "Proteção atual",
         "Pontos_De_Movimento_Atuais": "Pontos de Movimento atuais",
+        
         "Criar_Macro": "Criar Macro",
         "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa."
     },

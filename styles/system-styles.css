@@ -293,14 +293,13 @@ img.S0-clickable:hover {
 }
 
 #token-hud .status-effects {
-    width: 140px;
-    column-gap: 2px;
-    row-gap: 2px;
+    width: 200px;
 }
 
 #token-hud .status-effects .effect-control {
-    width: 36px;
-    height: 36px;
+    width: 100%;
+    height: 50px;
+    aspect-ratio: 1/1;
 }
 
 /* #endregion */
@@ -1570,6 +1569,14 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-selected {
     background-color: var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-characteristic.S0-letal {
+    background-color: var(--tertiary-color);
+}
+
+.S0-page-transparent .S0-characteristic.S0-superficial {
+    background-color: var(--primary-color);
 }
 
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial:hover,

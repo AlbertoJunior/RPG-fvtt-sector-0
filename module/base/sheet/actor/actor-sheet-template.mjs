@@ -74,7 +74,6 @@ class Setor0ActorSheet extends ActorSheet {
     activateListeners(html) {
         super.activateListeners(html);
         this.setupContentAndHeader(html);
-        SheetMethods.createDynamicSheet(html, this.isEditable);
         this.#presetSheet(html);
         this.#setupListeners(html);
         this.#addPageButtonsOnFloatingMenu(html);
@@ -165,7 +164,7 @@ class Setor0ActorSheet extends ActorSheet {
                 container: html.find('#fameContainer')[0],
                 systemCharacteristic: getObject(actor, CharacteristicType.SIMPLE)
             }
-        ].forEach(({container, systemCharacteristic}) => {
+        ].forEach(({ container, systemCharacteristic }) => {
             let hasNext = container?.firstElementChild;
             while (hasNext) {
                 const children = hasNext.querySelectorAll('.S0-characteristic');

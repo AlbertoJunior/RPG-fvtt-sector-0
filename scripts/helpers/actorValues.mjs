@@ -13,6 +13,10 @@ const map = {
     'total_languages': (actor) => ActorUtils.calculateTotalLanguages(actor),
     'total_experience': (actor) => ActorUtils.calculateTotalExperience(actor),
 
+    'actual_consciousness': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.CONSCIOUSNESS),
+    'actual_perseverance': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.PERSEVERANCE),
+    'actual_quietness': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.QUIETNESS),
+
     'offensive_projectile': (actor) => ActorCombatUtils.calculateOffensiveProjectileDices(actor),
     'offensive_projectile_half': (actor) => Math.floor(ActorCombatUtils.calculateOffensiveProjectileDices(actor) / 2),
     'offensive_brawl': (actor) => ActorCombatUtils.calculateOffensiveBrawlDices(actor),
@@ -33,6 +37,6 @@ const map = {
     },
 }
 
-export default function actorValues(actor, value, ...params) {        
+export default function actorValues(actor, value, ...params) {
     return map[value](actor, params[0]) || 0;
 }

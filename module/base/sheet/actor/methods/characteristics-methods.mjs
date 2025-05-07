@@ -5,7 +5,7 @@ import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { SheetMethods } from "./sheet-methods.mjs";
 
 export async function characteristicOnClick(event, actor) {
-    const element = event.target;    
+    const element = event.target;
 
     selectCharacteristic(element);
 
@@ -20,16 +20,36 @@ export async function characteristicOnClick(event, actor) {
 }
 
 async function handle(actor, systemCharacteristic, id, level) {
-    if (systemCharacteristic.includes('virtudes')) {
-        handleVirtue(actor, systemCharacteristic, id, level);
+    if (systemCharacteristic.includes(CharacteristicType.VIRTUES.id)) {
+        handleVirtue(actor, id, level);
     } else {
         handleOtherwise(actor, systemCharacteristic, id, level);
     }
 }
 
-async function handleVirtue(actor, systemCharacteristic, virtueId, level) {
-    const characteristic = `${systemCharacteristic}.${virtueId}.level`;
-    ActorUpdater._verifyAndUpdateActor(actor, characteristic, level);
+async function handleVirtue(actor, virtueId, level) {
+    let characteristic;
+
+    switch (virtueId) {
+        case CharacteristicType.VIRTUES.CONSCIOUSNESS.id: {
+            characteristic = CharacteristicType.VIRTUES.CONSCIOUSNESS.LEVEL;
+            break;
+        }
+        case CharacteristicType.VIRTUES.PERSEVERANCE.id: {
+            characteristic = CharacteristicType.VIRTUES.PERSEVERANCE.LEVEL;
+            break;
+        }
+        case CharacteristicType.VIRTUES.QUIETNESS.id: {
+            characteristic = CharacteristicType.VIRTUES.QUIETNESS.LEVEL;
+            break;
+        }
+        default: {
+            console.warn("-> Possível erro ao pegar a virtude");
+            return;
+        }
+    }
+
+    await ActorUpdater._verifyAndUpdateActor(actor, characteristic, level);
 }
 
 async function handleOtherwise(actor, systemCharacteristic, characteristicId, level) {
@@ -50,5 +70,5 @@ async function handleOtherwise(actor, systemCharacteristic, characteristicId, le
         );
     }
 
-    ActorUpdater._verifyKeysAndUpdateActor(actor, params);
+    await ActorUpdater._verifyKeysAndUpdateActor(actor, params);
 }

@@ -1,6 +1,6 @@
 import { ActorEquipmentUtils } from "../core/actor/actor-equipment.mjs";
 import { Setor0TokenDocument } from "../core/token/setor0-token.mjs";
-import { ActorCharacteristicField, ActorEnhancementField, ActorVirtueField, ActorAttributes, ActorAbilities } from "../field/actor-fields.mjs";
+import { ActorCharacteristicField, ActorEnhancementField, ActorAttributes, ActorAbilities, ActorVirtues } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../core/actor/actor-utils.mjs";
 import { FlagsUtils } from "../utils/flags-utils.mjs";
@@ -31,11 +31,7 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 recursos: new ActorCharacteristicField("S0.Recursos"),
                 superequipamentos: new ActorCharacteristicField("S0.SuperEquipamentos")
             }),
-            virtudes: new SchemaField({
-                consciencia: new ActorVirtueField("S0.Consciencia"),
-                perseveranca: new ActorVirtueField("S0.Perseveranca"),
-                quietude: new ActorVirtueField("S0.Quietude")
-            }),
+            virtudes: new ActorVirtues(),
             nivel_de_procurado: new ActorCharacteristicField("S0.NivelProcurado"),
             influencia: new ActorCharacteristicField("S0.Influencia"),
             nucleo: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Nucleo" }),
@@ -61,6 +57,11 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             bonus: new SchemaField({
                 atributos: new ActorAttributes({ initial: 0 }),
                 habilidades: new ActorAbilities(),
+                virtudes: new SchemaField({
+                    consciencia: new NumberField({ integer: true, initial: 0, label: "S0.Consciencia" }),
+                    perseveranca: new NumberField({ integer: true, initial: 0, label: "S0.Perseveranca" }),
+                    quietude: new NumberField({ integer: true, initial: 0, label: "S0.Quietude" }),
+                }),
                 iniciativa: new NumberField({ integer: true, initial: 0 }),
                 movimento: new NumberField({ integer: true, initial: 0 }),
                 vitalidade: new NumberField({ integer: true, initial: 0 }),

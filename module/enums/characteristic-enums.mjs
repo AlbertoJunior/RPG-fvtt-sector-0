@@ -79,6 +79,13 @@ export const CharacteristicType = Object.freeze({
             CHARISMA: { id: 'bonus_atributos_charisma', system: 'system.bonus.atributos.carisma' },
             INTELLIGENCE: { id: 'bonus_atributos_intelligence', system: 'system.bonus.atributos.inteligencia' },
         },
+        VIRTUES: {
+            id: 'bonus_virtudes',
+            system: 'system.bonus.virtudes',
+            CONSCIOUSNESS: { id: 'bonus_consciencia', system: 'system.bonus.virtudes.consciencia' },
+            PERSEVERANCE: { id: 'bonus_perseveranca', system: 'system.bonus.virtudes.perseveranca' },
+            QUIETNESS: { id: 'bonus_quietude', system: 'system.bonus.virtudes.quietude' },
+        },
         ABILITY: {
             id: 'bonus_habilidades',
             system: 'system.bonus.habilidades',
