@@ -1,9 +1,7 @@
-import { CoreRollMethods } from "../core/rolls/core-roll-methods.mjs";
 import { RollPerseverance } from "../core/rolls/perseverance-roll.mjs";
-import { RollPerseveranceMessageCreator } from "../creators/message/perseverance-roll.mjs";
-import { ChatCreator } from "./chat-creator.mjs";
 import { MessageRepository } from "../repository/message-repository.mjs";
 import { HtmlJsUtils } from "./html-js-utils.mjs";
+import { localize } from "../../scripts/utils/utils.mjs";
 
 export class DOMUtils {
     static #mapEventsHandle = {
@@ -57,35 +55,24 @@ export class DOMUtils {
     }
 
     static async #perseverance(target) {
-        const messageId = target.parentElement.parentElement.parentElement.parentElement.dataset.messageId;
+        const messageId = target.closest('.chat-message')?.dataset?.messageId;
         const message = MessageRepository.findMessage(messageId);
-        const rollsOnMessage = message.rolls.filter(roll => roll.options.isOverload == false);
-
-        if (!rollsOnMessage || rollsOnMessage.length < 1) {
-            console.log(`Nenhuma rolagem encontrada`);
+        if (!message) {
+            console.warn('-> Possível erro ao procurar a mensagem');
             return;
         }
 
-        const roll = rollsOnMessage[0];
-        const values = CoreRollMethods.getValuesOnRoll(roll);
-        const newValues = await RollPerseverance.rerrollValues(values);
-
-        newValues.difficulty = roll.options.difficulty || 6;
-        newValues.specialist = roll.options.specialist || false;
-        newValues.automatic = (roll.options.automatic || 0) + (roll.options?.weapon?.true_damage || 0);
-
-        const messageContent = await RollPerseveranceMessageCreator.mountContent(newValues);
-        const actorOnMessage = game.actors.get(message.speaker.actor);
-
-        this.#removePerseveranceButton(message, target);
-        ChatCreator._sendToChatTypeRoll(actorOnMessage, messageContent, [newValues.roll]);
+        const result = await RollPerseverance.operateMessage(message);
+        if (result) {
+            this.#removePerseveranceButton(message, target);
+        }
     }
 
     static #removePerseveranceButton(message, button) {
         let $content = $(message.content);
         let $button = $content.find(`button[data-action="${button.dataset.action}"][data-type="${button.dataset.type}"]`);
         if ($button) {
-            $button.text("Perseverança utilizada");
+            $button.text(localize('Perseveranca_Utilizada'));
             $button.removeAttr('data-action').removeAttr('data-type');
             $button.attr('disabled', true);
             MessageRepository.updateMessage(message, { content: $content.prop('outerHTML') });

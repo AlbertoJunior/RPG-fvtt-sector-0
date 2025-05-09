@@ -52,6 +52,7 @@
 
         "Id": "Identificador",
         "Nome": "Nome",
+        "Caracteristica": "Característica",
         "Caracteristicas": "Características",
        
         "Personagem": "Personagem",
@@ -186,6 +187,7 @@
         "Pergunta_Realizar_Acao": "Tem certeza que deseja realizar essa ação?",
         "Expandir_Contrair": "Expandir/Contrair",
         "Contrair_Expandir": "Contrair/Expandir",
+        "Perseveranca_Utilizada": "Perseverança utilizada",
         "Nenhum_Teste_Cadastrado": "Nenhum teste cadastrado",
         "Nivel_De_Procurado": "Nível de Procurado",
         "Tracos-Bons": "Traços Bons",

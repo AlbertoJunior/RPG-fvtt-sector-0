@@ -48,42 +48,45 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 </details>
 
 ### Personagem
+* 🚧 Bônus de Nível 6.
 * ✅ Aprimoramentos com efeitos passivos e ativos.
 * ✅ Sistema de inventário com mochila e itens equipados.
+* ✅ Atalhos customizados por Personagem.
 * 🚧 Transacionar itens entre personagens.
 * 🚧 Importar personagem do site.
 * 🚧 Calculo de XP e pontos utilizados.
 
 ### Sistemas
-* 🚧 Bônus de Nível 6.
-* 🚧 Rolagem com Crítico variável.
 * ✅ Aprimoramentos.
 * ✅ Traços Bons e Ruins.
 * ✅ Inventário.
-* ✅ Atalhos customizados por Personagem.
-* ✅ Atalhos customizados por Equipamento.
-* ✅ Rolagens considerando as penalidades e todos os bônus.
+* ✅ Atalhos.
 * ✅ Aliados e Informantes.
 
 ### Efeitos
 * ✅ Efeitos específicos do Setor 0.
 * ✅ Efeitos ativos baseado em Aprimoramentos.
-* 🚧 Efeitos ativos baseado em Traços.
-* 🚧 Efeitos ativos baseado em Equipamentos.
+* 🛠️ Efeitos ativos baseado em Traços.
+* 🛠️ Efeitos ativos baseado em Equipamentos.
 * ✅ Efeitos que são ativados durante um combate são desativados automaticamente ao final dele.
 
 ### Equipamentos
-* 🚧 Teste com Rolagem Dividida.
+* 🛠️ Ficha.
 * 🚧 SuperEquipamentos.
+* ✅ Rolagem pelo Equipamento.
+* ✅ Atalhos customizados por Equipamento.
 
 ### Rolagens
+* 🛠️ Rolagem totalmente customizada.
+* 🚧 Teste com Rolagem Dividida.
 * ✅ Atributos + Habilidade.
 * ✅ Virtudes.
 * ✅ Sobrecarga.
 * ✅ Vida.
 * ✅ Iniciativa.
 * ✅ Perseverança pela mensagem do chat.
-* ✅ Rolagem pelo Equipamento.
+* ✅ Rolagem com Crítico variável.
+* ✅ Rolagens considerando as penalidades e todos os bônus.
 
 ### Macros
 O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. Todo novo jogador recebe em sua Hotbar 3 macros iniciais, dois deles servem para abrir a ficha do Personagem em uma página específica, como a da mochila ou dos atalhos, o terceiro serve para realizar um teste de Sobrecarga, que é comum no sistema.

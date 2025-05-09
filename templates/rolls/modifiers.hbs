@@ -10,6 +10,15 @@
     </div>
 
     <div class="form-group">
+        <label for="critic" style="flex:1;">{{localize 'S0.Critico'}}:</label>
+        <select class="S0-select" id="critic" name="critic" style="flex:1">
+            {{#forLoop 5 11}}
+            <option value="{{index}}" {{#if (operators 'eq' index 10)}}selected{{/if}}>{{index}}</option>
+            {{/forLoop}}
+        </select>
+    </div>
+
+    <div class="form-group">
         <label for="bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
         <input id="bonus" name="bonus" type="number" style="flex:1;" value="0">
 

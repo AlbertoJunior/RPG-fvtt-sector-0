@@ -5,14 +5,15 @@ import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
     static async roll(actor, params) {
-        const { attr1, attr2, ability, specialist = false,
+        const {
+            attr1, attr2, ability, specialist = false,
             bonus = 0, automatic = 0, weapon,
             isHalf = false
         } = params;
 
         const penalty = ActorUtils.calculatePenalty(actor);
         const diceAmount = ActorUtils.calculateDices(actor, attr1, attr2, ability);
-        
+
         const diceAmountVerifiedHalf = isHalf ? Math.floor(diceAmount / 2) : diceAmount;
         const diceAmountPlusBonus = diceAmountVerifiedHalf + Number(bonus);
         const diceAmountSubtractedPenalty = Math.max(diceAmountPlusBonus - penalty, 0);

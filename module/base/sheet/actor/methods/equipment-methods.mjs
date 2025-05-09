@@ -253,6 +253,6 @@ class EquipmentHandleEvents {
             resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
         }
 
-        DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.name);
+        DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
 }

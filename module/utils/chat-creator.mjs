@@ -8,7 +8,7 @@ export class ChatCreator {
         });
     }
 
-    static async _sendToChatTypeRoll(actor, content, rolls, mode) {
+    static async _sendToChatTypeRoll(actor, content, rolls = [], mode) {
         const message = await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: actor }),
             content: content,

@@ -38,12 +38,14 @@ export class DefaultActions {
 
     static async sendRollOnChat(actor, resultRoll, difficulty, rollMessage, mode) {
         TODO('receber o crítico')
+    static async sendRollOnChat(actor, resultRoll, difficulty, critic, rollMessage, mode) {
         const params = {
             rolls: resultRoll.roll,
             attrs: resultRoll.attrs,
             abilityInfo: resultRoll.abilityInfo,
             modifiers: resultRoll.modifiers,
             difficulty: Number(difficulty),
+            critic: Number(critic),
             messageTest: rollMessage,
             havePerseverance: ActorUtils.havePerseverance(actor),
         }
@@ -68,7 +70,7 @@ export class DefaultActions {
     }
 
     static #mountOptions(objectRoll, params) {
-        const { isOverload, difficulty, messageTest, modifiers } = params;
+        const { isOverload, difficulty, critic, messageTest, modifiers } = params;
 
         const specialist = modifiers?.specialist || false;
         const isHalf = modifiers?.isHalf || false;
@@ -79,6 +81,7 @@ export class DefaultActions {
             ...objectRoll.options,
             isOverload: isOverload,
             difficulty: difficulty,
+            critic: critic,
             messageTest: messageTest,
             specialist: specialist,
             isHalf: isHalf,

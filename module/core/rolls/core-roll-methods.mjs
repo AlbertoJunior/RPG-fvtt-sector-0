@@ -21,7 +21,7 @@ export class CoreRollMethods {
         return roll.dice.flatMap(dice => dice.results.map(result => result.result));
     }
 
-    static calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, automatic) {
+    static calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, criticDifficulty, automatic) {
         let resultOverload = 0;
         let overload = false;
         for (const element of dicesOverload) {
@@ -41,7 +41,7 @@ export class CoreRollMethods {
         let usedSpecialist = !specialist;
 
         for (const element of dicesDefault) {
-            if (element == 10) {
+            if (element == 10 || (element >= criticDifficulty && element >= difficulty)) {
                 critic++;
                 resultDefault++;
             } else if (element == 1) {

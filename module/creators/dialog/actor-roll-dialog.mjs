@@ -94,15 +94,15 @@ export class ActorRollDialog {
         const attr2 = jHtml.find("#attr2").val();
         const ability = jHtml.find("#ability").val();
         const specialist = jHtml.find("#specialist").prop("checked");
+        const isHalf = jHtml.find("#divided").prop("checked");
         const difficulty = jHtml.find("#difficulty").val();
         const critic = jHtml.find("#critic").val();
         const bonus = jHtml.find("#bonus").val();
         const automatic = jHtml.find("#automatic").val();
         const rollMode = jHtml.find("#chat_select").val();
 
-        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, bonus, automatic, specialist });
-        TODO('enviar o crítico')
-        DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, undefined, rollMode);
+        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, bonus, automatic, specialist, isHalf });
+        DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, undefined, rollMode);
     }
 
     static async #confirmPage2(jHtml, actor) {

@@ -147,15 +147,17 @@ class ShortcutHandleEvents {
                 isHalf
             };
 
+            const difficulty = Number(data.difficulty);
+            const critic = Number(data.critic);
             const resultRoll = await RollAttribute.roll(actor, params);
-            DefaultActions.sendRollOnChat(actor, resultRoll, Number(data.difficulty), name, data.chatSelect);
+            DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name, data.chatSelect);
         });
     }
 
     static async rollCustomShortcut(actor, itemId) {
         const shortcutTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
         const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-        DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.name);
+        DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.critic, shortcutTest.name);
     }
 
 }

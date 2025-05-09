@@ -3,7 +3,7 @@ import { keyJsonToKeyLang, localize, toTitleCase } from "../../../scripts/utils/
 
 export class RollMessageCreator {
     static async mountContent(params) {
-        const { messageTest, rolls, attrs, abilityInfo, modifiers, difficulty, havePerseverance } = params;
+        const { messageTest, rolls, attrs, abilityInfo, modifiers, difficulty, critic, havePerseverance } = params;
 
         const diceResults = {
             overload: rolls.overload.values,
@@ -20,7 +20,7 @@ export class RollMessageCreator {
         }
 
         const result = this.#verifyResultRoll(
-            diceResults.overload, diceResults.default, abilityInfo.specialist, difficulty, automatic
+            diceResults.overload, diceResults.default, abilityInfo.specialist, difficulty, critic, automatic
         );
 
         const canUsePerseverance = diceResults.default.length > 0 && (havePerseverance || false);
@@ -40,6 +40,7 @@ export class RollMessageCreator {
             resultMessage: result.message.message,
             resultValue: result.result,
             difficulty: difficulty,
+            critic: critic,
             penalty: modifiers.penalty,
             bonus: modifiers.bonus,
             automatic: modifiers.automatic,
@@ -49,8 +50,8 @@ export class RollMessageCreator {
         return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll.hbs", data);
     }
 
-    static #verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty, automatic = 0) {
-        const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, automatic);
+    static #verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty, critic, automatic = 0) {
+        const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, critic, automatic);
         const message = this.#mountResultMessageInfos(result, overload);
         return { result, message };
     }
