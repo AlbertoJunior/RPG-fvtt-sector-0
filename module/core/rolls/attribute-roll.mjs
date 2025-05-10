@@ -18,23 +18,13 @@ export class RollAttribute {
         const diceAmountPlusBonus = diceAmountVerifiedHalf + Number(bonus);
         const diceAmountSubtractedPenalty = Math.max(diceAmountPlusBonus - penalty, 0);
 
-        let finalDiceAmount = diceAmountSubtractedPenalty;
+        let diceAmountWithWeapon = diceAmountSubtractedPenalty;
         if (diceAmountSubtractedPenalty > 0) {
             const weaponDamage = Number(weapon?.damage) || 0
-            finalDiceAmount += weaponDamage;
+            diceAmountWithWeapon += weaponDamage;
         }
 
-        const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), finalDiceAmount);
-
-        const [rollOverloadResults, rollDefaultResults] = await Promise.all([
-            CoreRollMethods.rollDice(overloadDiceAmount),
-            CoreRollMethods.rollDice(Math.max(finalDiceAmount - overloadDiceAmount, 0))
-        ]);
-
-        const rollsResults = {
-            overload: rollOverloadResults,
-            default: rollDefaultResults
-        }
+        const rollsResults = await CoreRollMethods.rollDiceAmountWithOverload(actor, diceAmountWithWeapon);
 
         const attributes = {
             attr1: {

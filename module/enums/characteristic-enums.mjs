@@ -36,7 +36,15 @@ export const CharacteristicType = Object.freeze({
             USED: { id: 'quietude_usada', system: 'system.virtudes.quietude.used' },
         },
     },
-    REPERTORY: { id: 'repertorio', system: 'system.repertorio' },
+    REPERTORY: {
+        id: 'repertorio',
+        system: 'system.repertorio',
+        ALLIES: { id: "aliados", system: "system.repertorio.aliados" },
+        ARSENAL: { id: "arsenal", system: "system.repertorio.arsenal" },
+        INFORMANTS: { id: "informantes", system: "system.repertorio.informantes" },
+        RESOURCES: { id: "recursos", system: "system.repertorio.recursos" },
+        SUPEREQUIPMENTS: { id: "superequipamentos", system: "system.repertorio.superequipamentos" },
+    },
     SKILLS: {
         id: 'habilidades',
         system: 'system.habilidades',
@@ -56,7 +64,18 @@ export const CharacteristicType = Object.freeze({
         CHEMISTRY: { id: 'quimica', system: 'system.habilidades.quimica' },
     },
     LANGUAGE: { id: 'linguas', system: 'system.linguas' },
-    TRAIT: { id: 'tracos', system: 'system.tracos' },
+    TRAIT: {
+        id: 'tracos',
+        system: 'system.tracos',
+        GOOD: {
+            id: 'bons',
+            system: 'system.tracos.bons',
+        },
+        BAD: {
+            id: 'ruins',
+            system: 'system.tracos.ruins',
+        }
+    },
     ENHANCEMENT_ALL: { id: 'enhancement_all', system: 'system.aprimoramentos' },
     ENHANCEMENT: { id: 'enhancement', system: 'system.aprimoramentos.aprimoramento' },
     VITALITY: {
@@ -124,6 +143,8 @@ export const CharacteristicType = Object.freeze({
             system: 'system.experiencia.usada',
         }
     },
+    BOUNTY: { id: 'nivel_de_procurado', system: 'system.nivel_de_procurado' },
+    INFLUENCE: { id: 'influencia', system: 'system.influencia' },
     SIMPLE: { id: '', system: 'system' },
 });
 

@@ -9,7 +9,6 @@ import { RollLifeMessageCreator } from "../creators/message/life-roll.mjs";
 import { RollOverloadMessageCreator } from "../creators/message/overload-roll.mjs";
 import { RollMessageCreator } from "../creators/message/roll-mesage.mjs";
 import { RollVirtueMessageCreator } from "../creators/message/virtue-roll.mjs";
-import { TODO } from "../../scripts/utils/utils.mjs";
 
 export class DefaultActions {
     static async processInitiativeRoll(actor) {
@@ -36,8 +35,39 @@ export class DefaultActions {
         ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll.roll], mode);
     }
 
-    static async sendRollOnChat(actor, resultRoll, difficulty, rollMessage, mode) {
-        TODO('receber o crítico')
+    static async processCustomRoll(actor, resultRoll, inputParams, rollMessage, mode) {
+        const params = {
+            rolls: resultRoll.roll,
+            attrs: resultRoll.attrs,
+            modifiers: {
+                ...resultRoll.modifiers,
+                automatic: inputParams.automatic,
+            },
+            difficulty: inputParams.difficulty,
+            critic: inputParams.critic,
+            messageTest: rollMessage,
+            havePerseverance: ActorUtils.havePerseverance(actor),
+            half: inputParams.half
+        }
+
+        const rolls = [];
+
+        const defaultRoll = params.rolls.default.roll;
+        if (defaultRoll != undefined) {
+            const objectRoll = this.#mountOptions(defaultRoll, { ...params, isOverload: false, isCustom: true });
+            rolls.push(objectRoll);
+        }
+
+        const overloadRoll = params.rolls.overload.roll;
+        if (overloadRoll != undefined) {
+            const objectRoll = this.#mountOptions(overloadRoll, { ...params, isOverload: true, isCustom: true });
+            rolls.push(objectRoll);
+        }
+
+        const message = await RollMessageCreator.mountContentCustomRoll(params);
+        await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
+    }
+
     static async sendRollOnChat(actor, resultRoll, difficulty, critic, rollMessage, mode) {
         const params = {
             rolls: resultRoll.roll,
@@ -52,14 +82,13 @@ export class DefaultActions {
 
         const rolls = [];
 
-        const rollItems = resultRoll.roll;
-        const defaultRoll = rollItems.default.roll;
+        const defaultRoll = params.rolls.default.roll;
         if (defaultRoll != undefined) {
             const objectRoll = this.#mountOptions(defaultRoll, { ...params, isOverload: false });
             rolls.push(objectRoll);
         }
 
-        const overloadRoll = rollItems.overload.roll;
+        const overloadRoll = params.rolls.overload.roll;
         if (overloadRoll != undefined) {
             const objectRoll = this.#mountOptions(overloadRoll, { ...params, isOverload: true });
             rolls.push(objectRoll);

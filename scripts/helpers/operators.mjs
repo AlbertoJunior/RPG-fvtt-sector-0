@@ -6,11 +6,14 @@ const operators = {
     gt: ([a, b]) => a > b,
     gte: ([a, b]) => a >= b,
     isNull: ([value]) => value === null || value === undefined,
+    isNotNull: ([value]) => !operators['isNull']([value]),
     isEmpty: (collection) => {
         if (!collection)
             return true;
         return collection.length == 0
     },
+    isNotEmpty: (collection) => !operators['isEmpty'](collection),
+    or: (values) => values.find(Boolean),
 };
 
 export default function operator(op, ...params) {

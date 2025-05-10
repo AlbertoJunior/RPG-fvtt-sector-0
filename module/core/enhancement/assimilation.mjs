@@ -4,6 +4,8 @@ import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/actor-enhancement-field.mjs";
 
+const enhancementID = '2';
+
 const assimilationEffects = [
     EnhancementEffectField._toJson(
         '9',
@@ -31,7 +33,7 @@ const assimilationEffects = [
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
                     secondary_attribute: CharacteristicType.ATTRIBUTES.PERCEPTION.id,
                     ability: CharacteristicType.SKILLS.INVESTIGATION.id,
-                    difficulty: 6
+                    difficulty: 6,
                 }
             ),
             RollTestDataModel._toJson(
@@ -39,7 +41,8 @@ const assimilationEffects = [
                     name: "(Rede) Perceber Camuflagem",
                     primary_attribute: CharacteristicType.VIRTUES.CONSCIOUSNESS.id,
                     secondary_attribute: CharacteristicType.ENHANCEMENT.id,
-                    difficulty: 6
+                    special_secondary: enhancementID,
+                    difficulty: 6,
                 }
             ),
         ]
@@ -195,7 +198,7 @@ const assimilationEffects = [
 ];
 
 export const assimilationEnhancement = {
-    id: '2',
+    id: enhancementID,
     name: 'Assimilação',
     value: 'assimilacao',
     icon: `${ICONS_PATH}/assimilation.svg`,

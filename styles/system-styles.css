@@ -200,6 +200,8 @@ img#logo {
 }
 
 .chat-message {
+    margin-inline: 0px;
+    margin-block: 6px;
     background: var(--secondary-color-alpha-50);
 }
 

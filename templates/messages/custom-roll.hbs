@@ -2,14 +2,26 @@
     <h4 style="text-align: center;">{{ localize attr1 }} + {{ localize attr2 }}</h4>
     <hr>
 
-    {{#if haveMessageTest}}
-    <p class="S0-hide-long-text" style="text-align: center;">{{ messageTest }}</p>
+    {{#if (operators 'or' (operators 'isNotNull' messageTestTitle) (operators 'isNotNull' messageTestSubtitle))}}
+
+    {{#if (operators 'isNotNull' messageTestTitle)}}
+    <p class="S0-hide-long-text" style="text-align: center;">{{ messageTestTitle }}</p>
+    {{/if}}
+
+    {{#if (operators 'isNotNull' messageTestSubtitle)}}
+    <p class="S0-hide-long-text" style="text-align: center;">{{ messageTestSubtitle }}</p>
+    {{/if}}
+
     <hr>
+
     {{/if}}
 
     {{#if haveResult}}
     <div class="dice-tooltip S0-container-contract">
-        <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
+        {{#if (operators 'isNotNull' attr3)}}
+        <p>{{localize 'S0.Caracteristica'}}: {{ attr3 }}</p>
+        {{/if}}
+
         <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
 
         <hr>
@@ -94,7 +106,7 @@
     <hr>
 
     <div class="dice-tooltip S0-container-contract">
-        <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
+        <p>{{localize 'S0.Habilidade'}}: {{ attr3 }}</p>
         <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
 
         <hr>

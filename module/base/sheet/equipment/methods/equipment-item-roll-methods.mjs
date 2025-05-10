@@ -102,7 +102,7 @@ class EquipmentSheetItemRollHandle {
         }
 
         const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(item.actor, rollTest, item);
-        DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
+        await DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
 
     static async chat(item, event) {

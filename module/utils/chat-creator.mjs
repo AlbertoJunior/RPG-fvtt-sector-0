@@ -32,6 +32,10 @@ export class ChatCreator {
             case "selfroll":
                 message.whisper = [game.user.id];
                 break;
+            default:
+                message.blind = false;
+                message.whisper = [];
+                break;
         }
     }
 

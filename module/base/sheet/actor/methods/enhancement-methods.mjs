@@ -213,7 +213,9 @@ export const enhancementHandleMethods = {
         const effectId = getEffectSelectedId(event);
         const effect = EnhancementRepository._getEnhancementEffectById(effectId);
         if (effect) {
-            EnhancementDialog._open(effect, actor);
+            EnhancementDialog._open(effect, actor, () => {
+                toggleEnhancementEffectOnActor(effect, actor);
+            });
         } else {
             NotificationsUtils._warning('enhancement-methods:view:effect is null');
         }

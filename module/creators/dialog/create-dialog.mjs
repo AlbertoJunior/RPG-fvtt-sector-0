@@ -1,14 +1,26 @@
-import { localize, snakeToCamel } from "../../../scripts/utils/utils.mjs"
+import { localize, randomId, snakeToCamel } from "../../../scripts/utils/utils.mjs"
 import { TEMPLATES_PATH } from "../../constants.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 
 export class CreateFormDialog {
-    static async _open(title, fileHtml, onConfirm) {
-        const buttons = this.#createButtons({ confirm: onConfirm });
-        const content = await this.#mountContent(fileHtml.replace(/\.[^/.]+$/, ''), buttons);
+    static optionsTemplate = {
+        onConfirm: async (data) => { },
+        onCancel: async (html) => { },
+        presetForm: {},
+    }
 
-        if (!this.#verifyContentIsValid(content)) {
-            console.error('Content is invalid')
+    static async _open(title, fileHtml, options) {
+        const buttons = this.#createButtons(
+            {
+                confirm: options.onConfirm,
+                cancel: options.onCancel
+            }
+        );
+
+        const content = await this.#mountContent(fileHtml.replace(/\.[^/.]+$/, ''), options.presetForm, buttons);
+
+        if (!this.#verifyContentIsForm(content)) {
+            console.error('Content isn\'t a form')
             return;
         }
 
@@ -24,13 +36,19 @@ export class CreateFormDialog {
     }
 
     static #createButtons(eventButtons) {
-        const { confirm: onConfirm } = eventButtons;
+        const onConfirm = eventButtons.confirm;
+        const onCancel = eventButtons.cancel;
 
-        let buttons = {};
+        const buttons = {};
+
         buttons['cancel'] = {
             label: localize("Cancelar"),
             classes: 'S0-button-confirm',
+            callback: (html) => {
+                onCancel?.(html)
+            }
         };
+
         buttons['confirm'] = {
             label: localize("Confirmar"),
             classes: 'S0-button-confirm default',
@@ -38,7 +56,7 @@ export class CreateFormDialog {
                 const form = html[0].querySelector("form");
                 const formData = new FormData(form);
                 const data = snakeToCamel(formData.entries());
-                onConfirm(data);
+                onConfirm?.(data);
             }
         };
 
@@ -49,24 +67,31 @@ export class CreateFormDialog {
         return buttons;
     }
 
-    static async #mountContent(fileHtml, buttons) {
+    static async #mountContent(fileHtml, presetForm = {}, buttons = null) {
         const dataForm = {
+            uuid: `form_dialog.${randomId(10)}`,
+            ...Object.fromEntries(
+                Object.entries(presetForm).filter(([key]) => key !== 'uuid')
+            )
         };
+
         const dataButtons = {
-            buttons: buttons && typeof buttons == 'object' ? Object.values(buttons) : null,
+            buttons: (buttons && typeof buttons === 'object') ? Object.values(buttons) : null,
         };
 
-        const formHtml = await renderTemplate(`${TEMPLATES_PATH}/${fileHtml}.hbs`, dataForm);
-        const buttonsHtml = await renderTemplate(`${TEMPLATES_PATH}/others/buttons-dialog.hbs`, dataButtons);
+        const [formHtml, buttonsHtml] = await Promise.all([
+            renderTemplate(`${TEMPLATES_PATH}/${fileHtml}.hbs`, dataForm),
+            renderTemplate(`${TEMPLATES_PATH}/others/buttons-dialog.hbs`, dataButtons),
+        ]);
 
-        return `<div class="S0-dialog">
-        ${formHtml}
-        ${buttonsHtml}
-        </div>
-        ` ;
+        return `
+        <div class="S0-dialog">
+            ${formHtml}
+            ${buttonsHtml}
+        </div>`;
     }
 
-    static #verifyContentIsValid(content) {
+    static #verifyContentIsForm(content) {
         return content.includes("<form");
     }
 
@@ -76,21 +101,22 @@ export class CreateFormDialog {
         this.#setupButtonsRender(html, dialog, buttons);
     }
 
-    static #setupButtonsRender(html, dialog, buttons) {
-        if (buttons) {
-            Object.keys(buttons).forEach(key => {
-                const button = buttons[key];
-                const buttonElement = html.find(`[data-action="${key}"]`);
+    static #setupButtonsRender(html, dialog, buttons = {}) {
+        const entries = Object.entries(buttons);
+        for (const [key, { callback, closeDialog }] of entries) {
+            const buttonElement = html.find(`[data-action="${key}"]`);
+            if (!buttonElement.length) {
+                continue;
+            }
 
-                buttonElement.on("click", () => {
-                    if (button.callback !== undefined) {
-                        button.callback(html);
-                        if (button.closeDialog == false) {
-                            return;
-                        }
+            buttonElement.on("click", () => {
+                if (typeof callback === "function") {
+                    callback(html);
+                    if (closeDialog === false) {
+                        return;
                     }
-                    dialog.close();
-                });
+                }
+                dialog.close();
             });
         }
     }

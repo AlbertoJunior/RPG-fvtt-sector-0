@@ -16,10 +16,10 @@ export class RollPerseverance {
         const newValues = await RollPerseverance.rerrollValues(values);
 
         newValues.difficulty = roll.options.difficulty || 6;
-        newValues.critic = roll.options.difficulty || 10;
+        newValues.critic = roll.options.critic || 10;
         newValues.specialist = roll.options.specialist || false;
         newValues.automatic = (roll.options.automatic || 0) + (roll.options?.weapon?.true_damage || 0);
-
+        
         const messageContent = await RollPerseveranceMessageCreator.mountContent(newValues);
         const actorOnMessage = game.actors.get(message.speaker.actor);
 

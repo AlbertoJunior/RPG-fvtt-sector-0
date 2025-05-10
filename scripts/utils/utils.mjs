@@ -48,10 +48,14 @@ export function toTitleCase(str) {
         .join(' ');
 }
 
-export function keyJsonToKeyLang(key) {
+export function toKeyLang(key) {
     const removeUnderscore = key.replaceAll('_', ' ');
     const toTitle = toTitleCase(removeUnderscore);
-    const langKey = toTitle.replaceAll(' ', '_');
+    return toTitle.replaceAll(' ', '_');
+}
+
+export function keyJsonToKeyLang(key) {
+    const langKey = toKeyLang(key);
     return `S0.${langKey}`;
 }
 
@@ -88,9 +92,14 @@ export function getObject(object, path) {
     return pathHaveSystem.split('.').reduce((acc, key) => acc && acc[key], object);
 }
 
-export function randomId() {
+export function randomId(maxString) {
     const id = crypto.randomUUID?.() ?? Math.random().toString(36).substring(2, 10);
-    return id.replaceAll('-', '');
+    const finalId = id.replaceAll('-', '');
+
+    if (typeof maxString == 'number' && maxString > 0) {
+        return finalId.substring(0, maxString)
+    }
+    return finalId;
 }
 
 export function convertToCollection(items) {

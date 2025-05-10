@@ -1,45 +1,50 @@
 <form class="S0-container">
     <h3 style="margin-block: 3px">{{localize 'S0.Modificadores'}}</h3>
     <div class="form-group">
-        <label for="difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
-        <select class="S0-select" id="difficulty" name="difficulty" style="flex:1">
+        <label for="{{uuid}}.difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
+        <select class="S0-select" id="{{uuid}}.difficulty" name="difficulty" style="flex:1">
             {{#forLoop 5 11}}
-            <option value="{{index}}" {{#if (operators 'eq' index 6)}}selected{{/if}}>{{index}}</option>
+            <option value="{{index}}" {{selectIfEq index 6}}>{{index}}</option>
             {{/forLoop}}
         </select>
     </div>
 
     <div class="form-group">
-        <label for="critic" style="flex:1;">{{localize 'S0.Critico'}}:</label>
-        <select class="S0-select" id="critic" name="critic" style="flex:1">
+        <label for="{{uuid}}.critic" style="flex:1;">{{localize 'S0.Critico'}}:</label>
+        <select class="S0-select" id="{{uuid}}.critic" name="critic" style="flex:1">
             {{#forLoop 5 11}}
-            <option value="{{index}}" {{#if (operators 'eq' index 10)}}selected{{/if}}>{{index}}</option>
+            <option value="{{index}}" {{selectIfEq index 10}}>{{index}}</option>
             {{/forLoop}}
         </select>
     </div>
 
+    {{#if (operators 'or' canBeHalf canBeSpecialist)}}
     <div class="form-group">
-        <label for="bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
-        <input id="bonus" name="bonus" type="number" style="flex:1;" value="0">
+        {{#if canBeHalf}}
+        <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
+            <label for="{{uuid}}.isHalf" style="flex:1;">{{localize 'S0.Dividido'}}:</label>
+            <input id="{{uuid}}.isHalf" name="half" type="checkbox">
+        </div>
+        {{/if}}
 
-        <label for="automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
-        <input id="automatic" name="automatic" type="number" style="flex:1;" value="0">
+        {{#if canBeSpecialist}}
+        <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
+            <label for="{{uuid}}.specialist" style="flex:1;">{{localize 'S0.Especialista'}}:</label>
+            <input id="{{uuid}}.specialist" name="specialist" type="checkbox">
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
+
+    <div class="form-group">
+        <label for="{{uuid}}.bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
+        <input id="{{uuid}}.bonus" name="bonus" type="number" style="flex:1;" value="0">
+
+        <label for="{{uuid}}.automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
+        <input id="{{uuid}}.automatic" name="automatic" type="number" style="flex:1;" value="0">
     </div>
 
     <hr>
 
-    <div class="form-group">
-        <label for="chat_select" style="flex:1;">{{localize 'S0.Enviar_No_Chat'}}:</label>
-        <select id="chat_select" name="chat_select" class="S0-select" style="flex:1; text-align: start;">
-            <option value="publicroll" selected="">{{localize 'S0.Rolagem_Publica'}}</option>
-            <option value="gmroll">{{localize 'S0.Rolagem_Privada_GM'}}</option>
-            <option value="blindroll">{{localize 'S0.Rolagem_GM_Oculta'}}</option>
-
-            {{#if (gameFunc 'isGm')}}
-            <optgroup label="{{localize 'S0.Rolagens_GM'}}">
-                <option value="selfroll">{{localize 'S0.Rolagem_Pessoal'}}</option>
-            </optgroup>
-            {{/if}}
-        </select>
-    </div>
+    {{> roll-chat-mode}}
 </form>

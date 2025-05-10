@@ -74,11 +74,12 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * 🛠️ Ficha.
 * 🚧 SuperEquipamentos.
 * ✅ Rolagem pelo Equipamento.
+* 🛠️ Rolagem dividida pelo Equipamento.
 * ✅ Atalhos customizados por Equipamento.
 
 ### Rolagens
-* 🛠️ Rolagem totalmente customizada.
-* 🚧 Teste com Rolagem Dividida.
+* ✅ Rolagem totalmente customizada.
+* ✅ Teste com Rolagem Dividida.
 * ✅ Atributos + Habilidade.
 * ✅ Virtudes.
 * ✅ Sobrecarga.

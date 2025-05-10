@@ -50,6 +50,58 @@ export class RollMessageCreator {
         return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll.hbs", data);
     }
 
+    static async mountContentCustomRoll(params) {
+        const { messageTest, modifiers, difficulty, critic, half, havePerseverance } = params;
+
+        const diceResults = {
+            overload: params.rolls.overload.values,
+            default: params.rolls.default.values
+        };
+
+        const { attr1, attr2, attr3 } = params.attrs;
+        const formule = `(${attr1.value} + ${attr2.value}) ${attr3.value ? `/ 2 + ${attr3.value}` : ''}`.trim();
+
+        let automatic = 0;
+        if (modifiers) {
+            automatic += modifiers.automatic || 0;
+            automatic += modifiers.weapon?.true_damage || 0;
+        }
+
+        const result = this.#verifyResultRoll(
+            diceResults.overload, diceResults.default, modifiers.specialist, difficulty, critic, automatic
+        );
+
+        const canUsePerseverance = diceResults.default.length > 0 && (havePerseverance || false);
+
+        const formatedMessageTest = messageTest.split(":");
+
+        const data = {
+            messageTestTitle: formatedMessageTest[0],
+            messageTestSubtitle: formatedMessageTest[1],
+            haveResult: (diceResults.overload.length + diceResults.default.length) > 0,
+            attr1: attr1.label,
+            attr2: attr2.label,
+            attr3: attr3.label,
+            formule: formule,
+            overloadValues: diceResults.overload.flat(),
+            defaultValues: diceResults.default.flat(),
+            canUsePerseverance: canUsePerseverance,
+            resultMessageClasses: result.message.classes,
+            resultMessage: result.message.message,
+            resultValue: result.result,
+            difficulty: difficulty,
+            critic: critic,
+            half: half,
+            specialist: modifiers.specialist,
+            penalty: modifiers.penalty,
+            bonus: modifiers.bonus,
+            automatic: modifiers.automatic,
+            weapon: modifiers.weapon,
+        };
+
+        return await renderTemplate("systems/setor0OSubmundo/templates/messages/custom-roll.hbs", data);
+    }
+
     static #verifyResultRoll(dicesOverload, dicesDefault, specialist, difficulty, critic, automatic = 0) {
         const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, critic, automatic);
         const message = this.#mountResultMessageInfos(result, overload);

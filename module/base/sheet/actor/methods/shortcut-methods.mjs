@@ -119,45 +119,55 @@ class ShortcutHandleEvents {
     }
 
     static async #rollDefaultShortcut(actor, type, subCharacteristic) {
-        CreateFormDialog._open(localize("Modificadores"), "rolls/modifiers", async (data) => {
-            const isOffensive = subCharacteristic.includes('offensive');
+        CreateFormDialog._open(
+            localize("Modificadores"),
+            "rolls/modifiers",
+            {
+                presetForm: {
+                    canBeHalf: false,
+                    canBeSpecialist: true,
+                },
+                onConfirm: async (data) => {
+                    const isOffensive = subCharacteristic.includes('offensive');
 
-            const presetMap = isOffensive ? this.#presetsCombatOffensiveShortcuts : this.#presetsCombatDefensiveShortcuts;
-            if (!presetMap) {
-                NotificationsUtils._error('Tipo inválido');
-                return;
-            }
+                    const presetMap = isOffensive ? this.#presetsCombatOffensiveShortcuts : this.#presetsCombatDefensiveShortcuts;
+                    if (!presetMap) {
+                        NotificationsUtils._error('Tipo inválido');
+                        return;
+                    }
 
-            const key = Object.keys(presetMap).find(presetKey => type.includes(presetKey));
-            if (!key) {
-                NotificationsUtils._error('Tipo inválido');
-                return;
-            }
+                    const key = Object.keys(presetMap).find(presetKey => type.includes(presetKey));
+                    if (!key) {
+                        NotificationsUtils._error('Tipo inválido');
+                        return;
+                    }
 
-            const isHalf = type.includes('half');
+                    const isHalf = type.includes('half');
 
-            const preset = presetMap[key];
-            const name = `${localize(preset.label)} ${isHalf ? 'Dividido' : 'Completo'}`;
-            const bonusPreset = preset.data.getBonus(actor);
+                    const preset = presetMap[key];
+                    const name = `${localize(preset.label)} ${isHalf ? 'Dividido' : 'Completo'}`;
+                    const bonusPreset = preset.data.getBonus(actor);
 
-            const params = {
-                ...preset.data,
-                bonus: Number(data.bonus) + bonusPreset,
-                automatic: Number(data.automatic),
-                isHalf
-            };
+                    const params = {
+                        ...preset.data,
+                        bonus: Number(data.bonus) + bonusPreset,
+                        automatic: Number(data.automatic),
+                        isHalf
+                    };
 
-            const difficulty = Number(data.difficulty);
-            const critic = Number(data.critic);
-            const resultRoll = await RollAttribute.roll(actor, params);
-            DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name, data.chatSelect);
-        });
+                    const difficulty = Number(data.difficulty);
+                    const critic = Number(data.critic);
+                    const resultRoll = await RollAttribute.roll(actor, params);
+                    await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name, data.chatSelect);
+                }
+            },
+        );
     }
 
     static async rollCustomShortcut(actor, itemId) {
         const shortcutTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
         const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-        DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.critic, shortcutTest.name);
+        await DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.critic, shortcutTest.name);
     }
 
 }

@@ -1,8 +1,7 @@
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
-import { SheetMethods } from "./sheet-methods.mjs";
 
 export async function characteristicOnClick(event, actor) {
     const element = event.target;
@@ -10,7 +9,7 @@ export async function characteristicOnClick(event, actor) {
     selectCharacteristic(element);
 
     const characteristicType = event.currentTarget.dataset.characteristic;
-    const systemCharacteristic = SheetMethods.characteristicTypeMap[characteristicType];
+    const systemCharacteristic = CharacteristicTypeMap[characteristicType];
 
     if (systemCharacteristic) {
         const parentElement = element.parentElement;

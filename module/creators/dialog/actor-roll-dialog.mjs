@@ -1,5 +1,5 @@
 import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
-import { keyJsonToKeyLang, localize, TODO } from "../../../scripts/utils/utils.mjs";
+import { localize, randomId, snakeToCamel } from "../../../scripts/utils/utils.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { AttributeRepository } from "../../repository/attribute-repository.mjs";
@@ -7,10 +7,23 @@ import { AbilityRepository } from "../../repository/ability-repository.mjs";
 import { VirtuesRepository } from "../../repository/virtues-repository.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
 import { RollVirtue } from "../../core/rolls/virtue-roll.mjs";
+import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
+import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
+import { ActorUtils } from "../../core/actor/actor-utils.mjs";
+import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
 
 export class ActorRollDialog {
+    static mapedPagesMethods = {
+        0: ActorRollDialog.#confirmPage1,
+        1: ActorRollDialog.#confirmPage2,
+        2: ActorRollDialog.#confirmPage3,
+    };
+
     static async _open(actor) {
-        const content = await this.#mountContent();
+        const uuid = `roll_dialog.${randomId(10)}`;
+        const dataOptions = this.#mountDataOptions(actor);
+        const content = await this.#mountContent(uuid, dataOptions);
 
         let currentPageDialog = 0;
         let pages = [];
@@ -25,16 +38,19 @@ export class ActorRollDialog {
                 confirm: {
                     label: localize("Rolar"),
                     callback: async (html) => {
-                        switch (currentPageDialog) {
-                            case 0: {
-                                await this.#confirmPage1($(pages[currentPageDialog]), actor);
-                                return;
-                            };
-                            case 1: {
-                                await this.#confirmPage2($(pages[currentPageDialog]), actor);
-                                return;
-                            };
+                        const page = pages[currentPageDialog];
+                        if (!page) {
+                            return;
                         }
+
+                        const form = $(page).closest("form")[0];
+                        const data = snakeToCamel(new FormData(form).entries());
+                        const rollMode = html.parent().find(`#chat_select`).val();
+                        if (!data) {
+                            return
+                        }
+
+                        ActorRollDialog.mapedPagesMethods[currentPageDialog]?.(actor, data, rollMode);
                     }
                 }
             },
@@ -54,7 +70,7 @@ export class ActorRollDialog {
         }).render(true);
     }
 
-    static async #mountContent() {
+    static #mountDataOptions(actor) {
         const attributesOptions = AttributeRepository._getItems()
             .map(attr => {
                 return {
@@ -73,12 +89,100 @@ export class ActorRollDialog {
 
         const virtueOptions = VirtuesRepository._getItems();
 
-        const data = {
+        const enhancementOptions = ActorUtils.getAllEnhancements(actor)
+            .map(enhance => {
+                return {
+                    id: `${CharacteristicType.ENHANCEMENT.id}_${enhance.id}`,
+                    label: enhance.name
+                }
+            });
+
+        const repertoryOptions = RepertoryRepository._getItems().map(repertory => {
+            return {
+                id: repertory.id,
+                label: game.i18n.localize(repertory.label)
+            }
+        });
+
+        const allCharacteristicOptionsGroup = [];
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: localize('Atributos'),
+                group_items: attributesOptions
+            }
+        );
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: localize('Habilidades'),
+                group_items: abilitiesOptions
+            }
+        );
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: localize('Virtudes'),
+                group_items: virtueOptions
+            }
+        );
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: localize('Aprimoramentos'),
+                group_items: enhancementOptions,
+            }
+        );
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: localize('Repertorio'),
+                group_items: repertoryOptions,
+            }
+        );
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: localize('Outros'),
+                group_items: [
+                    {
+                        id: CharacteristicType.CORE.id,
+                        label: localize('Nucleo'),
+                    },
+                    {
+                        id: CharacteristicType.BOUNTY.id,
+                        label: localize('Nivel_De_Procurado'),
+                    },
+                    {
+                        id: CharacteristicType.INFLUENCE.id,
+                        label: localize('Influencia'),
+                    },
+                    {
+                        id: 'zero',
+                        label: 'Zero',
+                    }
+                ]
+            }
+        );
+        allCharacteristicOptionsGroup.push(
+            {
+                group_label: 'Vazio',
+                group_items: [
+                    {
+                        label: '',
+                    },
+                ]
+            }
+        );
+
+        return {
             attributes: attributesOptions,
             abilities: abilitiesOptions,
             virtues: virtueOptions,
+            allCharacteristic: allCharacteristicOptionsGroup,
         }
-        return await renderTemplate("systems/setor0OSubmundo/templates/rolls/default-roll.hbs", data);
+    }
+
+    static async #mountContent(uuid, dataOptions) {
+        const data = {
+            uuid: uuid,
+            ...dataOptions
+        }
+        return await renderTemplate("systems/setor0OSubmundo/templates/rolls/default-roll-dialog.hbs", data);
     }
 
     static #changePage(page, pages, buttons) {
@@ -89,33 +193,68 @@ export class ActorRollDialog {
         });
     }
 
-    static async #confirmPage1(jHtml, actor) {
-        const attr1 = jHtml.find("#attr1").val();
-        const attr2 = jHtml.find("#attr2").val();
-        const ability = jHtml.find("#ability").val();
-        const specialist = jHtml.find("#specialist").prop("checked");
-        const isHalf = jHtml.find("#divided").prop("checked");
-        const difficulty = jHtml.find("#difficulty").val();
-        const critic = jHtml.find("#critic").val();
-        const bonus = jHtml.find("#bonus").val();
-        const automatic = jHtml.find("#automatic").val();
-        const rollMode = jHtml.find("#chat_select").val();
+    static async #confirmPage1(actor, data, rollMode) {
+        const inputParams = {
+            attr1: data["attr1"],
+            attr2: data["attr2"],
+            ability: data["ability"],
+            bonus: Number(data["bonus"]),
+            automatic: Number(data["automatic"]),
+            specialist: Boolean(data["specialist"]),
+            isHalf: Boolean(data["divided"]),
+        };
 
-        const resultRoll = await RollAttribute.roll(actor, { attr1, attr2, ability, bonus, automatic, specialist, isHalf });
-        DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, undefined, rollMode);
+        const difficulty = Number(data["difficulty"]);
+        const critic = Number(data["critic"]);
+
+        const resultRoll = await RollAttribute.roll(actor, inputParams);
+        await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, undefined, rollMode);
     }
 
-    static async #confirmPage2(jHtml, actor) {
-        const virtue1 = jHtml.find("#virtue1").val();
-        const virtue2 = jHtml.find("#virtue2").val();
-        const bonus = jHtml.find("#bonus").val();
-        const penalty = jHtml.find("#penalty").val();
-        const difficulty = jHtml.find("#difficulty").val();
-        const automatic = jHtml.find("#automatic").val();
-        const rollMode = jHtml.find("#chat_select").val();
+    static async #confirmPage2(actor, data, rollMode) {
+        const inputParams = {
+            virtue1: data["virtue1"],
+            virtue2: data["virtue2"],
+            bonus: Number(data["bonus"]),
+            penalty: Number(data["penalty"]),
+            automatic: Number(data["automatic"]),
+        };
 
-        const resultRoll = await RollVirtue.roll(actor, { virtue1, virtue2, bonus, penalty, automatic });
+        const difficulty = Number(data["difficulty"]);
 
-        DefaultActions.processVirtueRoll(actor, resultRoll, difficulty, rollMode);
+        const resultRoll = await RollVirtue.roll(actor, inputParams);
+        await DefaultActions.processVirtueRoll(actor, resultRoll, difficulty, rollMode);
+    }
+
+    static async #confirmPage3(actor, data, rollMode) {
+        function characteristic(value, characteristicKey) {
+            const result = {
+                [characteristicKey]: value,
+                [`special_${characteristicKey}`]: ''
+            };
+
+            if (value.includes(CharacteristicType.ENHANCEMENT.id)) {
+                const [base, special] = value.split("_");
+                result[characteristicKey] = base;
+                result[`special_${characteristicKey}`] = special;
+            }
+
+            return result;
+        }
+
+        const inputParams = {
+            ...characteristic(data["characteristic1"], 'primary'),
+            ...characteristic(data["characteristic2"], 'secondary'),
+            ...characteristic(data["characteristic3"], 'tertiary'),
+            half: Boolean(data["half"]),
+            specialist: Boolean(data["specialist"]),
+            bonus: Number(data["bonus"]),
+            automatic: Number(data["automatic"]),
+            difficulty: Number(data["difficulty"]),
+            critic: Number(data["critic"]),
+        };
+
+        const resultRoll = await CustomRoll.discoverAndRoll(actor, inputParams);
+        await DefaultActions.processCustomRoll(actor, resultRoll, inputParams, 'Teste Customizado', rollMode);
     }
 }

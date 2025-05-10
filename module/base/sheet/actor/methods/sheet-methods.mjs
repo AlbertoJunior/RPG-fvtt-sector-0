@@ -1,6 +1,6 @@
 import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
 import { getObject, selectCharacteristic, } from "../../../../../scripts/utils/utils.mjs";
-import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
+import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { handlerEquipmentEvents } from "./equipment-methods.mjs";
@@ -14,8 +14,6 @@ import { alliesHandleEvents, informantsHandleEvents } from "./network-methods.mj
 import { effectsHandleEvents } from "./effects-methods.mjs";
 
 export class SheetMethods {
-    static characteristicTypeMap = CharacteristicTypeMap;
-
     static handleMethods = {
         menu: {
             [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
