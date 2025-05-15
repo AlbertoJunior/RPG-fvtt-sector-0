@@ -54,7 +54,7 @@ const brutalityEffects = [
                     difficulty: 5
                 }
             ),
-        ]
+        ],
     ),
     EnhancementEffectField._toJson(
         '21',
@@ -89,18 +89,18 @@ const brutalityEffects = [
     ),
     EnhancementEffectField._toJson(
         '23',
-        'Hit Kill', 
-        4, 
-        EnhancementOverload.ONE_FIXED, 
-        EnhancementDuration.USE, 
+        'Hit Kill',
+        4,
+        EnhancementOverload.ONE_FIXED,
+        EnhancementDuration.USE,
         ['21', '22'],
     ),
     EnhancementEffectField._toJson(
         '24',
-        'Destroçar', 
-        5, 
-        EnhancementOverload.ONE_FIXED, 
-        EnhancementDuration.SCENE, 
+        'Destroçar',
+        5,
+        EnhancementOverload.ONE_FIXED,
+        EnhancementDuration.SCENE,
         ['23']
     )
 ];

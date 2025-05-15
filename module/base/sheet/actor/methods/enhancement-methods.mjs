@@ -2,7 +2,7 @@ import { ChatCreator } from "../../../../utils/chat-creator.mjs";
 import { EnhancementDialog } from "../../../../creators/dialog/enhancement-dialog.mjs";
 import { _createEmptyOption, _createOption, _createOptionsAndSetOnSelects } from "../../../../creators/element/element-creator-jscript.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
 import { EnhancementUtils } from "../../../../core/enhancement/enhancement-utils.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
@@ -13,10 +13,12 @@ import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
 import { ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
+import { EnhancementMessageCreator } from "../../../../creators/message/enhancement-message.mjs";
+import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 
 export async function sendEffectToChat(effect, actor) {
-    TODO('criar o envio para o chat');
-    ChatCreator._sendToChat(actor, effect.name);
+    const message = await EnhancementMessageCreator.mountContentInfo(effect);
+    ChatCreator._sendToChat(actor, message);
 }
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
@@ -116,6 +118,32 @@ function getEffectSelectedId(event) {
     return select.selectedOptions[0]?.value;
 }
 
+async function usedEffectSendOnChat(effect, actor) {
+    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, true);
+    await verifyIsGmAndDefineShowChat(message, actor);
+}
+
+async function deactivedEffectSendOnChat(effect, actor) {
+    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, false);
+    await verifyIsGmAndDefineShowChat(message, actor);
+}
+
+async function verifyIsGmAndDefineShowChat(message, actor) {
+    if (game.user.isGM) {
+        ConfirmationDialog.open({
+            message: "Ocultar?",
+            onCancel: async () => {
+                await ChatCreator._sendToChat(actor, message);
+            },
+            onConfirm: async () => {
+                await ChatCreator._sendToChat(actor, message, CONST.DICE_ROLL_MODES.PRIVATE);
+            }
+        });
+    } else {
+        await ChatCreator._sendToChat(actor, message);
+    }
+}
+
 async function toggleEnhancementEffectOnActor(effect, actor) {
     if (!effect) {
         NotificationsUtils._error(`Efeito inválido`);
@@ -130,7 +158,7 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
     const haveEffect = actor.effects.find(ef => ActiveEffectsUtils.getOriginId(ef) == effect.id);
     if (haveEffect) {
         await ActiveEffectsUtils.removeActorEffect(actor, ActiveEffectsUtils.getOriginId(haveEffect));
-        await ChatCreator._sendToChat(actor, `${localize("Desativou")} ${effect.name}`);
+        await deactivedEffectSendOnChat(effect, actor);
         return;
     }
 
@@ -140,9 +168,8 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
     }
 
     if (effect.duration == EnhancementDuration.USE) {
-        TODO("criar uma mensagem de Usou melhor")
         await NotificationsUtils._info(`${localize("Voce")} ${localize("Usou")} ${effect.name}`)
-        await ChatCreator._sendToChat(actor, `${localize("Usou")} ${effect.name}`);
+        await usedEffectSendOnChat(effect, actor);
         return;
     } else {
         const activeEffectData = ActiveEffectsUtils.createEffectData({

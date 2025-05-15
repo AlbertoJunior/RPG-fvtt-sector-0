@@ -27,7 +27,8 @@
             <div>
                 <label style="display: block; margin-top: 0px;">{{name}}</label>
                 <label style="display: block;">
-                    <h4>{{parse 'roll-enhancement-formule' ../familyId primary_attribute secondary_attribute ability}}</h4>
+                    <h4>{{parse 'roll-enhancement-formule' ../familyId primary_attribute secondary_attribute ability}}
+                    </h4>
                 </label>
                 <label style="display: inline;">{{localize 'S0.Dificuldade'}}:</label>
                 <h4 style="display: inline;">{{difficulty}}</h4>
@@ -38,10 +39,12 @@
         {{/each}}
     </div>
 
+    {{#if (operators 'isNotNull' description)}}
     <div class="S0-container">
         <strong style="display: block;">{{ localize 'S0.Descricao' }}:</strong>
         <div class="S0-message-simple-text">
             {{ description }}
         </div>
     </div>
+    {{/if}}
 </div>

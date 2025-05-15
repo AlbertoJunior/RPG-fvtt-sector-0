@@ -145,20 +145,6 @@ img#logo {
     object-fit: contain;
 }
 
-#chat-log {
-    overflow-y: scroll;
-    padding-left: 10px;
-}
-
-#chat-controls {
-    justify-content: space-around;
-}
-
-#chat-controls .roll-type-select {
-    width: 190px;
-    max-width: 190px;
-}
-
 .combat-sidebar li.combatant .roll {
     background: url(../icons/d10.png) no-repeat 50% 50%;
     background-size: 32px;
@@ -197,6 +183,25 @@ img#logo {
     grid-template-columns: repeat(6, 1fr);
     justify-items: center;
     row-gap: 6px;
+}
+
+#chat-log {
+    overflow-y: scroll;
+    padding-left: 10px;
+}
+
+#chat-controls {
+    justify-content: space-around;
+}
+
+#chat-controls .roll-type-select {
+    width: 190px;
+    max-width: 190px;
+}
+
+.flavor-text,
+.whisper-to {
+    color: var(--on-secondary-color);
 }
 
 .chat-message {

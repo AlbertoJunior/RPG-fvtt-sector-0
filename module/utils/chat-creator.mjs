@@ -1,41 +1,48 @@
 export class ChatCreator {
 
-    static async _sendToChat(actor, content) {
-        ChatMessage.create({
+    static async _sendToChat(actor, content, mode) {
+        await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: actor }),
             content: content,
-            style: CONST.CHAT_MESSAGE_STYLES.OTHER
+            style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+            whisper: this.#configureWhisperByMode(mode),
+            blind: this.#configureBlindByMode(mode)
         });
     }
 
     static async _sendToChatTypeRoll(actor, content, rolls = [], mode) {
-        const message = await ChatMessage.create({
+        await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: actor }),
             content: content,
-            rolls: rolls
+            rolls: rolls,
+            whisper: this.#configureWhisperByMode(mode),
+            blind: this.#configureBlindByMode(mode)
         });
-
-        this.#configureMode(message, mode);
-
-        return message;
     }
 
-    static #configureMode(message, mode) {
+    static #configureWhisperByMode(mode) {
         switch (mode) {
             case "gmroll":
-                message.whisper = ChatMessage.getWhisperRecipients("GM").map(u => u.id);
-                break;
+                return [...ChatMessage.getWhisperRecipients("GM").map(u => u.id), game.user.id];
             case "blindroll":
-                message.whisper = ChatMessage.getWhisperRecipients("GM").map(u => u.id);
-                message.blind = true;
-                break;
+                return ChatMessage.getWhisperRecipients("GM").map(u => u.id);
             case "selfroll":
-                message.whisper = [game.user.id];
-                break;
+                return [game.user.id];
             default:
-                message.blind = false;
-                message.whisper = [];
-                break;
+                return [];
+        }
+    }
+
+    static #configureBlindByMode(mode) {
+        switch (mode) {
+            case "gmroll":
+                return true;
+            case "blindroll":
+                return true;
+            case "selfroll":
+                return false;
+            default:
+                return false;
         }
     }
 
