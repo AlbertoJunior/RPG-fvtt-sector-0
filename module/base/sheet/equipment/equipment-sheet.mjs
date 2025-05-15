@@ -118,6 +118,7 @@ export class EquipmentSheet extends ItemSheet {
 export async function equipmentTemplatesRegister() {
     const templates = [
         { path: "items/armor" },
+        { path: "items/acessory" },
         { path: "items/melee" },
         { path: "items/projectile" },
         { path: "items/substance" },
@@ -132,7 +133,7 @@ export async function equipmentTemplatesRegister() {
 export async function registerEquipment() {
     await Items.unregisterSheet("core", ItemSheet);
     await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
-        types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
+        types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance", "Acessory"],
         makeDefault: true
     });
 }

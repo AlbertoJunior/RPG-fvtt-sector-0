@@ -31,7 +31,9 @@ export class MacroUtils {
     }
 
     static async createMacro({ name, command, img, toHotbar = true, flags } = {}) {
-        let macro = game.macros.find(m => normalizeString(m.name) === normalizeString(name) && normalizeString(m.command) === normalizeString(command));
+        const normalizedName = normalizeString(name);
+        const normalizedCommand = normalizeString(command);
+        let macro = game.macros.find(m => normalizeString(m.name) === normalizedName && normalizeString(m.command) === normalizedCommand);
         if (!macro) {
             macro = await Macro.create({
                 flags: {

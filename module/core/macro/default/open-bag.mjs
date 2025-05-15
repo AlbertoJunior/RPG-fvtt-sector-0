@@ -9,6 +9,9 @@ export const openBagMacroData = {
     }
   },
   name: "Abrir Mochila",
+  ownership: {
+    default: CONST.USER_ROLES.PLAYER
+  },
   command: `
 const targetPage = 4;
 ${verifyAndReturnSelectedToken}

@@ -21,8 +21,8 @@
 
         <div class="S0-container">
             <label for="biography" style="display: block; margin: 4px">{{ localize 'S0.Biografia' }}</label>
-            <input id="biography" name="system.background.biography" type="text"
-                value="{{actor.system.background.biography}}" placeholder="{{ localize 'S0.Biografia' }}" />
+            <textarea id="biography" name="system.background.biography" type="text" rows="5" style="resize: block;"
+                placeholder="{{ localize 'S0.Biografia' }}">{{actor.system.background.biography}}</textarea>
         </div>
     </div>
 

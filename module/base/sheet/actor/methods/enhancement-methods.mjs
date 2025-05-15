@@ -96,7 +96,7 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
     }
 
     const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
-    if (!effect && oldEffect.id != effect.id) {
+    if (!effect && oldEffect.id && oldEffect.id != '') {
         await ActiveEffectsUtils.removeActorEffect(actor, oldEffect.id)
     }
 

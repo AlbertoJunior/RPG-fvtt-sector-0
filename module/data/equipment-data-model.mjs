@@ -86,6 +86,15 @@ class RollableDataModel extends EquipmentDataModel {
     }
 }
 
+class AcessoryDataModel extends RollableDataModel {
+    static defineSchema() {
+        return {
+            ...super.defineSchema(),
+            type: new NumberField({ integer: true, initial: EquipmentType.ACESSORY, label: "S0.Tipo" }),
+        };
+    }
+}
+
 class VehicleDataModel extends RollableDataModel {
     static defineSchema() {
         return {
@@ -149,7 +158,8 @@ const EquipmentTypeStringMap = {
     [equipmentTypeIdToTypeString(EquipmentType.PROJECTILE)]: ProjectileDataModel,
     [equipmentTypeIdToTypeString(EquipmentType.ARMOR)]: ArmorDataModel,
     [equipmentTypeIdToTypeString(EquipmentType.VEHICLE)]: VehicleDataModel,
-    [equipmentTypeIdToTypeString(EquipmentType.SUBSTANCE)]: SubstanceDataModel
+    [equipmentTypeIdToTypeString(EquipmentType.SUBSTANCE)]: SubstanceDataModel,
+    [equipmentTypeIdToTypeString(EquipmentType.ACESSORY)]: AcessoryDataModel
 };
 
 export function equipmentParseData(data) {
@@ -167,5 +177,6 @@ export async function createEquipmentDataModels() {
         Armor: ArmorDataModel,
         Vehicle: VehicleDataModel,
         Substance: SubstanceDataModel,
+        Acessory: AcessoryDataModel,
     };
 }

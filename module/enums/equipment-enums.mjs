@@ -32,6 +32,7 @@ export const EquipmentType = Object.freeze({
     PROJECTILE: 3,
     VEHICLE: 4,
     SUBSTANCE: 5,
+    ACESSORY: 6,
 });
 
 export function equipmentTypeIdToTypeString(type) {
@@ -41,6 +42,7 @@ export function equipmentTypeIdToTypeString(type) {
         case EquipmentType.ARMOR: return 'Armor'
         case EquipmentType.VEHICLE: return 'Vehicle'
         case EquipmentType.SUBSTANCE: return 'Substance'
+        case EquipmentType.ACESSORY: return 'Acessory'
     }
     return undefined;
 }

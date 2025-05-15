@@ -9,8 +9,11 @@ export const openShortcutMacroData = {
     }
   },
   name: "Abrir Atalhos",
+  ownership: {
+    default: CONST.USER_ROLES.PLAYER
+  },
   command: `
-const targetPage = 5;
+const targetPage = 7;
 ${verifyAndReturnSelectedToken}
 ${verifyAndReturnActor}
 actor.sheet.render(true);

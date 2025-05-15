@@ -81,6 +81,12 @@ export class TraitRepository {
             requirement: 'Estrategista ou Inspirador'
         },
         {
+            id: '80',
+            name: 'Engenharia Veloz',
+            xp: 6,
+            description: 'Engenheiros extremamente habilidosos conseguem fabricar SuperEquipamentos em tempo recorde, seja pelo fato de já conhecerem todo o passo-a-passo do objeto a ser construído, ou por terem uma epifania durante o processo. Para construir qualquer SuperEquipamento considere que o tempo entre os testes de fabricação são reduzidos pela metade.'
+        },
+        {
             id: '13',
             name: 'Hipertimesia',
             xp: 6,
@@ -520,7 +526,7 @@ export class TraitRepository {
             effects: [
                 { key: CharacteristicType.OVERLOAD, value: -1, typeOfValue: EffectChangeValueType.FIXED },
             ]
-        },
+        }
     ];
 
     static #loadedGoodFromPack = [];

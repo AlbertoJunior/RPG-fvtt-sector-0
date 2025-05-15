@@ -8,6 +8,9 @@ export const getInvalidActorJsonMacroData = {
         }
     },
     name: "Pegar Json de Ator com erro",
+    ownership: {
+        default: CONST.USER_ROLES.GAMEMASTER
+    },
     img: "icons/svg/explosion.svg",
     type: "script",
     command: `

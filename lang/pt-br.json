@@ -246,9 +246,11 @@
             "Projectile": "Arma de Projeção",
             "Substance": "Substância",
             "Vehicle": "Veículo",
-            "Trait": "Traço"
+            "Trait": "Traço",
+            "Acessory": "Acessório"
         }
     },
+
     "DOCUMENT": {
         "ChatMessages": "Mensagens",
         "Combats": "Combates",

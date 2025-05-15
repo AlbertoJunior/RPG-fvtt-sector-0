@@ -8,7 +8,6 @@ import { VirtuesRepository } from "../../repository/virtues-repository.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
 import { RollVirtue } from "../../core/rolls/virtue-roll.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
