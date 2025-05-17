@@ -39,6 +39,8 @@
         "Modificadores": "Modificadores",
         "Atalhos": "Atalhos",
         "Atalho": "Atalho",
+        "Atuacao": "Atuação",
+        "Qualidade": "Qualidade",
 
         "Realizar_Teste": "Realizar Teste",
         "Rolagens_Player": "Modo de Rolagem",
@@ -184,8 +186,7 @@
         "Selecione_Um_Item": "Selecione um item para ver detalhes.",
         "Filtrar_Por_Nome": "Filtrar por nome...",
         "Selecionar_Item": "Selecionar Item",
-        "Pergunta_Usar_Item": "Usar o Item?",
-        "Pergunta_Realizar_Acao": "Tem certeza que deseja realizar essa ação?",
+
         "Expandir_Contrair": "Expandir/Contrair",
         "Contrair_Expandir": "Contrair/Expandir",
         "Perseveranca_Utilizada": "Perseverança utilizada",
@@ -232,7 +233,22 @@
         "Pontos_De_Movimento_Atuais": "Pontos de Movimento atuais",
         
         "Criar_Macro": "Criar Macro",
-        "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa."
+        "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa.",
+
+        "NPC": {
+            "Principais_Habilidades": "Principais Habilidades",
+            "Horrivel": "Horrível",
+            "Ruim": "Ruim",
+            "Bom": "Bom",
+            "Normal": "Normal",
+            "Excepcional": "Excepcional"
+        },
+
+        "Pergunta": {
+            "Usar_Item": "Usar o Item?",
+            "Realizar_Acao": "Tem certeza que deseja realizar essa ação?",
+            "Ocultar": "Ocultar?"
+        }
     },
     "TYPES": {
         "Actor": {

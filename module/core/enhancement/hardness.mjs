@@ -1,6 +1,6 @@
 import { ICONS_PATH } from "../../constants.mjs";
 import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/actor-enhancement-field.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
@@ -14,7 +14,7 @@ const hardnessEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: CharacteristicType.VITALITY.TOTAL, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: BaseActorCharacteristicType.VITALITY.TOTAL, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
     EnhancementEffectField._toJson(

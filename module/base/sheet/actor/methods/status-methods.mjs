@@ -1,5 +1,5 @@
 import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
@@ -30,11 +30,11 @@ function mountLifeCharacteristicToUpdate(event) {
     const parentElement = event.currentTarget.parentElement;
     return [
         {
-            systemCharacteristic: CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
+            systemCharacteristic: BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
             value: parentElement.querySelectorAll('.S0-superficial').length
         },
         {
-            systemCharacteristic: CharacteristicType.VITALITY.LETAL_DAMAGE,
+            systemCharacteristic: BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE,
             value: parentElement.querySelectorAll('.S0-letal').length
         },
     ];
@@ -105,11 +105,11 @@ const mapRemove = {
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
+                systemCharacteristic: BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.VITALITY.LETAL_DAMAGE,
+                systemCharacteristic: BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE,
                 value: 0
             },
         ];
@@ -127,11 +127,11 @@ const mapRemove = {
     health: async (actor, event) => {
         const keysToUpdate = [
             {
-                systemCharacteristic: CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
+                systemCharacteristic: BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE,
                 value: 0
             },
             {
-                systemCharacteristic: CharacteristicType.VITALITY.LETAL_DAMAGE,
+                systemCharacteristic: BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE,
                 value: 0
             },
         ];

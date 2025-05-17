@@ -6,6 +6,17 @@ export class DialogUtils {
     static presetDialogRender(html, params = {}) {
         const div = html[0].parentElement;
         div.classList.add('S0-content');
+        if (params.content) {
+            const keys = Object.keys(params.content);
+            for (const key of keys) {
+                div.style[key] = params.content[key];
+            }
+        }
+
+        const firtsChild = div.children[0];
+        if (firtsChild) {
+            firtsChild.classList.add('S0-page-transparent');
+        }
 
         this.#setupHeaderParams(div, params);
         this.#setupDialogButtons(div);

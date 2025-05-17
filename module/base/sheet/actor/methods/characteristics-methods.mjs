@@ -1,6 +1,6 @@
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
-import { CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 
 export async function characteristicOnClick(event, actor) {
@@ -63,7 +63,7 @@ async function handleOtherwise(actor, systemCharacteristic, characteristicId, le
     if (characteristicId == CharacteristicType.ATTRIBUTES.STAMINA.id) {
         params.push(
             {
-                systemCharacteristic: CharacteristicType.VITALITY.TOTAL,
+                systemCharacteristic: BaseActorCharacteristicType.VITALITY.TOTAL,
                 value: ActorUtils.calculateVitalityByUpAttribute(actor, level)
             }
         );

@@ -7,7 +7,7 @@ import { AbilityRepository } from "../../repository/ability-repository.mjs";
 import { VirtuesRepository } from "../../repository/virtues-repository.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
 import { RollVirtue } from "../../core/rolls/virtue-roll.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
@@ -143,11 +143,11 @@ export class ActorRollDialog {
                         label: localize('Nucleo'),
                     },
                     {
-                        id: CharacteristicType.BOUNTY.id,
+                        id: BaseActorCharacteristicType.BOUNTY.id,
                         label: localize('Nivel_De_Procurado'),
                     },
                     {
-                        id: CharacteristicType.INFLUENCE.id,
+                        id: BaseActorCharacteristicType.INFLUENCE.id,
                         label: localize('Influencia'),
                     },
                     {

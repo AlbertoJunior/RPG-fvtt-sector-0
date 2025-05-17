@@ -5,7 +5,7 @@ import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
 import { EquipmentType } from "../../../enums/equipment-enums.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
-import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { SYSTEM_ID } from "../../../constants.mjs";
@@ -39,7 +39,7 @@ class Setor0ActorSheet extends ActorSheet {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["setor0OSubmundo", "sheet", "actor"],
+            classes: [SYSTEM_ID, "sheet", "actor"],
             template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
             width: 600,
             height: 880,
@@ -236,8 +236,8 @@ class Setor0ActorSheet extends ActorSheet {
         select('sobrecarga', CharacteristicType.OVERLOAD);
         select('vida', CharacteristicType.LIFE);
 
-        let letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
-        let superFicialDamage = getObject(actor, CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
+        let letalDamage = getObject(actor, BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        let superFicialDamage = getObject(actor, BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
         html.find('#vitalidade .S0-characteristic-temp').each((index, item) => {
             if (superFicialDamage > 0) {
                 item.classList.add('S0-superficial');
@@ -354,5 +354,8 @@ export async function actorTemplatesRegister() {
 
 export async function registerActor() {
     await Actors.unregisterSheet("core", ActorSheet);
-    await Actors.registerSheet(SYSTEM_ID, Setor0ActorSheet, { makeDefault: true });
+    await Actors.registerSheet(SYSTEM_ID, Setor0ActorSheet, {
+        types: ["Player"],
+        makeDefault: true
+    });
 }

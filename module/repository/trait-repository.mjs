@@ -1,4 +1,4 @@
-import { CharacteristicType } from "../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../enums/characteristic-enums.mjs";
 import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
 
 export class TraitRepository {
@@ -186,7 +186,7 @@ export class TraitRepository {
             xp: 12,
             description: 'Para a sua estatura, você possui muito mais músculos e/ou gordura que a maioria dos outros seres. Essa quantia anormal de massa lhe deixa extremamente evidente em locais públicos, porém lhe confere dois níveis a mais de Vitalidade e também +2 dados em testes de Força para carregar, empurrar, puxar e segurar coisas ou seres.',
             effects: [
-                { key: CharacteristicType.VITALITY.TOTAL, value: 2, typeOfValue: EffectChangeValueType.FIXED },
+                { key: BaseActorCharacteristicType.VITALITY.TOTAL, value: 2, typeOfValue: EffectChangeValueType.FIXED },
             ]
         },
         {

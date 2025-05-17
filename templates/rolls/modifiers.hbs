@@ -18,6 +18,30 @@
         </select>
     </div>
 
+    {{#if canBeOverload}}
+    <div class="form-group">
+        <label for="{{uuid}}.overload" style="flex:1;">{{localize 'S0.Sobrecarga'}}:</label>
+        <input id="{{uuid}}.overload" name="overload" type="number" style="flex:1;" value="0" max="5" min="0">
+    </div>
+    {{/if}}
+
+    {{#if canBePenalty}}
+    <div class="form-group">
+        <label for="{{uuid}}.penalty" style="flex:1;">{{localize 'S0.Penalidade'}}:</label>
+        <input id="{{uuid}}.penalty" name="penalty" type="number" style="flex:1;" value="0" min="0">
+    </div>
+    {{/if}}
+
+    <div class="form-group">
+        <label for="{{uuid}}.bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
+        <input id="{{uuid}}.bonus" name="bonus" type="number" style="flex:1;" value="0">
+    </div>
+
+    <div class="form-group">
+        <label for="{{uuid}}.automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
+        <input id="{{uuid}}.automatic" name="automatic" type="number" style="flex:1;" value="0" min="0">
+    </div>
+
     {{#if (operators 'or' canBeHalf canBeSpecialist)}}
     <div class="form-group">
         {{#if canBeHalf}}
@@ -35,14 +59,6 @@
         {{/if}}
     </div>
     {{/if}}
-
-    <div class="form-group">
-        <label for="{{uuid}}.bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
-        <input id="{{uuid}}.bonus" name="bonus" type="number" style="flex:1;" value="0">
-
-        <label for="{{uuid}}.automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
-        <input id="{{uuid}}.automatic" name="automatic" type="number" style="flex:1;" value="0">
-    </div>
 
     <hr>
 

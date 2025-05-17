@@ -131,7 +131,7 @@ async function deactivedEffectSendOnChat(effect, actor) {
 async function verifyIsGmAndDefineShowChat(message, actor) {
     if (game.user.isGM) {
         ConfirmationDialog.open({
-            message: "Ocultar?",
+            message: localize("Pergunta.Ocultar"),
             onCancel: async () => {
                 await ChatCreator._sendToChat(actor, message);
             },

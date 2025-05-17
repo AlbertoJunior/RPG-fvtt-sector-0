@@ -1,6 +1,26 @@
-export const CharacteristicType = Object.freeze({
+
+export const BaseActorCharacteristicType = Object.freeze({
     NAME: { id: 'name', system: 'system.name' },
     MORPHOLOGY: { id: 'morphology', system: 'system.morfologia' },
+    DISTRICT: { id: 'bairro', system: 'system.bairro' },
+    BACKGROUND: {
+        id: 'background',
+        system: 'system.background',
+        ASSIGNMENT: { id: 'assignment', system: 'system.background.assignment' },
+    },
+    BOUNTY: { id: 'nivel_de_procurado', system: 'system.nivel_de_procurado' },
+    INFLUENCE: { id: 'influencia', system: 'system.influencia' },
+    VITALITY: {
+        id: 'vitalidade',
+        system: 'system.vitalidade',
+        TOTAL: { id: 'vitalidade_total', system: 'system.vitalidade.total' },
+        SUPERFICIAL_DAMAGE: { id: 'vitalidade_dano_superficial', system: 'system.vitalidade.dano_superficial' },
+        LETAL_DAMAGE: { id: 'vitalidade_dano_letal', system: 'system.vitalidade.dano_letal' },
+    },
+});
+
+export const CharacteristicType = Object.freeze({
+    NAME: { id: 'name', system: 'system.name' },
     CORE: { id: 'core', system: 'system.nucleo' },
     OVERLOAD: { id: 'overload', system: 'system.sobrecarga' },
     LIFE: { id: 'vida', system: 'system.vida' },
@@ -78,13 +98,6 @@ export const CharacteristicType = Object.freeze({
     },
     ENHANCEMENT_ALL: { id: 'enhancement_all', system: 'system.aprimoramentos' },
     ENHANCEMENT: { id: 'enhancement', system: 'system.aprimoramentos.aprimoramento' },
-    VITALITY: {
-        id: 'vitalidade',
-        system: 'system.vitalidade',
-        TOTAL: { id: 'vitalidade_total', system: 'system.vitalidade.total' },
-        SUPERFICIAL_DAMAGE: { id: 'vitalidade_dano_superficial', system: 'system.vitalidade.dano_superficial' },
-        LETAL_DAMAGE: { id: 'vitalidade_dano_letal', system: 'system.vitalidade.dano_letal' },
-    },
     BONUS: {
         id: 'bonus',
         system: 'system.bonus',
@@ -143,9 +156,42 @@ export const CharacteristicType = Object.freeze({
             system: 'system.experiencia.usada',
         }
     },
-    BOUNTY: { id: 'nivel_de_procurado', system: 'system.nivel_de_procurado' },
-    INFLUENCE: { id: 'influencia', system: 'system.influencia' },
     SIMPLE: { id: '', system: 'system' },
+});
+
+export const NpcCharacteristicType = Object.freeze({
+    QUALITY: {
+        id: 'qualidade',
+        system: 'system.qualidade',
+    },
+    SKILLS: {
+        id: 'habilidades',
+        system: 'system.habilidades',
+        PRIMARY: {
+            id: 'primaria',
+            system: 'system.habilidades.primaria',
+            VALUE: { system: 'system.habilidades.primaria.valor' },
+            SKILL_NAME: { system: 'system.habilidades.primaria.habilidade' },
+        },
+        SECONDARY: {
+            id: 'secundaria',
+            system: 'system.habilidades.secundaria',
+            VALUE: { system: 'system.habilidades.secundaria.valor' },
+            SKILL_NAME: { system: 'system.habilidades.secundaria.habilidade' },
+        },
+        TERTIARY: {
+            id: 'terciaria',
+            system: 'system.habilidades.terciaria',
+            VALUE: { system: 'system.habilidades.terciaria.valor' },
+            SKILL_NAME: { system: 'system.habilidades.terciaria.habilidade' },
+        },
+        QUATERNARY: {
+            id: 'quaternaria',
+            system: 'system.habilidades.quaternaria',
+            VALUE: { system: 'system.habilidades.quaternaria.valor' },
+            SKILL_NAME: { system: 'system.habilidades.quaternaria.habilidade' },
+        },
+    }
 });
 
 export const CharacteristicTypeMap = Object.fromEntries(

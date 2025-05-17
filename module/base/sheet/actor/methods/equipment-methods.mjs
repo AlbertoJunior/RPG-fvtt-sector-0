@@ -65,7 +65,7 @@ class EquipmentHandleEvents {
         }
 
         ConfirmationDialog.open({
-            message: localize('Pergunta_Usar_Item'),
+            message: localize('Pergunta.Usar_Item'),
             onConfirm: () => {
                 const actualValue = getObject(equipment, EquipmentCharacteristicType.QUANTITY);
                 const newValue = Math.max(0, actualValue - 1);

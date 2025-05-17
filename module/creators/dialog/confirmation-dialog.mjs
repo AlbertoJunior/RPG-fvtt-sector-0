@@ -34,7 +34,7 @@ export class ConfirmationDialog {
 
     static async #mountContent(message, title) {
         const data = {
-            title: title || localize("Pergunta_Realizar_Acao"),
+            title: title || localize("Pergunta.Realizar_Acao"),
             message
         }
         return await renderTemplate("systems/setor0OSubmundo/templates/others/confirmation-dialog.hbs", data);

@@ -20,6 +20,12 @@
         </div>
 
         <div class="S0-container">
+            <label for="assignment" style="display: block; margin: 4px">{{ localize 'S0.Atuacao' }}</label>
+            <input id="assignment" name="system.background.assignment" type="text" rows="5" style="resize: block;"
+                placeholder="{{ localize 'S0.Atuacao' }}" value="{{actor.system.background.assignment}}">
+        </div>
+
+        <div class="S0-container">
             <label for="biography" style="display: block; margin: 4px">{{ localize 'S0.Biografia' }}</label>
             <textarea id="biography" name="system.background.biography" type="text" rows="5" style="resize: block;"
                 placeholder="{{ localize 'S0.Biografia' }}">{{actor.system.background.biography}}</textarea>

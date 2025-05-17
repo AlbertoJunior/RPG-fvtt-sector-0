@@ -1,4 +1,4 @@
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { MorphologyRepository } from "../../repository/morphology-repository.mjs";
 
@@ -31,8 +31,8 @@ export class ActorUtils {
     }
 
     static getDamage(actor) {
-        const superficial = getObject(actor, CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
-        const letal = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        const superficial = getObject(actor, BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
+        const letal = getObject(actor, BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
         return superficial + letal;
     }
 
@@ -42,9 +42,9 @@ export class ActorUtils {
 
     static calculatePenalty(actor) {
         const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA) || 0;
-        const letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        const letalDamage = getObject(actor, BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
         const bonusPenalty = getObject(actor, CharacteristicType.BONUS.DAMAGE_PENALTY) || 0;
-        const sintheticBonus = getObject(actor, CharacteristicType.MORPHOLOGY) == MorphologyRepository.TYPES.SYNTHETIC.id ? 1 : 0;
+        const sintheticBonus = getObject(actor, BaseActorCharacteristicType.MORPHOLOGY) == MorphologyRepository.TYPES.SYNTHETIC.id ? 1 : 0;
 
         const calculateTotal = letalDamage - (stamina + sintheticBonus) + bonusPenalty;
         const safeMinValue = Math.max(calculateTotal, 0);
@@ -132,7 +132,8 @@ export class ActorUtils {
     }
 
     static getAllEnhancements(actor) {
-        return Object.values(getObject(actor, CharacteristicType.ENHANCEMENT_ALL)).filter(enhancement => enhancement.id !== '') || [];
+        const allEnhancements = getObject(actor, CharacteristicType.ENHANCEMENT_ALL) || [];
+        return Object.values(allEnhancements).filter(enhancement => enhancement.id !== '');
     }
 
     static #findEnhancementOnActorById(selectedId, enhancements) {

@@ -23,7 +23,7 @@ export class EquipmentSheet extends ItemSheet {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["setor0OSubmundo", "sheet", "item"],
+            classes: [SYSTEM_ID, "sheet", "item"],
             template: `systems/setor0OSubmundo/templates/items/default.hbs`,
             width: 300,
             height: 500
@@ -132,7 +132,7 @@ export async function equipmentTemplatesRegister() {
 
 export async function registerEquipment() {
     await Items.unregisterSheet("core", ItemSheet);
-    await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
+    await Items.registerSheet(SYSTEM_ID, EquipmentSheet, {
         types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance", "Acessory"],
         makeDefault: true
     });

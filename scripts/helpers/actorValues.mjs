@@ -1,6 +1,6 @@
 import { ActorUtils } from "../../module/core/actor/actor-utils.mjs";
 import { ActorCombatUtils } from "../../module/core/actor/actor-combat-utils.mjs";
-import { CharacteristicType } from "../../module/enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../module/enums/characteristic-enums.mjs";
 import { getObject } from "../utils/utils.mjs";
 
 const map = {
@@ -8,7 +8,7 @@ const map = {
     'pm': (actor) => ActorUtils.calculateMovimentPoints(actor),
     'initiative': (actor) => ActorUtils.calculateInitiative(actor),
     'current_damage': (actor) => ActorUtils.getDamage(actor),
-    'vitality': (actor) => getObject(actor, CharacteristicType.VITALITY.TOTAL),
+    'vitality': (actor) => getObject(actor, BaseActorCharacteristicType.VITALITY.TOTAL),
     'actual_languages': (actor) => ActorUtils.getActualLanguages(actor).length,
     'total_languages': (actor) => ActorUtils.calculateTotalLanguages(actor),
     'total_experience': (actor) => ActorUtils.calculateTotalExperience(actor),
