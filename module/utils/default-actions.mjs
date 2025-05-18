@@ -21,18 +21,37 @@ export class DefaultActions {
     static async processOverloadRoll(actor) {
         const resultRoll = await RollOverload.roll(actor);
         const contentMessage = await RollOverloadMessageCreator.mountContent(resultRoll);
-        ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
+        await ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
     }
 
     static async processLifeRoll(actor) {
         const resultRoll = await RollLife.roll(actor);
         const contentMessage = await RollLifeMessageCreator.mountContent(resultRoll);
-        ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
+        await ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll]);
     }
 
     static async processVirtueRoll(actor, resultRoll, difficulty, mode) {
         const contentMessage = await RollVirtueMessageCreator.mountContent({ resultRoll, difficulty });
-        ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll.roll], mode);
+        await ChatCreator._sendToChatTypeRoll(actor, contentMessage, [resultRoll.roll.roll], mode);
+    }
+
+    static async processSimplefiedRoll(actor, rollInformation) {
+        const { resultRoll, mode } = rollInformation;
+        const { isHalf, ...modifiersWithoutHalf } = rollInformation.modifiers;
+
+        const params = {
+            rolls: resultRoll,
+            abilityInfo: rollInformation.abilityInfo,
+            modifiers: modifiersWithoutHalf,
+            difficulty: rollInformation.difficulty,
+            critic: rollInformation.critic,
+            havePerseverance: true,
+            half: isHalf
+        };
+
+        const rolls = this.#prepareRolls(params.rolls, params, { isSimplified: true });
+        const message = await RollMessageCreator.mountContentSimplifiedRoll(params);
+        await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
 
     static async processCustomRoll(actor, resultRoll, inputParams, rollMessage, mode) {
@@ -50,20 +69,7 @@ export class DefaultActions {
             half: inputParams.half
         }
 
-        const rolls = [];
-
-        const defaultRoll = params.rolls.default.roll;
-        if (defaultRoll != undefined) {
-            const objectRoll = this.#mountOptions(defaultRoll, { ...params, isOverload: false, isCustom: true });
-            rolls.push(objectRoll);
-        }
-
-        const overloadRoll = params.rolls.overload.roll;
-        if (overloadRoll != undefined) {
-            const objectRoll = this.#mountOptions(overloadRoll, { ...params, isOverload: true, isCustom: true });
-            rolls.push(objectRoll);
-        }
-
+        const rolls = this.#prepareRolls(params.rolls, params, { isCustom: true });
         const message = await RollMessageCreator.mountContentCustomRoll(params);
         await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
@@ -80,31 +86,35 @@ export class DefaultActions {
             havePerseverance: ActorUtils.havePerseverance(actor),
         }
 
-        const rolls = [];
-
-        const defaultRoll = params.rolls.default.roll;
-        if (defaultRoll != undefined) {
-            const objectRoll = this.#mountOptions(defaultRoll, { ...params, isOverload: false });
-            rolls.push(objectRoll);
-        }
-
-        const overloadRoll = params.rolls.overload.roll;
-        if (overloadRoll != undefined) {
-            const objectRoll = this.#mountOptions(overloadRoll, { ...params, isOverload: true });
-            rolls.push(objectRoll);
-        }
-
+        const rolls = this.#prepareRolls(params.rolls, params);
         const message = await RollMessageCreator.mountContent(params);
         await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
 
-    static #mountOptions(objectRoll, params) {
-        const { isOverload, difficulty, critic, messageTest, modifiers } = params;
+    static #prepareRolls(rollsObject, params, extraFlags = {}) {
+        const rolls = [];
+        const { default: defaultData, overload: overloadData } = rollsObject;
 
-        const specialist = modifiers?.specialist || false;
-        const isHalf = modifiers?.isHalf || false;
-        const automaticSuccess = modifiers?.automatic;
-        const weapon = modifiers?.weapon;
+        if (defaultData?.roll) {
+            rolls.push(this.#mountOptions(defaultData.roll, { ...params, ...extraFlags, isOverload: false }));
+        }
+
+        if (overloadData?.roll) {
+            rolls.push(this.#mountOptions(overloadData.roll, { ...params, ...extraFlags, isOverload: true }));
+        }
+
+        return rolls;
+    }
+
+    static #mountOptions(objectRoll, params) {
+        const { isOverload, difficulty, critic, messageTest } = params;
+
+        const {
+            specialist = false,
+            isHalf = false,
+            automatic = 0,
+            weapon
+        } = params.modifiers || {};
 
         objectRoll.options = {
             ...objectRoll.options,
@@ -114,7 +124,7 @@ export class DefaultActions {
             messageTest: messageTest,
             specialist: specialist,
             isHalf: isHalf,
-            automatic: automaticSuccess,
+            automatic: automatic,
             weapon: weapon,
         }
         return objectRoll;

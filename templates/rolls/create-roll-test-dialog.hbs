@@ -32,16 +32,16 @@
                 {{/each}}
             </select>
 
-            <label for="specialist">{{localize 'S0.Especialista'}}</label>
-            <input id="specialist" type="checkbox" name="specialist" value="true" {{#if specialist}}checked{{/if}}
+            <label for="{{uuid}}.specialist">{{localize 'S0.Especialista'}}</label>
+            <input id="{{uuid}}.specialist" type="checkbox" name="specialist" value="true" {{#if specialist}}checked{{/if}}
                 {{#unless canEdit}}disabled{{/unless}} />
         </div>
 
         <h3>{{localize 'S0.Outros'}}</h3>
 
         <div class="form-group">
-            <label for="difficulty">{{localize 'S0.Dificuldade'}}:</label>
-            <select class="S0-select" id="difficulty" name="difficulty" {{#unless canEdit}}disabled{{/unless}}>
+            <label for="{{uuid}}.difficulty">{{localize 'S0.Dificuldade'}}:</label>
+            <select class="S0-select" id="{{uuid}}.difficulty" name="difficulty" {{#unless canEdit}}disabled{{/unless}}>
                 {{#forLoop 5 11}}
                 <option value="{{index}}" {{selectIfEq index ../difficulty}}>{{index}}</option>
                 {{/forLoop}}
@@ -49,8 +49,8 @@
         </div>
 
         <div class="form-group">
-            <label for="critic">{{localize 'S0.Critico'}}:</label>
-            <select class="S0-select" id="critic" name="critic" {{#unless canEdit}}disabled{{/unless}}>
+            <label for="{{uuid}}.critic">{{localize 'S0.Critico'}}:</label>
+            <select class="S0-select" id="{{uuid}}.critic" name="critic" {{#unless canEdit}}disabled{{/unless}}>
                 {{#forLoop 5 11}}
                 <option value="{{index}}" {{selectIfEq index ../critic}}>{{index}}</option>
                 {{/forLoop}}
@@ -58,14 +58,14 @@
         </div>
 
         <div class="form-group">
-            <label for="bonus">{{localize 'S0.Bonus'}}</label>
-            <input id="bonus" type="number" name="bonus" value="{{bonus}}" min="0" {{#unless
+            <label for="{{uuid}}.bonus">{{localize 'S0.Bonus'}}</label>
+            <input id="{{uuid}}.bonus" type="number" name="bonus" value="{{bonus}}" min="0" {{#unless
                 canEdit}}disabled{{/unless}} />
         </div>
 
         <div class="form-group">
-            <label for="automatic">{{localize 'S0.Automatico'}}</label>
-            <input id="automatic" type="number" name="automatic" value="{{automatic}}" min="0" {{#unless
+            <label for="{{uuid}}.automatic">{{localize 'S0.Automatico'}}</label>
+            <input id="{{uuid}}.automatic" type="number" name="automatic" value="{{automatic}}" min="0" {{#unless
                 canEdit}}disabled{{/unless}} />
         </div>
     </form>

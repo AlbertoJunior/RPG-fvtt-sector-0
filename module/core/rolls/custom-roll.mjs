@@ -1,10 +1,39 @@
 import { getObject, localize, toKeyLang } from "../../../scripts/utils/utils.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { ActorUtils } from "../actor/actor-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class CustomRoll {
+    static data = Object.freeze({
+        attributes: CustomRoll.#transformOnSet(CharacteristicType.ATTRIBUTES),
+        skills: CustomRoll.#transformOnSet(CharacteristicType.SKILLS),
+        virtues: CustomRoll.#transformOnSet(CharacteristicType.VIRTUES),
+        repertory: CustomRoll.#transformOnSet(CharacteristicType.REPERTORY),
+        others: CustomRoll.#getOthers(),
+    });
+
+    static #transformOnSet(characteristicType) {
+        return new Set(Object.values(characteristicType).filter(o => o.id).filter(Boolean).map(o => o.id));
+    }
+
+    static #getOthers() {
+        return new Set(
+            [
+                BaseActorCharacteristicType.BOUNTY,
+                BaseActorCharacteristicType.INFLUENCE
+            ].map(i => i.id)
+        );
+    }
+
+    static mountData(actor) {
+        const enhancements = new Set(ActorUtils.getAllEnhancements(actor) || []);
+        return {
+            ...CustomRoll.data,
+            enhancements: enhancements
+        };
+    }
+
     static async discoverAndRoll(actor, params) {
         const {
             primary, secondary, tertiary,
@@ -12,15 +41,7 @@ export class CustomRoll {
             bonus, specialist, half
         } = params;
 
-        const attributes = this.#transformOnSet(CharacteristicType.ATTRIBUTES);
-        const skills = this.#transformOnSet(CharacteristicType.SKILLS);
-        const virtues = this.#transformOnSet(CharacteristicType.VIRTUES);
-        const repertory = this.#transformOnSet(CharacteristicType.REPERTORY);
-        const enhancements = new Set(ActorUtils.getAllEnhancements(actor));
-
-        const data = {
-            attributes, skills, virtues, repertory, enhancements
-        }
+        const data = this.mountData(actor);
 
         const primaryValues = this.operateAllPossibilities(actor, data, primary, special_primary);
         const secondaryValues = this.operateAllPossibilities(actor, data, secondary, special_secondary);
@@ -68,10 +89,6 @@ export class CustomRoll {
         }
     }
 
-    static #transformOnSet(characteristicType) {
-        return new Set(Object.values(characteristicType).filter(o => o.id).filter(Boolean).map(o => o.id));
-    }
-
     static operateAllPossibilities(actor, params, characteristic, special) {
         if (characteristic === 'zero' || characteristic === 0) {
             return { label: 'Zero', value: 0 };
@@ -82,6 +99,7 @@ export class CustomRoll {
             () => this.#tryGetValue(actor, params.skills, characteristic, ActorUtils.getAbilityValue),
             () => this.#tryGetValue(actor, params.virtues, characteristic, ActorUtils.getVirtueLevel),
             () => this.#tryGetValue(actor, params.repertory, characteristic, this.#repertoryValueGetter),
+            () => this.#tryGetValue(actor, params.others, characteristic, this.#baseValueGetter),
             () => this.#tryEnhancement(actor, params.enhancements, characteristic, special)
         ];
 
@@ -105,6 +123,10 @@ export class CustomRoll {
 
     static #repertoryValueGetter(actor, characteristic) {
         return getObject(actor, CharacteristicType.REPERTORY)[characteristic] || 0;
+    }
+
+    static #baseValueGetter(actor, characteristic) {
+        return getObject(actor, CharacteristicType.SIMPLE)[characteristic] || 0;
     }
 
     static #tryEnhancement(actor, enhancements, characteristic, special) {

@@ -1,0 +1,17 @@
+<div style="display: flex; align-items: center; column-gap: 10px;">
+    <label style="flex: 1;">{{name}}:</label>
+
+    <select class="S0-select" style="flex: 2; min-height: 28px;" name="system.habilidades.{{system}}.habilidade"
+        {{#unless editable}}disabled{{/unless}}>
+        {{#each (fetchRepository 'ability')}}
+        <option value="{{id}}" {{selectIfEq ../actualSkill id }}>{{localize label}}</option>
+        {{/each}}
+    </select>
+
+    {{#if canRoll}}
+    <a class="S0-icon-rotate" style="font-size: var(--font-size-16);" data-action="roll" data-characteristic="skill"
+        data-subcharacteristic="{{system}}">
+        <i class="fas fa-dice-d10"></i>
+    </a>
+    {{/if}}
+</div>

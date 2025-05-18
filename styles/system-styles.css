@@ -873,6 +873,11 @@ button.S0-roll-result:not([disabled]):hover {
     margin-block: 0.4em;
 }
 
+.S0-message-content .S0-container-2-column label {
+    display: block;
+    text-align: center;
+}
+
 .S0-message-simple-text {
     font-family: var(--font-monospace);
     text-align: justify;
@@ -1600,6 +1605,10 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-selected {
     background-color: var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-characteristic {
+    border-color: var(--primary-color-alpha);
 }
 
 .S0-page-transparent .S0-characteristic.S0-letal {

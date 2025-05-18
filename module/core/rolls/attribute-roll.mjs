@@ -19,8 +19,8 @@ export class RollAttribute {
         const diceAmountSubtractedPenalty = Math.max(diceAmountPlusBonus - penalty, 0);
 
         let diceAmountWithWeapon = diceAmountSubtractedPenalty;
-        if (diceAmountSubtractedPenalty > 0) {
-            const weaponDamage = Number(weapon?.damage) || 0
+        if (diceAmountSubtractedPenalty > 0 && weapon) {
+            const weaponDamage = Number(weapon.damage) || 0;
             diceAmountWithWeapon += weaponDamage;
         }
 
@@ -63,9 +63,10 @@ export class RollAttribute {
         return this.roll(actor, params);
     }
 
-    static async rollByRollableTestsWithWeapon(actor, rollable, weapon) {
+    static async rollByRollableTestsWithWeapon(actor, rollable, weapon, half) {
         const params = {
             ...this.#mountParamsByRollable(rollable),
+            isHalf: half,
             weapon: {
                 damage: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
                 true_damage: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE)

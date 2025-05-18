@@ -74,11 +74,17 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * 🛠️ Ficha.
 * 🚧 SuperEquipamentos.
 * ✅ Rolagem pelo Equipamento.
-* 🛠️ Rolagem dividida pelo Equipamento.
+* ✅ Rolagem dividida pelo Equipamento.
 * ✅ Atalhos customizados por Equipamento.
+
+### Personagens Não Jogáveis (PNJ)
+* ✅ Ficha.
+* ✅ Rolagem.
+* ✅ Converter PJ para PNJ.
 
 ### Rolagens
 * ✅ Rolagem totalmente customizada.
+* ✅ Rolagem simplificada (Personagens Não Jogáveis).
 * ✅ Teste com Rolagem Dividida.
 * ✅ Atributos + Habilidade.
 * ✅ Virtudes.

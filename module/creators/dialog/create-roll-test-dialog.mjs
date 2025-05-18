@@ -100,6 +100,7 @@ export class CreateRollableTestDialog {
 
     static async #mountContent(rollableData, needConfirmation, buttons) {
         const data = {
+            uuid: `form_dialog.${randomId(10)}`,
             canEdit: needConfirmation,
             attributes: AttributeRepository._getItems(),
             abilities: AbilityRepository._getItems(),

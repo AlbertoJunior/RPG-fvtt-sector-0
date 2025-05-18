@@ -90,18 +90,20 @@ class EquipmentSheetItemRollHandle {
     }
 
     static async roll(item, event) {
-        const rollId = event.currentTarget.dataset.itemId;
-        this.rollById(item, rollId);
+        const dataset = event.currentTarget.dataset;
+        const rollId = dataset.itemId;
+        this.rollById(item, rollId, dataset.type == 'half');
     }
 
-    static async rollById(item, rollId) {
+    static async rollById(item, rollId, divided) {
         const possibleTests = this.#getItemTests(item);
         const rollTest = possibleTests.find(test => test.id == rollId);
         if (!rollTest) {
             return;
         }
 
-        const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(item.actor, rollTest, item);
+        const half = divided || false;
+        const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(item.actor, rollTest, item, half);
         await DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
 

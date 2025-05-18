@@ -1,5 +1,6 @@
 import { actorTemplatesRegister } from "../base/sheet/actor/actor-sheet-template.mjs";
 import { equipmentTemplatesRegister } from "../base/sheet/equipment/equipment-sheet.mjs";
+import { npcTemplatesRegister } from "../base/sheet/npc/npc-sheet.mjs";
 import { REGISTERED_TEMPLATES, SYSTEM_ID } from "../constants.mjs";
 
 export async function registerTemplates() {
@@ -19,6 +20,8 @@ async function loadAuxiliaryTemplates() {
         { call: "buttons-dialog", path: "others/buttons-dialog" },
         { call: "roll-chat-mode", path: "others/roll-chat-mode" },
         { call: "buttons-float-menu", path: "others/list-default-buttons-float-menu" },
+        { call: "core-roll-message", path: "others/core-roll-message" },
+        { call: "core-roll-message-invalid", path: "others/core-roll-message-invalid" },
     ];
 
     const loadedAuxiliaryTemplates = await loadAndRegisterTemplates(configTemplates);
@@ -30,7 +33,8 @@ async function loadAuxiliaryTemplates() {
 
 async function loadSheetTemplates() {
     const sheetTemplates = [
-        { model: 'Actor', method: actorTemplatesRegister() },
+        { model: 'Player', method: actorTemplatesRegister() },
+        { model: 'Npc', method: npcTemplatesRegister() },
         { model: 'Items', method: equipmentTemplatesRegister() },
     ];
 

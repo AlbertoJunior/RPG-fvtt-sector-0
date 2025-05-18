@@ -1,4 +1,6 @@
 import { getObject, onArrayRemove } from "../../../../../scripts/utils/utils.mjs";
+import { NpcConversor } from "../../../../core/npc/npc-conversor.mjs";
+import { NpcDialog } from "../../../../creators/dialog/npc-dialog.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
@@ -27,6 +29,12 @@ class NetworkHandleEvents {
         if (!fetchedActor) {
             return;
         }
-        fetchedActor.sheet?.render(true, { editable: false });
+
+        if (fetchedActor.type == "Player") {
+            const npcFromActor = NpcConversor.actorToNpc(fetchedActor);
+            NpcDialog.open(npcFromActor);
+        } else {
+            fetchedActor.sheet?.render(true, { editable: false });
+        }
     }
 }

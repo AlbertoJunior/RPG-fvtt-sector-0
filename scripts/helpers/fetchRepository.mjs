@@ -10,6 +10,7 @@ import { AttributeRepository } from "../../module/repository/attribute-repositor
 import { RepertoryRepository } from "../../module/repository/repertory-repository.mjs";
 import { VirtuesRepository } from "../../module/repository/virtues-repository.mjs";
 import { FameRepository } from "../../module/repository/fame-repository.mjs";
+import { NpcQualityRepository } from "../../module/repository/npc-quality-repository.mjs";
 
 const map = {
     'morphology': MorphologyRepository._getItems(),
@@ -23,10 +24,12 @@ const map = {
     'repertory': RepertoryRepository._getItems(),
     'virtue': VirtuesRepository._getItems(),
     'fame': FameRepository._getItems(),
+    'npc-fame': FameRepository._getItemsNpc(),
+    'npc-quality': NpcQualityRepository._getItems(),
     'equipment-types': getActorEquipmentTypes,
 }
 
-function getActorEquipmentTypes() {            
+function getActorEquipmentTypes() {
     return validEquipmentTypes().map(item => {
         const type = equipmentTypeIdToTypeString(item);
         return {

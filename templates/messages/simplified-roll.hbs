@@ -1,20 +1,10 @@
 <div class="S0-message-content">
-    <h4 style="text-align: center;">{{ localize attr1 }} + {{ localize attr2 }}</h4>
+    <h4 style="text-align: center;">{{ localize testName }}</h4>
     <hr>
-
-    {{#if haveMessageTest}}
-    <p class="S0-hide-long-text" style="text-align: center;">{{ messageTest }}</p>
-    <hr>
-    {{/if}}
 
     {{#if haveResult}}
 
     <div class="dice-tooltip S0-container-contract">
-        <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
-        <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
-
-        <hr>
-
         {{> core-roll-message this}}
     </div>
 

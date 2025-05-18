@@ -14,6 +14,7 @@ export async function loadHandlebarsHelpers() {
         "operators.mjs",
         "htmlUtils.mjs",
         "parse.mjs",
+        "selectIfHave.mjs",
     ];
 
     const resultLog = await Promise.all(helperFiles.map(async (file) => {

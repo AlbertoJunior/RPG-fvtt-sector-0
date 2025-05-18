@@ -16,4 +16,8 @@ export class FameRepository {
                 };
             });
     }
+
+    static _getItemsNpc() {
+        return FameRepository._getItems().filter(item => item.id != 'nucleo')
+    }
 }

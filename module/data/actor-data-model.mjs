@@ -5,24 +5,49 @@ import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../core/actor/actor-utils.mjs";
 import { FlagsUtils } from "../utils/flags-utils.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
+import { NpcSkill } from "../field/npc-fields.mjs";
+import { NpcQualityRepository } from "../repository/npc-quality-repository.mjs";
 
-const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
+const { NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
-class ActorDataModel extends foundry.abstract.TypeDataModel {
-    prepareDerivedData() {
-        super.prepareDerivedData();
-    }
-
+class BaseActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
             name: new StringField({ required: true, label: "S0.Nome" }),
             morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: 'androide' }),
             bairro: new StringField({ required: true, label: "S0.Bairro", initial: 'alfiran' }),
             background: new SchemaField({
+                assignment: new StringField({ required: true, label: "S0.Atuacao" }),
                 age: new NumberField({ required: false, blank: true }),
-                biography: new HTMLField({ required: false, blank: true }),
-                personality: new NumberField({ required: false, blank: true }),
+                biography: new StringField({ required: false, blank: true, nullable: true }),
             }),
+            vitalidade: new SchemaField({
+                total: new NumberField({ integer: true, initial: 6 }),
+                dano_superficial: new NumberField({ integer: true, initial: 0 }),
+                dano_letal: new NumberField({ integer: true, initial: 0 }),
+            }),
+            nivel_de_procurado: new ActorCharacteristicField("S0.NivelProcurado"),
+            influencia: new ActorCharacteristicField("S0.Influencia"),
+        }
+    }
+
+    get actualVitality() {
+        const total = this.actor.system.vitalidade.total;
+        return {
+            max: total,
+            value: total - ActorUtils.getDamage(this.actor)
+        };
+    }
+}
+
+class ActorDataModel extends BaseActorDataModel {
+    prepareDerivedData() {
+        super.prepareDerivedData();
+    }
+
+    static defineSchema() {
+        return {
+            ...super.defineSchema(),
             atributos: new ActorAttributes({ initial: 1 }),
             repertorio: new SchemaField({
                 aliados: new ActorCharacteristicField("S0.Aliados"),
@@ -32,8 +57,6 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
                 superequipamentos: new ActorCharacteristicField("S0.SuperEquipamentos")
             }),
             virtudes: new ActorVirtues(),
-            nivel_de_procurado: new ActorCharacteristicField("S0.NivelProcurado"),
-            influencia: new ActorCharacteristicField("S0.Influencia"),
             nucleo: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Nucleo" }),
             habilidades: new ActorAbilities(),
             linguas: new ArrayField(new StringField()),
@@ -46,11 +69,6 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
             tracos: new SchemaField({
                 bons: new ArrayField(new ActorTraitField()),
                 ruins: new ArrayField(new ActorTraitField())
-            }),
-            vitalidade: new SchemaField({
-                total: new NumberField({ integer: true, initial: 6 }),
-                dano_superficial: new NumberField({ integer: true, initial: 0 }),
-                dano_letal: new NumberField({ integer: true, initial: 0 }),
             }),
             sobrecarga: new NumberField({ integer: true, initial: 0 }),
             vida: new NumberField({ initial: 8, min: 0, max: 10 }),
@@ -86,16 +104,8 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
         return ActorEquipmentUtils.getActorEquippedArmorItem(this.actor);
     }
 
-    get actualVitality() {
-        const total = this.actor.system.vitalidade.total;
-        return {
-            max: total,
-            value: total - ActorUtils.getDamage(this.actor)
-        };
-    }
-
     get actualProtection() {
-        const armorEquipped = ActorEquipmentUtils.getActorEquippedArmorItem(this.actor);
+        const armorEquipped = this.equipedProtectItem;
         return {
             max: armorEquipped?.resistence || 0,
             value: armorEquipped?.actual_resistance || 0,
@@ -109,10 +119,29 @@ class ActorDataModel extends foundry.abstract.TypeDataModel {
     }
 }
 
-class NPCDataModel extends ActorDataModel {
+class NPCDataModel extends BaseActorDataModel {
+    prepareDerivedData() {
+        super.prepareDerivedData();
+
+        const data = this;
+        const bonusOrDebuff = NpcQualityRepository._getItems().find(quality => quality.id == data.qualidade)?.bonusOrDebuff || 0;
+
+        data.habilidades.primaria.valor = Math.max(7 + bonusOrDebuff, 0);
+        data.habilidades.secundaria.valor = Math.max(5 + bonusOrDebuff, 0);
+        data.habilidades.terciaria.valor = Math.max(3 + bonusOrDebuff, 0);
+        data.habilidades.quaternaria.valor = Math.max(0 + bonusOrDebuff, 0);
+    }
+
     static defineSchema() {
         return {
-            ...super.defineSchema()
+            ...super.defineSchema(),
+            qualidade: new StringField({ required: true, initial: "normal", label: "S0.Nome" }),
+            habilidades: new SchemaField({
+                primaria: new NpcSkill(),
+                secundaria: new NpcSkill(),
+                terciaria: new NpcSkill(),
+                quaternaria: new NpcSkill(),
+            })
         };
     }
 }
@@ -136,7 +165,7 @@ export async function createActorDataModels() {
         { id: 'vitalidade.total', label: 'Vitalidade_Total' },
         { id: 'sobrecarga', label: 'Sobrecarga' },
         { id: 'actualPM', label: 'Pontos_De_Movimento_Atuais' },
-    ])
+    ]);
 
     CONFIG.Actor.trackableAttributes = {
         Player: {
@@ -145,12 +174,12 @@ export async function createActorDataModels() {
         },
         NPC: {
             bar: ["actualVitality", "actualProtection"],
-            value: ["vitalidade.total", "sobrecarga", "actualPM"]
+            value: ["vitalidade.total"]
         }
     };
 
     CONFIG.Actor.dataModels = {
         Player: PlayerDataModel,
         NPC: NPCDataModel
-    }
+    };
 }

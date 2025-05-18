@@ -7,6 +7,7 @@ import { MacroUtils } from "../core/macro/macro-utils.mjs";
 import { registerEquipment } from "../base/sheet/equipment/equipment-sheet.mjs";
 import { registerActor } from "../base/sheet/actor/actor-sheet-template.mjs";
 import { SceneHookHandle } from "./scene.mjs";
+import { registerNpc } from "../base/sheet/npc/npc-sheet.mjs";
 
 export class ReadyHookHandle {
     static async handle() {
@@ -34,6 +35,7 @@ export class ReadyHookHandle {
     static async #sheets() {
         await registerEquipment();
         await registerActor();
+        await registerNpc();
     }
 
     static #effects() {

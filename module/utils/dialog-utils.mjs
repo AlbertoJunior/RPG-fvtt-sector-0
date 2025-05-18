@@ -4,13 +4,18 @@ import { HtmlJsUtils } from "./html-js-utils.mjs";
 
 export class DialogUtils {
     static presetDialogRender(html, params = {}) {
-        const div = html[0].parentElement;
+        const div = html[0]?.parentElement;
+        if (!div) {
+            return null;
+        }
+
         div.classList.add('S0-content');
-        if (params.content) {
-            const keys = Object.keys(params.content);
-            for (const key of keys) {
-                div.style[key] = params.content[key];
-            }
+
+        const paramsContent = params.content;
+        if (paramsContent && typeof paramsContent === 'object') {
+            Object.entries(params.content).forEach(([key, value]) => {
+                div.style[key] = value;
+            });
         }
 
         const firtsChild = div.children[0];
