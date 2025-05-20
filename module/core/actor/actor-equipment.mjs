@@ -72,6 +72,31 @@ export class ActorEquipmentUtils {
         return item;
     }
 
+    static getActorArmorEquippedValues(actor) {
+        const equippedArmor = ActorEquipmentUtils.getActorEquippedArmorItem(actor);
+        if (Boolean(equippedArmor)) {
+            return {
+                max: getObject(equippedArmor, EquipmentCharacteristicType.RESISTANCE) || 0,
+                value: getObject(equippedArmor, EquipmentCharacteristicType.ACTUAL_RESISTANCE) || 0,
+            };
+        } else {
+            return {
+                max: 0,
+                value: 0,
+            };
+        }
+    }
+
+    static getActorArmorEquippedResistence(actor) {
+        const equippedArmor = this.getActorEquippedArmorItem(actor);
+        return getObject(equippedArmor, EquipmentCharacteristicType.RESISTANCE) || 0;
+    }
+
+    static getActorArmorEquippedActualResistence(actor) {
+        const equippedArmor = this.getActorEquippedArmorItem(actor);
+        return getObject(equippedArmor, EquipmentCharacteristicType.ACTUAL_RESISTANCE) || 0;
+    }
+
     static async equip(actor, equipment) {
         await EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.EQUIPPED, true);
     }

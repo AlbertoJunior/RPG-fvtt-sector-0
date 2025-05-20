@@ -247,6 +247,7 @@ class EquipmentHandleEvents {
         }
 
         let resultRoll;
+        TODO('no futuro é ideal remover a utilização do system.')
         if (item.system.isWeapon) {
             resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item);
         } else {

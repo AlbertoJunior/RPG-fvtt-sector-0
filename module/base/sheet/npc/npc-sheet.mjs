@@ -1,18 +1,20 @@
-import { selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
 import { SYSTEM_ID } from "../../../constants.mjs";
 import { BaseActorCharacteristicType } from "../../../enums/characteristic-enums.mjs";
-import { OnEventType, OnEventTypeClickableEvents, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
+import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
 import { DialogUtils } from "../../../utils/dialog-utils.mjs";
-import { FlagsUtils } from "../../../utils/flags-utils.mjs";
-import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { menuHandleMethods } from "../../menu-default-methods.mjs";
 import { ActorUpdater } from "../../updater/actor-updater.mjs";
+import { handleStatusMethods } from "../actor/methods/status-methods.mjs";
+import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
 import { npcRollHandle } from "./methods/npc-roll-methods.mjs";
 
 export async function npcTemplatesRegister() {
     const templates = [
         { path: "npc/skill", call: "npcSkillPartial" },
+        { path: "npc/informations", call: "npcInformations" },
+        { path: "npc/status", call: "npcStatus" },
     ];
 
     return await loadAndRegisterTemplates(templates);
@@ -30,46 +32,40 @@ export const NpcSheetSize = {
     height: 450,
 }
 
-class Setor0NpcSheet extends ActorSheet {
-    #mapEvents = {
-        menu: menuHandleMethods,
-        skill: npcRollHandle,
-        img: {
-            [OnEventType.VIEW]: async (actor, event) => {
-                DialogUtils.showArtWork(actor.name, actor.img, true, actor.uuid);
+class Setor0NpcSheet extends Setor0BaseActorSheet {
+    get mapEvents() {
+        return {
+            menu: menuHandleMethods,
+            skill: npcRollHandle,
+            img: {
+                [OnEventType.VIEW]: async (actor, event) => {
+                    DialogUtils.showArtWork(actor.name, actor.img, true, actor.uuid);
+                }
+            },
+            temporary: handleStatusMethods,
+            characteristic: {
+                [OnEventType.CHARACTERISTIC]: async (actor, event) => {
+                    const dataset = event.currentTarget.dataset;
+                    switch (dataset.type) {
+                        case 'vigor':
+                            selectCharacteristic(event.currentTarget);
+                            const level = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
+                            ActorUpdater._verifyAndUpdateActor(actor, BaseActorCharacteristicType.VITALITY.TOTAL, level + 5);
+                            break;
+                        case 'influencia':
+                            this.#updateCharacteristic(actor, BaseActorCharacteristicType.INFLUENCE, event.currentTarget);
+                            break;
+                        case 'nivel_de_procurado':
+                            this.#updateCharacteristic(actor, BaseActorCharacteristicType.BOUNTY, event.currentTarget);
+                            break;
+                    }
+                }
             }
-        },
-        influencia: {
-            [OnEventType.CHARACTERISTIC]: async (actor, event) => {
-                this.#updateCharacteristic(actor, BaseActorCharacteristicType.INFLUENCE, event.currentTarget);
-            }
-        },
-        nivel_de_procurado: {
-            [OnEventType.CHARACTERISTIC]: async (actor, event) => {
-                this.#updateCharacteristic(actor, BaseActorCharacteristicType.BOUNTY, event.currentTarget);
-            }
-        }
-    };
+        };
+    }
 
     constructor(...args) {
         super(...args);
-        this.currentPage = 1;
-    }
-
-    getData() {
-        const data = super.getData();
-        data.editable = this.isEditable;
-        data.canRoll = this.canRollOrEdit;
-        data.canEdit = this.canRollOrEdit;
-        return data;
-    }
-
-    get isEditable() {
-        return (FlagsUtils.getActorFlag(this.actor, "editable") && this.canRollOrEdit) || false;
-    }
-
-    get canRollOrEdit() {
-        return game.user.isGM || this.actor.isOwner;
     }
 
     static get defaultOptions() {
@@ -84,40 +80,30 @@ class Setor0NpcSheet extends ActorSheet {
 
     activateListeners(html) {
         super.activateListeners(html);
-        this.#setupContentAndHeader(html);
         this.#setupListeners(html);
-    }
-
-    #setupContentAndHeader(html) {
-        HtmlJsUtils.setupContent(html);
-        HtmlJsUtils.setupHeader(html);
+        super.addPageButtonsOnFloatingMenu(html);
+        Setor0BaseActorSheet.presetStatusVitality(html, this.actor);
     }
 
     #setupListeners(html) {
-        const actionsClick = [
-            { selector: `[data-action="${OnEventType.CHARACTERISTIC}"]`, method: this.#onActionClick },
-            ...OnEventTypeClickableEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: this.#onActionClick }))
-        ];
+        [OnEventType.CHARACTERISTIC, ...OnEventTypeClickableEvents]
+            .map(eventType => ({
+                selector: `[data-action="${eventType}"]`,
+                method: super.onActionClick
+            }))
+            .forEach(action => {
+                html.find(action.selector).click(action.method.bind(this, html));
+            });
 
-        actionsClick.forEach(action => {
-            html.find(action.selector).click(action.method.bind(this, html));
-        });
-    }
+        [...OnEventTypeContextualEvents]
+            .map(eventType => ({
+                selector: `[data-action="${eventType}"]`,
+                method: super.onContextualClick
+            }))
+            .forEach(action => {
+                html.find(action.selector).on('contextmenu', action.method.bind(this, html));
+            });
 
-    async #onEvent(action, html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        const method = this.#mapEvents[characteristic]?.[action];
-        if (method) {
-            method(this.actor, event, html);
-        } else {
-            console.warn(`-> [${action}] não existe para: [${characteristic}]`);
-        }
-    }
-
-    async #onActionClick(html, event) {
-        const action = verifyAndParseOnEventType(event.currentTarget.dataset.action, OnMethod.CLICK);
-        this.#onEvent(action, html, event);
     }
 
     #updateCharacteristic(actor, characteristic, target) {

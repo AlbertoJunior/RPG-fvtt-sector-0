@@ -71,7 +71,6 @@ export class RollMessageCreator {
             diceResults.overload, diceResults.default, modifiers.specialist, difficulty, critic, modifiers.automatic
         );
 
-        debugger
         const formule = (diceResults.overload?.length || 0) + (diceResults.default?.length || 0)
 
         const coreContentData = this.mountCoreInformationRoll(diceResults, result, difficulty, critic, half, modifiers, havePerseverance, formule);

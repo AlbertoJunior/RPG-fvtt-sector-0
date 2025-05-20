@@ -11,6 +11,7 @@ import { RepertoryRepository } from "../../module/repository/repertory-repositor
 import { VirtuesRepository } from "../../module/repository/virtues-repository.mjs";
 import { FameRepository } from "../../module/repository/fame-repository.mjs";
 import { NpcQualityRepository } from "../../module/repository/npc-quality-repository.mjs";
+import { EquipmentInfoParser } from "../../module/core/equipment/equipment-info.mjs";
 
 const map = {
     'morphology': MorphologyRepository._getItems(),
@@ -27,6 +28,9 @@ const map = {
     'npc-fame': FameRepository._getItemsNpc(),
     'npc-quality': NpcQualityRepository._getItems(),
     'equipment-types': getActorEquipmentTypes,
+    'equipment-occultability': EquipmentInfoParser.getOccultabilityTypes,
+    'equipment-damage-type': EquipmentInfoParser.getDamageTypes,
+    'equipment-hand-type': EquipmentInfoParser.getHandTypes,
 }
 
 function getActorEquipmentTypes() {

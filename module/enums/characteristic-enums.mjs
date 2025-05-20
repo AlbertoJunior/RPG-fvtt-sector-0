@@ -22,7 +22,7 @@ export const BaseActorCharacteristicType = Object.freeze({
 export const CharacteristicType = Object.freeze({
     NAME: { id: 'name', system: 'system.name' },
     CORE: { id: 'core', system: 'system.nucleo' },
-    OVERLOAD: { id: 'overload', system: 'system.sobrecarga' },
+    OVERLOAD: { id: 'sobrecarga', system: 'system.sobrecarga' },
     LIFE: { id: 'vida', system: 'system.vida' },
     ATTRIBUTES: {
         id: 'atributos',
@@ -167,33 +167,44 @@ export const NpcCharacteristicType = Object.freeze({
     SKILLS: {
         id: 'habilidades',
         system: 'system.habilidades',
+        VALUE: { id: 'valor' },
+        SKILL_NAME: { id: 'nome' },
         PRIMARY: {
             id: 'primaria',
             system: 'system.habilidades.primaria',
             VALUE: { system: 'system.habilidades.primaria.valor' },
-            SKILL_NAME: { system: 'system.habilidades.primaria.habilidade' },
+            SKILL_NAME: { system: 'system.habilidades.primaria.nome' },
         },
         SECONDARY: {
             id: 'secundaria',
             system: 'system.habilidades.secundaria',
             VALUE: { system: 'system.habilidades.secundaria.valor' },
-            SKILL_NAME: { system: 'system.habilidades.secundaria.habilidade' },
+            SKILL_NAME: { system: 'system.habilidades.secundaria.nome' },
         },
         TERTIARY: {
             id: 'terciaria',
             system: 'system.habilidades.terciaria',
             VALUE: { system: 'system.habilidades.terciaria.valor' },
-            SKILL_NAME: { system: 'system.habilidades.terciaria.habilidade' },
+            SKILL_NAME: { system: 'system.habilidades.terciaria.nome' },
         },
         QUATERNARY: {
             id: 'quaternaria',
             system: 'system.habilidades.quaternaria',
             VALUE: { system: 'system.habilidades.quaternaria.valor' },
-            SKILL_NAME: { system: 'system.habilidades.quaternaria.habilidade' },
+            SKILL_NAME: { system: 'system.habilidades.quaternaria.nome' },
         },
     }
 });
 
-export const CharacteristicTypeMap = Object.fromEntries(
+export const CharacteristicTypeMap = Object.freeze(Object.fromEntries(
     Object.entries(CharacteristicType).map(([key, value]) => [value.id, value.system])
+));
+
+export const NpcSkillsMap = Object.freeze(
+    {
+        [NpcCharacteristicType.SKILLS.PRIMARY.id]: NpcCharacteristicType.SKILLS.PRIMARY,
+        [NpcCharacteristicType.SKILLS.SECONDARY.id]: NpcCharacteristicType.SKILLS.SECONDARY,
+        [NpcCharacteristicType.SKILLS.TERTIARY.id]: NpcCharacteristicType.SKILLS.TERTIARY,
+        [NpcCharacteristicType.SKILLS.QUATERNARY.id]: NpcCharacteristicType.SKILLS.QUATERNARY,
+    }
 );

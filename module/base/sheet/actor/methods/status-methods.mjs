@@ -1,4 +1,4 @@
-import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
+import { selectCharacteristic, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { BaseActorCharacteristicType, CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
@@ -51,6 +51,7 @@ const mapContextual = {
 const mapCheck = {
     virtue: async (actor, event) => {
         const itemType = event.currentTarget.dataset.itemType;
+        TODO('no futuro é ideal remover a utilização do system.')
         const characteristicKey = `system.virtudes.${itemType}.used`;
         selectCharacteristic(event.currentTarget);
         const value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;

@@ -66,7 +66,7 @@ export const EquipmentHand = Object.freeze({
 export const DamageType = Object.freeze({
     SUPERFICIAL: 0,
     LETAL: 1,
-    FIRE: 2,
-    ICE: 3,
-    ELETRIC: 4,
+    ELETRIC: 2,
+    FIRE: 3,
+    ICE: 4,
 });

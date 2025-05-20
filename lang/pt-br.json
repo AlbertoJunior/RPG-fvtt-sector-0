@@ -177,6 +177,7 @@
         "Movimento": "Movimento",
         "Iniciativa": "Iniciativa",
         "Penalidade": "Penalidade",
+        "Informacoes": "Informações",
         "Modo_Escuro": "Modo Escuro",
         "Modo_Compacto": "Modo Compacto",
         "Enviar_No_Chat": "Enviar no Chat",
@@ -206,10 +207,6 @@
         "Tipo_Dano": "Tipo de Dano",
         "Efeito_Utilizado": "Efeito Utilizado",
         
-        "Curto_Alcance": "Curto Alcance",
-        "Medio_Alcance": "Médio Alcance",
-        "Longo_Alcance": "Longo Alcance",
-        
         "Padrao": "Padrão",
         "Customizado": "Customizado",
         "Teste_Padrao": "Teste Padrão",
@@ -237,12 +234,39 @@
         "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa.",
 
         "NPC": {
+            "Ver_Ficha": "Ver Ficha",
+
             "Principais_Habilidades": "Principais Habilidades",
             "Horrivel": "Horrível",
             "Ruim": "Ruim",
             "Bom": "Bom",
             "Normal": "Normal",
-            "Excepcional": "Excepcional"
+            "Excepcional": "Excepcional",
+            
+            "Primaria": "Primária",
+            "Secundaria": "Secundária",
+            "Terciaria": "Terciária",
+            "Quaternaria": "Quaternária"
+        },
+
+        "Itens": {
+            "Curto_Alcance": "Curto Alcance",
+            "Medio_Alcance": "Médio Alcance",
+            "Longo_Alcance": "Longo Alcance",
+
+            "Bolso": "Bolso",
+            "Jaqueta": "Jaqueta",
+            "Inocultavel": "Inocultável",
+            
+            "Uma_Mao": "Uma Mão",
+            "Uma_Mao_Meia": "Uma Mão e Meia",
+            "Duas_Maos": "Duas Mãos",
+
+            "Superficial": "Superficial",
+            "Letal": "Letal",
+            "Fogo": "Fogo",
+            "Eletrico": "Elétrico",
+            "Gelo": "Gelo"
         },
 
         "Pergunta": {

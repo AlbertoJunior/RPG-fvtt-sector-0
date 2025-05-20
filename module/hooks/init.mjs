@@ -1,6 +1,6 @@
 import { DOMUtils } from "../utils/dom-listeners.mjs";
 import { createDataModels } from "../utils/models.mjs";
-import { configureSetor0Combat } from "../core/combat/setor0-combat.mjs";
+import { configureSetor0Combat } from "../base/sheet/combat/setor0-combat.mjs";
 import { configureSetor0TokenDocument } from "../core/token/setor0-token.mjs";
 import { loadHandlebarsHelpers } from "../utils/handlerbars-helper.mjs";
 import { registerTemplates } from "../utils/templates.mjs";

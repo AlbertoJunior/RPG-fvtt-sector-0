@@ -23,9 +23,9 @@ export class ChatCreator {
     static #configureWhisperByMode(mode) {
         switch (mode) {
             case "gmroll":
-                return [...ChatMessage.getWhisperRecipients("GM").map(u => u.id), game.user.id];
+                return new Set([...ChatMessage.getWhisperRecipients("GM").map(u => u.id), game.user.id]);
             case "blindroll":
-                return ChatMessage.getWhisperRecipients("GM").map(u => u.id);
+                return new Set(ChatMessage.getWhisperRecipients("GM").map(u => u.id));
             case "selfroll":
                 return [game.user.id];
             default:

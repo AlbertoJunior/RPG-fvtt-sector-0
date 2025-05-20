@@ -1,6 +1,7 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { BaseActorCharacteristicType, CharacteristicType, NpcCharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { NpcQualityRepository } from "../../repository/npc-quality-repository.mjs";
+import { ActorUtils } from "../actor/actor-utils.mjs";
 
 export class NpcConversor {
     static actorToNpc(actor) {
@@ -15,17 +16,19 @@ export class NpcConversor {
                 name: actor.name,
                 img: actor.img,
                 system: {
-                    name: getObject(actor, BaseActorCharacteristicType.NAME),
-                    morfologia: getObject(actor, BaseActorCharacteristicType.MORPHOLOGY),
-                    bairro: getObject(actor, BaseActorCharacteristicType.DISTRICT),
-                    background: getObject(actor, BaseActorCharacteristicType.BACKGROUND),
-                    vitalidade: getObject(actor, BaseActorCharacteristicType.VITALITY),
-                    nivel_de_procurado: getObject(actor, BaseActorCharacteristicType.BOUNTY),
-                    influencia: getObject(actor, BaseActorCharacteristicType.INFLUENCE),
-                    qualidade: countedQuality,
-                    habilidades: finalSkillValues,
-                }
+                    [BaseActorCharacteristicType.NAME.id]: getObject(actor, BaseActorCharacteristicType.NAME),
+                    [BaseActorCharacteristicType.MORPHOLOGY.id]: getObject(actor, BaseActorCharacteristicType.MORPHOLOGY),
+                    [BaseActorCharacteristicType.DISTRICT.id]: getObject(actor, BaseActorCharacteristicType.DISTRICT),
+                    [BaseActorCharacteristicType.BACKGROUND.id]: getObject(actor, BaseActorCharacteristicType.BACKGROUND),
+                    [BaseActorCharacteristicType.VITALITY.id]: getObject(actor, BaseActorCharacteristicType.VITALITY),
+                    [BaseActorCharacteristicType.BOUNTY.id]: getObject(actor, BaseActorCharacteristicType.BOUNTY),
+                    [BaseActorCharacteristicType.INFLUENCE.id]: getObject(actor, BaseActorCharacteristicType.INFLUENCE),
+                    [NpcCharacteristicType.QUALITY.id]: countedQuality,
+                    [NpcCharacteristicType.SKILLS.id]: finalSkillValues,
+                },
+                itemTypes: actor.itemTypes,
             },
+            items: actor.items,
             editable: false,
             canRoll: actor.sheet.canRollOrEdit,
             canEdit: false,
@@ -74,22 +77,25 @@ export class NpcConversor {
 
     static #mountSkills(actor) {
         const skills = Object.entries(getObject(actor, CharacteristicType.SKILLS)).sort((a, b) => b[1] - a[1]);
+
+        const idValue = NpcCharacteristicType.SKILLS.VALUE.id;
+        const idName = NpcCharacteristicType.SKILLS.SKILL_NAME.id;
         return {
-            primaria: {
-                valor: skills[0][1] || 0,
-                habilidade: skills[0][0]
+            [NpcCharacteristicType.SKILLS.PRIMARY.id]: {
+                [idValue]: skills[0][1] || 0,
+                [idName]: skills[0][0] || ''
             },
-            secundaria: {
-                valor: skills[1][1] || 0,
-                habilidade: skills[1][0]
+            [NpcCharacteristicType.SKILLS.SECONDARY.id]: {
+                [idValue]: skills[1][1] || 0,
+                [idName]: skills[1][0] || ''
             },
-            terciaria: {
-                valor: skills[2][1] || 0,
-                habilidade: skills[2][0]
+            [NpcCharacteristicType.SKILLS.TERTIARY.id]: {
+                [idValue]: skills[2][1] || 0,
+                [idName]: skills[2][0] || ''
             },
-            quaternaria: {
-                valor: skills[3][1] || 0,
-                habilidade: skills[3][0]
+            [NpcCharacteristicType.SKILLS.QUATERNARY.id]: {
+                [idValue]: skills[3][1] || 0,
+                [idName]: skills[3][0] || ''
             },
         }
     }
@@ -129,5 +135,13 @@ export class NpcConversor {
         }
 
         return finalSkills;
+    }
+
+    static getStamina(actor) {
+        return getObject(actor, BaseActorCharacteristicType.VITALITY.TOTAL) - 5;
+    }
+
+    static calculatePenalty(actor) {
+        return Math.max(ActorUtils.calculatePenalty(actor) - this.getStamina(actor), 0)
     }
 }

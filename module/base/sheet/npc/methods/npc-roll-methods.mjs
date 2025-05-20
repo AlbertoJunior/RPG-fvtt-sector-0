@@ -1,7 +1,9 @@
 import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
+import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
+import { NpcConversor } from "../../../../core/npc/npc-conversor.mjs";
 import { CoreRollMethods } from "../../../../core/rolls/core-roll-methods.mjs";
 import { CreateFormDialog } from "../../../../creators/dialog/create-dialog.mjs";
-import { NpcCharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { CharacteristicType, NpcCharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { AbilityRepository } from "../../../../repository/ability-repository.mjs";
 import { NpcQualityRepository } from "../../../../repository/npc-quality-repository.mjs";
@@ -53,12 +55,16 @@ class NpcRollMethods {
                     canBeOverload: canBeOverloaded,
                     canBeSpecialist: canBeSpecialist,
                     canBePenalty: true,
+                    values: {
+                        overload: ActorUtils.getOverload(actor),
+                        penalty: NpcConversor.calculatePenalty(actor),
+                    }
                 },
                 onConfirm: async (data) => {
                     const copiedActor = {
                         ...actor,
                     };
-                    copiedActor.system.sobrecarga = Number(data.overload);
+                    copiedActor.system[CharacteristicType.OVERLOAD.id] = Number(data.overload);
 
                     this.#mountRollInformations(copiedActor, value, skillName, data);
                 }

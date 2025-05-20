@@ -1,6 +1,7 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
 import { ActorUtils } from "../actor/actor-utils.mjs";
+import { EquipmentInfoParser } from "../equipment/equipment-info.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
@@ -68,10 +69,13 @@ export class RollAttribute {
             ...this.#mountParamsByRollable(rollable),
             isHalf: half,
             weapon: {
-                damage: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
-                true_damage: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE)
+                name: weapon.name,
+                [EquipmentCharacteristicType.DAMAGE.id]: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
+                [EquipmentCharacteristicType.TRUE_DAMAGE.id]: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE),
+                [EquipmentCharacteristicType.DAMAGE_TYPE.id]: EquipmentInfoParser.parseDamageType(getObject(weapon, EquipmentCharacteristicType.DAMAGE_TYPE)),
             }
         };
+
         return this.roll(actor, params);
     }
 

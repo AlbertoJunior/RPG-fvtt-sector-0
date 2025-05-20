@@ -25,8 +25,8 @@ export class EquipmentSheet extends ItemSheet {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: [SYSTEM_ID, "sheet", "item"],
             template: `systems/setor0OSubmundo/templates/items/default.hbs`,
-            width: 300,
-            height: 500
+            width: 320,
+            height: 620
         });
     }
 

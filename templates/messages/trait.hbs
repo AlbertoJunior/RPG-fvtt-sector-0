@@ -4,7 +4,7 @@
 
     <label style="display: block;"><strong>{{localize 'S0.Valor'}}:</strong> {{xp}}</label>
 
-    {{#unless (isNull morph) }}
+    {{#unless (operators 'isNull' morph) }}
     <label style="display: block;"><strong>{{localize 'S0.Morfologia'}}:</strong> {{morph}}</label>
     {{/unless}}
 

@@ -1,5 +1,5 @@
-import { EnhancementEffectDataChange } from "./enhancement-effect-field.mjs";
 import { RollTestDataModel } from "../data/roll-test-data-model.mjs";
+import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
 
 const { SchemaField, StringField, NumberField, ArrayField } = foundry.data.fields;
 
@@ -31,5 +31,17 @@ export class EnhancementEffectField extends SchemaField {
     static _toJson(id, name, level, overload, duration, requirement, effectChanges = [], possibleTests = [], description) {
         const object = new EnhancementEffectField(id, name, level, overload, duration, requirement, effectChanges, possibleTests, description);
         return object.toObject(object);
+    }
+}
+
+class EnhancementEffectDataChange extends SchemaField {
+    constructor(key, value = 0) {
+        super({
+            key: new StringField({ required: true, initial: key }),
+            value: new NumberField({ integer: true, required: true, initial: value }),
+            typeOfValue: new NumberField({ integer: true, required: true, initial: EffectChangeValueType.FIXED }),
+            otherValue: new StringField({ required: false, initial: undefined }),
+            mode: new NumberField({ integer: true, required: false, initial: CONST.ACTIVE_EFFECT_MODES.ADD }),
+        });
     }
 }

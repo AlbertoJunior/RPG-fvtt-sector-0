@@ -3,10 +3,11 @@ import { Setor0TokenDocument } from "../core/token/setor0-token.mjs";
 import { ActorCharacteristicField, ActorEnhancementField, ActorAttributes, ActorAbilities, ActorVirtues } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../core/actor/actor-utils.mjs";
-import { FlagsUtils } from "../utils/flags-utils.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 import { NpcSkill } from "../field/npc-fields.mjs";
 import { NpcQualityRepository } from "../repository/npc-quality-repository.mjs";
+import { getObject } from "../../scripts/utils/utils.mjs";
+import { BaseActorCharacteristicType } from "../enums/characteristic-enums.mjs";
 
 const { NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
@@ -31,12 +32,20 @@ class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         }
     }
 
+    get actor() {
+        return this.parent;
+    }
+
     get actualVitality() {
-        const total = this.actor.system.vitalidade.total;
+        const total = getObject(this.actor, BaseActorCharacteristicType.VITALITY.TOTAL) || 0;
         return {
             max: total,
             value: total - ActorUtils.getDamage(this.actor)
         };
+    }
+
+    get actualProtection() {
+        return ActorEquipmentUtils.getActorArmorEquippedValues(this.actor);
     }
 }
 
@@ -96,26 +105,8 @@ class ActorDataModel extends BaseActorDataModel {
         };
     }
 
-    get actor() {
-        return this.parent;
-    }
-
-    get equipedProtectItem() {
-        return ActorEquipmentUtils.getActorEquippedArmorItem(this.actor);
-    }
-
-    get actualProtection() {
-        const armorEquipped = this.equipedProtectItem;
-        return {
-            max: armorEquipped?.resistence || 0,
-            value: armorEquipped?.actual_resistance || 0,
-        };
-    }
-
     get actualPM() {
-        const pm = ActorUtils.calculateMovimentPoints(this.actor);
-        const usedPm = FlagsUtils.getActorFlag(this.actor, 'used_pm') || 0;
-        return Math.max(pm - usedPm, 0);
+        return ActorUtils.getActualMovimentPoints(this.actor);
     }
 }
 

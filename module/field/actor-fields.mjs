@@ -1,4 +1,4 @@
-import { EnhancementEffectField } from "./actor-enhancement-field.mjs";
+import { EnhancementEffectField } from "./enhancement-field.mjs";
 
 const { NumberField, SchemaField, StringField } = foundry.data.fields;
 

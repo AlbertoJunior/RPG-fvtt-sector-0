@@ -5,108 +5,49 @@
     </ul>
 
     <div class="S0-container" style="display: flex; align-items: flex-start; column-gap: 6px;">
-        <div class="S0-image-npc">
-            <img {{#if editable}}data-edit="img" title="Clique para alterar a imagem" {{else}} title="Clique para ver a imagem" data-action="view" data-characteristic="img" {{/if}}
+        <div class="S0-image-npc" {{#if editable}}style="border-color: var(--primary-color-alpha-50)"{{/if}}>
+            <img {{#if editable}}data-edit="img" title="Clique para alterar a imagem" {{else}}
+                title="Clique para ver a imagem" data-action="view" data-characteristic="img" {{/if}}
                 class="S0-actor-images S0-clickable" src="{{actor.img}}">
         </div>
 
         <div style="flex: 1;">
-            <div class="S0-container" style="margin-top: 0px;">
-                <h2 class="charname" style="display: flex; align-items: center;">
-                    <label for="name" style="flex: 1">{{ localize 'S0.Nome' }}:</label>
-                    <input id="name" name="name" style="height: 32px; margin-left: 6px; color: var(--primary-color);"
-                        type="text" value="{{actor.name}}" placeholder="{{ localize 'S0.Nome' }}" {{#unless
-                        editable}}disabled{{/unless}} />
-                </h2>
+            <header>
+                <div class="S0-container" style="margin-top: 0px;">
+                    <h2 class="charname" style="display: flex; align-items: center;">
+                        <label for="name" style="flex: 1">{{ localize 'S0.Nome' }}:</label>
+                        <input id="name" name="name"
+                            style="height: 32px; margin-left: 6px; color: var(--primary-color);" type="text"
+                            value="{{actor.name}}" placeholder="{{ localize 'S0.Nome' }}" {{#unless
+                            editable}}disabled{{/unless}} />
+                    </h2>
 
-                <div class="S0-container-2-column" style="margin-top: 6px;">
-                    <div style="display: flex; align-items: center; column-gap: 6px;">
-                        <label for="morfologia">{{ localize 'S0.Morfologia' }}:</label>
-                        <select class="S0-select" id="morfologia" style="height: 28px;" name="system.morfologia"
-                            {{#unless editable}}disabled{{/unless}}>
-                            {{#each (fetchRepository 'morphology')}}
-                            <option value="{{id}}" {{selectIfEq ../actor.system.morfologia id }}>{{label}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-
-                    <div style="display: flex; align-items: center; column-gap: 6px;">
-                        <label for="bairro">{{ localize 'S0.Bairro' }}:</label>
-                        <select class="S0-select" id="bairro" style="height: 28px;" name="system.bairro" {{#unless
-                            editable}}disabled{{/unless}}>
-                            {{#each (fetchRepository 'district')}}
-                            <option value="{{id}}" {{selectIfEq ../actor.system.bairro id }}>{{label}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="S0-page">
-                <div class="S0-container S0-flex-colum">
-                    <div style="display: flex; align-items: center;">
-                        <label for="job" style="flex: 1;">{{ localize 'S0.Atuacao' }}:</label>
-                        <input id="job" name="system.background.assignment"
-                            style="color: var(--primary-color); flex: 2; min-height: 28px;" type="text"
-                            value="{{actor.system.background.assignment}}" placeholder="{{ localize 'S0.Atuacao' }}"
-                            {{#unless editable}}disabled{{/unless}} />
-                    </div>
-
-                    <div style="display: flex; align-items: center;">
-                        <label for="quality" style="flex: 1;">{{localize 'S0.Qualidade'}}:</label>
-                        <select class="S0-select" style="flex: 2; min-height: 28px;" id="quality"
-                            name="system.qualidade" {{#unless editable}}disabled{{/unless}}>
-                            {{#each (fetchRepository 'npc-quality')}}
-                            <option value="{{id}}" {{selectIfEq ../actor.system.qualidade id }}>{{label}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="S0-container S0-container-2-column">
-                    {{#each (fetchRepository 'npc-fame')}}
-                    <div class="S0-characteristic-container" id="{{id}}">
-                        <label>
-                            {{localize label}}
-                        </label>
-
-                        {{#forLoop 0 4}}
-                        <div class="S0-characteristic {{#if ../../editable}}S0-clickable{{/if}}{{selectIfHave ../../actor ../id index}}"
-                            data-action="characteristic" data-characteristic="{{../id}}">
+                    <div class="S0-container-2-column" style="margin-top: 6px;">
+                        <div style="display: flex; align-items: center; column-gap: 6px;">
+                            <label for="morfologia">{{ localize 'S0.Morfologia' }}:</label>
+                            <select class="S0-select" id="morfologia" style="height: 28px;" name="system.morfologia"
+                                {{#unless editable}}disabled{{/unless}}>
+                                {{#each (fetchRepository 'morphology')}}
+                                <option value="{{id}}" {{selectIfEq ../actor.system.morfologia id }}>{{label}}</option>
+                                {{/each}}
+                            </select>
                         </div>
-                        {{/forLoop}}
 
-                        <div class="S0-characteristic S0-characteristic-6 {{#if ../editable}}S0-clickable{{/if}}{{selectIfHave ../actor id 4}}"
-                            data-action="characteristic" data-characteristic="{{id}}">
+                        <div style="display: flex; align-items: center; column-gap: 6px;">
+                            <label for="bairro">{{ localize 'S0.Bairro' }}:</label>
+                            <select class="S0-select" id="bairro" style="height: 28px;" name="system.bairro" {{#unless
+                                editable}}disabled{{/unless}}>
+                                {{#each (fetchRepository 'district')}}
+                                <option value="{{id}}" {{selectIfEq ../actor.system.bairro id }}>{{label}}</option>
+                                {{/each}}
+                            </select>
                         </div>
                     </div>
-                    {{/each}}
                 </div>
+            </header>
 
-                <div class="S0-container" style="margin-bottom: 0px;">
-                    <label>{{localize 'S0.NPC.Principais_Habilidades'}}</label>
-
-                    <hr>
-
-                    <div class="S0-flex-colum">
-                        {{> npcSkillPartial name="Primária" system="primaria"
-                        actualSkill=actor.system.habilidades.primaria.habilidade }}
-
-                        {{> npcSkillPartial name="Secundária" system="secundaria"
-                        actualSkill=actor.system.habilidades.secundaria.habilidade }}
-
-                        {{#if (operators 'gt' actor.system.habilidades.terciaria.valor 0)}}
-                        {{> npcSkillPartial name="Terciária" system="terciaria"
-                        actualSkill=actor.system.habilidades.terciaria.habilidade }}
-                        {{/if}}
-
-                        {{#if (operators 'gt' actor.system.habilidades.quaternaria.valor 0)}}
-                        {{> npcSkillPartial name="Quaternária" system="quaternaria"
-                        actualSkill=actor.system.habilidades.quaternaria.habilidade }}
-                        {{/if}}
-                    </div>
-                </div>
-            </div>
+            {{> npcInformations this}}
+            {{> npcStatus this}}
 
         </div>
     </div>

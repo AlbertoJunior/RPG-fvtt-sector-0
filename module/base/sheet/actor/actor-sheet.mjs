@@ -1,36 +1,36 @@
 import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
 import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
-import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
+import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
 import { EquipmentType } from "../../../enums/equipment-enums.mjs";
-import { FlagsUtils } from "../../../utils/flags-utils.mjs";
-import { BaseActorCharacteristicType, CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { SYSTEM_ID } from "../../../constants.mjs";
 import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
-import { SystemFlags } from "../../../enums/flags-enums.mjs";
 import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
+import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
 
-class Setor0ActorSheet extends ActorSheet {
+class Setor0ActorSheet extends Setor0BaseActorSheet {
 
-    #mapEvents = {
-        menu: SheetMethods.handleMethods.menu,
-        trait: SheetMethods.handleMethods.trait,
-        enhancement: SheetMethods.handleMethods.enhancement,
-        language: SheetMethods.handleMethods.language,
-        effects: SheetMethods.handleMethods.effects,
-        temporary: SheetMethods.handleMethods.temporary,
-        equipment: SheetMethods.handleMethods.equipment,
-        shortcuts: SheetMethods.handleMethods.shortcuts,
-        allies: SheetMethods.handleMethods.allies,
-        informants: SheetMethods.handleMethods.informants,
-    };
+    get mapEvents() {
+        return {
+            menu: SheetMethods.handleMethods.menu,
+            trait: SheetMethods.handleMethods.trait,
+            enhancement: SheetMethods.handleMethods.enhancement,
+            language: SheetMethods.handleMethods.language,
+            effects: SheetMethods.handleMethods.effects,
+            temporary: SheetMethods.handleMethods.temporary,
+            equipment: SheetMethods.handleMethods.equipment,
+            shortcuts: SheetMethods.handleMethods.shortcuts,
+            allies: SheetMethods.handleMethods.allies,
+            informants: SheetMethods.handleMethods.informants,
+        };
+    }
 
     constructor(...args) {
         super(...args);
-        this.currentPage = 1;
         this.filterBag = EquipmentType.UNKNOWM;
         this.isExpandedEffects = undefined;
         this.isExpandedShortcuts = undefined;
@@ -47,54 +47,24 @@ class Setor0ActorSheet extends ActorSheet {
         });
     }
 
-    getData() {
-        const data = super.getData();
-        data.editable = this.isEditable;
-        data.canRoll = this.canRollOrEdit;
-        data.canEdit = this.canRollOrEdit;
-        return data;
-    }
-
-    async _onDropActor(event, data) {
-        console.log('-> On Drop Actor');
-    }
-
-    async _onDropItem(event, data) {
-        console.log('-> On Drop Item');
-    }
-
-    get isEditable() {
-        return FlagsUtils.getActorFlag(this.actor, "editable") && this.canRollOrEdit;
-    }
-
-    get canRollOrEdit() {
-        return game.user.isGM || this.actor.isOwner;
-    }
-
     activateListeners(html) {
         super.activateListeners(html);
-        this.setupContentAndHeader(html);
         this.#presetSheet(html);
         this.#setupListeners(html);
-        this.#addPageButtonsOnFloatingMenu(html);
+        super.addPageButtonsOnFloatingMenu(html);
         SheetActorDragabbleMethods.setup(html, this.actor);
-    }
-
-    setupContentAndHeader(html) {
-        HtmlJsUtils.setupContent(html);
-        HtmlJsUtils.setupHeader(html);
     }
 
     #setupListeners(html) {
         const actionsClick = [
             { selector: `[data-action="${OnEventType.CHARACTERISTIC}"]`, method: this.#onCharacteristicClick },
-            ...OnEventTypeClickableEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: this.#onActionClick }))
+            ...OnEventTypeClickableEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: super.onActionClick }))
         ];
         const actionsChange = [
-            { selector: `[data-action="${OnEventType.CHANGE}"]`, method: this.#onChange },
+            { selector: `[data-action="${OnEventType.CHANGE}"]`, method: super.onChange },
         ];
         const actionsContextMenu = [
-            ...OnEventTypeContextualEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: this.#onContextualClick }))
+            ...OnEventTypeContextualEvents.map(eventType => ({ selector: `[data-action="${eventType}"]`, method: super.onContextualClick }))
         ];
 
         actionsClick.forEach(action => {
@@ -105,43 +75,6 @@ class Setor0ActorSheet extends ActorSheet {
         });
         actionsContextMenu.forEach(action => {
             html.find(action.selector).on('contextmenu', action.method.bind(this, html));
-        });
-    }
-
-    #addPageButtonsOnFloatingMenu(html) {
-        const buttonContainer = html.find("#floating-menu")[0];
-        const pages = [];
-        const buttons = [];
-
-        const isCompacted = FlagsUtils.getItemFlag(game.user, SystemFlags.MODE.COMPACT)
-
-        html.find(".S0-page").each((index, page) => {
-            pages.push(page);
-
-            const pageLabel = page?.getAttribute('data-label') || "[Erro]";
-            const textContent = isCompacted ? undefined : pageLabel;
-
-            const iconClass = page?.getAttribute('data-icon');
-            const iconOption = iconClass ? { icon: { class: iconClass, marginRight: isCompacted ? '0px' : '4px', } } : {};
-
-            const options = {
-                title: pageLabel,
-                classList: `S0-simulate-button ${isCompacted ? 'S0-compact' : ''}`,
-                ...iconOption
-            };
-
-            const button = _createLi(textContent, options);
-
-            buttonContainer.appendChild(button);
-
-            buttons.push(button);
-            button.addEventListener('click', this.#changePage.bind(this, index + 1, pages, buttons));
-
-            if (index + 1 != this.currentPage) {
-                page.classList.add('hidden');
-            } else {
-                button.classList.add('S0-selected');
-            }
         });
     }
 
@@ -203,22 +136,21 @@ class Setor0ActorSheet extends ActorSheet {
     }
 
     #presetEnhancement(html) {
-        const system = this.actor.system;
         const activeEffects = this.actor.statuses;
+        const actorEnhancements = Object.values(getObject(this.actor, CharacteristicType.ENHANCEMENT_ALL));
 
         html.find('.S0-enhancement').each((index, enhaceContainer) => {
-            const enhancement = system.aprimoramentos[`aprimoramento_${index + 1}`];
+            const enhancement = actorEnhancements[index];
             const selects = $(enhaceContainer).find('select');
 
-            $(selects[0]).find('option').each((_, option) => {
-                const itemId = option.dataset.itemId;
-                if (itemId == enhancement.id) {
-                    option.selected = true;
-                    const levelSelects = selects.slice(1);
-                    updateEnhancementLevelsOptions(itemId, levelSelects);
-                    selectLevelOnOptions(enhancement, levelSelects, activeEffects);
-                }
-            });
+            const familySelect = selects[0];
+            const option = Array.from(familySelect.options).find(option => option.dataset.itemId == enhancement.id);
+            if (option) {
+                option.selected = true;
+                const levelSelects = selects.slice(1);
+                updateEnhancementLevelsOptions(enhancement.id, levelSelects);
+                selectLevelOnOptions(enhancement, levelSelects, activeEffects);
+            }
         });
     }
 
@@ -236,19 +168,7 @@ class Setor0ActorSheet extends ActorSheet {
         select('sobrecarga', CharacteristicType.OVERLOAD);
         select('vida', CharacteristicType.LIFE);
 
-        let letalDamage = getObject(actor, BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
-        let superFicialDamage = getObject(actor, BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
-        html.find('#vitalidade .S0-characteristic-temp').each((index, item) => {
-            if (superFicialDamage > 0) {
-                item.classList.add('S0-superficial');
-                superFicialDamage--;
-            } else if (letalDamage > 0) {
-                item.classList.add('S0-letal');
-                letalDamage--;
-            } else {
-                return;
-            }
-        });
+        Setor0BaseActorSheet.presetStatusVitality(html, actor);
     }
 
     #presetSheetExpandContainers(html) {
@@ -290,45 +210,6 @@ class Setor0ActorSheet extends ActorSheet {
             return;
         }
         SheetMethods._handleCharacteristicClickEvent(event, this.actor);
-    }
-
-    async #onActionClick(html, event) {
-        const action = verifyAndParseOnEventType(event.currentTarget.dataset.action, OnMethod.CLICK);
-        this.#onEvent(action, html, event);
-    }
-
-    async #onChange(html, event) {
-        this.#onEvent(OnEventType.CHANGE, html, event);
-    }
-
-    async #onContextualClick(html, event) {
-        const action = verifyAndParseOnEventType(event.currentTarget.dataset.action, OnMethod.CONTEXTUAL);
-        this.#onEvent(action, html, event);
-    }
-
-    async #onEvent(action, html, event) {
-        event.preventDefault();
-        const characteristic = event.currentTarget.dataset.characteristic;
-        const method = this.#mapEvents[characteristic]?.[action];
-        if (method) {
-            method(this.actor, event, html);
-        } else {
-            console.warn(`-> [${action}] não existe para: [${characteristic}]`);
-        }
-    }
-
-    async #changePage(pageIndex, pages, buttons, event) {
-        if (pageIndex == this.currentPage)
-            return;
-
-        const normalizedCurrentIndex = Math.max(this.currentPage - 1, 0);
-        const normalizedIndex = Math.max(pageIndex - 1, 0);
-        pages[normalizedCurrentIndex].classList.toggle('hidden');
-        pages[normalizedIndex].classList.toggle('hidden');
-
-        buttons[normalizedCurrentIndex].classList.toggle('S0-selected');
-        buttons[normalizedIndex].classList.toggle('S0-selected');
-        this.currentPage = pageIndex;
     }
 }
 

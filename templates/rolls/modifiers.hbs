@@ -21,14 +21,14 @@
     {{#if canBeOverload}}
     <div class="form-group">
         <label for="{{uuid}}.overload" style="flex:1;">{{localize 'S0.Sobrecarga'}}:</label>
-        <input id="{{uuid}}.overload" name="overload" type="number" style="flex:1;" value="0" max="5" min="0">
+        <input id="{{uuid}}.overload" name="overload" type="number" style="flex:1;" value="{{values.overload}}" max="5" min="0">
     </div>
     {{/if}}
 
     {{#if canBePenalty}}
     <div class="form-group">
         <label for="{{uuid}}.penalty" style="flex:1;">{{localize 'S0.Penalidade'}}:</label>
-        <input id="{{uuid}}.penalty" name="penalty" type="number" style="flex:1;" value="0" min="0">
+        <input id="{{uuid}}.penalty" name="penalty" type="number" style="flex:1;" value="{{values.penalty}}" min="0">
     </div>
     {{/if}}
 

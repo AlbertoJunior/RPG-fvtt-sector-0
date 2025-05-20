@@ -1,4 +1,4 @@
-import { getObject } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs"
@@ -161,11 +161,14 @@ export class SheetActorDragabbleMethods {
     }
 
     static async #equipOrUnequip(actor, originSource, equipment) {
-        if (originSource == 'bag') {
+        TODO('no futuro é ideal remover a utilização do system.')
+
+        if (originSource == 'bag') {            
             if (equipment.system.canEquip) {
                 await ActorEquipmentUtils.equip(actor, equipment);
             } else {
-                NotificationsUtils._info("Este Item não pode ser equipado");
+                NotificationsUtils._warning("Este Item não pode ser equipado");
+                actor.sheet.render();
             }
         } else if (originSource == 'equipped') {
             await ActorEquipmentUtils.unequip(actor, equipment);

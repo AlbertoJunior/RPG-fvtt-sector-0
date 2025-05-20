@@ -1,6 +1,6 @@
-import { ActorUtils } from "../../core/actor/actor-utils.mjs";
-import { DefaultActions } from "../../utils/default-actions.mjs";
-import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
+import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
+import { DefaultActions } from "../../../utils/default-actions.mjs";
+import { ActiveEffectsUtils } from "../../../core/effect/active-effects.mjs";
 
 class Setor0Combat extends Combat {
     getData() {

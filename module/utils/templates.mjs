@@ -1,4 +1,4 @@
-import { actorTemplatesRegister } from "../base/sheet/actor/actor-sheet-template.mjs";
+import { actorTemplatesRegister } from "../base/sheet/actor/actor-sheet.mjs";
 import { equipmentTemplatesRegister } from "../base/sheet/equipment/equipment-sheet.mjs";
 import { npcTemplatesRegister } from "../base/sheet/npc/npc-sheet.mjs";
 import { REGISTERED_TEMPLATES, SYSTEM_ID } from "../constants.mjs";

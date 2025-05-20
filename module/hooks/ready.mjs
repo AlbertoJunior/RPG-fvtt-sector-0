@@ -5,7 +5,7 @@ import { MacroSync } from "../core/macro/macro-sync.mjs";
 import { MacroInstaller } from "../core/macro/macro-installer.mjs";
 import { MacroUtils } from "../core/macro/macro-utils.mjs";
 import { registerEquipment } from "../base/sheet/equipment/equipment-sheet.mjs";
-import { registerActor } from "../base/sheet/actor/actor-sheet-template.mjs";
+import { registerActor } from "../base/sheet/actor/actor-sheet.mjs";
 import { SceneHookHandle } from "./scene.mjs";
 import { registerNpc } from "../base/sheet/npc/npc-sheet.mjs";
 

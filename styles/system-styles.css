@@ -4,6 +4,7 @@ body {
     --color-underline-header: var(--secondary-color);
     --color-scrollbar: var(--secondary-color);
     --color-scrollbar-border: var(--primary-color);
+    --main-logo: url(systems/setor0OSubmundo/imgs/logo.png);
 }
 
 :root {
@@ -1631,7 +1632,7 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-page-transparent .S0-clickable.S0-characteristic {
-    background-color: rgba(250, 250, 250, 0.5);
+    background-color: var(--secondary-color);
 }
 
 .S0-page-transparent .S0-clickable:is(.S0-letal, .S0-selected):hover {

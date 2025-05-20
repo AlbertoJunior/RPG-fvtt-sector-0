@@ -145,9 +145,9 @@ class ProjectileDataModel extends WeaponDataModel {
             actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             capacity: new NumberField({ integer: true, initial: 1, label: "S0.Capacidade" }),
             cadence: new NumberField({ integer: true, initial: 1, label: "S0.Cadencia" }),
-            short_range: new NumberField({ integer: true, initial: 1, label: "S0.Curto_Alcance" }),
-            medium_range: new NumberField({ integer: true, initial: 1, label: "S0.Medio_Alcance" }),
-            long_range: new NumberField({ integer: true, initial: 1, label: "S0.Longo_Alcance" }),
+            short_range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Curto_Alcance" }),
+            medium_range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Medio_Alcance" }),
+            long_range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Longo_Alcance" }),
             special: new BooleanField({ initial: false, label: "S0.Especial" })
         };
     }

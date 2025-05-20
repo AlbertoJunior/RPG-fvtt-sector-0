@@ -1,6 +1,7 @@
 import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { MorphologyRepository } from "../../repository/morphology-repository.mjs";
+import { FlagsUtils } from "../../utils/flags-utils.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -178,5 +179,11 @@ export class ActorUtils {
                     system: actor.system
                 }
             });
+    }
+
+    static getActualMovimentPoints(actor) {
+        const pm = ActorUtils.calculateMovimentPoints(actor);
+        const usedPm = FlagsUtils.getActorFlag(actor, 'used_pm') || 0;
+        return Math.max(pm - usedPm, 0);
     }
 }

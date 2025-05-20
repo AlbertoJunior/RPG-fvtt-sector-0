@@ -9,7 +9,6 @@ export async function loadHandlebarsHelpers() {
         "actorLists.mjs",
         "isEmpty.mjs",
         "gameFunc.mjs",
-        "isNull.mjs",
         "concat.mjs",
         "operators.mjs",
         "htmlUtils.mjs",

@@ -1,6 +1,6 @@
 <section data-label="{{ localize 'S0.Status' }}" class="S0-page" id="statusPage" data-icon="fas fa-heart-pulse">
 
-    {{#unless (isNull actor.system.experiencia)}}
+    {{#unless (operators 'isNull' actor.system.experiencia)}}
     <div class="S0-container">
         <h2>
             {{localize 'S0.Experiencia'}}
@@ -203,8 +203,8 @@
         </ul>
 
         <ul class="S0-ul-flex">
-            {{#unless (isNull actor.system.equipedProtectItem) }}
-            <div class="S0-container" style="flex: 1;">
+            {{#if (actorValues actor 'have_equipped_armor') }}
+            <div class="S0-container" style="flex: 1; display: flex; flex-direction: column;">
                 <h3>
                     {{ localize 'S0.Protecao' }}
                     {{#if canRoll}}
@@ -214,8 +214,8 @@
                     {{/if}}
                 </h3>
 
-                <div id="protect" class="S0-inner-container" style="flex-wrap: wrap; column-gap: 26px; row-gap:10px">
-                    {{#forLoop 0 actor.system.equipedProtectItem.system.resistance}}
+                <div id="protect" class="S0-inner-container" style="flex-wrap: wrap; column-gap: 26px; row-gap:10px; flex: 1;">
+                    {{#forLoop 0 (actorValues actor 'equipped_amor_total_resistance')}}
                     {{#with ../canRoll as |canRoll|}}
                     <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                         data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="protect">
@@ -224,7 +224,7 @@
                     {{/forLoop}}
                 </div>
             </div>
-            {{/unless}}
+            {{/if}}
 
             <li class="S0-container" style="flex: 3">
                 <h3>
@@ -239,7 +239,7 @@
                     {{/if}}
                 </h3>
                 <div id="vitalidade" class="S0-inner-container">
-                    {{#forLoop 0 actor.system.vitalidade.total}}
+                    {{#forLoop 0 (actorValues actor 'vitality')}}
                     {{#with ../canRoll as |canRoll|}}
                     <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
                         data-action="{{#if canRoll}}check_contextual{{/if}}" data-characteristic="temporary"
