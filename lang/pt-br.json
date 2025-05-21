@@ -266,7 +266,16 @@
             "Letal": "Letal",
             "Fogo": "Fogo",
             "Eletrico": "Elétrico",
-            "Gelo": "Gelo"
+            "Gelo": "Gelo",
+
+            "Lata": "Lata",
+            "Popular": "Popular",
+            "Utilitario": "Utilitário",
+            "Esportivo": "Esportivo",
+            "Super_Esportivo": "Super Esportivo",
+            "Bruto": "Bruto",
+            "Exotico": "Exótico"
+
         },
 
         "Pergunta": {

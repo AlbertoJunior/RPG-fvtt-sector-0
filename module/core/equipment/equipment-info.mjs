@@ -1,5 +1,5 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
-import { DamageType, EquipmentHand, EquipmentHidding } from "../../enums/equipment-enums.mjs";
+import { DamageType, EquipmentHand, EquipmentHidding, VehicleType } from "../../enums/equipment-enums.mjs";
 
 export class EquipmentInfoParser {
 
@@ -32,6 +32,19 @@ export class EquipmentInfoParser {
         return map[value] || `<${localize('Erro')}>`;
     }
 
+    static parseVehicle(value) {
+        const map = {
+            [VehicleType.JUNKER]: `${localize('Itens.Lata')}`,
+            [VehicleType.ECONOMY]: `${localize('Itens.Popular')}`,
+            [VehicleType.UTILITARY]: `${localize('Itens.Utilitario')}`,
+            [VehicleType.SPORT]: `${localize('Itens.Esportivo')}`,
+            [VehicleType.SUPER_SPORT]: `${localize('Itens.Super_Esportivo')}`,
+            [VehicleType.RAW]: `${localize('Itens.Bruto')}`,
+            [VehicleType.EXOTIC]: `${localize('Itens.Exotico')}`,
+        }
+        return map[value] || `<${localize('Erro')}>`;
+    }
+
     static getHandTypes() {
         return Object.values(EquipmentHand).map(type => {
             return {
@@ -55,6 +68,15 @@ export class EquipmentInfoParser {
             return {
                 id: type,
                 label: EquipmentInfoParser.parseDamageType(type)
+            }
+        });
+    }
+
+    static getVehicleTypes() {
+        return Object.values(VehicleType).map(type => {
+            return {
+                id: type,
+                label: EquipmentInfoParser.parseVehicle(type)
             }
         });
     }

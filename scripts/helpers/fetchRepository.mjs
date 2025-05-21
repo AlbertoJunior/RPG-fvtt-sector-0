@@ -31,6 +31,7 @@ const map = {
     'equipment-occultability': EquipmentInfoParser.getOccultabilityTypes,
     'equipment-damage-type': EquipmentInfoParser.getDamageTypes,
     'equipment-hand-type': EquipmentInfoParser.getHandTypes,
+    'equipment-vehile-type': EquipmentInfoParser.getVehicleTypes,
 }
 
 function getActorEquipmentTypes() {

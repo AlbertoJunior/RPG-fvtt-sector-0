@@ -3,7 +3,7 @@ import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
 const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
 
-class EquipmentDataModel extends foundry.abstract.TypeDataModel {
+class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
     get isEquipment() {
         return true;
     }
@@ -43,7 +43,16 @@ class EquipmentDataModel extends foundry.abstract.TypeDataModel {
     }
 }
 
-class ArmorDataModel extends EquipmentDataModel {
+class EquipmentDataModel extends BaseEquipmentDataModel {
+    static defineSchema() {
+        return {
+            ...super.defineSchema(),
+            super_equipment: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
+        };
+    }
+}
+
+class ArmorDataModel extends BaseEquipmentDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
@@ -53,7 +62,7 @@ class ArmorDataModel extends EquipmentDataModel {
     }
 }
 
-class SubstanceDataModel extends EquipmentDataModel {
+class SubstanceDataModel extends BaseEquipmentDataModel {
     get canEquip() {
         return false;
     }
@@ -72,7 +81,7 @@ class SubstanceDataModel extends EquipmentDataModel {
     }
 }
 
-class RollableDataModel extends EquipmentDataModel {
+class RollableEquipmentDataModel extends BaseEquipmentDataModel {
     get canRoll() {
         return true;
     }
@@ -86,7 +95,7 @@ class RollableDataModel extends EquipmentDataModel {
     }
 }
 
-class AcessoryDataModel extends RollableDataModel {
+class AcessoryDataModel extends RollableEquipmentDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
@@ -95,11 +104,16 @@ class AcessoryDataModel extends RollableDataModel {
     }
 }
 
-class VehicleDataModel extends RollableDataModel {
+class VehicleDataModel extends RollableEquipmentDataModel {
+    get canEquip() {
+        return false;
+    }
+
     static defineSchema() {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.VEHICLE, label: "S0.Tipo" }),
+            type_vehicle: new NumberField({ integer: true, initial: 0, label: "S0.Tipo" }),
             actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             acceleration: new NumberField({ integer: true, initial: 0, label: "S0.Aceleracao" }),
             speed: new NumberField({ integer: true, initial: 0, label: "S0.Velocidade" })
@@ -107,7 +121,7 @@ class VehicleDataModel extends RollableDataModel {
     }
 }
 
-class WeaponDataModel extends RollableDataModel {
+class WeaponDataModel extends RollableEquipmentDataModel {
     get canRoll() {
         return true;
     }
@@ -163,7 +177,7 @@ const EquipmentTypeStringMap = {
 };
 
 export function equipmentParseData(data) {
-    const ModelClass = EquipmentTypeStringMap[data.type] ?? EquipmentDataModel;
+    const ModelClass = EquipmentTypeStringMap[data.type] ?? BaseEquipmentDataModel;
     const dataObject = data.toObject();
     const model = new ModelClass(dataObject.system);
     model.setupValues(data);

@@ -70,3 +70,13 @@ export const DamageType = Object.freeze({
     FIRE: 3,
     ICE: 4,
 });
+
+export const VehicleType = Object.freeze({
+    JUNKER: 0,
+    ECONOMY: 1,
+    UTILITARY: 2,
+    SPORT: 3,
+    SUPER_SPORT: 4,
+    RAW: 5,
+    EXOTIC: 6,
+});
