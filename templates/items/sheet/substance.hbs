@@ -1,19 +1,15 @@
 <form autocomplete="off">
-    {{> "systems/setor0OSubmundo/templates/items/common-equipment.hbs" this}}
+    {{> itemCommon this}}
 
     <div class="S0-page S0-container">
         <div class="form-group">
-            <label style="flex: 1;">
-                {{localize 'S0.Resistencia_Total'}}:
-            </label>
+            <label style="flex: 1;">{{localize 'S0.Resistencia'}}:</label>
             <input style="flex: 1;" type="number" name="system.resistance" value="{{system.resistance}}" />
         </div>
 
         <div class="form-group">
-            <label style="flex: 1;">
-                {{localize 'S0.Resistencia_Atual'}}:
-            </label>
-            <input style="flex: 1;" type="number" min="0" max="{{system.resistance}}" name="system.actual_resistance" value="{{system.actual_resistance}}" />
+            <label style="flex: 1;">{{localize 'S0.Efeitos'}}:</label>
+            <input style="flex: 1;" type="text" name="system.effects" value="{{system.effects}}" />
         </div>
 
         <label style="display: block; margin-block: 5px;">

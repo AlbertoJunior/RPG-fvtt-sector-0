@@ -1,5 +1,5 @@
 <form autocomplete="off">
-    {{> "systems/setor0OSubmundo/templates/items/common-equipment.hbs" this}}
+    {{> itemCommon this}}
 
     <div class="S0-page S0-container">
         <div class="form-group">
@@ -54,7 +54,7 @@
             </select>
         </div>
 
-        {{> "systems/setor0OSubmundo/templates/items/rollable-tests.hbs" this}}
+        {{> itemRollableTests this}}
 
         <label for="{{item.id}}.description" style="display: block; margin-block: 5px;">
             {{localize 'S0.Descricao'}}:

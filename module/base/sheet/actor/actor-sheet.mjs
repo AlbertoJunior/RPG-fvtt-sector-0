@@ -7,7 +7,7 @@ import { EquipmentType } from "../../../enums/equipment-enums.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
-import { SYSTEM_ID } from "../../../constants.mjs";
+import { SYSTEM_ID, TEMPLATES_PATH } from "../../../constants.mjs";
 import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
 import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
 import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
@@ -40,7 +40,7 @@ class Setor0ActorSheet extends Setor0BaseActorSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: [SYSTEM_ID, "sheet", "actor"],
-            template: "systems/setor0OSubmundo/templates/actors/actor-sheet.hbs",
+            template: `${TEMPLATES_PATH}/actors/actor-sheet.hbs`,
             width: 600,
             height: 880,
             resizable: false,
@@ -222,8 +222,6 @@ export async function actorTemplatesRegister() {
         { path: "actors/enhancement" },
         { path: "actors/enhancement-partial" },
         { path: "actors/equipment" },
-        { path: "items/equipment-bag-item", call: 'equipamentBagItem' },
-        { path: "items/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "actors/shortcuts" },
         { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' },
         { path: "actors/network" },

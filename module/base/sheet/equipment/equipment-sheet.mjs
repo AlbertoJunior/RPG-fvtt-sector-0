@@ -1,4 +1,4 @@
-import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
+import { SYSTEM_ID, REGISTERED_TEMPLATES, TEMPLATES_PATH } from "../../../constants.mjs";
 import { OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
@@ -24,7 +24,7 @@ export class EquipmentSheet extends ItemSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: [SYSTEM_ID, "sheet", "item"],
-            template: `systems/setor0OSubmundo/templates/items/default.hbs`,
+            template: `${TEMPLATES_PATH}/items/default.hbs`,
             width: 320,
             height: 620
         });
@@ -32,13 +32,13 @@ export class EquipmentSheet extends ItemSheet {
 
     get template() {
         const type = this.item.type.toLowerCase();
-        const path = `systems/${SYSTEM_ID}/templates/items/${type}.hbs`;
+        const path = `${TEMPLATES_PATH}/items/sheet/${type}.hbs`;
 
         if (REGISTERED_TEMPLATES.has(path)) {
             return path;
         }
 
-        return `systems/${SYSTEM_ID}/templates/items/default.hbs`
+        return `${TEMPLATES_PATH}/items/default.hbs`
     }
 
     getData() {
@@ -117,14 +117,16 @@ export class EquipmentSheet extends ItemSheet {
 
 export async function equipmentTemplatesRegister() {
     const templates = [
-        { path: "items/armor" },
-        { path: "items/acessory" },
-        { path: "items/melee" },
-        { path: "items/projectile" },
-        { path: "items/substance" },
-        { path: "items/vehicle" },
-        { path: "items/common-equipment" },
-        { path: "items/rollable-tests" }
+        { path: "items/sheet/armor" },
+        { path: "items/sheet/acessory" },
+        { path: "items/sheet/melee" },
+        { path: "items/sheet/projectile" },
+        { path: "items/sheet/substance" },
+        { path: "items/sheet/vehicle" },
+        { path: "items/others/equipment-bag-item", call: 'equipamentBagItem' },
+        { path: "items/others/equipment-equipped-item", call: 'equipamentEquippedItem' },
+        { path: "items/others/common-equipment", call: "itemCommon" },
+        { path: "items/others/rollable-tests", call: "itemRollableTests" }
     ];
 
     return await loadAndRegisterTemplates(templates);

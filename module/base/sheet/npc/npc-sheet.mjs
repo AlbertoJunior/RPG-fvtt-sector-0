@@ -1,5 +1,5 @@
-import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
-import { SYSTEM_ID } from "../../../constants.mjs";
+import { selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { SYSTEM_ID, TEMPLATES_PATH } from "../../../constants.mjs";
 import { BaseActorCharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
 import { DialogUtils } from "../../../utils/dialog-utils.mjs";
@@ -71,7 +71,7 @@ class Setor0NpcSheet extends Setor0BaseActorSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: [SYSTEM_ID, "sheet", "actor"],
-            template: "systems/setor0OSubmundo/templates/npc/npc-sheet.hbs",
+            template: `${TEMPLATES_PATH}/npc/npc-sheet.hbs`,
             width: NpcSheetSize.width,
             height: NpcSheetSize.height,
             resizable: false,
