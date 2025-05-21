@@ -1,14 +1,15 @@
-import { sendEffectToChat } from "../../base/sheet/actor/methods/enhancement-methods.mjs";
 import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { EnhancementInfoParser } from "../../core/enhancement/enhancement-info.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
-import { localize, TODO } from "../../../scripts/utils/utils.mjs";
+import { localize } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
 import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
 import { DefaultActions } from "../../utils/default-actions.mjs";
 import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
 import { CreateFormDialog } from "./create-dialog.mjs";
+import { ChatCreator } from "../../utils/chat-creator.mjs";
+import { EnhancementMessageCreator } from "../message/enhancement-message.mjs";
 
 export class EnhancementDialog {
     static async _open(enhancementEffect, actor, onConfirm) {
@@ -19,7 +20,7 @@ export class EnhancementDialog {
             cancel: {
                 label: localize("Chat"),
                 callback: (html) => {
-                    sendEffectToChat(enhancementEffect, actor);
+                    this.#sendEffectToChat(enhancementEffect, actor);
                 }
             }
         };
@@ -120,5 +121,10 @@ export class EnhancementDialog {
                 }
             }
         );
+    }
+
+    static async #sendEffectToChat(effect, actor) {
+        const message = await EnhancementMessageCreator.mountContentInfo(effect);
+        ChatCreator._sendToChat(actor, message);
     }
 }

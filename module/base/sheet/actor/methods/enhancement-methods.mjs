@@ -16,11 +16,6 @@ import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { EnhancementMessageCreator } from "../../../../creators/message/enhancement-message.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 
-export async function sendEffectToChat(effect, actor) {
-    const message = await EnhancementMessageCreator.mountContentInfo(effect);
-    ChatCreator._sendToChat(actor, message);
-}
-
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
     _createOptionsAndSetOnSelects(Array.from(selects), enhancementLevels);
@@ -98,7 +93,7 @@ async function updateActorLevelEnhancement(currentTarget, actor) {
     }
 
     const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
-    if (!effect && oldEffect.id && oldEffect.id != '') {
+    if (oldEffect.id && oldEffect.id != '' && oldEffect.id != effectId) {
         await ActiveEffectsUtils.removeActorEffect(actor, oldEffect.id)
     }
 

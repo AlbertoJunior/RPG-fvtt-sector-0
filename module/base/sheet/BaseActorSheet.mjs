@@ -2,7 +2,7 @@ import { getObject } from "../../../scripts/utils/utils.mjs";
 import { _createLi } from "../../creators/element/element-creator-jscript.mjs";
 import { BaseActorCharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { SystemFlags } from "../../enums/flags-enums.mjs";
-import { OnMethod, verifyAndParseOnEventType } from "../../enums/on-event-type.mjs";
+import { OnEventType, OnMethod, verifyAndParseOnEventType } from "../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../utils/html-js-utils.mjs";
 
