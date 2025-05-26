@@ -1,4 +1,5 @@
 import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, equipmentTypeIdToTypeString } from "../enums/equipment-enums.mjs";
+import { SuperEquipmentField } from "../field/equipment-field.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
 const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
@@ -43,25 +44,6 @@ class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
     }
 }
 
-class EquipmentDataModel extends BaseEquipmentDataModel {
-    static defineSchema() {
-        return {
-            ...super.defineSchema(),
-            super_equipment: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
-        };
-    }
-}
-
-class ArmorDataModel extends BaseEquipmentDataModel {
-    static defineSchema() {
-        return {
-            ...super.defineSchema(),
-            type: new NumberField({ integer: true, initial: EquipmentType.ARMOR, label: "S0.Tipo" }),
-            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
-        };
-    }
-}
-
 class SubstanceDataModel extends BaseEquipmentDataModel {
     get canEquip() {
         return false;
@@ -76,12 +58,34 @@ class SubstanceDataModel extends BaseEquipmentDataModel {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.SUBSTANCE, label: "S0.Tipo" }),
             quantity: new NumberField({ integer: true, initial: 1, minValue: 0, label: "S0.Quantidade" }),
-            effects: new ArrayField(new StringField())
         };
     }
 }
 
-class RollableEquipmentDataModel extends BaseEquipmentDataModel {
+class EquipmentDataModel extends BaseEquipmentDataModel {
+    get canBeSuper() {
+        return true;
+    }
+
+    static defineSchema() {
+        return {
+            ...super.defineSchema(),
+            super_equipment: new SuperEquipmentField(),
+        };
+    }
+}
+
+class ArmorDataModel extends EquipmentDataModel {
+    static defineSchema() {
+        return {
+            ...super.defineSchema(),
+            type: new NumberField({ integer: true, initial: EquipmentType.ARMOR, label: "S0.Tipo" }),
+            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
+        };
+    }
+}
+
+class RollableEquipmentDataModel extends EquipmentDataModel {
     get canRoll() {
         return true;
     }

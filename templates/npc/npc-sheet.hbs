@@ -17,7 +17,7 @@
                     <h2 class="charname" style="display: flex; align-items: center;">
                         <label for="name" style="flex: 1">{{ localize 'S0.Nome' }}:</label>
                         <input id="name" name="name"
-                            style="height: 32px; margin-left: 6px; color: var(--primary-color);" type="text"
+                            style="margin-left: 6px; color: var(--primary-color);" type="text"
                             value="{{actor.name}}" placeholder="{{ localize 'S0.Nome' }}" {{#unless
                             editable}}disabled{{/unless}} />
                     </h2>
@@ -25,7 +25,7 @@
                     <div class="S0-container-2-column" style="margin-top: 6px;">
                         <div style="display: flex; align-items: center; column-gap: 6px;">
                             <label for="morfologia">{{ localize 'S0.Morfologia' }}:</label>
-                            <select class="S0-select" id="morfologia" style="height: 28px;" name="system.morfologia"
+                            <select class="S0-select" id="morfologia" name="system.morfologia"
                                 {{#unless editable}}disabled{{/unless}}>
                                 {{#each (fetchRepository 'morphology')}}
                                 <option value="{{id}}" {{selectIfEq ../actor.system.morfologia id }}>{{label}}</option>
@@ -35,7 +35,7 @@
 
                         <div style="display: flex; align-items: center; column-gap: 6px;">
                             <label for="bairro">{{ localize 'S0.Bairro' }}:</label>
-                            <select class="S0-select" id="bairro" style="height: 28px;" name="system.bairro" {{#unless
+                            <select class="S0-select" id="bairro" name="system.bairro" {{#unless
                                 editable}}disabled{{/unless}}>
                                 {{#each (fetchRepository 'district')}}
                                 <option value="{{id}}" {{selectIfEq ../actor.system.bairro id }}>{{label}}</option>

@@ -1,8 +1,9 @@
+import { SYSTEM_ID } from "../constants.mjs";
 import { BaseActorCharacteristicType, CharacteristicType } from "../enums/characteristic-enums.mjs";
 import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
 
 export class TraitRepository {
-    static goodTrait = [
+    static #goodTrait = [
         {
             id: '1',
             name: 'Atraente',
@@ -197,7 +198,7 @@ export class TraitRepository {
         },
     ];
 
-    static badTrait = [
+    static #badTrait = [
         {
             id: '30',
             name: 'Vale da Estranheza',
@@ -533,7 +534,7 @@ export class TraitRepository {
     static #loadedBadFromPack = [];
 
     static async _loadFromPack() {
-        const compendium = (await game.packs.get('setor0OSubmundo.traits')?.getDocuments());
+        const compendium = (await game.packs.get(`${SYSTEM_ID}.traits`)?.getDocuments());
         if (compendium) {
             const allTraits = compendium.map((item) => {
                 const convertedItem = {
@@ -560,11 +561,17 @@ export class TraitRepository {
     }
 
     static _getGoodTraits() {
-        return [... this.goodTrait, ... this.#loadedGoodFromPack];
+        return [
+            ...TraitRepository.#goodTrait,
+            ...TraitRepository.#loadedGoodFromPack
+        ];
     }
 
     static _getBadTraits() {
-        return [... this.badTrait, ... this.#loadedBadFromPack];
+        return [
+            ...TraitRepository.#badTrait,
+            ...TraitRepository.#loadedBadFromPack
+        ];
     }
 
     static _getItemsByType(type) {

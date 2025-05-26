@@ -1,43 +1,49 @@
 const { NumberField, StringField, SchemaField, ArrayField } = foundry.data.fields;
 
 export class SuperEquipmentField extends SchemaField {
-    constructor({ level = 1, quality = [], defect = [] } = {}) {
+    constructor({ level = 0, effects = [], defects = [] } = {}) {
         super({
-            level: new NumberField({ required: true, integer: true, initial: 1, min: 1, max: 5 }),
-            quality: new ArrayField(new SuperEquipmentTraitField()),
-            defect: new ArrayField(new SuperEquipmentTraitField()),
-        });
+            level: new NumberField({ required: true, integer: true, initial: 0, min: 0, max: 5 }),
+            effects: new ArrayField(new SuperEquipmentTraitField()),
+            defects: new ArrayField(new SuperEquipmentTraitField()),
+        }, { initial: null, nullable: true });
 
         this.level = level;
-        this.quality = quality;
-        this.defect = defect;
+        this.effects = effects;
+        this.defects = defects;
     }
 
-    static _toJson(data = {}) {
+    static toJson(data = {}) {
         const instance = new SuperEquipmentField(data);
         return instance.toObject(instance);
     }
 }
 
-class SuperEquipmentTraitField extends SchemaField {
-    constructor(id, name, cost, particularity) {
+export class SuperEquipmentTraitField extends SchemaField {
+    constructor({ id, name, cost, limit, description, particularity } = {}) {
         super({
             id: new StringField({ required: true }),
             name: new StringField({ required: true }),
             cost: new NumberField({ required: true, integer: true, initial: 1, min: 1 }),
+            limit: new NumberField({ required: true, integer: true, initial: 1, min: 1 }),
+            description: new StringField({ nullable: true, required: false, initial: '' }),
             particularity: new StringField({ nullable: true, required: false })
         });
 
         this.id = id;
         this.name = name;
         this.cost = cost;
+        this.limit = limit;
+        if (description != undefined) {
+            this.description = description;
+        }
         if (particularity != undefined) {
             this.particularity = particularity;
         }
     }
 
-    static _toJson(id, name, cost, particularity) {
-        const object = new SuperEquipmentTraitField(id, name, cost, particularity);
-        return object.toObject(object);
+    static toJson(data = {}) {
+        const instance = new SuperEquipmentTraitField(data);
+        return instance.toObject(instance);
     }
 }

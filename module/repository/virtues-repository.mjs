@@ -7,7 +7,7 @@ export class VirtuesRepository {
         { id: 'quietude', label: 'Quietude' }
     ];
 
-    static _getItems() {
+    static getItems() {
         return [... this.#characteristics]
             .map(item => {
                 return {

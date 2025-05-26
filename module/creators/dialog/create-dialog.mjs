@@ -6,6 +6,7 @@ export class CreateFormDialog {
     static optionsTemplate = {
         onConfirm: async (data) => { },
         onCancel: async (html) => { },
+        render: (html, windowApp) => { },
         presetForm: {},
     }
 
@@ -29,7 +30,8 @@ export class CreateFormDialog {
             content,
             buttons: {},
             render: (html) => {
-                this.#render(html, dialog, { buttons });
+                const windowApp = this.#render(html, dialog, { buttons });
+                options.render?.(html, windowApp);
             },
         });
         dialog.render(true);
@@ -97,8 +99,9 @@ export class CreateFormDialog {
 
     static #render(html, dialog, params) {
         const { buttons, header } = params
-        DialogUtils.presetDialogRender(html, header);
+        const windowApp = DialogUtils.presetDialogRender(html, header);
         this.#setupButtonsRender(html, dialog, buttons);
+        return windowApp;
     }
 
     static #setupButtonsRender(html, dialog, buttons = {}) {

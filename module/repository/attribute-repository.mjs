@@ -11,6 +11,6 @@ export class AttributeRepository {
     ];
 
     static _getItems() {
-        return [... this.#characteristics];
+        return [...AttributeRepository.#characteristics];
     }
 }

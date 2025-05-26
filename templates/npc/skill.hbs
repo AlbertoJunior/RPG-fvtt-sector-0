@@ -1,7 +1,7 @@
 <div style="display: flex; align-items: center; column-gap: 10px;">
     <label style="flex: 1;">{{localize name}}:</label>
 
-    <select class="S0-select" style="flex: 2; min-height: 28px;" name="system.habilidades.{{system}}.nome"
+    <select class="S0-select" style="flex: 2;" name="system.habilidades.{{system}}.nome"
         {{#unless editable}}disabled{{/unless}}>
         {{#each (fetchRepository 'ability')}}
         <option value="{{id}}" {{selectIfEq (actorValues ../actor 'npc_actual_skill_name' ../system) id }}>{{localize label}}</option>

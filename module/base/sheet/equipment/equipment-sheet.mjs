@@ -1,17 +1,22 @@
 import { SYSTEM_ID, REGISTERED_TEMPLATES, TEMPLATES_PATH } from "../../../constants.mjs";
+import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
 import { OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { menuHandleMethods } from "../../menu-default-methods.mjs";
+import { handlerEquipmentCharacteristicsEvents } from "./methods/equipment-characteristics-methods.mjs";
 import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
 import { handlerEquipmentMenuRollEvents } from "./methods/equipment-menu-roll-methods.mjs";
+import { handlerSuperEquipmentEvents } from "./methods/superequipment-methods.mjs";
 
 export class EquipmentSheet extends ItemSheet {
     #mapEvents = {
         menu: menuHandleMethods,
         item_roll: handlerEquipmentItemRollEvents,
-        menu_roll: handlerEquipmentMenuRollEvents
+        menu_roll: handlerEquipmentMenuRollEvents,
+        characteristic: handlerEquipmentCharacteristicsEvents,
+        superequipment: handlerSuperEquipmentEvents,
     };
 
     constructor(...args) {
@@ -26,7 +31,7 @@ export class EquipmentSheet extends ItemSheet {
             classes: [SYSTEM_ID, "sheet", "item"],
             template: `${TEMPLATES_PATH}/items/default.hbs`,
             width: 320,
-            height: 620
+            height: 640
         });
     }
 
@@ -126,7 +131,8 @@ export async function equipmentTemplatesRegister() {
         { path: "items/others/equipment-bag-item", call: 'equipamentBagItem' },
         { path: "items/others/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "items/others/common-equipment", call: "itemCommon" },
-        { path: "items/others/rollable-tests", call: "itemRollableTests" }
+        { path: "items/others/rollable-tests", call: "itemRollableTests" },
+        { path: "items/others/superequipment", call: "itemSuperEquipment" }
     ];
 
     return await loadAndRegisterTemplates(templates);

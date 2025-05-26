@@ -1,7 +1,8 @@
+import { logTable } from "../../scripts/utils/utils.mjs";
 import { actorTemplatesRegister } from "../base/sheet/actor/actor-sheet.mjs";
 import { equipmentTemplatesRegister } from "../base/sheet/equipment/equipment-sheet.mjs";
 import { npcTemplatesRegister } from "../base/sheet/npc/npc-sheet.mjs";
-import { REGISTERED_TEMPLATES, SYSTEM_ID } from "../constants.mjs";
+import { REGISTERED_TEMPLATES, TEMPLATES_PATH } from "../constants.mjs";
 
 export async function registerTemplates() {
     const loadedAuxiliaryTemplates = await loadAuxiliaryTemplates();
@@ -11,8 +12,7 @@ export async function registerTemplates() {
     const errorsLoadedTemplates = allTemplates.filter(templateResult => templateResult.status == "Falha");
     logTemplateErrors("Erros ao carregar os templates", errorsLoadedTemplates);
 
-    console.table(allTemplates);
-    console.log('-> Todos os templates foram registados!');
+    logTable('Todos os templates foram registados!', allTemplates);
 }
 
 async function loadAuxiliaryTemplates() {
@@ -44,10 +44,12 @@ async function loadSheetTemplates() {
             return { template: template.model, status: "Sucesso", loadedTemplates };
         } catch (error) {
             console.error(error);
-            return { template: template.model, status: "Falha", loadedTemplates };
+            return { template: template.model, status: "Falha", template };
         }
     }));
-    console.table(results);
+
+    logTable('Templates das Fichas Registrados', results)
+    
     const errors = results.filter(result => result.status == "Falha");
     logTemplateErrors("Erros ao carregar os registers", errors);
 
@@ -58,10 +60,9 @@ async function loadSheetTemplates() {
 }
 
 export async function loadAndRegisterTemplates(inputTemplates = []) {
-    const basePath = `systems/${SYSTEM_ID}/templates`;
     const fullTemplates = inputTemplates.map(template => ({
         ...template,
-        fullPath: `${basePath}/${template.path}.hbs`
+        fullPath: `${TEMPLATES_PATH}/${template.path}.hbs`
     }));
 
     const templatesToLoad = fullTemplates.filter(template => !Handlebars.partials[template.fullPath]);

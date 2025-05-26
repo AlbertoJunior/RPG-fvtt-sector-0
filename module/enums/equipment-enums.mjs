@@ -22,7 +22,14 @@ export const EquipmentCharacteristicType = Object.freeze({
     LONG_RANGE: { id: 'long_range', system: `system.long_range` },
     SPECIAL: { id: 'special', system: `system.special` },
     POSSIBLE_TESTS: { id: 'possible_tests', system: `system.possible_tests` },
-    DEFAULT_TEST: { id: 'default_test', system: `system.default_test` }
+    DEFAULT_TEST: { id: 'default_test', system: `system.default_test` },
+    SUPER_EQUIPMENT: {
+        id: 'super_equipment',
+        system: `system.super_equipment`,
+        LEVEL: { id: 'level', system: `system.super_equipment.level` },
+        EFFECTS: { id: 'effects', system: `system.super_equipment.effects` },
+        DEFECTS: { id: 'defects', system: `system.super_equipment.defects` },
+    }
 });
 
 export const EquipmentType = Object.freeze({

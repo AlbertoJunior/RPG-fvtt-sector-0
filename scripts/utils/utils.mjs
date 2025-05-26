@@ -38,6 +38,12 @@ export function selectCharacteristic(element) {
     element.blur();
 }
 
+export function selectCharacteristicAndReturnLength(element) {
+    selectCharacteristic(element);
+    const value = element.parentElement.querySelectorAll('.S0-selected').length;
+    return value;
+}
+
 export function toTitleCase(str) {
     return str
         .toLowerCase()
@@ -117,4 +123,18 @@ export function snakeToCamel(entries) {
 
 export function normalizeString(str) {
     return str.replace(/\s+/g, ' ').trim();
+}
+
+export function logTable(title, table) {
+    console.log(`---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----\n-> ${title}`);
+    console.table(table);
+
+    const errors = Object.values(table).filter(result => result.error != null);
+    if (errors.length > 0) {
+        for (const resultWithError of errors) {
+            console.error(resultWithError.error);
+        }
+    }
+
+    console.log('---> ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- <---');
 }

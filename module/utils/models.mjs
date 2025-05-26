@@ -1,3 +1,4 @@
+import { logTable } from "../../scripts/utils/utils.mjs";
 import { createActorDataModels } from "../data/actor-data-model.mjs";
 import { createEquipmentDataModels } from "../data/equipment-data-model.mjs";
 import { createTraitDataModels } from "../data/trait-data-model.mjs";
@@ -23,6 +24,5 @@ export async function createDataModels() {
         )
     );
 
-    console.log('-> Todos os Models foram configurados!');
-    console.table(results);
+    logTable('Todos os Models foram configurados!', results);
 }

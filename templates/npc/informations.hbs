@@ -3,14 +3,14 @@
         <div style="display: flex; align-items: center;">
             <label for="job" style="flex: 1;">{{ localize 'S0.Atuacao' }}:</label>
             <input id="job" name="system.background.assignment"
-                style="color: var(--primary-color); flex: 2; min-height: 28px;" type="text"
+                style="color: var(--primary-color); flex: 2;" type="text"
                 value="{{actor.system.background.assignment}}" placeholder="{{ localize 'S0.Atuacao' }}" {{#unless
                 editable}}disabled{{/unless}} />
         </div>
 
         <div style="display: flex; align-items: center;">
             <label for="quality" style="flex: 1;">{{localize 'S0.Qualidade'}}:</label>
-            <select class="S0-select" style="flex: 2; min-height: 28px;" id="quality" name="system.qualidade" {{#unless
+            <select class="S0-select" style="flex: 2;" id="quality" name="system.qualidade" {{#unless
                 editable}}disabled{{/unless}}>
                 {{#each (fetchRepository 'npc-quality')}}
                 <option value="{{id}}" {{selectIfEq ../actor.system.qualidade id }}>{{label}}</option>

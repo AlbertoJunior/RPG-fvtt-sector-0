@@ -12,6 +12,7 @@ import { VirtuesRepository } from "../../module/repository/virtues-repository.mj
 import { FameRepository } from "../../module/repository/fame-repository.mjs";
 import { NpcQualityRepository } from "../../module/repository/npc-quality-repository.mjs";
 import { EquipmentInfoParser } from "../../module/core/equipment/equipment-info.mjs";
+import { SuperEquipmentTraitRepository } from "../../module/repository/superequipment-trait-repository.mjs";
 
 const map = {
     'morphology': MorphologyRepository._getItems(),
@@ -23,7 +24,7 @@ const map = {
     'attribute': AttributeRepository._getItems(),
     'ability': AbilityRepository._getItems(),
     'repertory': RepertoryRepository._getItems(),
-    'virtue': VirtuesRepository._getItems(),
+    'virtue': VirtuesRepository.getItems(),
     'fame': FameRepository._getItems(),
     'npc-fame': FameRepository._getItemsNpc(),
     'npc-quality': NpcQualityRepository._getItems(),
@@ -32,6 +33,8 @@ const map = {
     'equipment-damage-type': EquipmentInfoParser.getDamageTypes,
     'equipment-hand-type': EquipmentInfoParser.getHandTypes,
     'equipment-vehile-type': EquipmentInfoParser.getVehicleTypes,
+    'superequipment-good-traits': SuperEquipmentTraitRepository.getGoodTraits,
+    'superequipment-bad-traits': SuperEquipmentTraitRepository.getBadTraits,
 }
 
 function getActorEquipmentTypes() {

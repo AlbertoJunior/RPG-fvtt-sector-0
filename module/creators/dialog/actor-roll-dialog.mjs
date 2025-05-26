@@ -86,7 +86,7 @@ export class ActorRollDialog {
                 }
             });
 
-        const virtueOptions = VirtuesRepository._getItems();
+        const virtueOptions = VirtuesRepository.getItems();
 
         const enhancementOptions = ActorUtils.getAllEnhancements(actor)
             .map(enhance => {

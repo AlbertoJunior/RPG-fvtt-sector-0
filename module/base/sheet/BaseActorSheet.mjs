@@ -103,7 +103,7 @@ export class Setor0BaseActorSheet extends ActorSheet {
         const pages = [];
         const buttons = [];
 
-        const isCompacted = FlagsUtils.getItemFlag(game.user, SystemFlags.MODE.COMPACT)
+        const isCompacted = FlagsUtils.getItemFlag(game.user, SystemFlags.MODE.COMPACT);
 
         html.find(".S0-page").each((index, page) => {
             pages.push(page);

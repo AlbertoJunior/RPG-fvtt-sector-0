@@ -1,3 +1,4 @@
+import { SYSTEM_ID } from "../constants.mjs";
 import { agilityEnhancement } from "../core/enhancement/agility.mjs";
 import { assimilationEnhancement } from "../core/enhancement/assimilation.mjs";
 import { brutalityEnhancement } from "../core/enhancement/brutality.mjs";
@@ -20,7 +21,7 @@ export class EnhancementRepository {
     static #loadedFromPack = [];
 
     static async _loadFromPack() {
-        const compendium = await game.packs.get('setor0OSubmundo.enhancements')?.getDocuments();
+        const compendium = await game.packs.get(`${SYSTEM_ID}.enhancements`)?.getDocuments();
         if (compendium) {
             EnhancementRepository.#loadedFromPack = compendium.map((item) => {
                 return {
@@ -34,7 +35,10 @@ export class EnhancementRepository {
     }
 
     static _getItems() {
-        return [... this.#enhancements, ... this.#loadedFromPack].sort((a, b) => a.name.localeCompare(b.name));
+        return [
+            ...EnhancementRepository.#enhancements,
+            ...EnhancementRepository.#loadedFromPack
+        ].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     static _getEnhancementById(enhancementId) {
