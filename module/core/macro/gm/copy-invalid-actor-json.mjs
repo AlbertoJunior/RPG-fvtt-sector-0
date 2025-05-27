@@ -20,10 +20,10 @@ const invalidActors = game.actors._source.filter(actor => invalidIds.has(actor._
 if (invalidActors.length > 0) {
     await navigator.clipboard.writeText(JSON.stringify(raw, null, 2));
     ui.notifications.info("Dados do ator ${raw.name || "sem nome"} copiados para a área de transferência.");
-    console.log("Dados do ator ${raw.name || "sem nome"} copiados para a área de transferência.");
+    console.log("-> Dados do ator ${raw.name || "sem nome"} copiados para a área de transferência.");
 } else {
     ui.notifications.info("Nenhum actor corrompido");
-    console.log("Nenhum actor corrompido");
+    console.log("-> Nenhum actor corrompido");
 }
 `,
 }

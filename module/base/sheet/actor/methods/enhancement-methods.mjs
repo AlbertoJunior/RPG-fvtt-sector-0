@@ -11,7 +11,7 @@ import { ActorEnhancementField } from "../../../../field/actor-fields.mjs";
 import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
-import { ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
+import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { EnhancementMessageCreator } from "../../../../creators/message/enhancement-message.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
@@ -126,7 +126,8 @@ async function deactivedEffectSendOnChat(effect, actor) {
 async function verifyIsGmAndDefineShowChat(message, actor) {
     if (game.user.isGM) {
         ConfirmationDialog.open({
-            message: localize("Pergunta.Ocultar"),
+            titleDialog: "Ocultar Ação?",
+            message: localize("Pergunta.Ocultar_Acao"),
             onCancel: async () => {
                 await ChatCreator._sendToChat(actor, message);
             },
@@ -175,7 +176,7 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
             flags: {
                 [ActiveEffectsFlags.ORIGIN_ID]: effect.id,
                 [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ENHANCEMENT,
-                [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: localize('Aprimoramento'),
+                [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ENHANCEMENT),
                 ...(effect.duration !== EnhancementDuration.PASSIVE && {
                     [ActiveEffectsFlags.COMBAT_ID]: game.combat?.id
                 })

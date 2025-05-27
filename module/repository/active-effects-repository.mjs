@@ -4,7 +4,7 @@ import { simulatedActiveEffect } from "../core/effect/effect-items/simulated.mjs
 import { surprisedActiveEffect } from "../core/effect/effect-items/surprised.mjs";
 
 export class ActiveEffectRepository {
-    static items = [
+    static #items = [
         surprisedActiveEffect,
         simulatedActiveEffect,
         ...influencedActiveEffects,
@@ -20,6 +20,9 @@ export class ActiveEffectRepository {
     }
 
     static _getItems() {
-        return [... this.items, ...this.#getFoundryDefaultEffects()].filter(Boolean);
+        return [
+            ...this.#items,
+            ...this.#getFoundryDefaultEffects()
+        ].filter(Boolean);
     }
 }

@@ -9,6 +9,7 @@ export class ActiveEffectsUtils {
 
     static createEffectData(params) {
         const {
+            id,
             name = "",
             description = "",
             origin = "",
@@ -33,7 +34,7 @@ export class ActiveEffectsUtils {
         }
 
         const activeEffectData = {
-            id: name.toLowerCase(),
+            id: id ?? name.toLowerCase(),
             name: name,
             description: description,
             origin: origin,

@@ -131,6 +131,7 @@ export async function equipmentTemplatesRegister() {
         { path: "items/others/equipment-bag-item", call: 'equipamentBagItem' },
         { path: "items/others/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "items/others/common-equipment", call: "itemCommon" },
+        { path: "items/others/common-weapon", call: "itemCommonWeapon" },
         { path: "items/others/rollable-tests", call: "itemRollableTests" },
         { path: "items/others/superequipment", call: "itemSuperEquipment" }
     ];

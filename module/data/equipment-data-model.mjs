@@ -1,8 +1,8 @@
-import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, equipmentTypeIdToTypeString } from "../enums/equipment-enums.mjs";
-import { SuperEquipmentField } from "../field/equipment-field.mjs";
+import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, equipmentTypeIdToTypeString, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
+import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
-const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
+const { StringField, NumberField, BooleanField, ArrayField, SchemaField } = foundry.data.fields;
 
 class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
     get isEquipment() {
@@ -53,11 +53,21 @@ class SubstanceDataModel extends BaseEquipmentDataModel {
         return this.quantity > 0;
     }
 
+    prepareDerivedData() {
+        super.prepareDerivedData();
+        const data = this;
+        if (data.substance_type != SubstanceType.DRUG) {
+            data.effects = [];
+        }
+    }
+
     static defineSchema() {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.SUBSTANCE, label: "S0.Tipo" }),
+            substance_type: new NumberField({ integer: true, initial: SubstanceType.DRUG, label: "S0.Itens.Tipo_Substancia" }),
             quantity: new NumberField({ integer: true, initial: 1, minValue: 0, label: "S0.Quantidade" }),
+            effects: new ArrayField(new SubstanceEffectField()),
         };
     }
 }
@@ -151,6 +161,7 @@ class MeleeDataModel extends WeaponDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.MELEE, label: "S0.Tipo" }),
+            size: new NumberField({ integer: true, initial: MeleeSize.SMALL, label: "S0.Tamanho" }),
         };
     }
 }
@@ -163,9 +174,8 @@ class ProjectileDataModel extends WeaponDataModel {
             actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             capacity: new NumberField({ integer: true, initial: 1, label: "S0.Capacidade" }),
             cadence: new NumberField({ integer: true, initial: 1, label: "S0.Cadencia" }),
-            short_range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Curto_Alcance" }),
-            medium_range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Medio_Alcance" }),
-            long_range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Longo_Alcance" }),
+            range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Alcance" }),
+            max_range: new NumberField({ integer: true, initial: 2, label: "S0.Itens.Alcance_Maximo" }),
             special: new BooleanField({ initial: false, label: "S0.Especial" })
         };
     }

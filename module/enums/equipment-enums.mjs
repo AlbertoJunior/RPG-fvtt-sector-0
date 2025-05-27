@@ -7,7 +7,10 @@ export const EquipmentCharacteristicType = Object.freeze({
     QUANTITY: { id: 'quantity', system: `system.quantity` },
     RESISTANCE: { id: 'resistance', system: `system.resistance` },
     ACTUAL_RESISTANCE: { id: 'actual_resistance', system: `system.actual_resistance` },
-    EFFECTS: { id: 'effects', system: `system.effects` },
+    SUBSTANCE: {
+        EFFECTS: { id: 'effects', system: `system.effects` },
+        TYPE: { id: 'substance_type', system: `system.substance_type` },
+    },
     ACCELERATION: { id: 'acceleration', system: `system.acceleration` },
     SPEED: { id: 'speed', system: `system.speed` },
     HAND: { id: 'hand', system: `system.hand` },
@@ -17,9 +20,9 @@ export const EquipmentCharacteristicType = Object.freeze({
     DAMAGE_TYPE: { id: 'damage_type', system: `system.damage_type` },
     CAPACITY: { id: 'capacity', system: `system.capacity` },
     CADENCE: { id: 'cadence', system: `system.cadence` },
-    SHORT_RANGE: { id: 'short_range', system: `system.short_range` },
-    MEDIUM_RANGE: { id: 'medium_range', system: `system.medium_range` },
-    LONG_RANGE: { id: 'long_range', system: `system.long_range` },
+    RANGE: { id: 'range', system: `system.range` },
+    MAX_RANGE: { id: 'max_range', system: `system.max_range` },
+    SIZE: { id: 'size', system: `system.size` },
     SPECIAL: { id: 'special', system: `system.special` },
     POSSIBLE_TESTS: { id: 'possible_tests', system: `system.possible_tests` },
     DEFAULT_TEST: { id: 'default_test', system: `system.default_test` },
@@ -70,6 +73,12 @@ export const EquipmentHand = Object.freeze({
     TWO_HANDS: 2,
 });
 
+export const MeleeSize = Object.freeze({
+    SMALL: 0,
+    MEDIUM: 1,
+    LONG: 2,
+});
+
 export const DamageType = Object.freeze({
     SUPERFICIAL: 0,
     LETAL: 1,
@@ -86,4 +95,11 @@ export const VehicleType = Object.freeze({
     SUPER_SPORT: 4,
     RAW: 5,
     EXOTIC: 6,
+});
+
+export const SubstanceType = Object.freeze({
+    DRUG: 0,
+    POISON: 1,
+    ACID: 2,
+    GAS: 3,
 });

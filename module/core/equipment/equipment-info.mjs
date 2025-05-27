@@ -1,5 +1,6 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
-import { DamageType, EquipmentHand, EquipmentHidding, VehicleType } from "../../enums/equipment-enums.mjs";
+import { ActiveEffectsTypes } from "../../enums/active-effects-enums.mjs";
+import { DamageType, EquipmentHand, EquipmentHidding, MeleeSize, SubstanceType, VehicleType } from "../../enums/equipment-enums.mjs";
 
 export class EquipmentInfoParser {
 
@@ -45,6 +46,33 @@ export class EquipmentInfoParser {
         return map[value] || `<${localize('Erro')}>`;
     }
 
+    static parseMeleeSize(value) {
+        const map = {
+            [MeleeSize.SMALL]: `${localize('Itens.Curta')}`,
+            [MeleeSize.MEDIUM]: `${localize('Itens.Media')}`,
+            [MeleeSize.LONG]: `${localize('Itens.Grande')}`,
+        }
+        return map[value] || `<${localize('Erro')}>`;
+    }
+
+    static parseSubstance(value) {
+        const map = {
+            [SubstanceType.DRUG]: `${localize('Itens.Droga')}`,
+            [SubstanceType.POISON]: `${localize('Itens.Veneno')}`,
+            [SubstanceType.ACID]: `${localize('Itens.Acido')}`,
+            [SubstanceType.GAS]: `${localize('Itens.Gas')}`,
+        }
+        return map[value] || `<${localize('Erro')}>`;
+    }
+
+    static parseSubstanceEffectType(value) {
+        const map = {
+            [ActiveEffectsTypes.BUFF]: `${localize('Itens.Melhoria')}`,
+            [ActiveEffectsTypes.DEBUFF]: `${localize('Itens.Enfraquecimento')}`,
+        }
+        return map[value] || `<${localize('Erro')}>`;
+    }
+
     static getHandTypes() {
         return Object.values(EquipmentHand).map(type => {
             return {
@@ -77,6 +105,24 @@ export class EquipmentInfoParser {
             return {
                 id: type,
                 label: EquipmentInfoParser.parseVehicle(type)
+            }
+        });
+    }
+
+    static getMeleeSize() {
+        return Object.values(MeleeSize).map(type => {
+            return {
+                id: type,
+                label: EquipmentInfoParser.parseMeleeSize(type)
+            }
+        });
+    }
+
+    static getSubstanceTypes() {
+        return Object.values(SubstanceType).map(type => {
+            return {
+                id: type,
+                label: EquipmentInfoParser.parseSubstance(type)
             }
         });
     }

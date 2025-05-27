@@ -108,7 +108,7 @@ export class Setor0BaseActorSheet extends ActorSheet {
         html.find(".S0-page").each((index, page) => {
             pages.push(page);
 
-            const pageLabel = page?.getAttribute('data-label') || "[Erro]";
+            const pageLabel = page?.getAttribute('data-label') || `<${localize('Erro')}>`;
             const textContent = isCompacted ? undefined : pageLabel;
 
             const iconClass = page?.getAttribute('data-icon');

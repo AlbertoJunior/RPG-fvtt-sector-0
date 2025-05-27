@@ -36,7 +36,7 @@ export class DOMUtils {
                 return methodOfType(target);
             }
 
-            console.log(`Não existe evento configurado no DOM para [${action}]`);
+            console.log(`-> Não existe evento configurado no DOM para [${action}]`);
         });
     }
 

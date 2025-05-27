@@ -3,18 +3,19 @@
 
     <div class="S0-page S0-container">
         <div class="form-group">
-            <label style="flex: 1;">
+            <label for="{{item.id}}.resistance" style="flex: 1;">
                 {{localize 'S0.Resistencia_Total'}}:
             </label>
-            <input style="flex: 1;" type="number" name="system.resistance" value="{{system.resistance}}" />
+            <input id="{{item.id}}.resistance" style="flex: 1; text-align: center;" type="number"
+                name="system.resistance" value="{{system.resistance}}" min="1" />
         </div>
 
         <div class="form-group">
-            <label style="flex: 1;">
+            <label for="{{item.id}}.actual_resistance" style="flex: 1;">
                 {{localize 'S0.Resistencia_Atual'}}:
             </label>
-            <input style="flex: 1;" type="number" min="0" max="{{system.resistance}}" name="system.actual_resistance"
-                value="{{system.actual_resistance}}" />
+            <input id="{{item.id}}.actual_resistance" style="flex: 1; text-align: center;" type="number" min="0"
+                max="{{system.resistance}}" name="system.actual_resistance" value="{{system.actual_resistance}}" />
         </div>
     </div>
 

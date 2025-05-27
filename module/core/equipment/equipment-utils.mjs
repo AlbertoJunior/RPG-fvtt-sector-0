@@ -1,5 +1,7 @@
-import { getObject } from "../../../scripts/utils/utils.mjs";
-import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
+import { getObject, localize } from "../../../scripts/utils/utils.mjs";
+import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../enums/active-effects-enums.mjs";
+import { EquipmentCharacteristicType, SubstanceType } from "../../enums/equipment-enums.mjs";
+import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 export class EquipmentUtils {
     static getSuperEquipmentEffectsLimits(item) {
@@ -12,6 +14,10 @@ export class EquipmentUtils {
         const totalBonus = (level || 1) + totalDefects;
 
         return `${totalEffects}/${totalBonus}`;
+    }
+
+    static isSuperEquipment(item) {
+        return Boolean(getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT));
     }
 
     static getSuperEquipmentLevel(item) {
@@ -34,5 +40,51 @@ export class EquipmentUtils {
         const defects = superEquipment.defects || [];
         const totalEffects = effects.length + defects.length;
         return totalEffects > 0;
+    }
+
+    static substanceEffects(item) {
+        return getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];
+    }
+
+    static substanceWithEffects(item) {
+        const substanceType = getObject(item, EquipmentCharacteristicType.SUBSTANCE.TYPE);
+        if (substanceType == null || substanceType == undefined) {
+            return false;
+        }
+        return substanceType == SubstanceType.DRUG;
+    }
+
+    static getSubstanceActiveEffects(item) {
+        const effects = getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];
+        const originLabel = localize('Substancia');
+        const itemId = item.id;
+        const allEffects = [];
+
+        for (const effect of effects) {
+            const activeEffect = ActiveEffectsUtils.createEffectData({
+                id: `${itemId}.${effect.id}`,
+                origin: originLabel,
+                name: `${item.name}: ${effect.description}`,
+                description: effect.description,
+                statuses: [`${itemId}`],
+                duration: { startRound: 0, rounds: 99 },
+                changes: [
+                    {
+                        key: effect.change.key,
+                        value: effect.change.value,
+                        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+                    },
+                ],
+                flags: {
+                    [ActiveEffectsFlags.ORIGIN_ID]: itemId,
+                    [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ITEM,
+                    [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ITEM),
+                    [ActiveEffectsFlags.TYPE]: effect.type,
+                }
+            });
+
+            allEffects.push(activeEffect);
+        }
+        return allEffects;
     }
 }

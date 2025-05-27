@@ -109,6 +109,7 @@
         "Sobrecarga": "Sobrecarga",
         "Aprimoramento": "Aprimoramento",
         "Aprimoramentos": "Aprimoramentos",
+        "Afetado_Aprimoramento": "Afetado por Aprimoramento",
         
         "Status": "Status",
         "Vida": "Vida",
@@ -125,6 +126,7 @@
         "Equipamento": "Equipamento",
         "Protecao": "Proteção",
         "Veiculos": "Veiculos",
+        "Substancia": "Substância",
         "Substancias": "Substâncias",
         "Resistencia": "Resistência",
         "Maos": "Mãos",
@@ -140,6 +142,7 @@
         "Capacidade": "Capacidade",
         "Alcance": "Alcance",
         
+        "Outro": "Outro",
         "Outros": "Outros",
         "Fama": "Fama",
         "Biografia": "Biografia",
@@ -178,6 +181,8 @@
         "Iniciativa": "Iniciativa",
         "Penalidade": "Penalidade",
         "Informacoes": "Informações",
+        "Item": "Item",
+
         "Modo_Escuro": "Modo Escuro",
         "Modo_Compacto": "Modo Compacto",
         "Enviar_No_Chat": "Enviar no Chat",
@@ -250,9 +255,8 @@
         },
 
         "Itens": {
-            "Curto_Alcance": "Curto Alcance",
-            "Medio_Alcance": "Médio Alcance",
-            "Longo_Alcance": "Longo Alcance",
+            "Alcance": "Curto Alcance",
+            "Alcance_Maximo": "Alcance Máximo",
 
             "Bolso": "Bolso",
             "Jaqueta": "Jaqueta",
@@ -268,6 +272,11 @@
             "Eletrico": "Elétrico",
             "Gelo": "Gelo",
 
+            "Tamanho": "Tamanho",
+            "Curta": "Curta",
+            "Media": "Média",
+            "Grande": "Grande",
+
             "Lata": "Lata",
             "Popular": "Popular",
             "Utilitario": "Utilitário",
@@ -276,15 +285,34 @@
             "Bruto": "Bruto",
             "Exotico": "Exótico",
 
+            "Adicionar_Efeito" : "Adicionar_Efeito",
             "Efeitos": "Efeitos",
-            "Defeitos": "Defeitos"
+            "Defeitos": "Defeitos",
+
+            "Tipo_Substancia": "Tipo de Substância",
+            "Droga": "Droga",
+            "Veneno": "Veneno",
+            "Acido": "Ácido",
+            "Gas": "Gás",
+            "Melhoria": "Melhoria",
+            "Enfraquecimento": "Enfraquecimento",
+
+            "Pergunta": {
+                "Usar_Item": "Usar o Item?",
+                "Excluir_SuperEquipamento": "Excluir SuperEquipamento?",
+                "Excluir_SuperEquipamento_Completo": "Essa ação irá excluir todas as informações do SuperEquipamento, tem certeza que deseja continuar?"
+            },
+
+            "Mensagens": {
+                "Nao_Pode_Efeitos_Iguais" : "Não pode ter dois efeitos iguais"
+            }
 
         },
 
         "Pergunta": {
-            "Usar_Item": "Usar o Item?",
             "Realizar_Acao": "Tem certeza que deseja realizar essa ação?",
-            "Ocultar": "Ocultar?"
+            "Ocultar": "Ocultar?",
+            "Ocultar_Acao": "Deseja ocultar esta ação?"
         }
     },
     "TYPES": {
@@ -634,7 +662,6 @@
     "Collapse": "Recolher",
     "Display": "Exibição",
     "Document": "Documento",
-    "Errors": "Erros",
     "Expand": "Expandir",
     "Close": "Fechar",
     "Sheet": "Ficha",
@@ -662,6 +689,7 @@
     "Documentation": "Documentação",
     "Duplicate": "Duplicar",
     "Error": "Erro",
+    "Errors": "Erros",
     "Install": "Instalar",
     "Uninstall": "Desinstalar",
     "Elevation": "Elevação",

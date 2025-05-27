@@ -1,5 +1,7 @@
 import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
+import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
+import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
@@ -64,12 +66,27 @@ class EquipmentHandleEvents {
             return;
         }
 
+        switch (target.dataset.type.toLowerCase()) {
+            case 'substance': {
+                this.#useSubstance(actor, equipment);
+                return;
+            }
+        }
+    }
+
+    static #useSubstance(actor, equipment) {
         ConfirmationDialog.open({
-            message: localize('Pergunta.Usar_Item'),
+            titleDialog: `Usar: ${equipment.name}`,
+            message: localize('Itens.Pergunta.Usar_Item'),
             onConfirm: () => {
                 const actualValue = getObject(equipment, EquipmentCharacteristicType.QUANTITY);
                 const newValue = Math.max(0, actualValue - 1);
                 EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.QUANTITY, newValue);
+
+                const effects = EquipmentUtils.getSubstanceActiveEffects(equipment);
+                if (effects.length > 0) {
+                    ActiveEffectsUtils.addEffect(actor, effects);
+                }
             }
         });
     }
@@ -110,14 +127,13 @@ class EquipmentHandleEvents {
 
         switch (subCharacteristic) {
             case 'bag': {
-                this.#handleEditBag(actor, target);
+                this.#handleEditSubstanceQuantity(actor, target.dataset.itemId);
                 return;
             }
         }
     }
 
-    static #handleEditBag(actor, target) {
-        const equipmentId = target.dataset.itemId;
+    static #handleEditSubstanceQuantity(actor, equipmentId) {
         const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
         if (!equipment) {
             return;

@@ -18,12 +18,19 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 1. Baixe ou clone este repositório.
 2. Mova a pasta para o diretório `Data/systems` do seu Foundry VTT.
 3. Reinicie o Foundry e ative o sistema ao criar um novo mundo.
-
 > 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL.
 
-<details>
-<summary>Legenda de ícones</summary>
+## Utilizando com seus jogadores
+Caso você não possua um servidor para hospedar o Foundry e compartilhar o link, você pode criar um `QuickTunnel` com o `CloudFlare`. Da seguinte maneira:
 
+1. Baixe e instale o [cloudFlarered](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+2. Execute o código no CMD
+```console
+cloudflared tunnel --url http://localhost:30000
+```
+3. Pegue o link que foi apresentado no console e compartilhe.
+
+## Legenda de ícones
 ```
 🧩 Instalação
 🧬 Funcionalidades
@@ -35,7 +42,6 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 🛠️ Em desenvolvimento
 🚧 Planejado
 ```
-</details>
 
 ## 🧬 Funcionalidades
 <details>
@@ -71,8 +77,8 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 * ✅ Efeitos que são ativados durante um combate são desativados automaticamente ao final dele.
 
 ### Equipamentos
-* 🛠️ Ficha.
-* 🚧 SuperEquipamentos.
+* ✅ Ficha.
+* ✅ SuperEquipamentos.
 * ✅ Rolagem pelo Equipamento.
 * ✅ Rolagem dividida pelo Equipamento.
 * ✅ Atalhos customizados por Equipamento.

@@ -4,6 +4,8 @@ const map = {
     'superequipment_level': (item) => EquipmentUtils.getSuperEquipmentLevel(item),
     'superequipment_effects_limit': (item) => EquipmentUtils.getSuperEquipmentEffectsLimits(item),
     'superequipment_defects_limit': (item) => EquipmentUtils.getSuperEquipmentDefectsLimits(item),
+    'substance_effects': (item) => EquipmentUtils.substanceEffects(item),
+    'substance_with_effects': (item) => EquipmentUtils.substanceWithEffects(item),
 }
 
 export default function itemValues(item, value, ...params) {

@@ -1,3 +1,5 @@
+import { ActiveEffectsTypes } from "../enums/active-effects-enums.mjs";
+
 const { NumberField, StringField, SchemaField, ArrayField } = foundry.data.fields;
 
 export class SuperEquipmentField extends SchemaField {
@@ -44,6 +46,30 @@ export class SuperEquipmentTraitField extends SchemaField {
 
     static toJson(data = {}) {
         const instance = new SuperEquipmentTraitField(data);
+        return instance.toObject(instance);
+    }
+}
+
+export class SubstanceEffectField extends SchemaField {
+    constructor({ id, description, change, type } = {}) {
+        super({
+            id: new StringField({ required: true }),
+            type: new StringField({ required: false, initial: ActiveEffectsTypes.BUFF }),
+            description: new StringField({ required: true }),
+            change: new SchemaField({
+                key: new StringField({ required: false, nullable: true, initial: null }),
+                value: new NumberField({ required: false, integer: true, initial: 0 }),
+            }, { initial: null, nullable: true }),
+        }, { initial: null, nullable: true });
+
+        this.id = id;
+        this.description = description;
+        this.type = type;
+        this.change = change;
+    }
+
+    static toJson(data = {}) {
+        const instance = new SubstanceEffectField(data);
         return instance.toObject(instance);
     }
 }

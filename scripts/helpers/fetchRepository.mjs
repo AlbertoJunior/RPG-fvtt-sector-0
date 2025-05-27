@@ -32,7 +32,9 @@ const map = {
     'equipment-occultability': EquipmentInfoParser.getOccultabilityTypes,
     'equipment-damage-type': EquipmentInfoParser.getDamageTypes,
     'equipment-hand-type': EquipmentInfoParser.getHandTypes,
+    'equipment-melee-size': EquipmentInfoParser.getMeleeSize,
     'equipment-vehile-type': EquipmentInfoParser.getVehicleTypes,
+    'equipment-substance-type': EquipmentInfoParser.getSubstanceTypes,
     'superequipment-good-traits': SuperEquipmentTraitRepository.getGoodTraits,
     'superequipment-bad-traits': SuperEquipmentTraitRepository.getBadTraits,
 }

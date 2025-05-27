@@ -81,7 +81,7 @@ export class MacroUtils {
                 rollable: async (params) => {
                     const { actor, id } = params;
                     if (!actor || !id) {
-                        console.log("Elementos inválidos")
+                        console.log("-> Elementos inválidos")
                         return;
                     }
 

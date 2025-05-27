@@ -416,10 +416,17 @@ img.S0-clickable:hover {
     margin: 0px;
 }
 
+.S0-container textarea {
+    padding: 6px;
+}
+
+.S0-container input {
+    padding: 2px 6px;
+}
+
 .S0-container :is(input, textarea) {
     color: black;
     height: auto;
-    padding: 2px 6px;
     border: 2px solid var(--secondary-color-alpha-50);
     border-radius: var(--border-radius-large);
     transition: background-color 0.3s ease-in-out, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1682,7 +1689,7 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-page-transparent .S0-item-bag {
-    border-color: rgba(130, 0, 255);
+    border-color: var(--tertiary-color);
 }
 
 .S0-page-transparent .S0-actor-images-container {
