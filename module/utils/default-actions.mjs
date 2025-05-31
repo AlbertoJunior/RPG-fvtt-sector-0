@@ -40,6 +40,7 @@ export class DefaultActions {
         const { isHalf, ...modifiersWithoutHalf } = rollInformation.modifiers;
 
         const params = {
+            name: rollInformation.name,
             rolls: resultRoll,
             abilityInfo: rollInformation.abilityInfo,
             modifiers: modifiersWithoutHalf,

@@ -56,11 +56,12 @@ body {
     --border-radius-medium: 6px;
     --border-radius-large: 8px;
 
-    /* replace variables */
+    /* variables */
     --color-shadow-primary: var(--shadow-hover-color);
     --color-underline-header: var(--secondary-color);
     --color-scrollbar: var(--secondary-color);
     --color-scrollbar-border: var(--primary-color);
+    --font-size-9: 0.6em;
 }
 
 @font-face {
@@ -231,7 +232,7 @@ img#logo {
 .message-metadata,
 .chat-message {
     color: var(--primary-color);
-    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
+    text-shadow: 0 0px 2px var(--color-red);
 }
 
 .message-content button {
@@ -916,6 +917,19 @@ button.S0-roll-result:not([disabled]):hover {
     line-height: 1.3;
 }
 
+.S0-message-weapon-container {
+    background-color: var(--secondary-color-alpha-50);
+    margin: 10px;
+    padding: 2px 6px;
+    border: 1px solid var(--primary-color-alpha-50);
+    border-radius: 6px;
+    box-shadow: 0 0 6px var(--primary-color);
+}
+
+.S0-message-weapon-container label {
+    display: block;
+}
+
 .S0-dice {
     background: url(systems/setor0OSubmundo/icons/dn.png) no-repeat 0%;
     background-size: 36px;
@@ -1182,9 +1196,10 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* #region ALLIES, INFORMANTS, NPCs */
 
+/* #region NPC */
 .S0-image-npc {
     width: 200px;
-    height: 387px;
+    height: 392px;
     border: 2px solid var(--secondary-color-alpha-50);
     border-radius: 30px 0px;
     overflow: hidden;
@@ -1200,6 +1215,46 @@ button.S0-roll-result:not([disabled]):hover {
 .S0-image-npc img.S0-clickable {
     border: none;
 }
+
+.S0-item-bag-compact .S0-item-bag {
+    width: 80px;
+}
+
+.S0-item-bag-compact .S0-item-bag img {
+    max-width: 65px;
+    max-height: 80px;
+    min-height: 80px;
+}
+
+.S0-item-bag-compact .S0-item-bag .S0-item-name {
+    font-size: var(--font-size-9);
+    bottom: 18px;
+}
+
+.S0-item-bag-compact .S0-item-bag .S0-item-type {
+    font-size: var(--font-size-9);
+}
+
+.S0-item-bag-compact .S0-item-bag .S0-item-legend {
+    font-size: var(--font-size-10);
+    align-items: center;
+}
+
+.S0-item-bag-compact .S0-item-bag.S0-clickable:hover {
+    transform: scale(1.15);
+    z-index: 99;
+}
+
+.S0-item-bag-compact .S0-item-bag a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    position: relative;
+}
+
+/* #endregion */
 
 .S0-actor-images-container h4 {
     padding-right: 16px;

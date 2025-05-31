@@ -1,6 +1,8 @@
-import { getObject } from "../../../scripts/utils/utils.mjs";
+import { getObject, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../core/actor/actor-equipment.mjs";
 import { _createLi } from "../../creators/element/element-creator-jscript.mjs";
 import { BaseActorCharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
 import { SystemFlags } from "../../enums/flags-enums.mjs";
 import { OnEventType, OnMethod, verifyAndParseOnEventType } from "../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../utils/flags-utils.mjs";
@@ -96,6 +98,16 @@ export class Setor0BaseActorSheet extends ActorSheet {
                 return;
             }
         });
+    }
+
+    static presetStatusProtect(html, actor) {
+        const armor = ActorEquipmentUtils.getEquippedArmorItem(actor);
+        if (!armor) {
+            return;
+        }
+
+        const value = getObject(armor, EquipmentCharacteristicType.ACTUAL_RESISTANCE) || 0;
+        selectCharacteristic(html.find(`#statusPage #protect .S0-characteristic`)[value - 1]);
     }
 
     addPageButtonsOnFloatingMenu(html) {

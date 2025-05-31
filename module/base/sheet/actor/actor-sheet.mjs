@@ -11,6 +11,7 @@ import { SYSTEM_ID, TEMPLATES_PATH } from "../../../constants.mjs";
 import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
 import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
 import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
+import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
 
 class Setor0ActorSheet extends Setor0BaseActorSheet {
 
@@ -169,6 +170,7 @@ class Setor0ActorSheet extends Setor0BaseActorSheet {
         select('vida', CharacteristicType.LIFE);
 
         Setor0BaseActorSheet.presetStatusVitality(html, actor);
+        Setor0BaseActorSheet.presetStatusProtect(html, actor);
     }
 
     #presetSheetExpandContainers(html) {
@@ -209,7 +211,7 @@ class Setor0ActorSheet extends Setor0BaseActorSheet {
         if (!this.isEditable) {
             return;
         }
-        SheetMethods._handleCharacteristicClickEvent(event, this.actor);
+        await characteristicOnClick(event, this.actor);
     }
 }
 

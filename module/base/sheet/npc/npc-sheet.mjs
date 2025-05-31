@@ -6,6 +6,8 @@ import { DialogUtils } from "../../../utils/dialog-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { menuHandleMethods } from "../../menu-default-methods.mjs";
 import { ActorUpdater } from "../../updater/actor-updater.mjs";
+import { SheetActorDragabbleMethods } from "../actor/methods/dragabble-methods.mjs";
+import { handlerEquipmentEvents } from "../actor/methods/equipment-methods.mjs";
 import { handleStatusMethods } from "../actor/methods/status-methods.mjs";
 import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
 import { npcRollHandle } from "./methods/npc-roll-methods.mjs";
@@ -15,6 +17,7 @@ export async function npcTemplatesRegister() {
         { path: "npc/skill", call: "npcSkillPartial" },
         { path: "npc/informations", call: "npcInformations" },
         { path: "npc/status", call: "npcStatus" },
+        { path: "npc/bag", call: "npcBag" },
     ];
 
     return await loadAndRegisterTemplates(templates);
@@ -29,7 +32,7 @@ export async function registerNpc() {
 
 export const NpcSheetSize = {
     width: 680,
-    height: 450,
+    height: 454,
 }
 
 class Setor0NpcSheet extends Setor0BaseActorSheet {
@@ -60,6 +63,10 @@ class Setor0NpcSheet extends Setor0BaseActorSheet {
                             break;
                     }
                 }
+            },
+            equipment: {
+                ...handlerEquipmentEvents,
+                [OnEventType.ROLL]: async (actor, event) => npcRollHandle.rollEquipment(actor, event),
             }
         };
     }
@@ -83,6 +90,8 @@ class Setor0NpcSheet extends Setor0BaseActorSheet {
         this.#setupListeners(html);
         super.addPageButtonsOnFloatingMenu(html);
         Setor0BaseActorSheet.presetStatusVitality(html, this.actor);
+        Setor0BaseActorSheet.presetStatusProtect(html, this.actor);
+        SheetActorDragabbleMethods.setup(html, this.actor);
     }
 
     #setupListeners(html) {

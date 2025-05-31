@@ -1,16 +1,13 @@
-import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
 import { localize, randomId, snakeToCamel } from "../../../scripts/utils/utils.mjs";
-import { DefaultActions } from "../../utils/default-actions.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { AttributeRepository } from "../../repository/attribute-repository.mjs";
 import { AbilityRepository } from "../../repository/ability-repository.mjs";
 import { VirtuesRepository } from "../../repository/virtues-repository.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
-import { RollVirtue } from "../../core/rolls/virtue-roll.mjs";
 import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
+import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
 
 export class ActorRollDialog {
     static mapedPagesMethods = {
@@ -201,13 +198,12 @@ export class ActorRollDialog {
             automatic: Number(data["automatic"]),
             specialist: Boolean(data["specialist"]),
             isHalf: Boolean(data["divided"]),
+            difficulty: Number(data["difficulty"]),
+            critic: Number(data["critic"]),
+            rollMode: rollMode,
         };
 
-        const difficulty = Number(data["difficulty"]);
-        const critic = Number(data["critic"]);
-
-        const resultRoll = await RollAttribute.roll(actor, inputParams);
-        await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, undefined, rollMode);
+        await playerRollHandle.default(actor, inputParams);
     }
 
     static async #confirmPage2(actor, data, rollMode) {
@@ -217,12 +213,11 @@ export class ActorRollDialog {
             bonus: Number(data["bonus"]),
             penalty: Number(data["penalty"]),
             automatic: Number(data["automatic"]),
+            difficulty: Number(data["difficulty"]),
+            rollMode: rollMode,
         };
 
-        const difficulty = Number(data["difficulty"]);
-
-        const resultRoll = await RollVirtue.roll(actor, inputParams);
-        await DefaultActions.processVirtueRoll(actor, resultRoll, difficulty, rollMode);
+        await playerRollHandle.virtue(actor, inputParams);
     }
 
     static async #confirmPage3(actor, data, rollMode) {
@@ -251,9 +246,9 @@ export class ActorRollDialog {
             automatic: Number(data["automatic"]),
             difficulty: Number(data["difficulty"]),
             critic: Number(data["critic"]),
+            rollMode,
         };
 
-        const resultRoll = await CustomRoll.discoverAndRoll(actor, inputParams);
-        await DefaultActions.processCustomRoll(actor, resultRoll, inputParams, 'Teste Customizado', rollMode);
+        await playerRollHandle.custom(actor, inputParams);
     }
 }

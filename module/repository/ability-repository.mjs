@@ -23,4 +23,9 @@ export class AbilityRepository {
             ...AbilityRepository.#characteristics
         ].sort((a, b) => a.label.localeCompare(b.label));
     }
+
+    static getItem(id) {
+        const item = this._getItems().find(item => item.id == id);
+        return item ? foundry.utils.deepClone(item) : null;
+    }
 }

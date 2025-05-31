@@ -21,7 +21,8 @@ export class CustomRoll {
         return new Set(
             [
                 BaseActorCharacteristicType.BOUNTY,
-                BaseActorCharacteristicType.INFLUENCE
+                BaseActorCharacteristicType.INFLUENCE,
+                CharacteristicType.CORE,
             ].map(i => i.id)
         );
     }

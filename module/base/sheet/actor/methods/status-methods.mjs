@@ -1,8 +1,9 @@
-import { selectCharacteristic, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { BaseActorCharacteristicType, CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { selectCharacteristicAndReturnLength } from "../../../../../scripts/utils/utils.mjs";
+import { BaseActorCharacteristicType, CharacteristicType, getActorVirtue } from "../../../../enums/characteristic-enums.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
+import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 
 function selectLifeCharacteristic(event, addClassIfBlank) {
     let toUpdate = event.currentTarget;
@@ -51,26 +52,30 @@ const mapContextual = {
 const mapCheck = {
     virtue: async (actor, event) => {
         const itemType = event.currentTarget.dataset.itemType;
-        TODO('no futuro é ideal remover a utilização do system.')
-        const characteristicKey = `system.virtudes.${itemType}.used`;
-        selectCharacteristic(event.currentTarget);
-        const value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
-        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, value);
+        const characteristicKey = getActorVirtue(itemType);
+        if (!characteristicKey) {
+            return;
+        }
+
+        const value = selectCharacteristicAndReturnLength(event.currentTarget);
+        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey.USED, value);
     },
     overload: async (actor, event) => {
-        selectCharacteristic(event.currentTarget);
-        const value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
+        const value = selectCharacteristicAndReturnLength(event.currentTarget);
         ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, value);
     },
     life: async (actor, event) => {
-        selectCharacteristic(event.currentTarget);
-        const value = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
+        const value = selectCharacteristicAndReturnLength(event.currentTarget);
         ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.LIFE, value);
     },
     health: async (actor, event) => {
         selectLifeCharacteristic(event, 'S0-letal')
         const keysToUpdate = mountLifeCharacteristicToUpdate(event);
         ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+    },
+    protect: async (actor, event) => {
+        const value = selectCharacteristicAndReturnLength(event.currentTarget);
+        ActorEquipmentUtils.updateArmorEquippedActualResistance(actor, value);
     }
 }
 
@@ -119,11 +124,14 @@ const mapRemove = {
     },
     virtue: async (actor, event) => {
         const itemType = event.currentTarget.dataset.itemType;
-        const characteristicKey = `system.virtudes.${itemType}.used`;
-        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey, 0);
+        const characteristicKey = getActorVirtue(itemType);
+        if (!characteristicKey) {
+            return;
+        }
+        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey.USED, 0);
     },
     overload: async (actor, event) => {
-        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD.system, 0);
+        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, 0);
     },
     health: async (actor, event) => {
         const keysToUpdate = [
@@ -137,6 +145,9 @@ const mapRemove = {
             },
         ];
         ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+    },
+    protect: async (actor, event) => {
+        ActorEquipmentUtils.updateArmorEquippedActualResistance(actor, 999);
     }
 }
 

@@ -9,6 +9,7 @@ import { ActorCombatUtils } from "../../../../core/actor/actor-combat-utils.mjs"
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { playerRollHandle } from "./player-roll-methods.mjs";
 
 export const handlerShortcutEvents = {
     [OnEventType.ADD]: async (actor, event) => ShortcutHandleEvents.handleAdd(actor, event),
@@ -143,22 +144,22 @@ class ShortcutHandleEvents {
                     }
 
                     const isHalf = type.includes('half');
-
                     const preset = presetMap[key];
                     const name = `${localize(preset.label)} ${isHalf ? 'Dividido' : 'Completo'}`;
                     const bonusPreset = preset.data.getBonus(actor);
 
-                    const params = {
+                    const inputParams = {
                         ...preset.data,
                         bonus: Number(data.bonus) + bonusPreset,
                         automatic: Number(data.automatic),
-                        isHalf
+                        difficulty: Number(data.difficulty),
+                        critic: Number(data.critic),
+                        name: name,
+                        isHalf: isHalf,
+                        rollMode: data.chatSelect,
                     };
 
-                    const difficulty = Number(data.difficulty);
-                    const critic = Number(data.critic);
-                    const resultRoll = await RollAttribute.roll(actor, params);
-                    await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name, data.chatSelect);
+                    await playerRollHandle.default(actor, inputParams);
                 }
             },
         );
@@ -166,8 +167,7 @@ class ShortcutHandleEvents {
 
     static async rollCustomShortcut(actor, itemId) {
         const shortcutTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
-        const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-        await DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.critic, shortcutTest.name);
+        await playerRollHandle.shortcut(actor, shortcutTest);
     }
 
 }

@@ -1,7 +1,9 @@
-import { getObject, localize } from "../../../scripts/utils/utils.mjs";
+import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
 import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../enums/active-effects-enums.mjs";
 import { EquipmentCharacteristicType, SubstanceType } from "../../enums/equipment-enums.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
+
+TODO('no futuro é ideal remover a utilização do system.');
 
 export class EquipmentUtils {
     static getSuperEquipmentEffectsLimits(item) {
@@ -18,6 +20,18 @@ export class EquipmentUtils {
 
     static isSuperEquipment(item) {
         return Boolean(getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT));
+    }
+
+    static canEquip(item) {
+        return item?.system?.canEquip || false;
+    }
+
+    static isWeapon(item) {
+        return item?.system?.isWeapon || false;
+    }
+
+    static isEquipment(item) {
+        return item?.system?.isEquipment || false;
     }
 
     static getSuperEquipmentLevel(item) {

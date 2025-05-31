@@ -1,16 +1,19 @@
 import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { NpcConversor } from "../../../../core/npc/npc-conversor.mjs";
-import { CoreRollMethods } from "../../../../core/rolls/core-roll-methods.mjs";
+import { RollSimplified } from "../../../../core/rolls/simplified-roll.mjs";
 import { CreateFormDialog } from "../../../../creators/dialog/create-dialog.mjs";
+import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { CharacteristicType, NpcCharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { AbilityRepository } from "../../../../repository/ability-repository.mjs";
 import { NpcQualityRepository } from "../../../../repository/npc-quality-repository.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 
 export const npcRollHandle = {
     [OnEventType.ROLL]: async (actor, event) => NpcRollMethods.handleRoll(actor, event),
+    rollEquipment: async (actor, event) => NpcRollMethods.handleEquipmentRoll(actor, event),
+    rollableItem: async (actor, rollTest, item, half) => NpcRollMethods.rollByEquipment(actor, { item, rollTest }, half),
 }
 
 class NpcRollMethods {
@@ -35,12 +38,13 @@ class NpcRollMethods {
             return;
         }
 
-        this.#openDialogModifiers(actor, value, skillName);
+        const rollInformations = { value, skillName };
+        this.#openDialogModifiers(actor, rollInformations);
     }
 
-    static async #openDialogModifiers(actor, value, skillName) {
+    static async #openDialogModifiers(actor, rollInformations) {
         const qualityNpc = getObject(actor, NpcCharacteristicType.QUALITY);
-        const qualityValues = NpcQualityRepository._getItems().find(quality => quality.id == qualityNpc)?.bonusOrDebuff || 0;
+        const qualityValues = NpcQualityRepository.getItem(qualityNpc)?.bonusOrDebuff || 0;
 
         const canBeHalf = qualityValues >= 0;
         const canBeOverloaded = qualityValues >= 2;
@@ -66,41 +70,60 @@ class NpcRollMethods {
                     };
                     copiedActor.system[CharacteristicType.OVERLOAD.id] = Number(data.overload);
 
-                    this.#mountRollInformations(copiedActor, value, skillName, data);
+                    this.#mountRollInformations(copiedActor, rollInformations, data);
                 }
             },
         );
     }
 
-    static async #mountRollInformations(actor, value, skillName, data) {
-        const modifiersInformations = {
-            specialist: Boolean(data.specialist == 'on'),
-            bonus: Number(data.bonus),
-            penalty: Number(data.penalty),
-            isHalf: Boolean(data.half == 'on'),
-            automatic: Number(data.automatic),
-        };
+    static async #mountRollInformations(actor, rollInformations, data) {
+        const { value, skillName, item } = rollInformations;
 
-        const abilityInfo = {
-            skill: skillName,
-            label: AbilityRepository._getItems().find(skill => skill.id == skillName).label
+        const simplifiedRoll = await RollSimplified.roll(
+            actor,
+            {
+                value,
+                skillName,
+                item,
+                ...data,
+            }
+        );
+
+        await DefaultActions.processSimplefiedRoll(actor, simplifiedRoll);
+    }
+
+    static async handleEquipmentRoll(actor, event) {
+        const equipmentId = event.currentTarget.dataset.itemId;
+        const rollEquipmentInformations = ActorEquipmentUtils.getItemAndRollTest(actor, equipmentId);
+        await this.rollByEquipment(actor, rollEquipmentInformations);
+    }
+
+    static async rollByEquipment(actor, rollEquipmentInformations, half) {
+        if (!rollEquipmentInformations) {
+            NotificationsUtils._warning("É preciso definir um teste padrão para o item");
+            return;
         }
 
-        const halfDiceAmount = Math.floor(value / 2);
-        const adjustedForHalf = modifiersInformations.isHalf ? halfDiceAmount : value;
-        const finalValue = Math.max(adjustedForHalf + modifiersInformations.bonus - modifiersInformations.penalty, 0);
+        const ability = rollEquipmentInformations.rollTest.ability;
+        const skills = Object.values(this.#skillMap);
 
-        const rolledDices = await CoreRollMethods.rollDiceAmountWithOverload(actor, finalValue);
+        const matchedSkill = skills.find(skill => getObject(actor, skill.SKILL_NAME) === ability);
+        if (!matchedSkill) {
+            NotificationsUtils._warning("O teste desse item não utiliza nenhuma Habilidade conhecida pelo Personagem");
+            return;
+        }
 
-        const rollInformation = {
-            resultRoll: rolledDices,
-            abilityInfo: abilityInfo,
-            modifiers: modifiersInformations,
-            difficulty: Number(data.difficulty),
-            critic: Number(data.critic),
-            mode: data.chatSelect,
+        const skillName = getObject(actor, matchedSkill.SKILL_NAME);
+        const value = getObject(actor, matchedSkill.VALUE);
+
+        const informationsToRoll = {
+            value: value,
+            skillName: skillName,
+            ...rollEquipmentInformations,
+            isHalf: half,
         };
 
-        DefaultActions.processSimplefiedRoll(actor, rollInformation);
+        const simplifiedRoll = await RollSimplified.rollByEquipment(actor, informationsToRoll);
+        await DefaultActions.processSimplefiedRoll(actor, simplifiedRoll);
     }
 }

@@ -8,7 +8,7 @@
             </label>
             <select id="{{item.id}}.type" class="S0-select" style="flex: 1; min-width: 142.5px;"
                 name="system.type_vehicle">
-                {{#each (fetchRepository 'equipment-vehile-type')}}
+                {{#each (fetchRepository 'equipment-vehicle-type')}}
                 <option value="{{id}}" {{selectIfEq ../item.system.type_vehicle id }}>{{label}}</option>
                 {{/each}}
                 </option>
@@ -16,41 +16,23 @@
         </div>
 
         <div class="form-group">
-            <label for="{{item.id}}.resistance" style="flex: 1;">{{localize 'S0.Resistencia'}}:</label>
-            <input id="{{item.id}}.resistance" style="flex: 1; text-align: center;" type="number" min="1"
-                name="system.resistance" value="{{system.resistance}}" />
-        </div>
-
-        <div class="form-group">
-            <label style="flex: 1;" for="{{item.id}}.actual_resistance">
-                {{localize 'S0.Resistencia_Atual'}}:
-            </label>
-            <input id="{{item.id}}.actual_resistance" style="flex: 1; text-align: center;" type="number" min="0"
-                max="{{system.resistance}}" name="system.actual_resistance" value="{{system.actual_resistance}}" />
-        </div>
-
-        <div class="form-group">
             <label for="{{item.id}}.acceleration" style="flex: 1;">{{localize 'S0.Aceleracao'}}:</label>
             <input id="{{item.id}}.acceleration" style="flex: 1; text-align: center;" type="number"
-                name="system.acceleration" min="0" max="6" value="{{system.acceleration}}" />
+                name="system.acceleration" min="0" max="6" value="{{item.system.acceleration}}" />
         </div>
 
         <div class="form-group">
             <label for="{{item.id}}.speed" style="flex: 1;">{{localize 'S0.Velocidade'}}:</label>
             <input id="{{item.id}}.speed" style="flex: 1; text-align: center;" type="number" name="system.speed" min="0"
-                max="6" value="{{system.speed}}" />
+                max="6" value="{{item.system.speed}}" />
         </div>
     </div>
+
+    {{> itemCommonResistance this}}
 
     {{> itemSuperEquipment this}}
 
     {{> itemRollableTests this}}
 
-    <div class="S0-page S0-container">
-        <label for="{{item.id}}.description" style="display: block;">
-            {{localize 'S0.Descricao'}}:
-        </label>
-        <textarea id="{{item.id}}.description" style="resize: none; margin-top: 5px;" name="system.description"
-            type="text" maxlength="150" rows="5">{{system.description}}</textarea>
-    </div>
+    {{> itemCommonDescription this}}
 </form>

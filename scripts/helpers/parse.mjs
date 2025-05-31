@@ -1,3 +1,4 @@
+import { EquipmentInfoParser } from "../../module/core/equipment/equipment-info.mjs";
 import { CharacteristicType } from "../../module/enums/characteristic-enums.mjs";
 import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
 import { keyJsonToKeyLang } from "../utils/utils.mjs";
@@ -28,7 +29,8 @@ const parseables = {
         const origin = effect.origin;
         const name = effect.name;
         return origin ? `${origin}: ${name}` : name;
-    }
+    },
+    'item-damage-type': (value) => EquipmentInfoParser.parseDamageType(value),
 }
 
 export default function parse(op, ...params) {

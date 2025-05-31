@@ -90,7 +90,7 @@ export class MacroUtils {
                         return
                     }
 
-                    const item = ActorEquipmentUtils.getActorEquipments(actor).find(item => {
+                    const item = ActorEquipmentUtils.getEquipments(actor).find(item => {
                         const tests = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
                         return tests.some(test => test.id === id);
                     });

@@ -1,9 +1,10 @@
-import { getObject, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs"
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
+import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
 
 export class SheetActorDragabbleMethods {
     static async setup(html, actor) {
@@ -102,7 +103,7 @@ export class SheetActorDragabbleMethods {
                     return;
                 }
 
-                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, itemId);
+                const equipment = ActorEquipmentUtils.getEquipmentById(actor, itemId);
                 if (!equipment) {
                     console.warn("-> possível erro ao pegar o equipamento");
                     return
@@ -125,8 +126,8 @@ export class SheetActorDragabbleMethods {
     }
 
     static async #sortEquipments(actor, originSource, bagList, equippedList) {
-        const equipped = ActorEquipmentUtils.getActorEquippedItems(actor);
-        const unequipped = ActorEquipmentUtils.getActorFilteredUnequippedEquipment(actor);
+        const equipped = ActorEquipmentUtils.getEquippedItems(actor);
+        const unequipped = ActorEquipmentUtils.getFilteredUnequippedEquipment(actor);
 
         let elementContainer, sourceItems, staticItems;
 
@@ -161,10 +162,8 @@ export class SheetActorDragabbleMethods {
     }
 
     static async #equipOrUnequip(actor, originSource, equipment) {
-        TODO('no futuro é ideal remover a utilização do system.')
-
-        if (originSource == 'bag') {            
-            if (equipment.system.canEquip) {
+        if (originSource == 'bag') {
+            if (EquipmentUtils.canEquip(equipment)) {
                 await ActorEquipmentUtils.equip(actor, equipment);
             } else {
                 NotificationsUtils._warning("Este Item não pode ser equipado");

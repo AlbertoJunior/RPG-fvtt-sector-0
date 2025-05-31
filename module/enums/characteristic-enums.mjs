@@ -1,4 +1,9 @@
 
+export const ActorType = Object.freeze({
+    PLAYER: 'Player',
+    NPC: 'NPC',
+});
+
 export const BaseActorCharacteristicType = Object.freeze({
     NAME: { id: 'name', system: 'system.name' },
     MORPHOLOGY: { id: 'morphology', system: 'system.morfologia' },
@@ -21,7 +26,7 @@ export const BaseActorCharacteristicType = Object.freeze({
 
 export const CharacteristicType = Object.freeze({
     NAME: { id: 'name', system: 'system.name' },
-    CORE: { id: 'core', system: 'system.nucleo' },
+    CORE: { id: 'nucleo', system: 'system.nucleo' },
     OVERLOAD: { id: 'sobrecarga', system: 'system.sobrecarga' },
     LIFE: { id: 'vida', system: 'system.vida' },
     ATTRIBUTES: {
@@ -199,6 +204,11 @@ export const NpcCharacteristicType = Object.freeze({
 export const CharacteristicTypeMap = Object.freeze(Object.fromEntries(
     Object.entries(CharacteristicType).map(([key, value]) => [value.id, value.system])
 ));
+
+export function getActorVirtue(virtue) {
+    return Object.values(CharacteristicType.VIRTUES)
+        .find(item => item && item.system && item.id == virtue);
+}
 
 export const NpcSkillsMap = Object.freeze(
     {

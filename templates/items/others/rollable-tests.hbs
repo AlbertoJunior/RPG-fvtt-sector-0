@@ -16,11 +16,11 @@
 
     <section>
         <div id="rollable-tests-list" class="S0-container-contract">
-            {{#each system.possible_tests}}
+            {{#each item.system.possible_tests}}
             <div
                 style="padding-block: 8px; padding-inline: 6px; display: flex; align-items: center; column-gap: 4px; border-bottom: 1px solid var(--secondary-color-alpha);">
 
-                <div class="S0-characteristic S0-characteristic-temp {{#if ../owner}}S0-clickable{{/if}} {{#if (operators 'eq' ../system.default_test this.id)}}S0-selected{{/if}}"
+                <div class="S0-characteristic S0-characteristic-temp {{#if ../owner}}S0-clickable{{/if}} {{#if (operators 'eq' ../item.system.default_test this.id)}}S0-selected{{/if}}"
                     data-characteristic="item_roll" {{#if ../owner}}data-action="check" {{/if}}
                     data-item-id="{{this.id}}">
                 </div>

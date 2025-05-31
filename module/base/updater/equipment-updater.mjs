@@ -59,7 +59,7 @@ export class EquipmentUpdater {
         const updatedItems = [];
 
         for (const { equipmentId, flagsToUpdate } of equipmentsData) {
-            const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+            const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
             if (!equipment) {
                 console.warn(`[EquipmentUpdater] Equipamento não encontrado: ${equipmentId}`);
                 continue;

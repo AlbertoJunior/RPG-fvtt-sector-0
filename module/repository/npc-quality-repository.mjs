@@ -21,4 +21,9 @@ export class NpcQualityRepository {
                 };
             });
     }
+
+    static getItem(id) {
+        const item = this._getItems().find(item => item.id == id);
+        return item ? foundry.utils.deepClone(item) : null;
+    }
 }

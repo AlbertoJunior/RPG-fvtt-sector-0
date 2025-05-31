@@ -5,7 +5,6 @@ import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
-import { characteristicOnClick } from "./characteristics-methods.mjs";
 import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { handlerShortcutEvents } from "./shortcut-methods.mjs";
@@ -16,9 +15,8 @@ import { effectsHandleEvents } from "./effects-methods.mjs";
 export class SheetMethods {
     static handleMethods = {
         menu: {
+            ...menuHandleMethods,
             [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
-            [OnEventType.CHECK]: async (actor, event) => { menuHandleMethods.check(actor, event); },
-            [OnEventType.VIEW]: async (actor, event) => { menuHandleMethods.view(actor, event); },
         },
         language: {
             [OnEventType.ADD]: async (actor, event) => {
@@ -53,9 +51,5 @@ export class SheetMethods {
         allies: alliesHandleEvents,
         informants: informantsHandleEvents,
         shortcuts: handlerShortcutEvents
-    }
-
-    static async _handleCharacteristicClickEvent(event, actor) {
-        await characteristicOnClick(event, actor);
     }
 }

@@ -2,24 +2,18 @@
     {{> itemCommon this}}
 
     <div class="S0-page S0-container">
-        <div class="form-group">
-            <label for="{{item.id}}.resistance" style="flex: 1;">{{localize 'S0.Resistencia'}}:</label>
-            <input id="{{item.id}}.resistance" style="flex: 1; text-align: center;" type="number"
-                name="system.resistance" value="{{system.resistance}}" min="1" />
-        </div>
-
         {{> itemCommonWeapon this}}
 
         <div class="form-group">
             <label for="{{item.id}}.cadence" style="flex: 1;">{{localize 'S0.Cadencia'}}:</label>
             <input id="{{item.id}}.cadence" style="flex: 1; text-align: center;" type="number" name="system.cadence"
-                min="1" value="{{system.cadence}}" />
+                min="1" value="{{item.system.cadence}}" />
         </div>
 
         <div class="form-group">
             <label for="{{item.id}}.range" style="flex: 1;">{{localize 'S0.Alcance'}}:</label>
             <input id="{{item.id}}.range" style="flex: 1; text-align: center;" type="number" name="system.range" min="1"
-                value="{{system.range}}" />
+                value="{{item.system.range}}" />
         </div>
 
         <div class="form-group">
@@ -37,20 +31,16 @@
             <label for="{{item.id}}.special" style="flex: 1;">{{localize 'S0.Especial'}}?</label>
             <div style="flex: 1; min-width: 142.5px; display: flex; justify-content: center; align-items: center; ">
                 <input id="{{item.id}}.special" type="checkbox" name="system.special" {{#if
-                    system.special}}checked{{/if}} />
+                    item.system.special}}checked{{/if}} />
             </div>
         </div>
     </div>
+
+    {{> itemCommonResistance this}}
 
     {{> itemSuperEquipment this}}
 
     {{> itemRollableTests this}}
 
-    <div class="S0-page S0-container">
-        <label for="{{item.id}}.description" style="display: block;">
-            {{localize 'S0.Descricao'}}:
-        </label>
-        <textarea id="{{item.id}}.description" style="resize: none; margin-top: 5px;" name="system.description"
-            type="text" maxlength="150" rows="5">{{system.description}}</textarea>
-    </div>
+    {{> itemCommonDescription this}}
 </form>

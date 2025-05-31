@@ -1,32 +1,9 @@
 <form autocomplete="off">
     {{> itemCommon this}}
 
-    <div class="S0-page S0-container">
-        <div class="form-group">
-            <label for="{{item.id}}.resistance" style="flex: 1;">
-                {{localize 'S0.Resistencia_Total'}}:
-            </label>
-            <input id="{{item.id}}.resistance" style="flex: 1; text-align: center;" type="number"
-                name="system.resistance" value="{{system.resistance}}" min="1" />
-        </div>
-
-        <div class="form-group">
-            <label for="{{item.id}}.actual_resistance" style="flex: 1;">
-                {{localize 'S0.Resistencia_Atual'}}:
-            </label>
-            <input id="{{item.id}}.actual_resistance" style="flex: 1; text-align: center;" type="number" min="0"
-                max="{{system.resistance}}" name="system.actual_resistance" value="{{system.actual_resistance}}" />
-        </div>
-    </div>
+    {{> itemCommonResistance this}}
 
     {{> itemSuperEquipment this}}
 
-    <div class="S0-page S0-container">
-        <label for="{{item.id}}.description" style="display: block;">
-            {{localize 'S0.Descricao'}}:
-        </label>
-        <textarea id="{{item.id}}.description" style="resize: none; margin-top: 5px;" name="system.description"
-            type="text" maxlength="150" rows="5">{{system.description}}</textarea>
-    </div>
-
+    {{> itemCommonDescription this}}
 </form>

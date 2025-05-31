@@ -1,10 +1,11 @@
 import { ActiveEffectsTypes } from "../enums/active-effects-enums.mjs";
 
-const { NumberField, StringField, SchemaField, ArrayField } = foundry.data.fields;
+const { NumberField, BooleanField, StringField, SchemaField, ArrayField } = foundry.data.fields;
 
 export class SuperEquipmentField extends SchemaField {
     constructor({ level = 0, effects = [], defects = [] } = {}) {
         super({
+            active: new BooleanField({ initial: true, label: "S0.Ativo" }),
             level: new NumberField({ required: true, integer: true, initial: 0, min: 0, max: 5 }),
             effects: new ArrayField(new SuperEquipmentTraitField()),
             defects: new ArrayField(new SuperEquipmentTraitField()),

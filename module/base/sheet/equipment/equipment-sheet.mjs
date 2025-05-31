@@ -48,14 +48,8 @@ export class EquipmentSheet extends ItemSheet {
 
     getData() {
         const data = super.getData();
-        const item = this.item;
-        data.canEdit = game.user.isGM || item.getFlag(SYSTEM_ID, 'canEdit');
-
-        return {
-            ...data,
-            item,
-            system: item.system
-        };
+        data.canEdit = game.user.isGM || this.item.getFlag(SYSTEM_ID, 'canEdit');
+        return data;
     }
 
     get isEditable() {
@@ -132,8 +126,10 @@ export async function equipmentTemplatesRegister() {
         { path: "items/others/equipment-equipped-item", call: 'equipamentEquippedItem' },
         { path: "items/others/common-equipment", call: "itemCommon" },
         { path: "items/others/common-weapon", call: "itemCommonWeapon" },
+        { path: "items/others/common-resistance", call: "itemCommonResistance" },
+        { path: "items/others/common-description", call: "itemCommonDescription" },
         { path: "items/others/rollable-tests", call: "itemRollableTests" },
-        { path: "items/others/superequipment", call: "itemSuperEquipment" }
+        { path: "items/others/superequipment", call: "itemSuperEquipment" },
     ];
 
     return await loadAndRegisterTemplates(templates);

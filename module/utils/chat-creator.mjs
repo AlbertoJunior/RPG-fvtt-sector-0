@@ -11,22 +11,23 @@ export class ChatCreator {
     }
 
     static async _sendToChatTypeRoll(actor, content, rolls = [], mode) {
-        await ChatMessage.create({
+        const messageData = {
             speaker: ChatMessage.getSpeaker({ actor: actor }),
             content: content,
             rolls: rolls,
             whisper: this.#configureWhisperByMode(mode),
             blind: this.#configureBlindByMode(mode)
-        });
+        };
+        await ChatMessage.create(messageData, { rollMode: mode });
     }
 
     static #configureWhisperByMode(mode) {
         switch (mode) {
-            case "gmroll":
+            case CONST.DICE_ROLL_MODES.PRIVATE:
                 return new Set([...ChatMessage.getWhisperRecipients("GM").map(u => u.id), game.user.id]);
-            case "blindroll":
+            case CONST.DICE_ROLL_MODES.BLIND:
                 return new Set(ChatMessage.getWhisperRecipients("GM").map(u => u.id));
-            case "selfroll":
+            case CONST.DICE_ROLL_MODES.SELF:
                 return [game.user.id];
             default:
                 return [];
@@ -35,11 +36,11 @@ export class ChatCreator {
 
     static #configureBlindByMode(mode) {
         switch (mode) {
-            case "gmroll":
+            case CONST.DICE_ROLL_MODES.PRIVATE:
                 return true;
-            case "blindroll":
+            case CONST.DICE_ROLL_MODES.BLIND:
                 return true;
-            case "selfroll":
+            case CONST.DICE_ROLL_MODES.SELF:
                 return false;
             default:
                 return false;

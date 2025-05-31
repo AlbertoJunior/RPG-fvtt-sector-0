@@ -69,6 +69,10 @@ export function localize(key) {
     return game.i18n.localize(`S0.${key}`)
 }
 
+export function labelError() {
+    return `<${localize('Erro')}>`
+}
+
 export function onArrayRemove(array, item) {
     const indexToRemove = array.indexOf(item);
     if (indexToRemove !== -1) {

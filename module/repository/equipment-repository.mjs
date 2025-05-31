@@ -1,6 +1,7 @@
+import { getObject } from "../../scripts/utils/utils.mjs";
 import { SYSTEM_ID } from "../constants.mjs";
 import { equipmentParseData } from "../data/equipment-data-model.mjs";
-import { validEquipmentTypes } from "../enums/equipment-enums.mjs";
+import { EquipmentCharacteristicType, validEquipmentTypes } from "../enums/equipment-enums.mjs";
 
 export class EquipmentRepository {
 
@@ -9,7 +10,7 @@ export class EquipmentRepository {
 
     static async _loadFromGame() {
         const validTypes = validEquipmentTypes();
-        EquipmentRepository.#loadedFromPack = await game.items?.filter(item => validTypes.includes(item.system.type));
+        EquipmentRepository.#loadedFromPack = await game.items?.filter(item => validTypes.includes(getObject(item, EquipmentCharacteristicType.TYPE)));
     }
 
     static async _loadFromPack() {

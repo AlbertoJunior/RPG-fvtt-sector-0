@@ -6,7 +6,7 @@ import { EquipmentCharacteristicType, EquipmentType, equipmentTypeIdToTypeString
 export class ActorEquipmentUtils {
     static #allowedTypes = validEquipmentTypes().map(equipmentTypeIdToTypeString).filter(Boolean);
 
-    static getActorEquipments(actor) {
+    static getEquipments(actor) {
         const object = Object.fromEntries(
             Object.entries(actor.itemTypes).filter(([type]) => this.#allowedTypes.includes(type))
         )
@@ -18,8 +18,8 @@ export class ActorEquipmentUtils {
         return allItems.sort((a, b) => a.sort - b.sort);
     }
 
-    static getActorFilteredEquipment(actor, equipmentTypeId) {
-        const items = this.getActorEquipments(actor);
+    static getFilteredEquipment(actor, equipmentTypeId) {
+        const items = this.getEquipments(actor);
         if (!equipmentTypeId) {
             return [...items];
         }
@@ -28,17 +28,17 @@ export class ActorEquipmentUtils {
         return [...actor.itemTypes[itemTypeString]];
     }
 
-    static getActorFilteredUnequippedEquipment(actor, equipmentTypeId) {
-        const equipments = this.getActorFilteredEquipment(actor, equipmentTypeId);
+    static getFilteredUnequippedEquipment(actor, equipmentTypeId) {
+        const equipments = this.getFilteredEquipment(actor, equipmentTypeId);
         return [...equipments.filter(item => !getObject(item, EquipmentCharacteristicType.EQUIPPED))];
     }
 
-    static getActorEquipmentById(actor, equipmentId) {
+    static getEquipmentById(actor, equipmentId) {
         return actor.items.get(equipmentId);
     }
 
-    static getActorEquippedItems(actor) {
-        const items = this.getActorEquipments(actor);
+    static getEquippedItems(actor) {
+        const items = this.getEquipments(actor);
         return [...items.filter(item => getObject(item, EquipmentCharacteristicType.EQUIPPED))];
     }
 
@@ -66,14 +66,14 @@ export class ActorEquipmentUtils {
         };
     }
 
-    static getActorEquippedArmorItem(actor) {
-        const equipments = this.getActorEquippedItems(actor);
+    static getEquippedArmorItem(actor) {
+        const equipments = this.getEquippedItems(actor);
         const item = equipments.find(item => getObject(item, EquipmentCharacteristicType.TYPE) == EquipmentType.ARMOR);
         return item;
     }
 
-    static getActorArmorEquippedValues(actor) {
-        const equippedArmor = ActorEquipmentUtils.getActorEquippedArmorItem(actor);
+    static getArmorEquippedValues(actor) {
+        const equippedArmor = ActorEquipmentUtils.getEquippedArmorItem(actor);
         if (Boolean(equippedArmor)) {
             return {
                 max: getObject(equippedArmor, EquipmentCharacteristicType.RESISTANCE) || 0,
@@ -87,13 +87,13 @@ export class ActorEquipmentUtils {
         }
     }
 
-    static getActorArmorEquippedResistence(actor) {
-        const equippedArmor = this.getActorEquippedArmorItem(actor);
+    static getArmorEquippedResistence(actor) {
+        const equippedArmor = this.getEquippedArmorItem(actor);
         return getObject(equippedArmor, EquipmentCharacteristicType.RESISTANCE) || 0;
     }
 
-    static getActorArmorEquippedActualResistence(actor) {
-        const equippedArmor = this.getActorEquippedArmorItem(actor);
+    static getArmorEquippedActualResistence(actor) {
+        const equippedArmor = this.getEquippedArmorItem(actor);
         return getObject(equippedArmor, EquipmentCharacteristicType.ACTUAL_RESISTANCE) || 0;
     }
 
@@ -103,5 +103,38 @@ export class ActorEquipmentUtils {
 
     static async unequip(actor, equipment) {
         await EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.EQUIPPED, false);
+    }
+
+    static async updateArmorEquippedActualResistance(actor, value) {
+        const armor = this.getEquippedArmorItem(actor);
+        if (!armor) {
+            return;
+        }
+        const safedValue = Math.min(getObject(armor, EquipmentCharacteristicType.RESISTANCE), value);
+        await EquipmentUpdater.updateEquipment(armor, EquipmentCharacteristicType.ACTUAL_RESISTANCE, safedValue);
+    }
+
+    static getItemAndRollTest(actor, equipmentId) {
+        if(!actor || !equipmentId) {
+            return null
+        }
+
+        const item = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
+        if (!item) {
+            return null;
+        }
+
+        const defaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
+        if (!defaultTestId) {
+            return null;
+        }
+
+        const possibleTests = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
+        const rollTest = possibleTests.find(test => test.id == defaultTestId) || null;
+
+        return {
+            item,
+            rollTest
+        };
     }
 }

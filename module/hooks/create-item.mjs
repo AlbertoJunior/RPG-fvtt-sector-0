@@ -1,3 +1,4 @@
+import { EquipmentUtils } from "../core/equipment/equipment-utils.mjs";
 import { EquipmentRepository } from "../repository/equipment-repository.mjs";
 
 export class CreateItemHookHandle {
@@ -7,7 +8,7 @@ export class CreateItemHookHandle {
         if (!canContinue) {
             return;
         }
-        
+
         this.#operateItemCreated(item);
     }
 
@@ -31,7 +32,7 @@ export class CreateItemHookHandle {
     }
 
     static async #operateItemCreated(item) {
-        if (item.system.isEquipment) {
+        if (EquipmentUtils.isEquipment(item)) {
             EquipmentRepository.addItem(item);
         }
     }

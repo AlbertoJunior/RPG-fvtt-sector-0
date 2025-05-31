@@ -2,7 +2,7 @@ import { ChatCreator } from "../../../../utils/chat-creator.mjs";
 import { EnhancementDialog } from "../../../../creators/dialog/enhancement-dialog.mjs";
 import { _createEmptyOption, _createOption, _createOptionsAndSetOnSelects } from "../../../../creators/element/element-creator-jscript.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { EnhancementUtils } from "../../../../core/enhancement/enhancement-utils.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
@@ -50,6 +50,7 @@ async function updateActorEnhancement(currentTarget, actor) {
     const enhancementText = selectedEnhancement.text;
 
     const slotEnhancement = currentTarget.dataset.itemId;
+    TODO('remover a utilização do .system');
     const key = `${CharacteristicType.ENHANCEMENT.system}_${slotEnhancement}`;
     const characteristic = ActorEnhancementField._toJson(enhancementId, enhancementText);
 
@@ -71,7 +72,8 @@ async function updateActorEnhancement(currentTarget, actor) {
 async function updateActorLevelEnhancement(currentTarget, actor) {
     const { enhancementSlot, enhancementLevel } = currentTarget.dataset;
     const effectId = currentTarget.selectedOptions[0].value;
-
+    
+    TODO('remover a utilização do .system');
     const enhancementOnSlotKey = `${CharacteristicType.ENHANCEMENT.system}_${enhancementSlot}`
 
     const enhancementOnSlot = getObject(actor, `${enhancementOnSlotKey}`);

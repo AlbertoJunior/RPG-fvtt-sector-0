@@ -5,7 +5,7 @@
     </ul>
 
     <div class="S0-container" style="display: flex; align-items: flex-start; column-gap: 6px;">
-        <div class="S0-image-npc" {{#if editable}}style="border-color: var(--primary-color-alpha-50)"{{/if}}>
+        <div class="S0-image-npc" {{#if editable}}style="border-color: var(--primary-color-alpha-50)" {{/if}}>
             <img {{#if editable}}data-edit="img" title="Clique para alterar a imagem" {{else}}
                 title="Clique para ver a imagem" data-action="view" data-characteristic="img" {{/if}}
                 class="S0-actor-images S0-clickable" src="{{actor.img}}">
@@ -16,8 +16,7 @@
                 <div class="S0-container" style="margin-top: 0px;">
                     <h2 class="charname" style="display: flex; align-items: center;">
                         <label for="name" style="flex: 1">{{ localize 'S0.Nome' }}:</label>
-                        <input id="name" name="name"
-                            style="margin-left: 6px; color: var(--primary-color);" type="text"
+                        <input id="name" name="name" style="margin-left: 6px; color: var(--primary-color);" type="text"
                             value="{{actor.name}}" placeholder="{{ localize 'S0.Nome' }}" {{#unless
                             editable}}disabled{{/unless}} />
                     </h2>
@@ -25,8 +24,8 @@
                     <div class="S0-container-2-column" style="margin-top: 6px;">
                         <div style="display: flex; align-items: center; column-gap: 6px;">
                             <label for="morfologia">{{ localize 'S0.Morfologia' }}:</label>
-                            <select class="S0-select" id="morfologia" name="system.morfologia"
-                                {{#unless editable}}disabled{{/unless}}>
+                            <select class="S0-select" id="morfologia" name="system.morfologia" {{#unless
+                                editable}}disabled{{/unless}}>
                                 {{#each (fetchRepository 'morphology')}}
                                 <option value="{{id}}" {{selectIfEq ../actor.system.morfologia id }}>{{label}}</option>
                                 {{/each}}
@@ -48,6 +47,7 @@
 
             {{> npcInformations this}}
             {{> npcStatus this}}
+            {{> npcBag this}}
 
         </div>
     </div>

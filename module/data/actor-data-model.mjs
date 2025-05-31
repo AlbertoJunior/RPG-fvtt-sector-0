@@ -45,11 +45,11 @@ class BaseActorDataModel extends foundry.abstract.TypeDataModel {
     }
 
     get actualProtection() {
-        return ActorEquipmentUtils.getActorArmorEquippedValues(this.actor);
+        return ActorEquipmentUtils.getArmorEquippedValues(this.actor);
     }
 }
 
-class ActorDataModel extends BaseActorDataModel {
+class PlayerDataModel extends BaseActorDataModel {
     prepareDerivedData() {
         super.prepareDerivedData();
     }
@@ -66,7 +66,7 @@ class ActorDataModel extends BaseActorDataModel {
                 superequipamentos: new ActorCharacteristicField("S0.SuperEquipamentos")
             }),
             virtudes: new ActorVirtues(),
-            nucleo: new NumberField({ nullable: false, integer: true, min: 0, initial: 1, max: 5, label: "S0.Nucleo" }),
+            nucleo: new NumberField({ integer: true, min: 0, initial: 1, max: 5, label: "S0.Nucleo" }),
             habilidades: new ActorAbilities(),
             linguas: new ArrayField(new StringField()),
             aprimoramentos: new SchemaField({
@@ -80,7 +80,14 @@ class ActorDataModel extends BaseActorDataModel {
                 ruins: new ArrayField(new ActorTraitField())
             }),
             sobrecarga: new NumberField({ integer: true, initial: 0 }),
-            vida: new NumberField({ initial: 8, min: 0, max: 10 }),
+            vida: new NumberField({ integer: true, initial: 8, min: 0, max: 10 }),
+            aliados: new ArrayField(new StringField()),
+            informantes: new ArrayField(new StringField()),
+            experiencia: new SchemaField({
+                usada: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+                atual: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+            }),
+            atalhos: new ArrayField(new RollTestDataModel()),
             bonus: new SchemaField({
                 atributos: new ActorAttributes({ initial: 0 }),
                 habilidades: new ActorAbilities(),
@@ -98,10 +105,7 @@ class ActorDataModel extends BaseActorDataModel {
                 ofensivo_longo_alcance: new NumberField({ integer: true, initial: 0 }),
                 defensivo: new NumberField({ integer: true, initial: 0 }),
                 defensivo_multiplo: new NumberField({ integer: true, initial: 0 }),
-            }),
-            aliados: new ArrayField(new StringField()),
-            informantes: new ArrayField(new StringField()),
-            atalhos: new ArrayField(new RollTestDataModel()),
+            })
         };
     }
 
@@ -115,35 +119,32 @@ class NPCDataModel extends BaseActorDataModel {
         super.prepareDerivedData();
 
         const data = this;
-        const bonusOrDebuff = NpcQualityRepository._getItems().find(quality => quality.id == data.qualidade)?.bonusOrDebuff || 0;
+        const bonusOrDebuff = NpcQualityRepository.getItem(data.qualidade)?.bonusOrDebuff || 0;
 
         data.habilidades.primaria.valor = Math.max(7 + bonusOrDebuff, 0);
         data.habilidades.secundaria.valor = Math.max(5 + bonusOrDebuff, 0);
         data.habilidades.terciaria.valor = Math.max(3 + bonusOrDebuff, 0);
         data.habilidades.quaternaria.valor = Math.max(0 + bonusOrDebuff, 0);
+
+        if (bonusOrDebuff <= 0) {
+            data.habilidades.quaternaria = null;
+        }
+
+        if (bonusOrDebuff <= -4) {
+            data.habilidades.terciaria = null;
+        }
     }
 
     static defineSchema() {
+        const defaultQuality = NpcQualityRepository.TYPES.NORMAL;
         return {
             ...super.defineSchema(),
-            qualidade: new StringField({ required: true, initial: "normal", label: "S0.Nome" }),
+            qualidade: new StringField({ required: true, initial: defaultQuality.id, label: defaultQuality.label }),
             habilidades: new SchemaField({
                 primaria: new NpcSkill(),
                 secundaria: new NpcSkill(),
                 terciaria: new NpcSkill(),
                 quaternaria: new NpcSkill(),
-            })
-        };
-    }
-}
-
-class PlayerDataModel extends ActorDataModel {
-    static defineSchema() {
-        return {
-            ...super.defineSchema(),
-            experiencia: new SchemaField({
-                usada: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-                atual: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
             })
         };
     }

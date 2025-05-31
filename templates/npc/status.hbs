@@ -29,7 +29,8 @@
                 {{/if}}
             </h3>
 
-            <div id="protect" class="S0-inner-container" style="flex-wrap: wrap; column-gap: 26px; row-gap:10px; flex: 1">
+            <div id="protect" class="S0-inner-container"
+                style="flex-wrap: wrap; column-gap: 12px; row-gap:10px; flex: 1">
                 {{#forLoop 0 (actorValues actor 'equipped_amor_total_resistance')}}
                 {{#with ../canRoll as |canRoll|}}
                 <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
@@ -53,8 +54,7 @@
                 </a>
                 {{/if}}
             </h3>
-            <div id="vitalidade" class="S0-inner-container"
-                style="column-gap: 20px;">
+            <div id="vitalidade" class="S0-inner-container" style="column-gap: 20px;">
                 {{#forLoop 0 (actorValues actor 'vitality')}}
                 {{#with ../canRoll as |canRoll|}}
                 <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"

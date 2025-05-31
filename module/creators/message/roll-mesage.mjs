@@ -1,5 +1,6 @@
 import { CoreRollMethods } from "../../core/rolls/core-roll-methods.mjs";
 import { keyJsonToKeyLang, localize, toTitleCase } from "../../../scripts/utils/utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class RollMessageCreator {
     static async mountContent(params) {
@@ -30,7 +31,7 @@ export class RollMessageCreator {
             ...coreContentData,
         };
 
-        return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll.hbs`, data);
     }
 
     static async mountContentCustomRoll(params) {
@@ -59,7 +60,7 @@ export class RollMessageCreator {
             ...coreContentData
         };
 
-        return await renderTemplate("systems/setor0OSubmundo/templates/messages/custom-roll.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/custom-roll.hbs`, data);
     }
 
     static async mountContentSimplifiedRoll(params) {
@@ -75,13 +76,15 @@ export class RollMessageCreator {
 
         const coreContentData = this.mountCoreInformationRoll(diceResults, result, difficulty, critic, half, modifiers, havePerseverance, formule);
 
+        const name = params.name || params.abilityInfo.label;
+
         const data = {
-            testName: params.abilityInfo.label,
+            testName: name,
             haveResult: result.result > 0,
             ...coreContentData,
         };
 
-        return await renderTemplate("systems/setor0OSubmundo/templates/messages/simplified-roll.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/simplified-roll.hbs`, data);
     }
 
     static #verifyResultRoll(dicesOverload = [], dicesDefault = [], specialist = false, difficulty = 6, critic = 10, automatic = 0) {

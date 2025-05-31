@@ -2,7 +2,7 @@ import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, equipmentTy
 import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
-const { StringField, NumberField, BooleanField, ArrayField, SchemaField } = foundry.data.fields;
+const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
 
 class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
     get isEquipment() {
@@ -36,9 +36,7 @@ class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
 
     static defineSchema() {
         return {
-            name: new StringField({ required: true, label: "S0.Nome" }),
             description: new StringField({ required: true, label: "S0.Descricao" }),
-            resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia" }),
             equipped: new BooleanField({ initial: false, label: "S0.Equipado" }),
         };
     }
@@ -80,6 +78,8 @@ class EquipmentDataModel extends BaseEquipmentDataModel {
     static defineSchema() {
         return {
             ...super.defineSchema(),
+            resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia" }),
+            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             super_equipment: new SuperEquipmentField(),
         };
     }
@@ -90,7 +90,6 @@ class ArmorDataModel extends EquipmentDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.ARMOR, label: "S0.Tipo" }),
-            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
         };
     }
 }
@@ -128,7 +127,6 @@ class VehicleDataModel extends RollableEquipmentDataModel {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.VEHICLE, label: "S0.Tipo" }),
             type_vehicle: new NumberField({ integer: true, initial: 0, label: "S0.Tipo" }),
-            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             acceleration: new NumberField({ integer: true, initial: 0, label: "S0.Aceleracao" }),
             speed: new NumberField({ integer: true, initial: 0, label: "S0.Velocidade" })
         };
@@ -171,7 +169,6 @@ class ProjectileDataModel extends WeaponDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.PROJECTILE, label: "S0.Tipo" }),
-            actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             capacity: new NumberField({ integer: true, initial: 1, label: "S0.Capacidade" }),
             cadence: new NumberField({ integer: true, initial: 1, label: "S0.Cadencia" }),
             range: new NumberField({ integer: true, initial: 1, label: "S0.Itens.Alcance" }),

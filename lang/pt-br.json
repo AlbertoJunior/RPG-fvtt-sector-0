@@ -26,6 +26,9 @@
         "Voce": "Você",
         "Detalhes": "Detalhes",
         "Selecionados": "Selecionados",
+        "Ativo": "Ativo",
+        "Ativou": "Ativou",
+        "Inativo": "Inativo",
         "Desativou": "Desativou",
         "Atualizar": "Atualizar",
         "Ofensivo": "Ofensivo",
@@ -237,6 +240,7 @@
         
         "Criar_Macro": "Criar Macro",
         "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa.",
+        "Teste_Customizado": "Teste Customizado",
 
         "NPC": {
             "Ver_Ficha": "Ver Ficha",
@@ -304,7 +308,9 @@
             },
 
             "Mensagens": {
-                "Nao_Pode_Efeitos_Iguais" : "Não pode ter dois efeitos iguais"
+                "Nao_Pode_Efeitos_Iguais" : "Não pode ter dois efeitos iguais",
+                "Aviso_Remocao_Itens_Mochila" : "Essa ação irá remover todos os itens da mochila",
+                "Aviso_Desequipar_Itens" : "Essa ação irá desequipar todos os itens equipados"
             }
 
         },
@@ -453,8 +459,8 @@
         "NavLabel": "Navegação de Combates",
         "NoneRemaining": "Não há Combatentes restantes neste Combate que ainda não foram derrotados.",
         "Sounds": {
-            "Epic": "Epic",
-            "MC": "Fight Commentator"
+            "Epic": "Épico",
+            "MC": "Comentarista"
         },
         "CannotLinkToScene": "Você não pode vincular o Combate a uma Cena que não contenha todos os seus Combatentes.",
         "CombatantStatus": "Status",
@@ -510,7 +516,7 @@
         "DISPLAY_OWNER": "Sempre para o Dono",
         "DISPLAY_ALWAYS": "Sempre para Todos",
         "OcclusionRadius": "Raio de Oclusão",
-        "OcclusionRadiusHint": "Quando este Token estiver abaixo de um Tyle que usa oclusão radial, este valor controla o tamanho do buraco cortado no Tyle para permitir que o Token seja visto através dela.",
+        "OcclusionRadiusHint": "Quando este Token estiver abaixo de um Tile que usa oclusão radial, este valor controla o tamanho do buraco cortado no Tile para permitir que o Token seja visto através dela.",
         "WarningNoActor": "Este Token faz referência a um Personagem que não existe mais no Mundo.",
         "WarningNoVision": "Não há nenhum Token nesta Cena que lhe conceda visibilidade da área."
     },
@@ -605,12 +611,10 @@
     "SHEETS": {
         "ConfigureSheet": "Configurar Ficha",
         "ThisSheet": "Esta Ficha",
-        "DefaultDocumentSheet": "Default {document} Sheet",
-        "DocumentSheetHint": "Override which sheet type you would like to use for this specific document.",
+        "DocumentSheetHint": "Defina o tipo de ficha que você gostaria de usar para este documento específico.",
         "TypeSheetHint": "Definir o tipo de ficha padrão utilizado para este tipo de documento (Apenas para o Mestre).",
-        "DocumentSheetPrivate": "You do not have sufficient permission to view the sheet for this {type}.",
+        "DocumentSheetPrivate": "Você não tem permissão suficiente para ver esse {type} de ficha.",
         "Save": "Salvar configuração",
-        "FormNavLabel": "Form Tab Navigation",
         "CopyUuid": "Copiar UUID"
     },
     "CHAT": {
@@ -637,7 +641,7 @@
         "PrivateRollContent": "{user} rolou dados em segredo"
     },
     "SCENES": {
-        "Configure": "Configure"
+        "Configure": "Configurar"
     },
     "ITEM": {
         "ViewArt": "Ver arte do Item"
@@ -647,6 +651,17 @@
         "MovementCollision": "O movimento tentado colide com pelo menos uma Parede.",
         "MovementNoPermission": "Você não tem permissão para mover este Token.",
         "MovementLocked": "Este Token não pode ser movido porque está travado."
+    },
+    "TIME": {
+        "Now": "Agora",
+        "Seconds": "Segundos",
+        "SecondsAbbreviation": "s",
+        "Minutes": "Minutos",
+        "MinutesAbbreviation": "m",
+        "Hours": "Horas",
+        "HoursAbbreviation": "h",
+        "DaysAbbreviation": "d",
+        "Since": "{since} atrás"
     },
     "AreYouSure": "Tem certeza?",
     "Yes": "Sim",

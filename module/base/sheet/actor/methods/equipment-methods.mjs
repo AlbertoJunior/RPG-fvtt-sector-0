@@ -61,7 +61,7 @@ class EquipmentHandleEvents {
 
     static #handleCheckBag(actor, target) {
         const equipmentId = target.dataset.itemId;
-        const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (!equipment) {
             return;
         }
@@ -107,14 +107,14 @@ class EquipmentHandleEvents {
     }
 
     static async #lockUnlockBagItems(actor, isUnlock) {
-        const equipments = ActorEquipmentUtils.getActorEquipments(actor);
+        const equipments = ActorEquipmentUtils.getEquipments(actor);
         equipments.forEach(async (equipment) => {
             EquipmentUpdater.updateEquipmentFlags(equipment, 'editable', isUnlock);
         });
     }
 
     static async #lockUnlockEquippedItems(actor, isUnlock) {
-        const equipments = ActorEquipmentUtils.getActorEquippedItems(actor);
+        const equipments = ActorEquipmentUtils.getEquippedItems(actor);
         equipments.forEach(async (equipment) => {
             EquipmentUpdater.updateEquipmentFlags(equipment, 'editable', isUnlock);
         });
@@ -134,7 +134,7 @@ class EquipmentHandleEvents {
     }
 
     static #handleEditSubstanceQuantity(actor, equipmentId) {
-        const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (!equipment) {
             return;
         }
@@ -172,7 +172,7 @@ class EquipmentHandleEvents {
             }
             case 'bag': {
                 const equipmentId = dataset.itemId;
-                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+                const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
                 if (equipment) {
                     await ActorEquipmentUtils.equip(actor, equipment);
                 }
@@ -197,7 +197,7 @@ class EquipmentHandleEvents {
                 return;
             }
             case 'equipped': {
-                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+                const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
                 if (equipment) {
                     await ActorEquipmentUtils.unequip(actor, equipment);
                 }
@@ -210,15 +210,15 @@ class EquipmentHandleEvents {
         switch (type) {
             case 'bag': {
                 const params = {
-                    message: "Essa ação irá remover todos os itens da mochila",
-                    onConfirm: () => ActorUpdater.removeDocuments(actor, ActorEquipmentUtils.getActorEquipments(actor).map(item => item.id))
+                    message: localize('Itens.Mensagens.Aviso_Remocao_Itens_Mochila'),
+                    onConfirm: () => ActorUpdater.removeDocuments(actor, ActorEquipmentUtils.getEquipments(actor).map(item => item.id))
                 }
                 ConfirmationDialog.open(params);
                 return;
             }
             case 'equipped': {
                 const params = {
-                    message: "Essa ação irá desequipar todos os itens equipados",
+                    message: localize('Itens.Mensagens.Aviso_Desequipar_Itens'),
                     onConfirm: () => this.#unequipAllItems(actor)
                 }
                 ConfirmationDialog.open(params);
@@ -228,13 +228,13 @@ class EquipmentHandleEvents {
     }
 
     static async #unequipAllItems(actor) {
-        const equipmentsUnequipPromises = ActorEquipmentUtils.getActorEquippedItems(actor).map(equipment => ActorEquipmentUtils.unequip(actor, equipment));
+        const equipmentsUnequipPromises = ActorEquipmentUtils.getEquippedItems(actor).map(equipment => ActorEquipmentUtils.unequip(actor, equipment));
         await Promise.all(equipmentsUnequipPromises);
     }
 
     static async handleView(actor, event) {
         const equipmentId = event.currentTarget.dataset.itemId;
-        const item = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const item = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (item) {
             item.sheet.render(true, { editable: false });
         }
@@ -246,7 +246,7 @@ class EquipmentHandleEvents {
 
     static async handleRoll(actor, event) {
         const equipmentId = event.currentTarget.dataset.itemId;
-        const item = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const item = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (!item) {
             return;
         }
@@ -263,8 +263,7 @@ class EquipmentHandleEvents {
         }
 
         let resultRoll;
-        TODO('no futuro é ideal remover a utilização do system.')
-        if (item.system.isWeapon) {
+        if (EquipmentUtils.isWeapon(item)) {
             resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item);
         } else {
             resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);

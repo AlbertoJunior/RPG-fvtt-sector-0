@@ -15,9 +15,9 @@ const map = {
     'total_languages': (actor) => ActorUtils.calculateTotalLanguages(actor),
     'total_experience': (actor) => ActorUtils.calculateTotalExperience(actor),
 
-    'have_equipped_armor': (actor) => Boolean(ActorEquipmentUtils.getActorEquippedArmorItem(actor)),
-    'equipped_amor_total_resistance': (actor) => ActorEquipmentUtils.getActorArmorEquippedResistence(actor),
-    'equipped_amor_actual_resistance': (actor) => ActorEquipmentUtils.getActorArmorEquippedActualResistence(actor),
+    'have_equipped_armor': (actor) => Boolean(ActorEquipmentUtils.getEquippedArmorItem(actor)),
+    'equipped_amor_total_resistance': (actor) => ActorEquipmentUtils.getArmorEquippedResistence(actor),
+    'equipped_amor_actual_resistance': (actor) => ActorEquipmentUtils.getArmorEquippedActualResistence(actor),
 
     'actual_consciousness': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.CONSCIOUSNESS),
     'actual_perseverance': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.PERSEVERANCE),
@@ -42,7 +42,7 @@ const map = {
     'npc_stamina': (actor) => NpcConversor.getStamina(actor),
 
     'calculate_dice_pool': (actor, params) => {
-        const { primary_attribute, secondary_attribute, ability, bonus = 0 } = params;
+        const { primary_attribute, secondary_attribute, ability, bonus = 0 } = params[0];
         return ActorUtils.calculateDices(actor, primary_attribute, secondary_attribute, ability) + bonus;
     },
 }
