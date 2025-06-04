@@ -12,7 +12,7 @@ export class ActorUtils {
 
     static getAbilityValue(actor, ability) {
         const base = getObject(actor, CharacteristicType.SKILLS)[ability] || 0;
-        const bonus = getObject(actor, CharacteristicType.BONUS.ABILITY)[ability] || 0;
+        const bonus = getObject(actor, CharacteristicType.BONUS.SKILL)[ability] || 0;
         return base + bonus;
     }
 

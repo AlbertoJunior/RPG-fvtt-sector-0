@@ -1,4 +1,5 @@
-import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, equipmentTypeIdToTypeString, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
+import { EquipmentInfoParser } from "../core/equipment/equipment-info.mjs";
+import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
 import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
 import { RollTestDataModel } from "./roll-test-data-model.mjs";
 
@@ -179,12 +180,12 @@ class ProjectileDataModel extends WeaponDataModel {
 }
 
 const EquipmentTypeStringMap = {
-    [equipmentTypeIdToTypeString(EquipmentType.MELEE)]: MeleeDataModel,
-    [equipmentTypeIdToTypeString(EquipmentType.PROJECTILE)]: ProjectileDataModel,
-    [equipmentTypeIdToTypeString(EquipmentType.ARMOR)]: ArmorDataModel,
-    [equipmentTypeIdToTypeString(EquipmentType.VEHICLE)]: VehicleDataModel,
-    [equipmentTypeIdToTypeString(EquipmentType.SUBSTANCE)]: SubstanceDataModel,
-    [equipmentTypeIdToTypeString(EquipmentType.ACESSORY)]: AcessoryDataModel
+    [EquipmentInfoParser.equipmentTypeIdToTypeString(EquipmentType.MELEE)]: MeleeDataModel,
+    [EquipmentInfoParser.equipmentTypeIdToTypeString(EquipmentType.PROJECTILE)]: ProjectileDataModel,
+    [EquipmentInfoParser.equipmentTypeIdToTypeString(EquipmentType.ARMOR)]: ArmorDataModel,
+    [EquipmentInfoParser.equipmentTypeIdToTypeString(EquipmentType.VEHICLE)]: VehicleDataModel,
+    [EquipmentInfoParser.equipmentTypeIdToTypeString(EquipmentType.SUBSTANCE)]: SubstanceDataModel,
+    [EquipmentInfoParser.equipmentTypeIdToTypeString(EquipmentType.ACESSORY)]: AcessoryDataModel
 };
 
 export function equipmentParseData(data) {

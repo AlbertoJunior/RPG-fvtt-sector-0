@@ -10,10 +10,11 @@ import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
 import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
 
 export class ActorRollDialog {
-    static mapedPagesMethods = {
+    static #mapedPagesMethods = {
         0: ActorRollDialog.#confirmPage1,
         1: ActorRollDialog.#confirmPage2,
         2: ActorRollDialog.#confirmPage3,
+        3: ActorRollDialog.#confirmPage4,
     };
 
     static async _open(actor) {
@@ -46,7 +47,7 @@ export class ActorRollDialog {
                             return
                         }
 
-                        ActorRollDialog.mapedPagesMethods[currentPageDialog]?.(actor, data, rollMode);
+                        ActorRollDialog.#mapedPagesMethods[currentPageDialog]?.(actor, data, rollMode);
                     }
                 }
             },
@@ -250,5 +251,19 @@ export class ActorRollDialog {
         };
 
         await playerRollHandle.custom(actor, inputParams);
+    }
+
+    static async #confirmPage4(actor, data, rollMode) {
+        const inputParams = {
+            half: Boolean(data["half"]),
+            specialist: Boolean(data["specialist"]),
+            value: Number(data["value"]),
+            automatic: Number(data["automatic"]),
+            difficulty: Number(data["difficulty"]),
+            critic: Number(data["critic"]),
+            rollMode,
+        };
+
+        await playerRollHandle.simple(actor, inputParams);
     }
 }

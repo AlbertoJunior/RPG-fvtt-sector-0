@@ -29,6 +29,7 @@ export const EquipmentCharacteristicType = Object.freeze({
     SUPER_EQUIPMENT: {
         id: 'super_equipment',
         system: `system.super_equipment`,
+        ACTIVE: { id: 'active', system: `system.super_equipment.active` },
         LEVEL: { id: 'level', system: `system.super_equipment.level` },
         EFFECTS: { id: 'effects', system: `system.super_equipment.effects` },
         DEFECTS: { id: 'defects', system: `system.super_equipment.defects` },
@@ -44,18 +45,6 @@ export const EquipmentType = Object.freeze({
     SUBSTANCE: 5,
     ACESSORY: 6,
 });
-
-export function equipmentTypeIdToTypeString(type) {
-    switch (type) {
-        case EquipmentType.MELEE: return 'Melee'
-        case EquipmentType.PROJECTILE: return 'Projectile'
-        case EquipmentType.ARMOR: return 'Armor'
-        case EquipmentType.VEHICLE: return 'Vehicle'
-        case EquipmentType.SUBSTANCE: return 'Substance'
-        case EquipmentType.ACESSORY: return 'Acessory'
-    }
-    return undefined;
-}
 
 export function validEquipmentTypes() {
     return Object.values(EquipmentType).filter(typeId => typeId !== EquipmentType.UNKNOWM);
@@ -102,4 +91,11 @@ export const SubstanceType = Object.freeze({
     POISON: 1,
     ACID: 2,
     GAS: 3,
+});
+
+export const SuperEquipmentParticularityType = Object.freeze({
+    TEXT: 0,
+    ATTRIBUTE: 1,
+    SKILL: 2,
+    DAMAGE_TYPE: 3,
 });

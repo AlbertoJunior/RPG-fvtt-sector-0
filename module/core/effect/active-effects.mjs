@@ -64,7 +64,7 @@ export class ActiveEffectsUtils {
         return this.getFlags(activeEffect)[ActiveEffectsFlags.ORIGIN_TYPE];
     }
 
-    static async addEffect(actor, activeEffectData) {
+    static async addActorEffect(actor, activeEffectData) {
         await ActorUpdater.addEffects(actor, [...activeEffectData]);
     }
 

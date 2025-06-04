@@ -123,7 +123,7 @@ export const CharacteristicType = Object.freeze({
             PERSEVERANCE: { id: 'bonus_perseveranca', system: 'system.bonus.virtudes.perseveranca' },
             QUIETNESS: { id: 'bonus_quietude', system: 'system.bonus.virtudes.quietude' },
         },
-        ABILITY: {
+        SKILL: {
             id: 'bonus_habilidades',
             system: 'system.bonus.habilidades',
         },

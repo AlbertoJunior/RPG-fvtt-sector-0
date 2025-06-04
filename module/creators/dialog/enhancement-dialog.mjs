@@ -70,7 +70,7 @@ export class EnhancementDialog {
             return;
         }
 
-        CreateFormDialog._open(
+        CreateFormDialog.open(
             localize("Modificadores"),
             "rolls/modifiers",
             {

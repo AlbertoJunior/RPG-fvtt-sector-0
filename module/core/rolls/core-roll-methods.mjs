@@ -49,20 +49,45 @@ export class CoreRollMethods {
     }
 
     static calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, criticDifficulty, automatic) {
+        const { resultOverload, criticalOverload, failureOverload } = this.#calculateOverloadSuccesses(dicesOverload, difficulty);
+
+        const resultDefault = this.#calculateDefaultSuccesses(dicesDefault, difficulty, criticDifficulty, specialist);
+
+        const resultWithoutAutomatic = resultOverload + resultDefault;
+        const resultFinal = resultWithoutAutomatic + (resultWithoutAutomatic > 0 ? automatic : 0);
+
+        return {
+            result: resultFinal,
+            criticalOverload: resultFinal > 0 && criticalOverload,
+            failureOverload: resultFinal < 0 && failureOverload,
+        }
+    }
+
+    static #calculateOverloadSuccesses(dicesOverload, difficulty) {
         let resultOverload = 0;
-        let overload = false;
+        let criticalOverload = false;
+        let failureOverload = false;
+
         for (const element of dicesOverload) {
             if (element == 10) {
                 resultOverload += 3;
-                overload = true;
+                criticalOverload = true;
             } else if (element == 1) {
                 resultOverload -= 3;
-                overload = true;
+                failureOverload = true;
             } else if (element >= difficulty) {
                 resultOverload++;
             }
         }
 
+        return {
+            resultOverload,
+            criticalOverload,
+            failureOverload
+        }
+    }
+
+    static #calculateDefaultSuccesses(dicesDefault, difficulty, criticDifficulty, specialist) {
         let resultDefault = 0;
         let criticCount = 0;
         let usedSpecialist = !specialist;
@@ -88,12 +113,6 @@ export class CoreRollMethods {
         }
         const resultCritic = Math.floor(Math.max(criticCount, 0) / 2);
 
-        const resultWithoutAutomatic = resultOverload + resultDefault + resultCritic;
-        const resultFinal = resultWithoutAutomatic + (resultWithoutAutomatic > 0 ? automatic : 0);
-
-        return {
-            result: resultFinal,
-            overload: overload
-        }
+        return resultDefault + resultCritic;
     }
 }

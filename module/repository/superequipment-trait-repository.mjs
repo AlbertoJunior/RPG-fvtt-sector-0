@@ -1,4 +1,5 @@
 import { SYSTEM_ID } from "../constants.mjs";
+import { SuperEquipmentParticularityType } from "../enums/equipment-enums.mjs";
 import { SuperEquipmentTraitField } from "../field/equipment-field.mjs";
 
 export class SuperEquipmentTraitRepository {
@@ -9,7 +10,9 @@ export class SuperEquipmentTraitRepository {
             cost: 1,
             limit: 2,
             description: 'Para alguma Habilidade não combativa.',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.SKILL
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good2',
@@ -48,11 +51,13 @@ export class SuperEquipmentTraitRepository {
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good7',
-            name: 'Efeito Diverso (1)*',
+            name: 'Efeito Diverso',
             cost: 1,
             limit: 3,
-            description: '* Efeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
-            particularity: ''
+            description: 'Efeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good8',
@@ -91,11 +96,13 @@ export class SuperEquipmentTraitRepository {
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good13',
-            name: 'Efeito Diverso (2)*',
+            name: 'Efeito Diverso',
             cost: 2,
             limit: 3,
-            description: '* Efeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
-            particularity: ''
+            description: 'Efeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good14',
@@ -103,7 +110,9 @@ export class SuperEquipmentTraitRepository {
             cost: 2,
             limit: 1,
             description: 'Aplica um atributo elemental ao dano causado por armas, podendo ser Elétrico, Incendiário ou Congelante',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.DAMAGE_TYPE
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good15',
@@ -117,7 +126,10 @@ export class SuperEquipmentTraitRepository {
             name: '-1 Dificuldade',
             cost: 3,
             limit: 3,
-            description: 'Diminui em 1 a Dificuldade dos testes enquanto estiver usando este item. A Dificuldade mínima é 5.'
+            description: 'Diminui em 1 a Dificuldade dos testes enquanto estiver usando este item. A Dificuldade mínima é 5.',
+            particularity: {
+                type: SuperEquipmentParticularityType.SKILL
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good17',
@@ -125,15 +137,19 @@ export class SuperEquipmentTraitRepository {
             cost: 3,
             limit: 3,
             description: 'Temporariamente aumenta em 2 um Atributo escolhido.',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.ATTRIBUTE
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good18',
-            name: 'Efeito Diverso (3)*',
+            name: 'Efeito Diverso',
             cost: 3,
             limit: 3,
-            description: '* Efeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
-            particularity: ''
+            description: 'Efeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'good19',
@@ -141,7 +157,9 @@ export class SuperEquipmentTraitRepository {
             cost: 4,
             limit: 1,
             description: 'Habilidade pré-definida (dif. Mínima 7)',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.SKILL
+            }
         }),
     ];
 
@@ -155,11 +173,13 @@ export class SuperEquipmentTraitRepository {
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad2',
-            name: 'Defeito Diverso *',
+            name: 'Defeito Diverso',
             cost: 1,
             limit: 3,
-            description: '* Defeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
-            particularity: ''
+            description: 'Defeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad3',
@@ -167,7 +187,9 @@ export class SuperEquipmentTraitRepository {
             cost: 1,
             limit: 1,
             description: 'Sempre que usar este SuperEquipamento será mal visto por outros seres que conhecem a Má Reputação deste item. Seja por ele ter sido roubado de alguém importante ou ter algum estigma associado, qualquer coisa é válida.',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad4',
@@ -175,7 +197,9 @@ export class SuperEquipmentTraitRepository {
             cost: 1,
             limit: 1,
             description: 'Defina com o narrador alguma situação ou cenário que este SuperEquipamento não pode ser utilizado.',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad5',
@@ -211,14 +235,19 @@ export class SuperEquipmentTraitRepository {
             cost: 1,
             limit: 2,
             description: 'Precisa ser recarregado custando 3 Pontos de Movimentos a mais. Se não for uma Arma de Projeção, precisa definir a quantidade de turnos para recarregar.',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad10',
             name: '+1 na Dificuldade de uso',
             cost: 2,
             limit: 3,
-            description: 'Aumenta a Dificuldade para usar o SuperEquipamento em 1. A Dificuldade máxima é 10.'
+            description: 'Aumenta a Dificuldade para usar o SuperEquipamento em 1. A Dificuldade máxima é 10.',
+            particularity: {
+                type: SuperEquipmentParticularityType.SKILL
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad11',
@@ -247,7 +276,9 @@ export class SuperEquipmentTraitRepository {
             cost: 3,
             limit: 1,
             description: 'Sempre que o SuperEquipamento estiver visível, o narrador pode pedir um Teste de Procurado.',
-            particularity: ''
+            particularity: {
+                type: SuperEquipmentParticularityType.TEXT
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad15',
@@ -313,5 +344,13 @@ export class SuperEquipmentTraitRepository {
 
     static getItemByTypeAndId(type, traitId) {
         return this.getItemsByType(type).find(element => element.id == traitId);
+    }
+
+    static getTraitsNeedActivate() {
+        const ids = ['bad12', 'bad15', 'bad16'];
+        return [
+            ...this.getGoodTraits(),
+            ...this.getBadTraits(),
+        ].filter(trait => ids.includes(trait.id));
     }
 }

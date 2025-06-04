@@ -1,4 +1,5 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 import { CoreRollMethods } from "../../core/rolls/core-roll-methods.mjs";
 
 export class RollPerseveranceMessageCreator {
@@ -16,7 +17,7 @@ export class RollPerseveranceMessageCreator {
             resultMessageClasses = `S0-critical-failure`;
         } else {
             resultMessage = localize('Falha');
-            resultMessageClasses = `S0--failure`;
+            resultMessageClasses = `S0-failure`;
         }
 
         const data = {
@@ -26,6 +27,7 @@ export class RollPerseveranceMessageCreator {
             removedDiceValues: removedValues,
             resultValue: successes
         };
-        return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll-perseverance.hbs", data);
+
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-perseverance.hbs`, data);
     }
 }

@@ -50,7 +50,7 @@ class NpcRollMethods {
         const canBeOverloaded = qualityValues >= 2;
         const canBeSpecialist = qualityValues > 2;
 
-        CreateFormDialog._open(
+        CreateFormDialog.open(
             localize("Modificadores"),
             "rolls/modifiers",
             {

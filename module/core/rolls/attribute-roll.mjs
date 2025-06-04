@@ -39,16 +39,16 @@ export class RollAttribute {
         }
 
         const modifiersInformations = {
+            specialist: specialist,
             automatic: Number(automatic),
             bonus: Number(bonus),
             penalty: penalty,
-            weapon: weapon
+            weapon: weapon,
         }
 
         const abilityInformations = {
             label: ability,
             value: ActorUtils.getAbilityValue(actor, ability),
-            specialist: specialist
         };
 
         return {
@@ -70,6 +70,7 @@ export class RollAttribute {
             isHalf: half,
             weapon: {
                 name: weapon.name,
+                [EquipmentCharacteristicType.TYPE]: weapon.name,
                 [EquipmentCharacteristicType.DAMAGE.id]: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
                 [EquipmentCharacteristicType.TRUE_DAMAGE.id]: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE),
                 [EquipmentCharacteristicType.DAMAGE_TYPE.id]: EquipmentInfoParser.parseDamageType(getObject(weapon, EquipmentCharacteristicType.DAMAGE_TYPE)),

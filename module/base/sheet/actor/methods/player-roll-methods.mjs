@@ -1,6 +1,7 @@
-import { localize } from "../../../../../scripts/utils/utils.mjs";
+import { localize, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { CustomRoll } from "../../../../core/rolls/custom-roll.mjs";
+import { RollSimplified } from "../../../../core/rolls/simplified-roll.mjs";
 import { RollVirtue } from "../../../../core/rolls/virtue-roll.mjs";
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 
@@ -9,6 +10,7 @@ export const playerRollHandle = {
     custom: async (actor, inputParams) => PlayerRollMethods.handleCustomRoll(actor, inputParams),
     virtue: async (actor, inputParams) => PlayerRollMethods.handleVirtueRoll(actor, inputParams),
     shortcut: async (actor, shortcutTest) => PlayerRollMethods.handleShortcutRoll(actor, shortcutTest),
+    simple: async (actor, inputParams) => PlayerRollMethods.handleSimpleRoll(actor, inputParams),
     rollableItem: async (actor, rollTest, item, half) => PlayerRollMethods.handleRollabeItemRoll(actor, { rollTest, item, half }),
 }
 
@@ -37,6 +39,8 @@ class PlayerRollMethods {
     static async handleRollabeItemRoll(actor, inputParams) {
         const { rollTest, item, half } = inputParams;
 
+        debugger
+        TODO('colocar a separação entre ITEM e ARMA')
         const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item, half);
         await DefaultActions.sendRollOnChat(actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
@@ -46,5 +50,14 @@ class PlayerRollMethods {
 
         const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
         await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name);
+    }
+
+    static async handleSimpleRoll(actor, inputParams) {
+        const rollInformation = {
+            name: localize('Simples'),
+            resultRoll: await RollSimplified.rollByAmount(actor, inputParams),
+            ...inputParams
+        };
+        await DefaultActions.processRollByAmount(actor, rollInformation);
     }
 }

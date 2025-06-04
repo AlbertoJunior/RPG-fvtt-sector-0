@@ -1,5 +1,5 @@
 import { ActiveEffectsUtils } from "../core/effect/active-effects.mjs";
-import { OscillatingTintManager } from "../core/effect/oscilating-effect.mjs";
+import { OscillatingTintManager } from "../core/effect/oscilating-effect-manager.mjs";
 import { ActorUtils } from "../core/actor/actor-utils.mjs";
 import { FlagsUtils } from "../utils/flags-utils.mjs";
 import { ActiveEffectsFlags } from "../enums/active-effects-enums.mjs";

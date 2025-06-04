@@ -1,10 +1,11 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { EquipmentUpdater } from "../../base/updater/equipment-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
-import { EquipmentCharacteristicType, EquipmentType, equipmentTypeIdToTypeString, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
+import { EquipmentCharacteristicType, EquipmentType, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
+import { EquipmentInfoParser } from "../equipment/equipment-info.mjs";
 
 export class ActorEquipmentUtils {
-    static #allowedTypes = validEquipmentTypes().map(equipmentTypeIdToTypeString).filter(Boolean);
+    static #allowedTypes = validEquipmentTypes().map(EquipmentInfoParser.equipmentTypeIdToTypeString).filter(Boolean);
 
     static getEquipments(actor) {
         const object = Object.fromEntries(
@@ -24,7 +25,7 @@ export class ActorEquipmentUtils {
             return [...items];
         }
 
-        const itemTypeString = equipmentTypeIdToTypeString(equipmentTypeId);
+        const itemTypeString = EquipmentInfoParser.equipmentTypeIdToTypeString(equipmentTypeId);
         return [...actor.itemTypes[itemTypeString]];
     }
 
@@ -115,7 +116,7 @@ export class ActorEquipmentUtils {
     }
 
     static getItemAndRollTest(actor, equipmentId) {
-        if(!actor || !equipmentId) {
+        if (!actor || !equipmentId) {
             return null
         }
 

@@ -7,7 +7,7 @@ export class RollPerseverance {
         const rollsOnMessage = message.rolls.filter(roll => roll.options.isOverload == false);
 
         if (!rollsOnMessage || rollsOnMessage.length < 1) {
-            console.log(`-> Nenhuma rolagem encontrada`);
+            console.warn(`-> Nenhuma rolagem encontrada`);
             return null;
         }
 
@@ -19,7 +19,7 @@ export class RollPerseverance {
         newValues.critic = roll.options.critic || 10;
         newValues.specialist = roll.options.specialist || false;
         newValues.automatic = (roll.options.automatic || 0) + (roll.options?.weapon?.true_damage || 0);
-        
+
         const messageContent = await RollPerseveranceMessageCreator.mountContent(newValues);
         const actorOnMessage = game.actors.get(message.speaker.actor);
 
@@ -47,8 +47,9 @@ export class RollPerseverance {
             return values;
         }
 
-        values.sort((a, b) => a - b);
-        return values.slice(0, 2);
+        const copiedList = [...values];
+        copiedList.sort((a, b) => a - b);
+        return copiedList.slice(0, 2);
     }
 
     static #removeValues(values, valuesToRemove) {

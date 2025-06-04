@@ -44,6 +44,8 @@
         "Atalho": "Atalho",
         "Atuacao": "Atuação",
         "Qualidade": "Qualidade",
+        "Limite": "Limite",
+        "Simples": "Simples",
 
         "Realizar_Teste": "Realizar Teste",
         "Rolagens_Player": "Modo de Rolagem",
@@ -100,6 +102,7 @@
         "Arsenal": "Arsenal",
         "Informantes": "Informantes",
         "Recursos": "Recursos",
+        "SuperEquipamento": "SuperEquipamento",
         "SuperEquipamentos": "SuperEquipamentos",
         
         "Virtudes": "Virtudes",
@@ -272,9 +275,9 @@
 
             "Superficial": "Superficial",
             "Letal": "Letal",
-            "Fogo": "Fogo",
+            "Fogo": "Incendiário",
             "Eletrico": "Elétrico",
-            "Gelo": "Gelo",
+            "Gelo": "Gélido",
 
             "Tamanho": "Tamanho",
             "Curta": "Curta",

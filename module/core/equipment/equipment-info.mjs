@@ -1,8 +1,20 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
 import { ActiveEffectsTypes } from "../../enums/active-effects-enums.mjs";
-import { DamageType, EquipmentHand, EquipmentHidding, MeleeSize, SubstanceType, VehicleType } from "../../enums/equipment-enums.mjs";
+import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType, VehicleType } from "../../enums/equipment-enums.mjs";
 
 export class EquipmentInfoParser {
+    static mappedEquipmentTypes = {
+        [EquipmentType.MELEE]: 'Melee',
+        [EquipmentType.PROJECTILE]: 'Projectile',
+        [EquipmentType.ARMOR]: 'Armor',
+        [EquipmentType.VEHICLE]: 'Vehicle',
+        [EquipmentType.SUBSTANCE]: 'Substance',
+        [EquipmentType.ACESSORY]: 'Acessory',
+    }
+
+    static equipmentTypeIdToTypeString(type) {
+        return EquipmentInfoParser.mappedEquipmentTypes[type];
+    }
 
     static parseHidding(value) {
         const map = {

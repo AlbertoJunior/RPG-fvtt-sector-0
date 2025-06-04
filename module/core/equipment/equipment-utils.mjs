@@ -1,6 +1,7 @@
 import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
 import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../enums/active-effects-enums.mjs";
 import { EquipmentCharacteristicType, SubstanceType } from "../../enums/equipment-enums.mjs";
+import { SuperEquipmentTraitRepository } from "../../repository/superequipment-trait-repository.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 TODO('no futuro é ideal remover a utilização do system.');
@@ -18,10 +19,6 @@ export class EquipmentUtils {
         return `${totalEffects}/${totalBonus}`;
     }
 
-    static isSuperEquipment(item) {
-        return Boolean(getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT));
-    }
-
     static canEquip(item) {
         return item?.system?.canEquip || false;
     }
@@ -34,13 +31,16 @@ export class EquipmentUtils {
         return item?.system?.isEquipment || false;
     }
 
+    static isSuperEquipment(item) {
+        return Boolean(getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT));
+    }
+
     static getSuperEquipmentLevel(item) {
-        const level = getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.LEVEL) || 0;
-        return level;
+        return getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.LEVEL) || 0;
     }
 
     static getSuperEquipmentDefectsLimits(item) {
-        const level = getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.LEVEL) || 0;
+        const level = this.getSuperEquipmentLevel(item);
         const defects = getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.DEFECTS) || [];
         return `${defects.length}/${Math.max(level - 2, 0)}`;
     }
@@ -54,6 +54,68 @@ export class EquipmentUtils {
         const defects = superEquipment.defects || [];
         const totalEffects = effects.length + defects.length;
         return totalEffects > 0;
+    }
+
+    static getSuperEquipmentNeedsActivate(item) {
+        const traits = this.getSuperEquipmentTraits(item);
+        return this.superEquipmentNeedsActivate(traits);
+    }
+
+    static getSuperEquipmentTraits(item) {
+        const { SUPER_EQUIPMENT } = EquipmentCharacteristicType;
+        return [
+            ...(getObject(item, SUPER_EQUIPMENT.EFFECTS) || []),
+            ...(getObject(item, SUPER_EQUIPMENT.DEFECTS) || [])
+        ];
+    }
+
+    static superEquipmentNeedsActivate(traitList) {
+        const activateTraitIds = new Set(
+            SuperEquipmentTraitRepository.getTraitsNeedActivate().map(({ id }) => id)
+        );
+
+        return traitList.some(trait => {
+            const baseId = trait.id.split('.')[1];
+            return activateTraitIds.has(baseId);
+        });
+    }
+
+    static getSuperEquipmentActiveEffect(item) {
+        const effects = EquipmentUtils.getSuperEquipmentTraits(item)
+            .filter(effect => effect.particularity?.change != null);
+
+        if (effects.length <= 0) {
+            return null;
+        }
+
+        const flags = {
+            [ActiveEffectsFlags.ORIGIN_ID]: item.id,
+            [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ITEM,
+            [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ITEM),
+        };
+        const changes = [];
+
+        for (const effect of effects) {
+            const particularity = effect.particularity;
+            changes.push(
+                {
+                    key: particularity.change.key,
+                    value: particularity.change.value,
+                    mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+                },
+            )
+        }
+
+        return ActiveEffectsUtils.createEffectData(
+            {
+                name: item.name,
+                origin: localize('SuperEquipamento'),
+                statuses: [`${item.id}`],
+                duration: { startRound: 0, rounds: 99 },
+                flags: flags,
+                changes: changes
+            }
+        );
     }
 
     static substanceEffects(item) {
@@ -72,6 +134,7 @@ export class EquipmentUtils {
         const effects = getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];
         const originLabel = localize('Substancia');
         const itemId = item.id;
+        const originTypeLabel = activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ITEM);
         const allEffects = [];
 
         for (const effect of effects) {
@@ -92,7 +155,7 @@ export class EquipmentUtils {
                 flags: {
                     [ActiveEffectsFlags.ORIGIN_ID]: itemId,
                     [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ITEM,
-                    [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ITEM),
+                    [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: originTypeLabel,
                     [ActiveEffectsFlags.TYPE]: effect.type,
                 }
             });

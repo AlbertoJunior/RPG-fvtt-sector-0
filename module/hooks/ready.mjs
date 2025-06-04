@@ -1,4 +1,4 @@
-import { OscillatingTintManager } from "../core/effect/oscilating-effect.mjs";
+import { OscillatingTintManager } from "../core/effect/oscilating-effect-manager.mjs";
 import { RepositoriesUtils } from "../utils/repositories.mjs";
 import { ActiveEffectRepository } from "../repository/active-effects-repository.mjs";
 import { MacroSync } from "../core/macro/macro-sync.mjs";

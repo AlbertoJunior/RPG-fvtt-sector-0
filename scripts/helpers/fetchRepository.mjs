@@ -1,4 +1,4 @@
-import { equipmentTypeIdToTypeString, validEquipmentTypes } from "../../module/enums/equipment-enums.mjs";
+import { validEquipmentTypes } from "../../module/enums/equipment-enums.mjs";
 import { MorphologyRepository } from "../../module/repository/morphology-repository.mjs";
 import { DistrictRepository } from "../../module/repository/district-repository.mjs";
 import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
@@ -16,7 +16,7 @@ import { SuperEquipmentTraitRepository } from "../../module/repository/superequi
 
 function getActorEquipmentTypes() {
     return validEquipmentTypes().map(item => {
-        const type = equipmentTypeIdToTypeString(item);
+        const type = EquipmentInfoParser.equipmentTypeIdToTypeString(item);
         return {
             id: item,
             label: localizeType(`Item.${type}`),

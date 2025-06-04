@@ -85,7 +85,7 @@ class EquipmentHandleEvents {
 
                 const effects = EquipmentUtils.getSubstanceActiveEffects(equipment);
                 if (effects.length > 0) {
-                    ActiveEffectsUtils.addEffect(actor, effects);
+                    ActiveEffectsUtils.addActorEffect(actor, effects);
                 }
             }
         });

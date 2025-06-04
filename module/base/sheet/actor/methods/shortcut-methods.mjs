@@ -120,7 +120,7 @@ class ShortcutHandleEvents {
     }
 
     static async #rollDefaultShortcut(actor, type, subCharacteristic) {
-        CreateFormDialog._open(
+        CreateFormDialog.open(
             localize("Modificadores"),
             "rolls/modifiers",
             {

@@ -66,11 +66,11 @@ export function keyJsonToKeyLang(key) {
 }
 
 export function localize(key) {
-    return game.i18n.localize(`S0.${key}`)
+    return game.i18n.localize(`S0.${key}`);
 }
 
 export function labelError() {
-    return `<${localize('Erro')}>`
+    return `<${localize('Erro')}>`;
 }
 
 export function onArrayRemove(array, item) {
@@ -83,7 +83,7 @@ export function onArrayRemove(array, item) {
 }
 
 export function localizeType(key) {
-    return game.i18n.localize(`TYPES.${key}`)
+    return game.i18n.localize(`TYPES.${key}`);
 }
 
 export function TODO(message, notify) {
@@ -107,7 +107,7 @@ export function randomId(maxString) {
     const finalId = id.replaceAll('-', '');
 
     if (typeof maxString == 'number' && maxString > 0) {
-        return finalId.substring(0, maxString)
+        return finalId.substring(0, maxString);
     }
     return finalId;
 }

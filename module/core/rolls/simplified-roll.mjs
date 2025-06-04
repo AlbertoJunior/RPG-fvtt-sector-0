@@ -6,6 +6,15 @@ import { NpcConversor } from "../npc/npc-conversor.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollSimplified {
+    static async rollByAmount(actor, params) {
+        const modifiersInformations = {
+            isHalf: false,
+            bonus: 0,
+            penalty: 0,
+        }
+        return await this.#rollDices(actor, params.value, modifiersInformations);;
+    }
+
     static async roll(actor, params) {
         const modifiersInformations = this.#mountModifiersInfo(params);
         const abilityInfo = this.#mountAbilityInfo(params.skillName);

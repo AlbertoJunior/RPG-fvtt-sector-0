@@ -29,7 +29,7 @@ class EquipmentSheetCharacteristicsHandle {
     }
 
     static async #addSubstanceEffect(item) {
-        CreateFormDialog._open(
+        CreateFormDialog.open(
             localize('Itens.Adicionar_Efeito'),
             'items/dialog/substance-effect',
             {

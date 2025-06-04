@@ -10,7 +10,7 @@ export class CreateFormDialog {
         presetForm: {},
     }
 
-    static async _open(title, fileHtml, options) {
+    static async open(title, fileHtml, options) {
         const buttons = this.#createButtons(
             {
                 confirm: options.onConfirm,

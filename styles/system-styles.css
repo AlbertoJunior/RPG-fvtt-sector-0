@@ -1370,6 +1370,9 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-drop-container {
+    min-width: 0;
+    min-height: 0;
+    height: 85%;
     padding: var(--border-radius-medium) !important;
     border-radius: var(--border-radius-large);
     transition: background-color 0.2s ease-in-out, padding 0.2s ease-in-out;

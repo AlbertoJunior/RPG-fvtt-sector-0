@@ -55,6 +55,26 @@ export class DefaultActions {
         await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
 
+    static async processRollByAmount(actor, rollInformation) {
+        const params = {
+            name: rollInformation.name,
+            amount: rollInformation.value,
+            rolls: rollInformation.resultRoll,
+            modifiers: {
+                specialist: rollInformation.specialist,
+                automatic: rollInformation.automatic,
+            },
+            difficulty: rollInformation.difficulty,
+            critic: rollInformation.critic,
+            havePerseverance: ActorUtils.havePerseverance(actor),
+            half: false
+        };
+
+        const rolls = this.#prepareRolls(params.rolls, params, { isAmountRoll: true });
+        const message = await RollMessageCreator.mountContentByAmountRoll(params);
+        await ChatCreator._sendToChatTypeRoll(actor, message, rolls, rollInformation.rollMode);
+    }
+
     static async processCustomRoll(actor, resultRoll, inputParams, rollMessage, mode) {
         const params = {
             rolls: resultRoll.roll,

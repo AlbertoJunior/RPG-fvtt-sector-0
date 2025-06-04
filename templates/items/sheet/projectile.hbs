@@ -11,6 +11,12 @@
         </div>
 
         <div class="form-group">
+            <label for="{{item.id}}.capacity" style="flex: 1;">{{localize 'S0.Capacidade'}}:</label>
+            <input id="{{item.id}}.capacity" style="flex: 1; text-align: center;" type="number" name="system.capacity"
+                min="1" value="{{item.system.capacity}}" />
+        </div>
+
+        <div class="form-group">
             <label for="{{item.id}}.range" style="flex: 1;">{{localize 'S0.Alcance'}}:</label>
             <input id="{{item.id}}.range" style="flex: 1; text-align: center;" type="number" name="system.range" min="1"
                 value="{{item.system.range}}" />
