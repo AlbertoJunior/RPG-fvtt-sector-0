@@ -4,6 +4,7 @@ import { localize, randomId } from "../../../scripts/utils/utils.mjs"
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { ConfirmationDialog } from "./confirmation-dialog.mjs";
 import { RollTestUtils } from "../../core/rolls/roll-test-utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class CreateRollableTestDialog {
     static async _view(rollTestData) {
@@ -113,7 +114,7 @@ export class CreateRollableTestDialog {
             ...rollableData
         };
 
-        return await renderTemplate("systems/setor0OSubmundo/templates/rolls/create-roll-test-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/rolls/create-roll-test-dialog.hbs`, data);
     }
 
     static #getDialogMode(isCreate, needConfirmation) {

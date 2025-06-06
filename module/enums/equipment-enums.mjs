@@ -98,4 +98,5 @@ export const SuperEquipmentParticularityType = Object.freeze({
     ATTRIBUTE: 1,
     SKILL: 2,
     DAMAGE_TYPE: 3,
+    FIXED: 4,
 });

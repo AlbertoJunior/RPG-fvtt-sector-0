@@ -1,5 +1,5 @@
 <!-- #region ROLLS -->
-{{#unless (isEmpty overloadValues)}}
+{{#unless (operators 'isEmpty' overloadValues)}}
 <p>{{localize 'S0.Sobrecarga'}}:</p>
 <ol class="dice-rolls">
     {{#each overloadValues}}
@@ -8,7 +8,7 @@
 </ol>
 {{/unless}}
 
-{{#unless (isEmpty defaultValues)}}
+{{#unless (operators 'isEmpty' defaultValues)}}
 <p>{{localize 'S0.Rolagem'}}:</p>
 <ol class="dice-rolls">
     {{#each defaultValues }}

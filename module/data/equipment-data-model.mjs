@@ -1,7 +1,7 @@
 import { EquipmentInfoParser } from "../core/equipment/equipment-info.mjs";
 import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
 import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
-import { RollTestDataModel } from "./roll-test-data-model.mjs";
+import { RollTestField } from "./roll-test-data-model.mjs";
 
 const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
 
@@ -104,7 +104,7 @@ class RollableEquipmentDataModel extends EquipmentDataModel {
         return {
             ...super.defineSchema(),
             default_test: new StringField({ initial: "", required: false, blank: true, label: "S0.Teste_Padrao" }),
-            possible_tests: new ArrayField(new RollTestDataModel()),
+            possible_tests: new ArrayField(new RollTestField()),
         };
     }
 }

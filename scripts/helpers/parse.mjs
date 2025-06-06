@@ -4,10 +4,10 @@ import { EnhancementRepository } from "../../module/repository/enhancement-repos
 import { keyJsonToKeyLang } from "../utils/utils.mjs";
 
 const parseables = {
-    'roll-enhancement-formule': (values) => {
+    'roll_enhancement_formule': (values) => {
         const [enhancementId, val1, val2, val3 = ''] = values;
 
-        const enhancement = EnhancementRepository._getEnhancementById(enhancementId);
+        const enhancement = EnhancementRepository.getEnhancementById(enhancementId);
 
         const replaceIfEnhancement = (val) => {
             if (val == CharacteristicType.ENHANCEMENT.id) {
@@ -24,13 +24,13 @@ const parseables = {
         const base = `(${primary} + ${secondary})/2`;
         return val3 ? `${base} + ${replaceIfEnhancement(val3)}` : base;
     },
-    'effect-on-status': (value) => {
+    'effect_on_status': (value) => {
         const effect = value[0];
         const origin = effect.origin;
         const name = effect.name;
         return origin ? `${origin}: ${name}` : name;
     },
-    'item-damage-type': (value) => EquipmentInfoParser.parseDamageType(value),
+    'item_quantity': (value) => EquipmentInfoParser.parseQuantity(value[0]),
 }
 
 export default function parse(op, ...params) {

@@ -7,7 +7,7 @@
 
         <hr>
 
-        {{#unless (isEmpty diceValues)}}
+        {{#unless (operators 'isEmpty' diceValues)}}
         <p>{{localize 'S0.Rolagem'}}:</p>
         <ol class="dice-rolls">
             {{#each diceValues }}

@@ -67,10 +67,7 @@ export class OscillatingTintManager {
                 continue;
             }
 
-            const tintEffects = actor.effects.filter(e =>
-                e.changes.some(c => c.key === ActiveEffectsUtils.KEYS.TINT_TOKEN)
-            );
-
+            const tintEffects = actor.effects.filter(e => e.changes.some(c => c.key === ActiveEffectsUtils.KEYS.TINT_TOKEN));
             if (tintEffects.length > 1) {
                 OscillatingTintManager.startOscillationForToken(token);
             }

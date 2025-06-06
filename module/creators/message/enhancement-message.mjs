@@ -1,12 +1,12 @@
-import { localize } from "../../../scripts/utils/utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 import { EnhancementInfoParser } from "../../core/enhancement/enhancement-info.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 
 export class EnhancementMessageCreator {
-    static #pathTemplates = "systems/setor0OSubmundo/templates/messages/enhancement";
+    static #pathTemplates = `${TEMPLATES_PATH}/messages/enhancement`;
 
     static async getFamily(effect) {
-        return EnhancementRepository._getEnhancementFamilyByEffectId(effect.id)
+        return EnhancementRepository.getEnhancementFamilyByEffectId(effect.id)
     }
 
     static async mountContentInfo(effect) {
@@ -23,10 +23,8 @@ export class EnhancementMessageCreator {
         return await renderTemplate(`${this.#pathTemplates}/enhancement-information.hbs`, data);
     }
 
-    static async mountContentActiveDeactive(effect, activated) {
+    static async mountContentActiveDeactive(effect, status) {
         const family = await this.getFamily(effect);
-
-        const status = activated == true ? localize('Usou') : localize ('Desativou');
 
         const data = {
             family: family.name,

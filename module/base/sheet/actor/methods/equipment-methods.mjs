@@ -269,6 +269,6 @@ class EquipmentHandleEvents {
             resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
         }
 
-        await DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
+        await DefaultActions.processAttributeRoll(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
 }

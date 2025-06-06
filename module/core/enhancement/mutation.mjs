@@ -1,5 +1,5 @@
 import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
+import { RollTestField } from "../../data/roll-test-data-model.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
@@ -14,7 +14,7 @@ const mutationEffects = [
         [],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Ocultar Armas",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -34,7 +34,7 @@ const mutationEffects = [
         [],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Maleabilizar Corpo",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -54,7 +54,7 @@ const mutationEffects = [
         ['42'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Regenerar Orgânico",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -63,7 +63,7 @@ const mutationEffects = [
                     difficulty: 7
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Regenerar Robótico",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -91,7 +91,7 @@ const mutationEffects = [
         ['44', '43'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Identificar Fraqueza Orgânico",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -100,7 +100,7 @@ const mutationEffects = [
                     difficulty: 7
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Identificar Fraqueza Robótico",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -109,7 +109,7 @@ const mutationEffects = [
                     difficulty: 7
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Analisar Orgânico",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -118,7 +118,7 @@ const mutationEffects = [
                     difficulty: 7
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Analisar Robótico",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -138,7 +138,7 @@ const mutationEffects = [
         ['44'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Expelir",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -166,7 +166,7 @@ const mutationEffects = [
         ['45', '46'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Possuir (Voluntário)",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -175,7 +175,7 @@ const mutationEffects = [
                     difficulty: 6
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Possuir (Forçado)",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,
@@ -195,7 +195,7 @@ const mutationEffects = [
         ['47', '48'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Ativar no Reflexo",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,

@@ -1,5 +1,5 @@
 import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
+import { RollTestField } from "../../data/roll-test-data-model.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
@@ -25,7 +25,7 @@ const brutalityEffects = [
         ['18'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Encontrão",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STRENGTH.id,
@@ -45,7 +45,7 @@ const brutalityEffects = [
         ['18'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Agarrar",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STRENGTH.id,
@@ -65,7 +65,7 @@ const brutalityEffects = [
         ['19', '20'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Arremessar",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STRENGTH.id,

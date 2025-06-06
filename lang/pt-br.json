@@ -11,6 +11,7 @@
         "Confirmar": "Confirmar",
         "Cancelar": "Cancelar",
         "Ativar": "Ativar",
+        "Desativar": "Desativar",
         "Nivel": "Nível",
         "Chat": "Chat",
         "Equipar": "Equipar",
@@ -116,6 +117,10 @@
         "Aprimoramento": "Aprimoramento",
         "Aprimoramentos": "Aprimoramentos",
         "Afetado_Aprimoramento": "Afetado por Aprimoramento",
+        "Reiniciar_Efeitos_Passivos": "Reiniciar Efeitos Passivos",
+        "Remover_Efeito": "Remover Efeito",
+        "Remover_Todos_Efeitos": "Remover todos os Efeitos",
+        "Ver_Efeito": "Ver Efeito",
         
         "Status": "Status",
         "Vida": "Vida",

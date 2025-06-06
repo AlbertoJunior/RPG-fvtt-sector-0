@@ -81,17 +81,20 @@ export class EquipmentUtils {
     }
 
     static getSuperEquipmentActiveEffect(item) {
-        const effects = EquipmentUtils.getSuperEquipmentTraits(item)
-            .filter(effect => effect.particularity?.change != null);
+        const allTraits = EquipmentUtils.getSuperEquipmentTraits(item);
+        const effects = allTraits.filter(effect => effect.particularity?.change != null);
 
         if (effects.length <= 0) {
             return null;
         }
 
+        const isPassive = !this.superEquipmentNeedsActivate(allTraits);
+
         const flags = {
             [ActiveEffectsFlags.ORIGIN_ID]: item.id,
             [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ITEM,
             [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ITEM),
+            [ActiveEffectsFlags.IS_PASSIVE]: isPassive,
         };
         const changes = [];
 
@@ -111,7 +114,7 @@ export class EquipmentUtils {
                 name: item.name,
                 origin: localize('SuperEquipamento'),
                 statuses: [`${item.id}`],
-                duration: { startRound: 0, rounds: 99 },
+                duration: isPassive ? null : { startRound: 0, rounds: 99 },
                 flags: flags,
                 changes: changes
             }
@@ -134,14 +137,14 @@ export class EquipmentUtils {
         const effects = getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];
         const originLabel = localize('Substancia');
         const itemId = item.id;
+        const itemName = item.name;
         const originTypeLabel = activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ITEM);
         const allEffects = [];
 
         for (const effect of effects) {
             const activeEffect = ActiveEffectsUtils.createEffectData({
-                id: `${itemId}.${effect.id}`,
                 origin: originLabel,
-                name: `${item.name}: ${effect.description}`,
+                name: `${itemName}: ${effect.description}`,
                 description: effect.description,
                 statuses: [`${itemId}`],
                 duration: { startRound: 0, rounds: 99 },

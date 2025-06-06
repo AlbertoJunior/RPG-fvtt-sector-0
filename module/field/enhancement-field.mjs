@@ -1,4 +1,4 @@
-import { RollTestDataModel } from "../data/roll-test-data-model.mjs";
+import { RollTestField } from "../data/roll-test-data-model.mjs";
 import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
 
 const { SchemaField, StringField, NumberField, ArrayField } = foundry.data.fields;
@@ -14,7 +14,7 @@ export class EnhancementEffectField extends SchemaField {
             description: new StringField({ required: false, initial: null, nullable: true }),
             requirement: new ArrayField(new StringField()),
             effectChanges: new ArrayField(new EnhancementEffectDataChange()),
-            possible_tests: new ArrayField(new RollTestDataModel()),
+            possible_tests: new ArrayField(new RollTestField()),
         });
 
         this.id = id;

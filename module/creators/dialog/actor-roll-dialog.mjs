@@ -8,6 +8,7 @@ import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/cha
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
 import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class ActorRollDialog {
     static #mapedPagesMethods = {
@@ -64,7 +65,7 @@ export class ActorRollDialog {
                 });
             },
             default: 'confirm',
-        }).render(true);
+        }, { width: 430 }).render(true);
     }
 
     static #mountDataOptions(actor) {
@@ -179,7 +180,7 @@ export class ActorRollDialog {
             uuid: uuid,
             ...dataOptions
         }
-        return await renderTemplate("systems/setor0OSubmundo/templates/rolls/default-roll-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/rolls/default-roll-dialog.hbs`, data);
     }
 
     static #changePage(page, pages, buttons) {

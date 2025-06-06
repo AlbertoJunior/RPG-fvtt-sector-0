@@ -1,6 +1,7 @@
+import { randomId } from "../../../scripts/utils/utils.mjs";
 import { ActorUpdater } from "../../base/updater/actor-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
-import { ActiveEffectsFlags } from "../../enums/active-effects-enums.mjs";
+import { ActiveEffectsFlags, ActiveEffectsTypes } from "../../enums/active-effects-enums.mjs";
 
 export class ActiveEffectsUtils {
     static KEYS = {
@@ -9,7 +10,6 @@ export class ActiveEffectsUtils {
 
     static createEffectData(params) {
         const {
-            id,
             name = "",
             description = "",
             origin = "",
@@ -34,7 +34,7 @@ export class ActiveEffectsUtils {
         }
 
         const activeEffectData = {
-            id: id ?? name.toLowerCase(),
+            id: randomId(10),
             name: name,
             description: description,
             origin: origin,
@@ -72,6 +72,10 @@ export class ActiveEffectsUtils {
         this.removeActorEffects(actor, [effectId]);
     }
 
+    static getActorEffect(actor, effectOriginId) {
+        return actor?.effects.find(effect => this.getOriginId(effect) == effectOriginId);
+    }
+
     static async removeActorEffects(actor, effectsId = []) {
         if (!actor || !Array.isArray(effectsId) || effectsId.length === 0) {
             return;
@@ -83,6 +87,25 @@ export class ActiveEffectsUtils {
         await Promise.all(effectsToRemove.map(effect => effect.delete()));
     }
 
+    static isPassive(effect) {
+        return effect.duration.type == 'none';
+    }
+
+    static hasType(effect) {
+        const effectType = this.getFlags(effect)[ActiveEffectsFlags.TYPE];
+        return effectType != undefined;
+    }
+
+    static isBuff(effect) {
+        const effectType = this.getFlags(effect)[ActiveEffectsFlags.TYPE];
+        return effectType == ActiveEffectsTypes.BUFF;
+    }
+    
+    static isDebuff(effect) {
+        const effectType = this.getFlags(effect)[ActiveEffectsFlags.TYPE];
+        return effectType == ActiveEffectsTypes.DEBUFF;
+    }
+    
     static async enableEffect(effect) {
         if (effect) {
             await effect.update({ disabled: false });

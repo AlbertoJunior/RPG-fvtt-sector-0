@@ -72,7 +72,7 @@ async function updateActorEnhancement(currentTarget, actor) {
 async function updateActorLevelEnhancement(currentTarget, actor) {
     const { enhancementSlot, enhancementLevel } = currentTarget.dataset;
     const effectId = currentTarget.selectedOptions[0].value;
-    
+
     TODO('remover a utilização do .system');
     const enhancementOnSlotKey = `${CharacteristicType.ENHANCEMENT.system}_${enhancementSlot}`
 
@@ -115,13 +115,18 @@ function getEffectSelectedId(event) {
     return select.selectedOptions[0]?.value;
 }
 
+async function activateEffectSendOnChat(effect, actor) {
+    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, localize('Ativou'));
+    await verifyIsGmAndDefineShowChat(message, actor);
+}
+
 async function usedEffectSendOnChat(effect, actor) {
-    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, true);
+    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, localize('Usou'));
     await verifyIsGmAndDefineShowChat(message, actor);
 }
 
 async function deactivedEffectSendOnChat(effect, actor) {
-    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, false);
+    const message = await EnhancementMessageCreator.mountContentActiveDeactive(effect, localize('Desativou'));
     await verifyIsGmAndDefineShowChat(message, actor);
 }
 
@@ -153,14 +158,14 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
         return;
     }
 
-    const haveEffect = actor.effects.find(ef => ActiveEffectsUtils.getOriginId(ef) == effect.id);
+    const haveEffect = ActiveEffectsUtils.getActorEffect(actor, effect.id);
     if (haveEffect) {
         await ActiveEffectsUtils.removeActorEffect(actor, ActiveEffectsUtils.getOriginId(haveEffect));
         await deactivedEffectSendOnChat(effect, actor);
         return;
     }
 
-    const enhancement = await EnhancementRepository._getEnhancementFamilyByEffectId(effect.id);
+    const enhancement = await EnhancementRepository.getEnhancementFamilyByEffectId(effect.id);
     if (!enhancement) {
         return;
     }
@@ -188,6 +193,7 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
         EnhancementUtils.verifyAndSetEffectChanges(actor, activeEffectData, effect.effectChanges, enhancement);
         EnhancementUtils.configureActiveEffect(activeEffectData, effect, enhancement);
         await ActorUpdater.addEffects(actor, [activeEffectData]);
+        await activateEffectSendOnChat(effect, actor);
     }
 }
 
@@ -238,9 +244,7 @@ export const enhancementHandleMethods = {
         const effectId = getEffectSelectedId(event);
         const effect = EnhancementRepository._getEnhancementEffectById(effectId);
         if (effect) {
-            EnhancementDialog._open(effect, actor, () => {
-                toggleEnhancementEffectOnActor(effect, actor);
-            });
+            EnhancementDialog.open(effect, actor, () => toggleEnhancementEffectOnActor(effect, actor));
         } else {
             NotificationsUtils._warning('enhancement-methods:view:effect is null');
         }

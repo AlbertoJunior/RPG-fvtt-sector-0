@@ -19,7 +19,7 @@ class PlayerRollMethods {
         const { difficulty, critic, name, rollMode } = inputParams;
 
         const resultRoll = await RollAttribute.roll(actor, inputParams);
-        await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name, rollMode);
+        await DefaultActions.processAttributeRoll(actor, resultRoll, difficulty, critic, name, rollMode);
     }
 
     static async handleVirtueRoll(actor, inputParams) {
@@ -39,17 +39,16 @@ class PlayerRollMethods {
     static async handleRollabeItemRoll(actor, inputParams) {
         const { rollTest, item, half } = inputParams;
 
-        debugger
         TODO('colocar a separação entre ITEM e ARMA')
         const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item, half);
-        await DefaultActions.sendRollOnChat(actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
+        await DefaultActions.processAttributeRoll(actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
 
     static async handleShortcutRoll(actor, shortcutTest) {
         const { difficulty, critic, name } = shortcutTest;
 
         const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-        await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, name);
+        await DefaultActions.processAttributeRoll(actor, resultRoll, difficulty, critic, name);
     }
 
     static async handleSimpleRoll(actor, inputParams) {

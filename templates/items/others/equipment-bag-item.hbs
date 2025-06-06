@@ -13,7 +13,7 @@
 
         {{#if system.haveQuantity}}
         <div class="S0-badge">
-            <span class="S0-hide-long-text">{{system.quantity}}</span>
+            <span class="S0-hide-long-text">{{parse 'item_quantity' this}}</span>
         </div>
         {{/if}}
     </div>

@@ -5,6 +5,7 @@ import { ActiveEffectsUtils } from "../active-effects.mjs";
 
 const shattered1 = ActiveEffectsUtils.createEffectData({
     name: "Destroçado 1",
+    origin: `Aprimoramento: ${brutalityEnhancement.name}`,
     img: `${brutalityEnhancement.icon}`,
     duration: { startRound: 0, rounds: 99 },
     tint: "#FFDC00",
@@ -25,6 +26,7 @@ const shattered1 = ActiveEffectsUtils.createEffectData({
 
 const shattered2 = ActiveEffectsUtils.createEffectData({
     name: "Destroçado 2",
+    origin: `Aprimoramento: ${brutalityEnhancement.name}`,
     img: `${brutalityEnhancement.icon}`,
     duration: { startRound: 0, rounds: 99 },
     tint: "#F07823",
@@ -46,6 +48,7 @@ const shattered2 = ActiveEffectsUtils.createEffectData({
 
 const shattered3 = ActiveEffectsUtils.createEffectData({
     name: "Destroçado 3",
+    origin: `Aprimoramento: ${brutalityEnhancement.name}`,
     img: `${brutalityEnhancement.icon}`,
     duration: { startRound: 0, rounds: 99 },
     tint: "#F00A0A",

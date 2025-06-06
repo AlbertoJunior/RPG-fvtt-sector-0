@@ -2,6 +2,7 @@ import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/cha
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { MorphologyRepository } from "../../repository/morphology-repository.mjs";
 import { FlagsUtils } from "../../utils/flags-utils.mjs";
+import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -185,5 +186,47 @@ export class ActorUtils {
         const pm = ActorUtils.calculateMovimentPoints(actor);
         const usedPm = FlagsUtils.getActorFlag(actor, 'used_pm') || 0;
         return Math.max(pm - usedPm, 0);
+    }
+
+    static getEffects(actor) {
+        const effects = [...(actor?.effects.contents || [])];
+
+        effects.sort((a, b) => {
+            if (ActiveEffectsUtils.getOriginId(a) === 'dead') {
+                return -1;
+            }
+            if (ActiveEffectsUtils.getOriginId(b) === 'dead') {
+                return 1;
+            }
+
+            const aOrigin = a.origin;
+            const bOrigin = b.origin;
+
+            const hasOriginA = Boolean(aOrigin);
+            const hasOriginB = Boolean(bOrigin);
+
+            if (hasOriginA !== hasOriginB) {
+                return hasOriginA ? -1 : 1;
+            }
+
+            if (hasOriginA && hasOriginB) {
+                const aIsEnhancement = aOrigin.includes('Aprimoramento');
+                const BIsEnhancement = bOrigin.includes('Aprimoramento');
+
+                if (aIsEnhancement !== BIsEnhancement) {
+                    return aIsEnhancement ? -1 : 1;
+                }
+
+                if (aOrigin === bOrigin) {
+                    return a.name.localeCompare(b.name);
+                }
+
+                return aOrigin.localeCompare(bOrigin);
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+
+        return effects;
     }
 }

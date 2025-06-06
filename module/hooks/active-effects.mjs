@@ -38,7 +38,7 @@ export class ActiveEffectHookHandle {
             return;
         }
 
-        const hasMultipleTints = actor.effects.filter(e => e.changes.some(c => c.key === ActiveEffectsUtils.KEYS.TINT_TOKEN)).length > 1;
+        const hasMultipleTints = this.#hasMultipleTints(actor);
         if (hasMultipleTints) {
             OscillatingTintManager.startOscillationForToken(token);
         } else {
@@ -57,11 +57,15 @@ export class ActiveEffectHookHandle {
             return;
         }
 
-        const hasMultipleTints = actor.effects.filter(e => e.changes.some(c => c.key === ActiveEffectsUtils.KEYS.TINT_TOKEN)).length > 1;
+        const hasMultipleTints = this.#hasMultipleTints(actor);
         if (hasMultipleTints) {
             OscillatingTintManager.startOscillationForToken(token);
         } else {
             OscillatingTintManager.stopOscillationForToken(token);
         }
+    }
+
+    static #hasMultipleTints(actor) {
+        return actor.effects.filter(e => e.changes.some(c => c.key === ActiveEffectsUtils.KEYS.TINT_TOKEN)).length > 1;
     }
 }

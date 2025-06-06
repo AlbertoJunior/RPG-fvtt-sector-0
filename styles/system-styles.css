@@ -37,6 +37,10 @@ body {
     --color-red-alpha: rgba(240, 10, 10, 0.8);
     --color-red-alpha-50: rgba(240, 10, 10, 0.5);
 
+    --color-green: rgba(10, 140, 10, 1);
+    --color-green-alpha: rgba(10, 140, 10, 0.8);
+    --color-green-alpha-50: rgba(10, 140, 10, 0.5);
+
     --focus-color: rgba(255, 250, 190, 1);
 
     --shadow-color: rgba(0, 0, 0, 0.2);
@@ -124,7 +128,6 @@ section {
 /* #endregion */
 
 /* #region EDIT FOUNDRY STYLE */
-
 .directory-list .directory-item {
     padding-block: 2px;
     box-shadow: 0px 1px 6px black;
@@ -322,7 +325,6 @@ img.S0-clickable:hover {
 /* #endregion */
 
 /* #region MY STYLES */
-
 /* #region PAGES */
 
 .S0-page {
@@ -482,7 +484,6 @@ img.S0-clickable:hover {
 /* #endregion */
 
 /* #region BASE STYLES */
-
 .S0-actor-sheet section {
     margin-inline: 0px;
 }
@@ -582,6 +583,16 @@ img.S0-clickable:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.S0-buff-color {
+    color: var(--color-green);
+    text-shadow: 0 0 2px;
+}
+
+.S0-debuff-color {
+    color: var(--color-red);
+    text-shadow: 0 0 2px;
 }
 
 /* #endregion */
@@ -1077,6 +1088,7 @@ button.S0-roll-result:not([disabled]):hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     text-wrap: nowrap;
+    max-width: 100%;
 }
 
 .S0-max-2-line-text {
@@ -1089,29 +1101,25 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-badge {
+    min-height: 20px;
+    max-height: 28px;
+    min-width: 20px;
+    max-width: 28px;
+    padding: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     right: 4px;
     bottom: 0px;
-    min-height: 20px;
-    max-height: 26px;
-    min-width: 20px;
-    max-width: 26px;
-    padding: 3px;
-    font-size: var(--font-size-12);
+    font-size: var(--font-size-11);
+    font-weight: bold;
     box-shadow: 0 0 6px var(--shadow-color);
     border-radius: 50%;
     opacity: 0;
     background: var(--primary-color);
     transition: bottom 0.2s ease-in-out, opacity 0.2s ease-in-out;
     aspect-ratio: 1 / 1;
-}
-
-.S0-badge span {
-    padding: 2px;
-    font-weight: bold;
 }
 
 .S0-item-bag:hover .S0-badge {
@@ -1435,8 +1443,7 @@ button.S0-roll-result:not([disabled]):hover {
 /* #endregion */
 
 /* #region ANIMATE ICONS */
-
-/* === MENU PARA ÍCONES NO HOVER === */
+/* #region ICON MENU */
 .S0-menu-float {
     color: black;
     visibility: hidden;
@@ -1468,7 +1475,9 @@ button.S0-roll-result:not([disabled]):hover {
     opacity: 1;
 }
 
-/* === ROTAÇÃO DE ÍCONES NO HOVER === */
+/* #endregion */
+
+/* #region ICON ROTATE */
 .S0-centralized-icon {
     width: 16px;
     height: 16px;
@@ -1493,8 +1502,9 @@ button.S0-roll-result:not([disabled]):hover {
     scale: 1.15;
 }
 
-/* === SWAP DE ÍCONES NO HOVER === */
+/* #endregion */
 
+/* #region ICON SWAPPER */
 .S0-icon-swaper {
     display: flex;
     align-items: center;
@@ -1527,7 +1537,9 @@ button.S0-roll-result:not([disabled]):hover {
     display: flex;
 }
 
-/* === ÍCONE COM SLIDER ATIVADO NO HOVER === */
+/* #endregion */
+
+/* #region ICON SLIDER */
 .S0-icon-hover-slider {
     position: relative;
     display: inline-flex;
@@ -1622,8 +1634,9 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* #endregion */
 
-/* #region EXPAND/CONTRACT CONTAINER */
+/* #endregion */
 
+/* #region EXPAND/CONTRACT CONTAINER */
 .S0-container-contract {
     overflow: hidden;
     max-height: 0;
@@ -1785,7 +1798,6 @@ button.S0-roll-result:not([disabled]):hover {
 /* #endregion */
 
 /* #region ID EDITS */
-
 #actor-image {
     object-position: top;
     width: 220px;
@@ -1814,9 +1826,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 #effects-container.S0-expanded {
     padding-block: 4px;
-    max-height: 340px;
+    max-height: 180px;
 }
 
 /* #endregion */
-
-/* styles.css */

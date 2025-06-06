@@ -1,5 +1,5 @@
 import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
+import { RollTestField } from "../../data/roll-test-data-model.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
@@ -59,7 +59,7 @@ const influenceEffects = [
         ['27'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Mesmerizar",
                     primary_attribute: CharacteristicType.ATTRIBUTES.CHARISMA.id,
@@ -79,7 +79,7 @@ const influenceEffects = [
         ['27'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Modificar Memória",
                     primary_attribute: CharacteristicType.ATTRIBUTES.CHARISMA.id,

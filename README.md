@@ -66,6 +66,7 @@ cloudflared tunnel --url http://localhost:30000
 * ✅ Aprimoramentos.
 * ✅ Traços Bons e Ruins.
 * ✅ Inventário.
+* ✅ SuperEquipamentos.
 * ✅ Atalhos.
 * ✅ Aliados e Informantes.
 
@@ -73,7 +74,7 @@ cloudflared tunnel --url http://localhost:30000
 * ✅ Efeitos específicos do Setor 0.
 * ✅ Efeitos ativos baseado em Aprimoramentos.
 * 🛠️ Efeitos ativos baseado em Traços.
-* 🛠️ Efeitos ativos baseado em Equipamentos.
+* ✅ Efeitos ativos baseado em Equipamentos.
 * ✅ Efeitos que são ativados durante um combate são desativados automaticamente ao final dele.
 
 ### Equipamentos
@@ -86,19 +87,22 @@ cloudflared tunnel --url http://localhost:30000
 ### Personagens Não Jogáveis (PNJ)
 * ✅ Ficha.
 * ✅ Rolagem.
-* ✅ Converter PJ para PNJ.
+* ✅ Equipamentos.
+* ✅ Converter Personagem Jogável (PJ) para PNJ.
 
 ### Rolagens
-* ✅ Rolagem totalmente customizada.
-* ✅ Rolagem simplificada (Personagens Não Jogáveis).
-* ✅ Teste com Rolagem Dividida.
-* ✅ Atributos + Habilidade.
+* ✅ Padrão (Atributos + Habilidade).
+* ✅ Padrão (Dividida).
 * ✅ Virtudes.
+* ✅ Simplificada.
+* ✅ Simplificada (Personagens Não Jogáveis).
+* ✅ Customizada.
 * ✅ Sobrecarga.
 * ✅ Vida.
 * ✅ Iniciativa.
-* ✅ Perseverança pela mensagem do chat.
+* ✅ Perseverança (pelo chat).
 * ✅ Rolagem com Crítico variável.
+* ✅ Rolagem com Especialização.
 * ✅ Rolagens considerando as penalidades e todos os bônus.
 
 ### Macros

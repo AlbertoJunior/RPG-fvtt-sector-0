@@ -6,7 +6,7 @@ const { NumberField, BooleanField, StringField, SchemaField, ArrayField } = foun
 export class SuperEquipmentField extends SchemaField {
     constructor({ level = 0, effects = [], defects = [] } = {}) {
         super({
-            active: new BooleanField({ initial: true, label: "S0.Ativo" }),
+            active: new BooleanField({ initial: true }),
             level: new NumberField({ required: true, integer: true, initial: 0, min: 0, max: 5 }),
             effects: new ArrayField(new SuperEquipmentTraitField()),
             defects: new ArrayField(new SuperEquipmentTraitField()),
@@ -24,10 +24,11 @@ export class SuperEquipmentField extends SchemaField {
 }
 
 export class SuperEquipmentTraitField extends SchemaField {
-    constructor({ id, name, cost, limit, description, particularity } = {}) {
+    constructor({ id, name, need_activate, cost, limit, description, particularity } = {}) {
         super({
             id: new StringField({ required: true }),
             name: new StringField({ required: true }),
+            need_activate: new BooleanField({ initial: false }),
             cost: new NumberField({ required: true, integer: true, initial: 1, min: 1 }),
             limit: new NumberField({ required: true, integer: true, initial: 1, min: 1 }),
             description: new StringField({ nullable: true, required: false, initial: '' }),
@@ -36,6 +37,7 @@ export class SuperEquipmentTraitField extends SchemaField {
 
         this.id = id;
         this.name = name;
+        this.need_activate = need_activate;
         this.cost = cost;
         this.limit = limit;
         this.particularity = particularity;

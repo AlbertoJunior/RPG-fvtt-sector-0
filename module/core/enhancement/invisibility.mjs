@@ -1,5 +1,5 @@
 import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
+import { RollTestField } from "../../data/roll-test-data-model.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
@@ -15,7 +15,7 @@ const invisibilityEffects = [
         [],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Manter Esconder",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -59,7 +59,7 @@ const invisibilityEffects = [
             },
         ],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Manter Camuflagem",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,

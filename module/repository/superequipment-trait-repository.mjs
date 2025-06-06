@@ -1,4 +1,5 @@
 import { SYSTEM_ID } from "../constants.mjs";
+import { CharacteristicType } from "../enums/characteristic-enums.mjs";
 import { SuperEquipmentParticularityType } from "../enums/equipment-enums.mjs";
 import { SuperEquipmentTraitField } from "../field/equipment-field.mjs";
 
@@ -11,7 +12,11 @@ export class SuperEquipmentTraitRepository {
             limit: 2,
             description: 'Para alguma Habilidade não combativa.',
             particularity: {
-                type: SuperEquipmentParticularityType.SKILL
+                type: SuperEquipmentParticularityType.SKILL,
+                change: {
+                    key: '',
+                    value: 1,
+                }
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -138,7 +143,11 @@ export class SuperEquipmentTraitRepository {
             limit: 3,
             description: 'Temporariamente aumenta em 2 um Atributo escolhido.',
             particularity: {
-                type: SuperEquipmentParticularityType.ATTRIBUTE
+                type: SuperEquipmentParticularityType.ATTRIBUTE,
+                change: {
+                    key: '',
+                    value: 2,
+                }
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -175,7 +184,7 @@ export class SuperEquipmentTraitRepository {
             id: 'bad2',
             name: 'Defeito Diverso',
             cost: 1,
-            limit: 3,
+            limit: 2,
             description: 'Defeito negociável com o narrador. É recomendado procurar por SuperEquipamentos já existentes para ter ideias.',
             particularity: {
                 type: SuperEquipmentParticularityType.TEXT
@@ -212,66 +221,143 @@ export class SuperEquipmentTraitRepository {
             id: 'bad6',
             name: '-2 de Capacidade',
             cost: 1,
-            limit: 3,
+            limit: 2,
             description: 'Para Armas de Projeção. O valor mínimo para a Capacidade é 1.'
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad7',
             name: '-2 de Resistência',
             cost: 1,
-            limit: 3,
+            limit: 2,
             description: 'Diminui a Resistência em 2. O valor mínimo para a Resistência é 1.'
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad8',
-            name: '-1 no Ataque e Defesa',
+            name: '-2 no Ataque (Corpo-a-Corpo)',
             cost: 1,
-            limit: 3,
-            description: 'Diminui um Dado do Ataque e da Defesa do usuário.'
+            limit: 2,
+            description: 'Diminui dois Dados do Ataque Corpo-a-Corpo do usuário.',
+            particularity: {
+                type: SuperEquipmentParticularityType.FIXED,
+                description: '-2 no Ataque (Corpo-a-Corpo)',
+                change: {
+                    key: CharacteristicType.BONUS.OFENSIVE_MELEE.system,
+                    value: -2,
+                }
+            }
         }),
         SuperEquipmentTraitField.toJson({
             id: 'bad9',
+            name: '-2 no Ataque (Armas de Projeção)',
+            cost: 1,
+            limit: 2,
+            description: 'Diminui dois Dados do Ataque com Armas de Projeção do usuário.',
+            particularity: {
+                type: SuperEquipmentParticularityType.FIXED,
+                description: '-2 no Ataque (Armas de Projeção)',
+                change: {
+                    key: CharacteristicType.BONUS.OFENSIVE_PROJECTILE.system,
+                    value: -2,
+                }
+            }
+        }),
+        SuperEquipmentTraitField.toJson({
+            id: 'bad10',
+            name: '-2 na Defesa',
+            cost: 1,
+            limit: 2,
+            description: 'Diminui dois Dados da Defesa do usuário.',
+            particularity: {
+                type: SuperEquipmentParticularityType.FIXED,
+                description: '-2 na Defesa',
+                change: {
+                    key: CharacteristicType.BONUS.DEFENSIVE.system,
+                    value: -2,
+                }
+            }
+        }),
+        SuperEquipmentTraitField.toJson({
+            id: 'bad11',
             name: '-3 Pontos de Movimento para recarregar',
             cost: 1,
             limit: 2,
-            description: 'Precisa ser recarregado custando 3 Pontos de Movimentos a mais. Se não for uma Arma de Projeção, precisa definir a quantidade de turnos para recarregar.',
+            description: 'Precisa ser recarregado custando 3 Pontos de Movimentos a mais. Se não for uma Arma de Projeção, precisa ser recarregado a cada dois usos.',
             particularity: {
                 type: SuperEquipmentParticularityType.TEXT
             }
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad10',
+            id: 'bad12',
             name: '+1 na Dificuldade de uso',
             cost: 2,
-            limit: 3,
+            limit: 2,
             description: 'Aumenta a Dificuldade para usar o SuperEquipamento em 1. A Dificuldade máxima é 10.',
             particularity: {
                 type: SuperEquipmentParticularityType.SKILL
             }
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad11',
+            id: 'bad13',
             name: '-1 na Dificuldade para ser Hackeado',
             cost: 2,
             limit: 1,
             description: 'Diminui a Dificuldade para ser Hackeado. A Dificuldade mínima é 5.'
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad12',
+            id: 'bad14',
             name: 'Requer teste de Sobrecarga',
+            need_activate: true,
             cost: 2,
             limit: 2,
             description: 'Para utilizar os Efeitos do SuperEquipamento o usuário precisa ativá-lo com um Teste de Sobrecarga. Fica ativo pela cena.'
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad13',
-            name: '-3 no Ataque e Defesa',
-            cost: 3,
-            limit: 3,
-            description: 'Diminui três Dados do Ataque e da Defesa do usuário.'
+            id: 'bad15',
+            name: '-4 no Ataque (Corpo-a-Corpo)',
+            cost: 2,
+            limit: 1,
+            description: 'Diminui quatro Dados do Ataque Corpo-a-Corpo do usuário.',
+            particularity: {
+                type: SuperEquipmentParticularityType.FIXED,
+                description: '-4 no Ataque (Corpo-a-Corpo)',
+                change: {
+                    key: CharacteristicType.BONUS.OFENSIVE_MELEE.system,
+                    value: -4,
+                }
+            }
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad14',
+            id: 'bad16',
+            name: '-4 no Ataque (Armas de Projeção)',
+            cost: 2,
+            limit: 1,
+            description: 'Diminui quatro Dados do Ataque com Armas de Projeção do usuário.',
+            particularity: {
+                type: SuperEquipmentParticularityType.FIXED,
+                description: '-4 no Ataque (Armas de Projeção)',
+                change: {
+                    key: CharacteristicType.BONUS.OFENSIVE_PROJECTILE.system,
+                    value: -4,
+                }
+            }
+        }),
+        SuperEquipmentTraitField.toJson({
+            id: 'bad17',
+            name: '-4 na Defesa',
+            cost: 2,
+            limit: 1,
+            description: 'Diminui quatro Dados da Defesa do usuário.',
+            particularity: {
+                type: SuperEquipmentParticularityType.FIXED,
+                description: '-4 na Defesa',
+                change: {
+                    key: CharacteristicType.BONUS.DEFENSIVE.system,
+                    value: -4,
+                }
+            }
+        }),
+        SuperEquipmentTraitField.toJson({
+            id: 'bad18',
             name: 'Atrai atenção indesejada',
             cost: 3,
             limit: 1,
@@ -281,15 +367,17 @@ export class SuperEquipmentTraitRepository {
             }
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad15',
+            id: 'bad19',
             name: 'Sofre 2 de Dano Letal',
+            need_activate: true,
             cost: 3,
             limit: 2,
             description: 'Para utilizar os Efeitos do SuperEquipamento o usuário precisa ativá-lo e sofre 2 de Dano Letal Automático. Fica ativo pela cena.'
         }),
         SuperEquipmentTraitField.toJson({
-            id: 'bad16',
+            id: 'bad20',
             name: 'Defeituoso',
+            need_activate: true,
             cost: 4,
             limit: 1,
             description: 'Para ativar teste com 1 dado Dificuldade 8'
@@ -347,10 +435,9 @@ export class SuperEquipmentTraitRepository {
     }
 
     static getTraitsNeedActivate() {
-        const ids = ['bad12', 'bad15', 'bad16'];
         return [
             ...this.getGoodTraits(),
             ...this.getBadTraits(),
-        ].filter(trait => ids.includes(trait.id));
+        ].filter(trait => trait.need_activate);
     }
 }

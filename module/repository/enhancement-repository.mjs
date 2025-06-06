@@ -41,7 +41,7 @@ export class EnhancementRepository {
         ].sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    static _getEnhancementById(enhancementId) {
+    static getEnhancementById(enhancementId) {
         if (enhancementId) {
             const fetchedEnhancement = this._getItems().filter(item => item.id == enhancementId)[0];
             if (fetchedEnhancement) {
@@ -53,7 +53,7 @@ export class EnhancementRepository {
 
     static _getEnhancementEffectsByEnhancementId(enhancementId) {
         if (enhancementId) {
-            const fetchedLevels = this._getEnhancementById(enhancementId)?.effects;
+            const fetchedLevels = this.getEnhancementById(enhancementId)?.effects;
             if (fetchedLevels) {
                 return [...fetchedLevels];
             }
@@ -66,7 +66,7 @@ export class EnhancementRepository {
             return null;
 
         if (enhancementId) {
-            return this._getEnhancementById(enhancementId)?.effects.find(ef => ef.id == effectId) || null;
+            return this.getEnhancementById(enhancementId)?.effects.find(ef => ef.id == effectId) || null;
         }
 
         return this._getItems()
@@ -74,7 +74,7 @@ export class EnhancementRepository {
             .find(ef => ef.id == effectId) || null;
     }
 
-    static _getEnhancementFamilyByEffectId(effectId) {
+    static getEnhancementFamilyByEffectId(effectId) {
         return this._getItems().find(enhancement => enhancement.effects?.some(effect => effect.id == effectId));
     }
 

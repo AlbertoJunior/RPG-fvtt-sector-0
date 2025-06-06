@@ -1,5 +1,5 @@
 import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
+import { RollTestField } from "../../data/roll-test-data-model.mjs";
 import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
@@ -26,7 +26,7 @@ const hardnessEffects = [
         ['50'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Ativar no Reflexo",
                     primary_attribute: CharacteristicType.ATTRIBUTES.STAMINA.id,

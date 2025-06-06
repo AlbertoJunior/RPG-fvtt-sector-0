@@ -80,7 +80,7 @@ export class EnhancementUtils {
         switch (effectDuration) {
             case EnhancementDuration.TIME:
             case EnhancementDuration.SCENE: {
-                const enhancement = EnhancementRepository._getEnhancementById(enhancementId);
+                const enhancement = EnhancementRepository.getEnhancementById(enhancementId);
                 if (!enhancement) {
                     return;
                 }

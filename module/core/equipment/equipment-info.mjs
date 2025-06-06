@@ -1,6 +1,6 @@
-import { localize } from "../../../scripts/utils/utils.mjs";
+import { getObject, localize } from "../../../scripts/utils/utils.mjs";
 import { ActiveEffectsTypes } from "../../enums/active-effects-enums.mjs";
-import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType, VehicleType } from "../../enums/equipment-enums.mjs";
+import { DamageType, EquipmentCharacteristicType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType, VehicleType } from "../../enums/equipment-enums.mjs";
 
 export class EquipmentInfoParser {
     static mappedEquipmentTypes = {
@@ -137,5 +137,23 @@ export class EquipmentInfoParser {
                 label: EquipmentInfoParser.parseSubstance(type)
             }
         });
+    }
+
+    static parseQuantity(item) {
+        const quantity = getObject(item, EquipmentCharacteristicType.QUANTITY);
+
+        if (!quantity) {
+            return 0;
+        }
+
+        if (quantity < 1000) {
+            return quantity.toString();
+        } else if (quantity < 1_000_000) {
+            return (quantity / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+        } else if (quantity < 1_000_000_000) {
+            return (quantity / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+        } else {
+            return (quantity / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+        }
     }
 }

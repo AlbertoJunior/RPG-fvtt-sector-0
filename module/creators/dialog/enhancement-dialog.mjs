@@ -10,39 +10,43 @@ import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
 import { CreateFormDialog } from "./create-dialog.mjs";
 import { ChatCreator } from "../../utils/chat-creator.mjs";
 import { EnhancementMessageCreator } from "../message/enhancement-message.mjs";
+import { ActiveEffectsUtils } from "../../core/effect/active-effects.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class EnhancementDialog {
-    static async _open(enhancementEffect, actor, onConfirm) {
-        const enhancementFamily = EnhancementRepository._getEnhancementFamilyByEffectId(enhancementEffect.id);
+    static async open(enhancementEffect, actor, onConfirm) {
+        const enhancementFamily = EnhancementRepository.getEnhancementFamilyByEffectId(enhancementEffect.id);
         const content = await this.#mountContent(enhancementEffect, enhancementFamily);
 
         const buttons = {
             cancel: {
                 label: localize("Chat"),
-                callback: (html) => {
-                    this.#sendEffectToChat(enhancementEffect, actor);
-                }
+                callback: () => this.#sendEffectToChat(enhancementEffect, actor)
             }
         };
 
         const canActive = actor != undefined && enhancementEffect.duration !== EnhancementDuration.PASSIVE && typeof onConfirm === 'function';
         if (canActive) {
+            const hasActivated = actor.effects
+                .map(effect => ActiveEffectsUtils.getOriginId(effect))
+                .includes(enhancementEffect.id);
+
             buttons.confirm = {
-                label: localize("Ativar"),
-                callback: (html) => {
-                    onConfirm();
-                }
+                label: localize(hasActivated ? "Desativar" : "Ativar"),
+                callback: onConfirm
             }
         }
 
         new Dialog(
             {
-                title: `${enhancementEffect.name}`,
+                title: enhancementEffect.name,
                 content: content,
                 buttons: buttons,
                 render: (html) => {
                     DialogUtils.presetDialogRender(html);
-                    $(html).find(`[data-action="${OnEventType.ROLL}"]`).click(EnhancementDialog.#onRollEvent.bind(this, actor, enhancementEffect));
+                    $(html)
+                        .find(`[data-action="${OnEventType.ROLL}"]`)
+                        .click((event) => this.#onRollEvent(actor, enhancementEffect, event));
                 }
             },
             {
@@ -59,7 +63,7 @@ export class EnhancementDialog {
             family: enhancementFamily.name,
             familyId: enhancementFamily.id,
         };
-        return await renderTemplate("systems/setor0OSubmundo/templates/enhancement/enhancement-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/enhancement/enhancement-dialog.hbs`, data);
     }
 
     static async #onRollEvent(actor, enhancementEffect, event) {
@@ -98,7 +102,7 @@ export class EnhancementDialog {
                         rollTest.specialist = isSpecialist;
 
                         const resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
-                        await DefaultActions.sendRollOnChat(actor, resultRoll, difficulty, critic, rollMessage, mode);
+                        await DefaultActions.processAttributeRoll(actor, resultRoll, difficulty, critic, rollMessage, mode);
                     } else {
                         const inputParams = {
                             primary: rollTest.primary_attribute,

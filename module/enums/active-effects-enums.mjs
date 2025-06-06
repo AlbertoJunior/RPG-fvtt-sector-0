@@ -10,11 +10,11 @@ export const ActiveEffectsOriginTypes = Object.freeze({
 
 export function activeEffectOriginTypeLabel(type) {
     const map = {
-       [ActiveEffectsOriginTypes.ITEM] : localize('Item'),
-       [ActiveEffectsOriginTypes.ENHANCEMENT] : localize('Aprimoramento'),
-       [ActiveEffectsOriginTypes.TRAIT] : localize('Traco'),
-       [ActiveEffectsOriginTypes.OTHER] : localize('Outro'),
-       [ActiveEffectsOriginTypes.AFFECTED_ENHANCEMENT] : localize('Afetado_Aprimoramento'),
+        [ActiveEffectsOriginTypes.ITEM]: localize('Item'),
+        [ActiveEffectsOriginTypes.ENHANCEMENT]: localize('Aprimoramento'),
+        [ActiveEffectsOriginTypes.TRAIT]: localize('Traco'),
+        [ActiveEffectsOriginTypes.OTHER]: localize('Outro'),
+        [ActiveEffectsOriginTypes.AFFECTED_ENHANCEMENT]: localize('Afetado_Aprimoramento'),
     }
 
     return map[type] || `<${localize('Erro')}>`;
@@ -32,4 +32,5 @@ export const ActiveEffectsFlags = Object.freeze({
     TYPE: 'type',
     REMOVE_EFFECTS: 'removeEffects',
     COMBAT_ID: 'combatId',
+    IS_PASSIVE: 'isPassve',
 });

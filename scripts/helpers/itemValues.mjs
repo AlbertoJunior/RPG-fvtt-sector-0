@@ -1,3 +1,4 @@
+import { ActiveEffectsUtils } from "../../module/core/effect/active-effects.mjs";
 import { EquipmentUtils } from "../../module/core/equipment/equipment-utils.mjs";
 
 const map = {
@@ -7,6 +8,9 @@ const map = {
     'superequipment_needs_activate': (item) => EquipmentUtils.getSuperEquipmentNeedsActivate(item),
     'substance_effects': (item) => EquipmentUtils.substanceEffects(item),
     'substance_with_effects': (item) => EquipmentUtils.substanceWithEffects(item),
+    'effect_has_type': (item) => ActiveEffectsUtils.hasType(item),
+    'effect_is_buff': (item) => ActiveEffectsUtils.isBuff(item),
+    'effect_is_debuff': (item) => ActiveEffectsUtils.isDebuff(item),
 }
 
 export default function itemValues(item, value, ...params) {

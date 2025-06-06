@@ -95,7 +95,7 @@ export class DefaultActions {
         await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
 
-    static async sendRollOnChat(actor, resultRoll, difficulty, critic, rollMessage, mode) {
+    static async processAttributeRoll(actor, resultRoll, difficulty, critic, rollMessage, mode) {
         const params = {
             rolls: resultRoll.roll,
             attrs: resultRoll.attrs,

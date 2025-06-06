@@ -1,5 +1,5 @@
 import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestDataModel } from "../../data/roll-test-data-model.mjs";
+import { RollTestField } from "../../data/roll-test-data-model.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
 import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
@@ -27,7 +27,7 @@ const assimilationEffects = [
         [],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Perceber Camuflagem",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -36,7 +36,7 @@ const assimilationEffects = [
                     difficulty: 6,
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "(Rede) Perceber Camuflagem",
                     primary_attribute: CharacteristicType.VIRTUES.CONSCIOUSNESS.id,
@@ -64,7 +64,7 @@ const assimilationEffects = [
         ['11'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Identificar",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -84,7 +84,7 @@ const assimilationEffects = [
         ['11'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Hackear Sistema",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -93,7 +93,7 @@ const assimilationEffects = [
                     difficulty: 7
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Hackear Aprimoramento",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -113,7 +113,7 @@ const assimilationEffects = [
         ['12', '13'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Compartilhar Sentidos",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -122,7 +122,7 @@ const assimilationEffects = [
                     difficulty: 7
                 }
             ),
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Ilusão",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -144,7 +144,7 @@ const assimilationEffects = [
             { key: CharacteristicType.BONUS.ATTRIBUTES.INTELLIGENCE, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Simular Alvo",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -164,7 +164,7 @@ const assimilationEffects = [
         ['14', '15'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Compreensão Total",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,
@@ -184,7 +184,7 @@ const assimilationEffects = [
         ['14', '15'],
         [],
         [
-            RollTestDataModel._toJson(
+            RollTestField.toJson(
                 {
                     name: "Invadir Memória",
                     primary_attribute: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id,

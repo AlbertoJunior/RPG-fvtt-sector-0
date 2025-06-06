@@ -133,7 +133,7 @@ export class CustomRoll {
     static #tryEnhancement(actor, enhancements, characteristic, special) {
         if (characteristic == CharacteristicType.ENHANCEMENT.id) {
             if (enhancements.some(e => e.id == special)) {
-                const enhancementSelected = EnhancementRepository._getEnhancementById(special);
+                const enhancementSelected = EnhancementRepository.getEnhancementById(special);
                 return {
                     label: enhancementSelected.name,
                     value: ActorUtils.getEnhancementLevel(actor, enhancementSelected),

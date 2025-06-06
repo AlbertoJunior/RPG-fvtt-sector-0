@@ -2,10 +2,12 @@ import { ICONS_PATH } from "../../../constants.mjs";
 import { ActiveEffectsFlags, ActiveEffectsOriginTypes, ActiveEffectsTypes } from "../../../enums/active-effects-enums.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType } from "../../../enums/enhancement-enums.mjs";
+import { assimilationEnhancement } from "../../enhancement/assimilation.mjs";
 import { ActiveEffectsUtils } from "../active-effects.mjs";
 
 const simulated = ActiveEffectsUtils.createEffectData({
     name: "Cena Simulada",
+    origin: `Aprimoramento: ${assimilationEnhancement.name}`,
     img: `${ICONS_PATH}/user-ninja.svg`,
     duration: { startRound: 0, rounds: 99 },
     tint: "#FFDC00",

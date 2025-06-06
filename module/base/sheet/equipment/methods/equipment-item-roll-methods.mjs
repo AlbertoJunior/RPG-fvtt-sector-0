@@ -1,12 +1,10 @@
 import { getObject, onArrayRemove, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { RollTestUtils } from "../../../../core/rolls/roll-test-utils.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { ActorType } from "../../../../enums/characteristic-enums.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs"
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 import { playerRollHandle } from "../../actor/methods/player-roll-methods.mjs";
 import { npcRollHandle } from "../../npc/methods/npc-roll-methods.mjs";

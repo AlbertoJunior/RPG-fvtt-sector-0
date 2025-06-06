@@ -2,7 +2,7 @@ import { randomId } from "../../scripts/utils/utils.mjs";
 
 const { SchemaField, NumberField, StringField, BooleanField } = foundry.data.fields;
 
-export class RollTestDataModel extends SchemaField {
+export class RollTestField extends SchemaField {
     constructor() {
         super({
             id: new StringField({ required: true, blank: false, initial: '', label: "S0.Id" }),
@@ -20,7 +20,7 @@ export class RollTestDataModel extends SchemaField {
         });
     }
 
-    static _toJson(params) {
+    static toJson(params) {
         const {
             id, name,
             primary_attribute, secondary_attribute,
@@ -29,7 +29,7 @@ export class RollTestDataModel extends SchemaField {
             difficulty = 6, critic = 10,
         } = params;
 
-        const object = new RollTestDataModel();
+        const object = new RollTestField();
         object.id = id || randomId();
         object.name = name;
         object.primary_attribute = primary_attribute;

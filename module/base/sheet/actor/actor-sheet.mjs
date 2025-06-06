@@ -1,5 +1,5 @@
 import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
-import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { getObject, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
 import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
@@ -137,6 +137,7 @@ class Setor0ActorSheet extends Setor0BaseActorSheet {
     }
 
     #presetEnhancement(html) {
+        TODO('deixar de usar o statuses e passar a usar o origin ID do sistema')
         const activeEffects = this.actor.statuses;
         const actorEnhancements = Object.values(getObject(this.actor, CharacteristicType.ENHANCEMENT_ALL));
 

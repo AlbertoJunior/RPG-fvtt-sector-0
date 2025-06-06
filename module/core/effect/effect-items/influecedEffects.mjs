@@ -5,6 +5,7 @@ import { ActiveEffectsUtils } from "../active-effects.mjs";
 
 const addicted = ActiveEffectsUtils.createEffectData({
     name: "Viciado",
+    origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
     tint: "#FFDC00",
     changes: [
@@ -23,7 +24,9 @@ const addicted = ActiveEffectsUtils.createEffectData({
 
 const mesmerized = ActiveEffectsUtils.createEffectData({
     name: "Mesmerizado",
+    origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
+    duration: { rounds: 99, startTime: 0 },
     tint: "#FFDC00",
     changes: [
         {
@@ -41,7 +44,9 @@ const mesmerized = ActiveEffectsUtils.createEffectData({
 
 const racionalize = ActiveEffectsUtils.createEffectData({
     name: "Racionalizando",
+    origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
+    duration: { rounds: 99, startTime: 0 },
     tint: "#FFDC00",
     changes: [],
     flags: {
@@ -53,7 +58,9 @@ const racionalize = ActiveEffectsUtils.createEffectData({
 
 const fascinated = ActiveEffectsUtils.createEffectData({
     name: "Fascinado",
+    origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
+    duration: { rounds: 99, startTime: 0 },
     tint: "#FFDC00",
     changes: [
         {
