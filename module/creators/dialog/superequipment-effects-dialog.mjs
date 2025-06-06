@@ -1,8 +1,8 @@
-import { localize, randomId, TODO } from "../../../scripts/utils/utils.mjs";
+import { localize, randomId } from "../../../scripts/utils/utils.mjs";
 import { EquipmentInfoParser } from "../../core/equipment/equipment-info.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EquipmentCharacteristicType, SuperEquipmentParticularityType } from "../../enums/equipment-enums.mjs";
-import { SuperEquipmentParticularityField, SuperEquipmentTraitField } from "../../field/equipment-field.mjs";
+import { SuperEquipmentParticularityField } from "../../field/equipment-field.mjs";
 import { AbilityRepository } from "../../repository/ability-repository.mjs";
 import { AttributeRepository } from "../../repository/attribute-repository.mjs";
 import { SuperEquipmentTraitRepository } from "../../repository/superequipment-trait-repository.mjs";
@@ -50,39 +50,17 @@ export class SuperEquipmentEffectsDialog {
                         return;
                     }
 
-                    let particularityObject = null;
-
+                    const requireParticularity = !!trait.particularity;
                     const hasParticularity = particularity?.trim().length > 0;
-                    if (hasParticularity) {
-                        particularityObject = SuperEquipmentParticularityField.toJson(
-                            {
-                                ...trait.particularity,
-                                description: particularity.trim(),
-                            }
-                        );
 
-                        const mappedCharacteristic = {
-                            [SuperEquipmentParticularityType.ATTRIBUTE]: {
-                                path: CharacteristicType.BONUS.ATTRIBUTES,
-                                value: 2
-                            },
-                            [SuperEquipmentParticularityType.SKILL]: {
-                                path: CharacteristicType.BONUS.SKILL,
-                                value: 1
-                            },
-                        };
-                        const characteristic = mappedCharacteristic[trait.particularity.type];
-                        if (characteristic && selectedParticularity) {
-                            const key = `${characteristic.path.system}.${selectedParticularity}`
-                            particularityObject.change = { key: key, value: characteristic.value }
-                        }
-                    }
-
-                    const requireParticularity = trait.particularity != null;
-                    if (requireParticularity && particularityObject == null) {
+                    if (requireParticularity && !hasParticularity) {
                         NotificationsUtils._error('Esse Traço precisa do campo Particularidade preenchido');
                         return;
                     }
+
+                    const particularityObject = hasParticularity
+                        ? this.#mountTraitParticularity(trait.particularity, particularity, selectedParticularity)
+                        : null;
 
                     if (typeof onConfirm === 'function') {
                         const copyObject = {
@@ -96,6 +74,23 @@ export class SuperEquipmentEffectsDialog {
                 }
             }
         );
+    }
+
+    static #mapCharacteristicsToOptions() {
+        const groups = {
+            [localize('Atributos')]: AttributeRepository._getItems(),
+            [localize('Habilidades')]: AbilityRepository._getItems(),
+            [localize('Tipo_Dano')]: EquipmentInfoParser.getDamageTypes(),
+        };
+
+        return Object.entries(groups)
+            .map(([label, options]) => ({
+                label,
+                options: options.map(opt => ({
+                    ...opt,
+                    name: game.i18n.localize(opt.label),
+                })),
+            }));
     }
 
     static #mapTraitToOptions(list) {
@@ -125,23 +120,6 @@ export class SuperEquipmentEffectsDialog {
             ));
     }
 
-    static #mapCharacteristicsToOptions() {
-        const groups = {
-            [localize('Atributos')]: AttributeRepository._getItems(),
-            [localize('Habilidades')]: AbilityRepository._getItems(),
-            [localize('Tipo_Dano')]: EquipmentInfoParser.getDamageTypes(),
-        };
-
-        return Object.entries(groups)
-            .map(([label, options]) => ({
-                label,
-                options: options.map(opt => ({
-                    ...opt,
-                    name: game.i18n.localize(opt.label),
-                })),
-            }));
-    }
-
     static #render(windowApp, html, listTraits, listCharacteristics) {
         const characteristics = listCharacteristics.flatMap(group => group.options);
 
@@ -168,6 +146,15 @@ export class SuperEquipmentEffectsDialog {
         this.#onSelectEffectChange(windowApp, listTraits, effectsElements);
     }
 
+    static #onSelectCharacteristicChange(characteristics, jElements) {
+        const { selectCharacteristicParticularity, inputParticularity } = jElements;
+        const selectedVal = selectCharacteristicParticularity.val();
+        const selected = characteristics.find(c => c.id == selectedVal);
+        if (selected) {
+            inputParticularity.val(selected.name);
+        }
+    }
+
     static #onSelectEffectChange(windowApp, listTraits, jElements) {
         const {
             selectEffect, description, cost, limit,
@@ -190,7 +177,7 @@ export class SuperEquipmentEffectsDialog {
 
         inputParticularity.val('');
 
-        const jElementsCharacteristics = { selectParticularityContainer, selectCharacteristic, particularityContainer };
+        const jElementsCharacteristics = { selectParticularityContainer, selectCharacteristic, inputParticularity, particularityContainer };
         this.#updateSelectCharacteristic(trait, jElementsCharacteristics);
 
         windowApp.style.height = 'auto';
@@ -199,17 +186,26 @@ export class SuperEquipmentEffectsDialog {
     static #updateSelectCharacteristic(trait, jElements) {
         const hasParticularity = trait.particularity != null;
 
-        const { selectParticularityContainer, selectCharacteristic, particularityContainer } = jElements;
+        const { selectParticularityContainer, selectCharacteristic, inputParticularity, particularityContainer } = jElements;
 
         if (hasParticularity) {
+            const particularityType = trait.particularity.type;
+
             const mappedIndex = {
                 [SuperEquipmentParticularityType.ATTRIBUTE]: 0,
                 [SuperEquipmentParticularityType.SKILL]: 6,
                 [SuperEquipmentParticularityType.DAMAGE_TYPE]: 20,
             };
-            const index = mappedIndex[trait.particularity.type];
-
+            const index = mappedIndex[particularityType];
             const canSelect = index != null;
+
+            if (particularityType == SuperEquipmentParticularityType.FIXED) {
+                selectParticularityContainer.hide();
+                particularityContainer.hide();
+                selectCharacteristic.val('');
+                inputParticularity.val(trait.particularity.description);
+                return;
+            }
 
             selectParticularityContainer.toggle(canSelect);
             particularityContainer.toggle(!canSelect);
@@ -225,16 +221,37 @@ export class SuperEquipmentEffectsDialog {
         }
     }
 
-    static #onSelectCharacteristicChange(characteristics, jElements) {
-        const { selectCharacteristicParticularity, inputParticularity } = jElements;
-        const selectedVal = selectCharacteristicParticularity.val();
-        const selected = characteristics.find(c => c.id == selectedVal);
-        if (selected) {
-            inputParticularity.val(selected.name);
-        }
-    }
-
     static #findTrait(listTraits, id) {
         return listTraits.find(trait => trait.id == id);
+    }
+
+    static #mountTraitParticularity(particularity, inputParticularity, selectedParticularity) {
+        const particularityObject = SuperEquipmentParticularityField.toJson(
+            {
+                ...particularity,
+                description: inputParticularity.trim(),
+            }
+        );
+
+        const particularityType = particularity.type;
+        if (particularityType != SuperEquipmentParticularityType.FIXED) {
+            const mappedCharacteristic = {
+                [SuperEquipmentParticularityType.ATTRIBUTE]: {
+                    path: CharacteristicType.BONUS.ATTRIBUTES,
+                    value: particularity.change?.value || 2
+                },
+                [SuperEquipmentParticularityType.SKILL]: {
+                    path: CharacteristicType.BONUS.SKILL,
+                    value: particularity.change?.value || 1
+                },
+            };
+
+            const characteristic = mappedCharacteristic[particularityType];
+            if (characteristic && selectedParticularity) {
+                const key = `${characteristic.path.system}.${selectedParticularity}`
+                particularityObject.change = { key: key, value: characteristic.value }
+            }
+        }
+        return particularityObject;
     }
 }

@@ -3,6 +3,7 @@ import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTyp
 import { EquipmentCharacteristicType, SubstanceType } from "../../enums/equipment-enums.mjs";
 import { SuperEquipmentTraitRepository } from "../../repository/superequipment-trait-repository.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
+import { EquipmentInfoParser } from "./equipment-info.mjs";
 
 TODO('no futuro é ideal remover a utilização do system.');
 
@@ -166,5 +167,45 @@ export class EquipmentUtils {
             allEffects.push(activeEffect);
         }
         return allEffects;
+    }
+
+    static getItemRollInformation(item) {
+        if (!item) {
+            return undefined;
+        }
+
+        const base = {
+            name: item.name,
+            changes: [
+                `${localize('Tipo')}: ${EquipmentInfoParser.parseEquipmentType(getObject(item, EquipmentCharacteristicType.TYPE))}`,
+            ],
+        };
+
+        if (this.isWeapon(item)) {
+            return this.#getWeaponRollInformation(item, base);
+        } else {
+            return this.#getEquipmentRollInformation(item, base);
+        }
+    }
+
+    static #getWeaponRollInformation(item, base) {
+        return {
+            ...base,
+            changes: [
+                ...base.changes,
+                `${localize('Dano')}: ${getObject(item, EquipmentCharacteristicType.DAMAGE)}`,
+                `${localize('Dano_Automatico')}: ${getObject(item, EquipmentCharacteristicType.TRUE_DAMAGE)}`,
+                `${localize('Tipo_Dano')}: ${EquipmentInfoParser.parseDamageType(getObject(item, EquipmentCharacteristicType.DAMAGE_TYPE))}`
+            ]
+        }
+    }
+
+    static #getEquipmentRollInformation(item, base) {
+        return {
+            ...base,
+            changes: [
+                ...base.changes,
+            ]
+        }
     }
 }

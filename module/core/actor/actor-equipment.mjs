@@ -2,7 +2,9 @@ import { getObject } from "../../../scripts/utils/utils.mjs";
 import { EquipmentUpdater } from "../../base/updater/equipment-updater.mjs";
 import { SYSTEM_ID } from "../../constants.mjs";
 import { EquipmentCharacteristicType, EquipmentType, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
+import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 import { EquipmentInfoParser } from "../equipment/equipment-info.mjs";
+import { EquipmentUtils } from "../equipment/equipment-utils.mjs";
 
 export class ActorEquipmentUtils {
     static #allowedTypes = validEquipmentTypes().map(EquipmentInfoParser.equipmentTypeIdToTypeString).filter(Boolean);
@@ -137,5 +139,29 @@ export class ActorEquipmentUtils {
             item,
             rollTest
         };
+    }
+
+    static verifyPassiveSuperEquipmentEffects(actor) {
+        const equippedItems = ActorEquipmentUtils.getEquippedItems(actor)
+            .filter(item => EquipmentUtils.isSuperEquipment(item))
+            .filter(superEquipment => getObject(superEquipment, EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE));
+
+        const activatedEffectsIds = new Set(actor.effects.map(effect => {
+            return ActiveEffectsUtils.getOriginId(effect);
+        }));
+
+        const equipmentsWithoutEffects = equippedItems.filter(item => !activatedEffectsIds.has(item.id));
+
+        const effects = [];
+        for (const item of equipmentsWithoutEffects) {
+            const effectData = EquipmentUtils.getSuperEquipmentActiveEffect(item);
+            if (effectData) {
+                effects.push(effectData);
+            }
+        }
+
+        if (effects.length > 0) {
+            ActiveEffectsUtils.addActorEffect(actor, effects);
+        }
     }
 }

@@ -51,7 +51,7 @@ export class EnhancementRepository {
         return undefined;
     }
 
-    static _getEnhancementEffectsByEnhancementId(enhancementId) {
+    static getEnhancementEffectsByEnhancementId(enhancementId) {
         if (enhancementId) {
             const fetchedLevels = this.getEnhancementById(enhancementId)?.effects;
             if (fetchedLevels) {
@@ -61,7 +61,7 @@ export class EnhancementRepository {
         return [];
     }
 
-    static _getEnhancementEffectById(effectId, enhancementId) {
+    static getEnhancementEffectById(effectId, enhancementId) {
         if (!effectId)
             return null;
 

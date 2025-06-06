@@ -1,6 +1,6 @@
 import { getObject, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../core/actor/actor-equipment.mjs";
-import { _createLi } from "../../creators/element/element-creator-jscript.mjs";
+import { createLi } from "../../creators/element/element-creator-jscript.mjs";
 import { BaseActorCharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
 import { SystemFlags } from "../../enums/flags-enums.mjs";
@@ -132,7 +132,7 @@ export class Setor0BaseActorSheet extends ActorSheet {
                 ...iconOption
             };
 
-            const button = _createLi(textContent, options);
+            const button = createLi(textContent, options);
 
             buttonContainer.appendChild(button);
 

@@ -2,7 +2,6 @@ import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mj
 import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
 import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
 import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog.mjs";
@@ -10,9 +9,9 @@ import { NotificationsUtils } from "../../../../creators/message/notifications.m
 import { EquipmentCharacteristicType, EquipmentType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
+import { playerRollHandle } from "./player-roll-methods.mjs";
 
 export const handlerEquipmentEvents = {
     [OnEventType.ADD]: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),
@@ -241,7 +240,7 @@ class EquipmentHandleEvents {
     }
 
     static async handleChat(actor, event) {
-        TODO('implementar o chat');
+        TODO('implementar');
     }
 
     static async handleRoll(actor, event) {
@@ -257,18 +256,11 @@ class EquipmentHandleEvents {
             return;
         }
 
-        const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS).find(test => test.id == defaultTestId);
+        const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS)?.find(test => test.id == defaultTestId);
         if (!rollTest) {
             return;
         }
 
-        let resultRoll;
-        if (EquipmentUtils.isWeapon(item)) {
-            resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item);
-        } else {
-            resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
-        }
-
-        await DefaultActions.processAttributeRoll(item.actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
+        await playerRollHandle.rollableItem(actor, rollTest, item);
     }
 }

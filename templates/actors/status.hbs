@@ -1,6 +1,6 @@
 <section data-label="{{ localize 'S0.Status' }}" class="S0-page" id="statusPage" data-icon="fas fa-heart-pulse">
 
-    {{#unless (operators 'isNull' actor.system.experiencia)}}
+    {{#if (operators 'isNotNull' actor.system.experiencia)}}
     <div class="S0-container">
         <h2>
             {{localize 'S0.Experiencia'}}
@@ -52,7 +52,7 @@
             </li>
         </ul>
     </div>
-    {{/unless}}
+    {{/if}}
 
     <div class="S0-container">
         <h2> {{localize 'S0.Situacao'}}

@@ -1,4 +1,4 @@
-import { getObject, localize } from "../../../scripts/utils/utils.mjs";
+import { getObject, labelError, localize } from "../../../scripts/utils/utils.mjs";
 import { ActiveEffectsTypes } from "../../enums/active-effects-enums.mjs";
 import { DamageType, EquipmentCharacteristicType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType, VehicleType } from "../../enums/equipment-enums.mjs";
 
@@ -16,13 +16,18 @@ export class EquipmentInfoParser {
         return EquipmentInfoParser.mappedEquipmentTypes[type];
     }
 
+    static parseEquipmentType(value) {
+        const map = this.equipmentTypeIdToTypeString(value);
+        return map ? game.i18n.localize(`TYPES.Item.${map}`) : labelError();
+    }
+
     static parseHidding(value) {
         const map = {
             [EquipmentHidding.POCKET]: `${localize('Itens.Bolso')}`,
             [EquipmentHidding.JACKET]: `${localize('Itens.Jaqueta')}`,
             [EquipmentHidding.NONE]: `${localize('Itens.Inocultavel')}`,
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static parseHand(value) {
@@ -31,18 +36,18 @@ export class EquipmentInfoParser {
             [EquipmentHand.ONE_HALF_HAND]: `${localize('Itens.Uma_Mao_Meia')}`,
             [EquipmentHand.TWO_HANDS]: `${localize('Itens.Duas_Maos')}`,
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static parseDamageType(value) {
         const map = {
-            [DamageType.SUPERFICIAL]: `${localize('Itens.Superficial')}`,
-            [DamageType.LETAL]: `${localize('Itens.Letal')}`,
-            [DamageType.ELETRIC]: `${localize('Itens.Eletrico')}`,
-            [DamageType.FIRE]: `${localize('Itens.Fogo')}`,
-            [DamageType.ICE]: `${localize('Itens.Gelo')}`,
+            [DamageType.SUPERFICIAL]: localize('Itens.Superficial'),
+            [DamageType.LETAL]: localize('Itens.Letal'),
+            [DamageType.ELETRIC]: localize('Itens.Eletrico'),
+            [DamageType.FIRE]: localize('Itens.Fogo'),
+            [DamageType.ICE]: localize('Itens.Gelo'),
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static parseVehicle(value) {
@@ -55,7 +60,7 @@ export class EquipmentInfoParser {
             [VehicleType.RAW]: `${localize('Itens.Bruto')}`,
             [VehicleType.EXOTIC]: `${localize('Itens.Exotico')}`,
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static parseMeleeSize(value) {
@@ -64,7 +69,7 @@ export class EquipmentInfoParser {
             [MeleeSize.MEDIUM]: `${localize('Itens.Media')}`,
             [MeleeSize.LONG]: `${localize('Itens.Grande')}`,
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static parseSubstance(value) {
@@ -74,7 +79,7 @@ export class EquipmentInfoParser {
             [SubstanceType.ACID]: `${localize('Itens.Acido')}`,
             [SubstanceType.GAS]: `${localize('Itens.Gas')}`,
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static parseSubstanceEffectType(value) {
@@ -82,7 +87,7 @@ export class EquipmentInfoParser {
             [ActiveEffectsTypes.BUFF]: `${localize('Itens.Melhoria')}`,
             [ActiveEffectsTypes.DEBUFF]: `${localize('Itens.Enfraquecimento')}`,
         }
-        return map[value] || `<${localize('Erro')}>`;
+        return map[value] || labelError();
     }
 
     static getHandTypes() {

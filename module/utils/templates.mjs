@@ -20,8 +20,8 @@ async function loadAuxiliaryTemplates() {
         { call: "buttons-dialog", path: "others/buttons-dialog" },
         { call: "roll-chat-mode", path: "others/roll-chat-mode" },
         { call: "buttons-float-menu", path: "others/list-default-buttons-float-menu" },
-        { call: "core-roll-message", path: "others/core-roll-message" },
-        { call: "core-roll-message-invalid", path: "others/core-roll-message-invalid" },
+        { call: "core-roll-message", path: "messages/roll/core-result" },
+        { call: "core-roll-message-invalid", path: "messages/roll/core-result-invalid" },
     ];
 
     const loadedAuxiliaryTemplates = await loadAndRegisterTemplates(configTemplates);

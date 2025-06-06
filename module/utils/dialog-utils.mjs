@@ -1,5 +1,5 @@
 import { onArrayRemove } from "../../scripts/utils/utils.mjs";
-import { _createA } from "../creators/element/element-creator-jscript.mjs";
+import { createA } from "../creators/element/element-creator-jscript.mjs";
 import { HtmlJsUtils } from "./html-js-utils.mjs";
 
 export class DialogUtils {
@@ -45,7 +45,7 @@ export class DialogUtils {
 
             const buttons = params.header.buttons || [];
             buttons.forEach(button => {
-                const elementA = _createA(button.label, {
+                const elementA = createA(button.label, {
                     icon: button.icon
                 });
 

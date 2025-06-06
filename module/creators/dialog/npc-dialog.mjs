@@ -7,7 +7,7 @@ import { SystemFlags } from "../../enums/flags-enums.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { FlagsUtils } from "../../utils/flags-utils.mjs";
-import { _createLi } from "../element/element-creator-jscript.mjs";
+import { createLi } from "../element/element-creator-jscript.mjs";
 
 export class NpcDialog {
     static #mapEvents = {
@@ -122,7 +122,7 @@ export class NpcDialog {
                     }),
                 };
 
-                const button = _createLi(textContent, options);
+                const button = createLi(textContent, options);
                 buttonContainer.appendChild(button);
                 buttons.push(button);
 
@@ -161,7 +161,7 @@ export class NpcDialog {
                 },
             };
 
-            const button = _createLi(textContent, options);
+            const button = createLi(textContent, options);
             button.addEventListener('click', () => {                
                 game.actors.get(npcActor.id)?.sheet?.render(true);
             });

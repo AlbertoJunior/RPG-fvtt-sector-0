@@ -189,8 +189,13 @@ export class ActorUtils {
     }
 
     static getEffects(actor) {
-        const effects = [...(actor?.effects.contents || [])];
+        const effects = [...(actor.effects.contents || [])];
+        return effects;
+    }
 
+    static getEffectsSorted(actor) {
+        const effects = this.getEffects(actor);
+        
         effects.sort((a, b) => {
             if (ActiveEffectsUtils.getOriginId(a) === 'dead') {
                 return -1;

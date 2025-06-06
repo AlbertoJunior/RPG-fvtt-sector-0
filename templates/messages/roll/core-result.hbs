@@ -1,21 +1,21 @@
 <!-- #region ROLLS -->
-{{#unless (operators 'isEmpty' overloadValues)}}
+{{#if (operators 'isNotEmpty' overloadValues)}}
 <p>{{localize 'S0.Sobrecarga'}}:</p>
 <ol class="dice-rolls">
     {{#each overloadValues}}
     <li class="S0-d10 roll die d10 S0-d10-overload">{{ this }}</li>
     {{/each}}
 </ol>
-{{/unless}}
+{{/if}}
 
-{{#unless (operators 'isEmpty' defaultValues)}}
+{{#if (operators 'isNotEmpty' defaultValues)}}
 <p>{{localize 'S0.Rolagem'}}:</p>
 <ol class="dice-rolls">
     {{#each defaultValues }}
     <li class="S0-d10 roll die d10">{{ this }}</li>
     {{/each}}
 </ol>
-{{/unless}}
+{{/if}}
 
 <hr>
 <!-- #endregion -->
@@ -85,29 +85,23 @@
 <!-- #endregion -->
 
 <!-- #region WEAPON -->
-{{#unless (operators 'isNull' weapon)}}
+{{#if (operators 'isNotNull' weapon)}}
 <div class="S0-message-weapon-container">
     <label style="margin-block: 4px;" class="S0-hide-long-text">
-        {{localize 'S0.Arma'}}: {{weapon.name}}
+        {{weapon.name}}
     </label>
 
     <hr>
 
-    <label style="margin: 2px 10px;">
-        {{localize 'S0.Tipo'}}: {{ weapon.damage_type }}
-    </label>
-
-    <label style="margin: 2px 10px;">
-        {{localize 'S0.Dano'}}: {{ weapon.damage }}
-    </label>
-
-    <label style="margin: 2px 10px;">
-        {{localize 'S0.Dano_Automatico'}}: {{ weapon.true_damage }}
-    </label>
+    <ul style="padding: 0px; margin: 5px 10px;">
+        {{#each weapon.changes as |change|}}
+        <label>{{change}}</label>
+        {{/each}}
+    </ul>
 </div>
 
 <hr>
-{{/unless}}
+{{/if}}
 <!-- #endregion -->
 
 <!-- #region CAN USE PERSEVERANCE -->

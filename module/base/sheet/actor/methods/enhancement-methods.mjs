@@ -1,47 +1,47 @@
 import { ChatCreator } from "../../../../utils/chat-creator.mjs";
 import { EnhancementDialog } from "../../../../creators/dialog/enhancement-dialog.mjs";
-import { _createEmptyOption, _createOption, _createOptionsAndSetOnSelects } from "../../../../creators/element/element-creator-jscript.mjs";
+import { createOptionsAndSetOnSelects } from "../../../../creators/element/element-creator-jscript.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
 import { EnhancementUtils } from "../../../../core/enhancement/enhancement-utils.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { getActorEnhancementSlot } from "../../../../enums/characteristic-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { EnhancementDuration } from "../../../../enums/enhancement-enums.mjs";
 import { ActorEnhancementField } from "../../../../field/actor-fields.mjs";
 import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
-import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../../../enums/active-effects-enums.mjs";
+import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes, ActiveEffectsTypes } from "../../../../enums/active-effects-enums.mjs";
 import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { EnhancementMessageCreator } from "../../../../creators/message/enhancement-message.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
-    const enhancementLevels = EnhancementRepository._getEnhancementEffectsByEnhancementId(enhancementId);
-    _createOptionsAndSetOnSelects(Array.from(selects), enhancementLevels);
+    const enhancementLevels = EnhancementRepository.getEnhancementEffectsByEnhancementId(enhancementId);
+    createOptionsAndSetOnSelects(Array.from(selects), enhancementLevels);
 }
 
 export function selectLevelOnOptions(enhancement, selects, activeEffects) {
     const levels = enhancement.levels;
     Array.from(selects).forEach((select, index) => {
-        const level = levels[`nv${index + 1}`];
-        if (level && level.id != '') {
-            const option = Array.from(select.options).find(option => option.value == level.id);
+        const levelId = levels[`nv${index + 1}`]?.id;
+        if (levelId != '') {
+            const option = Array.from(select.options).find(option => option.value == levelId);
             if (option) {
                 option.selected = true;
 
-                setupViewButtonIsVisibleAndItemIsChecked(select, level.id, activeEffects);
+                const isActive = activeEffects.has(levelId);
+                setupViewButtonIsVisibleAndItemIsChecked(select.parentElement, isActive);
             }
         }
     });
 }
 
-function setupViewButtonIsVisibleAndItemIsChecked(select, levelId, activeEffects) {
-    const parent = select.parentElement;
+function setupViewButtonIsVisibleAndItemIsChecked(parent, isActive) {
     $(parent).find(`a[data-action=${OnEventType.VIEW}]`).toggleClass('hidden');
     $(parent).find(`a[data-action=${OnEventType.CHECK}]`)
         .toggleClass('hidden')
-        .toggleClass('S0-selected', activeEffects.some(effect => effect == levelId));
+        .toggleClass('S0-selected', isActive);
 }
 
 async function updateActorEnhancement(currentTarget, actor) {
@@ -49,13 +49,11 @@ async function updateActorEnhancement(currentTarget, actor) {
     const enhancementId = selectedEnhancement.dataset.itemId;
     const enhancementText = selectedEnhancement.text;
 
-    const slotEnhancement = currentTarget.dataset.itemId;
-    TODO('remover a utilização do .system');
-    const key = `${CharacteristicType.ENHANCEMENT.system}_${slotEnhancement}`;
+    const enhancementOnSlotKey = getActorEnhancementSlot(currentTarget.dataset.itemId);
     const characteristic = ActorEnhancementField._toJson(enhancementId, enhancementText);
 
     if (enhancementId == undefined || enhancementId == '') {
-        const enhancementOnSlot = getObject(actor, key);
+        const enhancementOnSlot = getObject(actor, enhancementOnSlotKey);
         await removeEnhancementEffects(actor, enhancementOnSlot);
     }
 
@@ -66,19 +64,17 @@ async function updateActorEnhancement(currentTarget, actor) {
         currentTarget.blur();
         return;
     }
-    ActorUpdater._verifyAndUpdateActor(actor, key, characteristic);
+    ActorUpdater._verifyAndUpdateActor(actor, enhancementOnSlotKey, characteristic);
 }
 
 async function updateActorLevelEnhancement(currentTarget, actor) {
     const { enhancementSlot, enhancementLevel } = currentTarget.dataset;
     const effectId = currentTarget.selectedOptions[0].value;
 
-    TODO('remover a utilização do .system');
-    const enhancementOnSlotKey = `${CharacteristicType.ENHANCEMENT.system}_${enhancementSlot}`
-
+    const enhancementOnSlotKey = getActorEnhancementSlot(enhancementSlot);
     const enhancementOnSlot = getObject(actor, `${enhancementOnSlotKey}`);
 
-    const effect = EnhancementRepository._getEnhancementEffectById(effectId, enhancementOnSlot.id);
+    const effect = EnhancementRepository.getEnhancementEffectById(effectId, enhancementOnSlot.id);
 
     if (effectId !== '') {
         const alreadyHasEffect = ActorUtils.getAllEnhancements(actor)
@@ -184,6 +180,7 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
                 [ActiveEffectsFlags.ORIGIN_ID]: effect.id,
                 [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.ENHANCEMENT,
                 [ActiveEffectsFlags.ORIGIN_TYPE_LABEL]: activeEffectOriginTypeLabel(ActiveEffectsOriginTypes.ENHANCEMENT),
+                [ActiveEffectsFlags.TYPE]: ActiveEffectsTypes.BUFF,
                 ...(effect.duration !== EnhancementDuration.PASSIVE && {
                     [ActiveEffectsFlags.COMBAT_ID]: game.combat?.id
                 })
@@ -242,7 +239,7 @@ export const enhancementHandleMethods = {
     },
     [OnEventType.VIEW]: async (actor, event) => {
         const effectId = getEffectSelectedId(event);
-        const effect = EnhancementRepository._getEnhancementEffectById(effectId);
+        const effect = EnhancementRepository.getEnhancementEffectById(effectId);
         if (effect) {
             EnhancementDialog.open(effect, actor, () => toggleEnhancementEffectOnActor(effect, actor));
         } else {
@@ -251,7 +248,7 @@ export const enhancementHandleMethods = {
     },
     [OnEventType.CHECK]: async (actor, event) => {
         const effectId = getEffectSelectedId(event);
-        const effect = EnhancementRepository._getEnhancementEffectById(effectId);
+        const effect = EnhancementRepository.getEnhancementEffectById(effectId);
         if (effect) {
             toggleEnhancementEffectOnActor(effect, actor);
         } else {

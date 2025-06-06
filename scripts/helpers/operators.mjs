@@ -7,16 +7,16 @@ const operators = {
     gte: ([a, b]) => a >= b,
     isNull: ([value]) => value === null || value === undefined,
     isNotNull: ([value]) => !operators['isNull']([value]),
-    isEmpty: (collection) => {
-        if (!collection)
-            return true;
-        return collection.length == 0
-    },
-    isNotEmpty: (collection) => !operators['isEmpty'](collection),
-    or: (values) => values.find(Boolean),
+    isEmpty: (collection) => Array.isArray(collection) && collection.length === 0,
+    isNotEmpty: (collection) => Array.isArray(collection) && collection.length > 0,
+    or: (values) => values.some(Boolean),
 };
 
 export default function operator(op, ...params) {
     params.pop();
-    return operators[op](Object.values(params));
+    const input = params.length === 1 && Array.isArray(params[0])
+        ? params[0]
+        : params;
+
+    return operators[op](input);
 }

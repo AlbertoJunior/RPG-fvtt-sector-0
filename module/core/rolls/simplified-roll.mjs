@@ -77,10 +77,7 @@ export class RollSimplified {
             specialist: rollTest.specialist,
             bonus: rollTest.bonus + itemBonus,
             automatic: rollTest.automatic + itemAutomatic,
-            weapon: {
-                name: item.name,
-                ...item.system,
-            },
+            weapon: EquipmentUtils.getItemRollInformation(item),
             difficulty: rollTest.difficulty,
             critic: rollTest.critic,
         };

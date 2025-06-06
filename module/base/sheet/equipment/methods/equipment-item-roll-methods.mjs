@@ -122,7 +122,7 @@ class EquipmentSheetItemRollHandle {
     }
 
     static async chat(item, event) {
-        TODO('enviar roll do item no chat');
+        TODO('implementar');
     }
 
     static async view(item, event) {

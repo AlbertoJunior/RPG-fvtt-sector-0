@@ -93,7 +93,7 @@ export class EnhancementUtils {
         switch (effectDuration) {
             case EnhancementDuration.TIME:
             case EnhancementDuration.SCENE: {
-                const effect = EnhancementRepository._getEnhancementEffectById(levelId);
+                const effect = EnhancementRepository.getEnhancementEffectById(levelId);
                 if (!effect) {
                     return;
                 }

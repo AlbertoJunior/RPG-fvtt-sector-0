@@ -13,14 +13,10 @@ export class RollMessageCreator {
 
         const automatic = this.#getAutomaticFromModifiers(modifiers);
         const result = this.#verifyResultRoll(
-            diceResults.overload, diceResults.default, abilityInfo.specialist, difficulty, critic, automatic
+            diceResults.overload, diceResults.default, modifiers.specialist, difficulty, critic, automatic
         );
 
-        const updatedModifiers = {
-            ...modifiers,
-            specialist: abilityInfo.specialist
-        }
-        const coreContentData = this.mountCoreInformationRoll(diceResults, result, difficulty, critic, half, updatedModifiers, havePerseverance, formule);
+        const coreContentData = this.mountCoreInformationRoll(diceResults, result, difficulty, critic, half, modifiers, havePerseverance, formule);
 
         const data = {
             haveMessageTest: typeof messageTest === "string" && messageTest.trim().length > 0,
@@ -60,7 +56,7 @@ export class RollMessageCreator {
             ...coreContentData
         };
 
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/custom-roll.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/custom.hbs`, data);
     }
 
     static async mountContentSimplifiedRoll(params) {
@@ -72,47 +68,68 @@ export class RollMessageCreator {
             diceResults.overload, diceResults.default, modifiers.specialist, difficulty, critic, modifiers.automatic
         );
 
+        const name = params.name || params.abilityInfo.label;
         const formule = (diceResults.overload?.length || 0) + (diceResults.default?.length || 0)
 
         const coreContentData = this.mountCoreInformationRoll(diceResults, result, difficulty, critic, half, modifiers, havePerseverance, formule);
-
-        const name = params.name || params.abilityInfo.label;
 
         const data = {
             testName: name,
             haveResult: result.result > 0,
             ...coreContentData,
         };
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/simplified.hbs`, data);
+    }
 
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/simplified-roll.hbs`, data);
+    static async mountContentByAmountRoll(params) {
+        const { name, amount, rolls, difficulty, critic, half, modifiers, havePerseverance } = params;
+        const { automatic, specialist } = modifiers;
+
+        const diceResults = this.#getDiceResults(rolls);
+
+        const result = this.#verifyResultRoll(
+            diceResults.overload, diceResults.default, specialist, difficulty, critic, automatic
+        );
+
+        const formule = `${amount}D10`;
+
+        const coreContentData = this.mountCoreInformationRoll(diceResults, result, difficulty, critic, half, modifiers, havePerseverance, formule);
+
+        const data = {
+            testName: name,
+            haveResult: result.result > 0,
+            ...coreContentData,
+        };
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/simplified.hbs`, data);
     }
 
     static #verifyResultRoll(dicesOverload = [], dicesDefault = [], specialist = false, difficulty = 6, critic = 10, automatic = 0) {
-        const { result, overload } = CoreRollMethods.calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, critic, automatic);
-        const message = this.#mountResultMessageInfos(result, overload);
+        const { result, criticalOverload, failureOverload } = CoreRollMethods.calculateSuccess(
+            dicesOverload, dicesDefault, specialist, difficulty, critic, automatic
+        );
+        const message = this.#mountResultMessageInfos(result, criticalOverload, failureOverload);
         return { result, message };
     }
 
-    static #mountResultMessageInfos(resultSuccess, haveOverload) {
-        let messageInfo = '';
+    static #mountResultMessageInfos(resultSuccess, criticalOverload, failureOverload) {
         if (resultSuccess > 0) {
-            messageInfo = {
-                message: haveOverload ? `${localize('Sucesso_Explosivo').toUpperCase()}!` : localize('Sucesso'),
-                classes: haveOverload ? "S0-overload S0-success" : "S0-success"
-            }
-        } else if (resultSuccess < 0) {
-            messageInfo = {
-                message: haveOverload ? localize('Falha_Caotica').toUpperCase() : localize('Falha_Critica'),
-                classes: haveOverload ? "S0-overload S0-critical-failure" : "S0-critical-failure"
-            }
-        } else {
-            messageInfo = {
-                message: localize('Falha'),
-                classes: "S0-failure"
-            }
+            return {
+                message: criticalOverload ? `${localize('Sucesso_Explosivo').toUpperCase()}!` : localize('Sucesso'),
+                classes: criticalOverload ? "S0-overload S0-success" : "S0-success"
+            };
         }
 
-        return messageInfo;
+        if (resultSuccess < 0) {
+            return {
+                message: failureOverload ? localize('Falha_Caotica').toUpperCase() : localize('Falha_Critica'),
+                classes: failureOverload ? "S0-overload S0-critical-failure" : "S0-critical-failure"
+            };
+        }
+
+        return {
+            message: localize('Falha'),
+            classes: "S0-failure"
+        };
     }
 
     static #getDiceResults(paramRolls) {

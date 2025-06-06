@@ -23,7 +23,7 @@ const map = {
     'actual_perseverance': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.PERSEVERANCE),
     'actual_quietness': (actor) => ActorUtils.calculateActualVirtue(actor, CharacteristicType.VIRTUES.QUIETNESS),
 
-    'effects': (actor) => ActorUtils.getEffects(actor),
+    'effects': (actor) => ActorUtils.getEffectsSorted(actor),
 
     'offensive_projectile': (actor) => ActorCombatUtils.calculateOffensiveProjectileDices(actor),
     'offensive_projectile_half': (actor) => Math.floor(ActorCombatUtils.calculateOffensiveProjectileDices(actor) / 2),

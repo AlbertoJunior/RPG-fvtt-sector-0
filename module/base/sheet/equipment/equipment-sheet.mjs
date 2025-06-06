@@ -1,5 +1,4 @@
 import { SYSTEM_ID, REGISTERED_TEMPLATES, TEMPLATES_PATH } from "../../../constants.mjs";
-import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
 import { OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";

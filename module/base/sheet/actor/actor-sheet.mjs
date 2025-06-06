@@ -1,5 +1,4 @@
-import { _createLi } from "../../../creators/element/element-creator-jscript.mjs";
-import { getObject, selectCharacteristic, TODO } from "../../../../scripts/utils/utils.mjs";
+import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
 import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
@@ -12,6 +11,7 @@ import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
 import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
 import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
 import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
+import { ActiveEffectsUtils } from "../../../core/effect/active-effects.mjs";
 
 class Setor0ActorSheet extends Setor0BaseActorSheet {
 
@@ -137,9 +137,10 @@ class Setor0ActorSheet extends Setor0BaseActorSheet {
     }
 
     #presetEnhancement(html) {
-        TODO('deixar de usar o statuses e passar a usar o origin ID do sistema')
-        const activeEffects = this.actor.statuses;
-        const actorEnhancements = Object.values(getObject(this.actor, CharacteristicType.ENHANCEMENT_ALL));
+        const actor = this.actor;
+
+        const activeEffects = new Set(ActorUtils.getEffects(actor).map(effect => ActiveEffectsUtils.getOriginId(effect)));
+        const actorEnhancements = Object.values(getObject(actor, CharacteristicType.ENHANCEMENT_ALL));
 
         html.find('.S0-enhancement').each((index, enhaceContainer) => {
             const enhancement = actorEnhancements[index];

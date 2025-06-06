@@ -1,7 +1,5 @@
-import { getObject } from "../../../scripts/utils/utils.mjs";
-import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
 import { ActorUtils } from "../actor/actor-utils.mjs";
-import { EquipmentInfoParser } from "../equipment/equipment-info.mjs";
+import { EquipmentUtils } from "../equipment/equipment-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
@@ -64,19 +62,12 @@ export class RollAttribute {
         return this.roll(actor, params);
     }
 
-    static async rollByRollableTestsWithWeapon(actor, rollable, weapon, half) {
+    static async rollByRollableTestsWithEquipment(actor, rollable, equipment, half) {
         const params = {
             ...this.#mountParamsByRollable(rollable),
             isHalf: half,
-            weapon: {
-                name: weapon.name,
-                [EquipmentCharacteristicType.TYPE]: weapon.name,
-                [EquipmentCharacteristicType.DAMAGE.id]: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
-                [EquipmentCharacteristicType.TRUE_DAMAGE.id]: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE),
-                [EquipmentCharacteristicType.DAMAGE_TYPE.id]: EquipmentInfoParser.parseDamageType(getObject(weapon, EquipmentCharacteristicType.DAMAGE_TYPE)),
-            }
+            weapon: EquipmentUtils.getItemRollInformation(equipment)
         };
-
         return this.roll(actor, params);
     }
 

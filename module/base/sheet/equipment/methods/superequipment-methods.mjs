@@ -95,7 +95,12 @@ class SuperEquipmentSheeHandle {
     static async #addActiveEffects(item) {
         const effectData = EquipmentUtils.getSuperEquipmentActiveEffect(item);
         if (effectData) {
-            await ActiveEffectsUtils.addActorEffect(item.actor, [effectData]);
+            const actor = item.actor;
+            const activeEffect = ActiveEffectsUtils.getActorEffect(actor, item.id);
+            if (activeEffect) {
+                await this.#removeActiveEffects(item)
+            }
+            await ActiveEffectsUtils.addActorEffect(actor, [effectData]);
         }
     }
 

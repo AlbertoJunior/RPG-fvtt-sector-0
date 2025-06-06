@@ -1,4 +1,4 @@
-import { localize, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { localize } from "../../../../../scripts/utils/utils.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { CustomRoll } from "../../../../core/rolls/custom-roll.mjs";
 import { RollSimplified } from "../../../../core/rolls/simplified-roll.mjs";
@@ -31,7 +31,6 @@ class PlayerRollMethods {
 
     static async handleCustomRoll(actor, inputParams) {
         const { rollMode } = inputParams;
-
         const resultRoll = await CustomRoll.discoverAndRoll(actor, inputParams);
         await DefaultActions.processCustomRoll(actor, resultRoll, inputParams, localize('Teste_Customizado'), rollMode);
     }
@@ -39,16 +38,16 @@ class PlayerRollMethods {
     static async handleRollabeItemRoll(actor, inputParams) {
         const { rollTest, item, half } = inputParams;
 
-        TODO('colocar a separação entre ITEM e ARMA')
-        const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item, half);
+        const resultRoll = await RollAttribute.rollByRollableTestsWithEquipment(actor, rollTest, item, half);
         await DefaultActions.processAttributeRoll(actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
     }
 
     static async handleShortcutRoll(actor, shortcutTest) {
-        const { difficulty, critic, name } = shortcutTest;
+        const { difficulty, critic, name, rollMessage, mode } = shortcutTest;
 
+        const rollLabel = rollMessage ? rollMessage : name;
         const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-        await DefaultActions.processAttributeRoll(actor, resultRoll, difficulty, critic, name);
+        await DefaultActions.processAttributeRoll(actor, resultRoll, difficulty, critic, rollLabel, mode);
     }
 
     static async handleSimpleRoll(actor, inputParams) {

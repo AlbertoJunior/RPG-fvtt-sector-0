@@ -12,10 +12,10 @@ import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class ActorRollDialog {
     static #mapedPagesMethods = {
-        0: ActorRollDialog.#confirmPage1,
-        1: ActorRollDialog.#confirmPage2,
-        2: ActorRollDialog.#confirmPage3,
-        3: ActorRollDialog.#confirmPage4,
+        0: ActorRollDialog.#confirmDefaultRoll,
+        1: ActorRollDialog.#confirmVirtueRoll,
+        2: ActorRollDialog.#confirmSimplifiedRoll,
+        3: ActorRollDialog.#confirmCustomRoll,
     };
 
     static async _open(actor) {
@@ -191,7 +191,7 @@ export class ActorRollDialog {
         });
     }
 
-    static async #confirmPage1(actor, data, rollMode) {
+    static async #confirmDefaultRoll(actor, data, rollMode) {
         const inputParams = {
             attr1: data["attr1"],
             attr2: data["attr2"],
@@ -208,7 +208,7 @@ export class ActorRollDialog {
         await playerRollHandle.default(actor, inputParams);
     }
 
-    static async #confirmPage2(actor, data, rollMode) {
+    static async #confirmVirtueRoll(actor, data, rollMode) {
         const inputParams = {
             virtue1: data["virtue1"],
             virtue2: data["virtue2"],
@@ -222,7 +222,7 @@ export class ActorRollDialog {
         await playerRollHandle.virtue(actor, inputParams);
     }
 
-    static async #confirmPage3(actor, data, rollMode) {
+    static async #confirmCustomRoll(actor, data, rollMode) {
         function characteristic(value, characteristicKey) {
             const result = {
                 [characteristicKey]: value,
@@ -254,7 +254,7 @@ export class ActorRollDialog {
         await playerRollHandle.custom(actor, inputParams);
     }
 
-    static async #confirmPage4(actor, data, rollMode) {
+    static async #confirmSimplifiedRoll(actor, data, rollMode) {
         const inputParams = {
             half: Boolean(data["half"]),
             specialist: Boolean(data["specialist"]),

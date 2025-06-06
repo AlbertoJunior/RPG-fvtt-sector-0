@@ -1,4 +1,3 @@
-
 export const ActorType = Object.freeze({
     PLAYER: 'Player',
     NPC: 'NPC',
@@ -208,6 +207,10 @@ export const CharacteristicTypeMap = Object.freeze(Object.fromEntries(
 export function getActorVirtue(virtue) {
     return Object.values(CharacteristicType.VIRTUES)
         .find(item => item && item.system && item.id == virtue);
+}
+
+export function getActorEnhancementSlot(slot) {
+    return `${CharacteristicType.ENHANCEMENT.system}_${slot}`;
 }
 
 export const NpcSkillsMap = Object.freeze(

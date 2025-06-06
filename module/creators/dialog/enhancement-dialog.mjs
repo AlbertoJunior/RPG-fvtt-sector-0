@@ -4,17 +4,18 @@ import { EnhancementInfoParser } from "../../core/enhancement/enhancement-info.m
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { localize } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
-import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
-import { DefaultActions } from "../../utils/default-actions.mjs";
-import { CustomRoll } from "../../core/rolls/custom-roll.mjs";
 import { CreateFormDialog } from "./create-dialog.mjs";
 import { ChatCreator } from "../../utils/chat-creator.mjs";
 import { EnhancementMessageCreator } from "../message/enhancement-message.mjs";
 import { ActiveEffectsUtils } from "../../core/effect/active-effects.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
+import { ActorUtils } from "../../core/actor/actor-utils.mjs";
+import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
 
 export class EnhancementDialog {
     static async open(enhancementEffect, actor, onConfirm) {
+        const haveActor = actor != undefined;
+
         const enhancementFamily = EnhancementRepository.getEnhancementFamilyByEffectId(enhancementEffect.id);
         const content = await this.#mountContent(enhancementEffect, enhancementFamily);
 
@@ -25,14 +26,17 @@ export class EnhancementDialog {
             }
         };
 
-        const canActive = actor != undefined && enhancementEffect.duration !== EnhancementDuration.PASSIVE && typeof onConfirm === 'function';
+        const canActive = haveActor && typeof onConfirm === 'function';
         if (canActive) {
-            const hasActivated = actor.effects
+            const hasActivated = ActorUtils.getEffects(actor)
                 .map(effect => ActiveEffectsUtils.getOriginId(effect))
                 .includes(enhancementEffect.id);
 
+            const isUsableType = enhancementEffect.duration === EnhancementDuration.USE;
+            const useOrActiveText = isUsableType ? "Usar" : "Ativar";
+
             buttons.confirm = {
-                label: localize(hasActivated ? "Desativar" : "Ativar"),
+                label: localize(hasActivated ? "Desativar" : useOrActiveText),
                 callback: onConfirm
             }
         }
@@ -44,9 +48,12 @@ export class EnhancementDialog {
                 buttons: buttons,
                 render: (html) => {
                     DialogUtils.presetDialogRender(html);
-                    $(html)
-                        .find(`[data-action="${OnEventType.ROLL}"]`)
-                        .click((event) => this.#onRollEvent(actor, enhancementEffect, event));
+
+                    if (haveActor) {
+                        $(html)
+                            .find(`[data-action="${OnEventType.ROLL}"]`)
+                            .click((event) => this.#onRollEvent(actor, enhancementEffect, event));
+                    }
                 }
             },
             {
@@ -100,9 +107,10 @@ export class EnhancementDialog {
                         rollTest.bonus = bonus;
                         rollTest.automatic = automatic;
                         rollTest.specialist = isSpecialist;
+                        rollTest.rollMessage = rollMessage;
+                        rollTest.mode = mode;
 
-                        const resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
-                        await DefaultActions.processAttributeRoll(actor, resultRoll, difficulty, critic, rollMessage, mode);
+                        await playerRollHandle.shortcut(actor, rollTest);
                     } else {
                         const inputParams = {
                             primary: rollTest.primary_attribute,
@@ -117,10 +125,10 @@ export class EnhancementDialog {
                             automatic: automatic,
                             difficulty: difficulty,
                             critic: critic,
+                            rollMode: mode,
                         }
 
-                        const resultRoll = await CustomRoll.discoverAndRoll(actor, inputParams);
-                        await DefaultActions.processCustomRoll(actor, resultRoll, inputParams, rollMessage, mode);
+                        await playerRollHandle.custom(actor, inputParams);
                     }
                 }
             }
