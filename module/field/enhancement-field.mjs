@@ -1,4 +1,4 @@
-import { RollTestField } from "../data/roll-test-data-model.mjs";
+import { RollTestField } from "./roll-test-field.mjs";
 import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
 
 const { SchemaField, StringField, NumberField, ArrayField } = foundry.data.fields;
@@ -28,7 +28,7 @@ export class EnhancementEffectField extends SchemaField {
         this.description = description;
     }
 
-    static _toJson(id, name, level, overload, duration, requirement, effectChanges = [], possibleTests = [], description) {
+    static toJson(id, name, level, overload, duration, requirement, effectChanges = [], possibleTests = [], description) {
         const object = new EnhancementEffectField(id, name, level, overload, duration, requirement, effectChanges, possibleTests, description);
         return object.toObject(object);
     }

@@ -1,14 +1,18 @@
 import { SYSTEM_ID } from "../constants.mjs";
 
 export class DistrictRepository {
-    static items = [
-        { id: 'alfiran', label: 'Alfiran' },
-        { id: 'ameisen', label: 'Ameisen' },
-        { id: 'aranhas', label: 'Aranhas' },
-        { id: 'ptitsy', label: 'Ptitsy' },
-        { id: 'tokojirami', label: 'Tokojirami' },
-        { id: 'vyura', label: 'Vyura' },
-    ];
+
+    static TYPES = Object.freeze({
+        COLMEIA: { id: 'colmeia', label: 'Colmeia' },
+        ALFIRAN: { id: 'alfiran', label: 'Alfiran' },
+        AMEISEN: { id: 'ameisen', label: 'Ameisen' },
+        ARANHAS: { id: 'aranhas', label: 'Aranhas' },
+        PTITSY: { id: 'ptitsy', label: 'Ptitsy' },
+        TOKOJIRAMI: { id: 'tokojirami', label: 'Tokojirami' },
+        VYURA: { id: 'vyura', label: 'Vyura' },
+    });
+
+    static #items = Object.values(DistrictRepository.TYPES);
 
     static #loadedFromPack = [];
 
@@ -26,7 +30,7 @@ export class DistrictRepository {
     }
 
     static #getBaseItems() {
-        return [... this.items];
+        return [... this.#items].filter(district => district != DistrictRepository.TYPES.COLMEIA);
     }
 
     static _getItems() {

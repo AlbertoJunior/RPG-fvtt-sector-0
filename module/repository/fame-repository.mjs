@@ -1,10 +1,11 @@
 import { localize } from "../../scripts/utils/utils.mjs";
+import { CharacteristicType, BaseActorCharacteristicType } from "../enums/characteristic-enums.mjs";
 
 export class FameRepository {
     static #characteristics = [
-        { id: 'nucleo', label: 'Nucleo' },
-        { id: 'influencia', label: 'Influencia' },
-        { id: 'nivel_de_procurado', label: 'Procurado' }
+        { id: CharacteristicType.CORE.id, label: 'Nucleo' },
+        { id: BaseActorCharacteristicType.INFLUENCE.id, label: 'Influencia' },
+        { id: BaseActorCharacteristicType.BOUNTY.id, label: 'Procurado' }
     ];
 
     static _getItems() {

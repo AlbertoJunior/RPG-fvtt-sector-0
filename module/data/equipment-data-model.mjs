@@ -1,7 +1,7 @@
 import { EquipmentInfoParser } from "../core/equipment/equipment-info.mjs";
 import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
 import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
-import { RollTestField } from "./roll-test-data-model.mjs";
+import { RollTestField } from "../field/roll-test-field.mjs";
 
 const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
 

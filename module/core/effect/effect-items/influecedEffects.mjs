@@ -1,6 +1,6 @@
 import { ActiveEffectsFlags, ActiveEffectsOriginTypes, ActiveEffectsTypes } from "../../../enums/active-effects-enums.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
-import { influenceEnhancement } from "../../enhancement/influence.mjs";
+import { influenceEnhancement } from "../../enhancement/enhancement-items/influence.mjs";
 import { ActiveEffectsUtils } from "../active-effects.mjs";
 
 const addicted = ActiveEffectsUtils.createEffectData({

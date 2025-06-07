@@ -1,12 +1,12 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestField } from "../../data/roll-test-data-model.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
-import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { RollTestField } from "../../../field/roll-test-field.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
+import { ActiveEffectsUtils } from "../../effect/active-effects.mjs";
 
 const invisibilityEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '33',
         'Esconder',
         1,
@@ -26,7 +26,7 @@ const invisibilityEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '34',
         'Supressão de Ruídos',
         1,
@@ -34,7 +34,7 @@ const invisibilityEffects = [
         EnhancementDuration.SCENE,
         []
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '35',
         'Silenciar',
         1,
@@ -42,7 +42,7 @@ const invisibilityEffects = [
         EnhancementDuration.SCENE,
         []
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '36',
         'Camuflagem',
         2,
@@ -70,7 +70,7 @@ const invisibilityEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '37',
         'Fantasma',
         3,
@@ -78,7 +78,7 @@ const invisibilityEffects = [
         EnhancementDuration.SCENE,
         ['36'],
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '38',
         'Um na multidão',
         3,
@@ -86,7 +86,7 @@ const invisibilityEffects = [
         EnhancementDuration.SCENE,
         ['36']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '39',
         'Desaparecer',
         4,
@@ -94,7 +94,7 @@ const invisibilityEffects = [
         EnhancementDuration.SCENE,
         ['37', '38']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '40',
         'Incógnito',
         5,

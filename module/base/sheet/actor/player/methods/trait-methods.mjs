@@ -36,7 +36,7 @@ export const traitMethods = {
             const characteristic = getCharacteristic(traitType);
             const actorTraits = getObject(actor, characteristic) || [];
 
-            const objectTrait = ActorTraitField._toJson(trait.id, trait.name, trait.particularity);
+            const objectTrait = ActorTraitField.toJson(trait.id, trait.name, trait.particularity);
             const updatedTraits = [...actorTraits, objectTrait];
 
             TODO("Verificar se vai adicionar algum bonus");
@@ -58,7 +58,7 @@ export const traitMethods = {
         const trait = actorTraits[itemIndex];
 
         TraitDialog._openByTrait(trait, traitType, actor, async (editedTrait) => {
-            const objectTrait = ActorTraitField._toJson(editedTrait.id, editedTrait.name, editedTrait.particularity);
+            const objectTrait = ActorTraitField.toJson(editedTrait.id, editedTrait.name, editedTrait.particularity);
             const updatedTraits = [...actorTraits];
             updatedTraits[itemIndex] = objectTrait;
             await ActorUpdater.verifyAndUpdateActor(actor, characteristic, updatedTraits);

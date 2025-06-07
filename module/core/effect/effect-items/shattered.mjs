@@ -1,6 +1,6 @@
 import { ActiveEffectsFlags, ActiveEffectsOriginTypes, ActiveEffectsTypes } from "../../../enums/active-effects-enums.mjs";
 import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
-import { brutalityEnhancement } from "../../enhancement/brutality.mjs";
+import { brutalityEnhancement } from "../../enhancement/enhancement-items/brutality.mjs";
 import { ActiveEffectsUtils } from "../active-effects.mjs";
 
 const shattered1 = ActiveEffectsUtils.createEffectData({

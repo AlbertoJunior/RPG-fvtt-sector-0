@@ -3,7 +3,7 @@ import { Setor0TokenDocument } from "../core/token/setor0-token.mjs";
 import { ActorCharacteristicField, ActorEnhancementField, ActorAttributes, ActorAbilities, ActorVirtues } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../core/actor/actor-utils.mjs";
-import { RollTestField } from "./roll-test-data-model.mjs";
+import { RollTestField } from "../field/roll-test-field.mjs";
 import { NpcSkill } from "../field/npc-fields.mjs";
 import { NpcQualityRepository } from "../repository/npc-quality-repository.mjs";
 import { getObject } from "../../scripts/utils/utils.mjs";

@@ -1,11 +1,11 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestField } from "../../data/roll-test-data-model.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { RollTestField } from "../../../field/roll-test-field.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
 
 const mutationEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '41',
         'Arma Corporal',
         1,
@@ -25,7 +25,7 @@ const mutationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '42',
         'Fundir',
         1,
@@ -45,7 +45,7 @@ const mutationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '43',
         'Regeneração',
         2,
@@ -74,7 +74,7 @@ const mutationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '44',
         'Resistência à toxinas',
         2,
@@ -82,7 +82,7 @@ const mutationEffects = [
         EnhancementDuration.PASSIVE,
         ['41', '42']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '45',
         'Anatomia',
         3,
@@ -129,7 +129,7 @@ const mutationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '46',
         'Peçonhento',
         3,
@@ -149,7 +149,7 @@ const mutationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '47',
         'Incorpóreo',
         4,
@@ -157,7 +157,7 @@ const mutationEffects = [
         EnhancementDuration.PASSIVE,
         ['45', '46']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '48',
         'Simbiose',
         4,
@@ -186,7 +186,7 @@ const mutationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '49',
         'Imortalidade',
         5,

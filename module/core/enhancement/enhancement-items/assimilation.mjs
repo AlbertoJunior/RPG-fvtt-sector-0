@@ -1,13 +1,13 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestField } from "../../data/roll-test-data-model.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { RollTestField } from "../../../field/roll-test-field.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
 
 const enhancementID = '2';
 
 const assimilationEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '9',
         'Aguçar Sentidos',
         1,
@@ -18,7 +18,7 @@ const assimilationEffects = [
             { key: CharacteristicType.BONUS.ATTRIBUTES.PERCEPTION, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '10',
         'Hiper-Visão Cibernética',
         1,
@@ -47,7 +47,7 @@ const assimilationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '11',
         'Simulação',
         2,
@@ -55,7 +55,7 @@ const assimilationEffects = [
         EnhancementDuration.PASSIVE,
         ['9', '10']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '12',
         'Debug',
         3,
@@ -75,7 +75,7 @@ const assimilationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '13',
         'Proxy',
         3,
@@ -104,7 +104,7 @@ const assimilationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '14',
         'Ponto de Acesso',
         4,
@@ -133,7 +133,7 @@ const assimilationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '15',
         'Criar Gatilhos',
         4,
@@ -155,7 +155,7 @@ const assimilationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '16',
         'Onipresença',
         5,
@@ -175,7 +175,7 @@ const assimilationEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '17',
         'Dedução e Indução Mental',
         5,

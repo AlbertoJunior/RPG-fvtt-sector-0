@@ -1,11 +1,11 @@
 import { SYSTEM_ID } from "../constants.mjs";
-import { agilityEnhancement } from "../core/enhancement/agility.mjs";
-import { assimilationEnhancement } from "../core/enhancement/assimilation.mjs";
-import { brutalityEnhancement } from "../core/enhancement/brutality.mjs";
-import { hardnessEnhancement } from "../core/enhancement/hardness.mjs";
-import { influenceEnhancement } from "../core/enhancement/influence.mjs";
-import { invisibilityEnhancement } from "../core/enhancement/invisibility.mjs";
-import { mutationEnhancement } from "../core/enhancement/mutation.mjs";
+import { agilityEnhancement } from "../core/enhancement/enhancement-items/agility.mjs";
+import { assimilationEnhancement } from "../core/enhancement/enhancement-items/assimilation.mjs";
+import { brutalityEnhancement } from "../core/enhancement/enhancement-items/brutality.mjs";
+import { hardnessEnhancement } from "../core/enhancement/enhancement-items/hardness.mjs";
+import { influenceEnhancement } from "../core/enhancement/enhancement-items/influence.mjs";
+import { invisibilityEnhancement } from "../core/enhancement/enhancement-items/invisibility.mjs";
+import { mutationEnhancement } from "../core/enhancement/enhancement-items/mutation.mjs";
 
 export class EnhancementRepository {
     static #enhancements = [

@@ -1,10 +1,10 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
 
 const agilityEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '1',
         'Maestria',
         1,
@@ -15,7 +15,7 @@ const agilityEffects = [
             { key: CharacteristicType.BONUS.INITIATIVE, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '2',
         'Reflexos Rápidos',
         1,
@@ -26,7 +26,7 @@ const agilityEffects = [
             { key: CharacteristicType.BONUS.INITIATIVE, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '3',
         'Agilidade',
         2,
@@ -37,7 +37,7 @@ const agilityEffects = [
             { key: CharacteristicType.BONUS.ATTRIBUTES.DEXTERITY, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '4',
         'Disparada',
         3,
@@ -45,7 +45,7 @@ const agilityEffects = [
         EnhancementDuration.USE,
         ['3']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '5',
         'Primeira Forma Defensiva',
         3,
@@ -56,7 +56,7 @@ const agilityEffects = [
             { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '6',
         'Ataque Relâmpago',
         4,
@@ -64,7 +64,7 @@ const agilityEffects = [
         EnhancementDuration.USE,
         ['4', '5']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '7',
         'Segunda Forma Defensiva',
         4,
@@ -75,7 +75,7 @@ const agilityEffects = [
             { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '8',
         'Fração de Segundo',
         5,
