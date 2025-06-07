@@ -46,7 +46,7 @@ export class SuperEquipmentEffectsDialog {
                     const trait = this.#findTrait(listTraits, selectedTrait);
 
                     if (!trait) {
-                        NotificationsUtils._error('Erro ao selecionar Traço');
+                        NotificationsUtils.error('Erro ao selecionar Traço');
                         return;
                     }
 
@@ -54,7 +54,7 @@ export class SuperEquipmentEffectsDialog {
                     const hasParticularity = particularity?.trim().length > 0;
 
                     if (requireParticularity && !hasParticularity) {
-                        NotificationsUtils._error('Esse Traço precisa do campo Particularidade preenchido');
+                        NotificationsUtils.error('Esse Traço precisa do campo Particularidade preenchido');
                         return;
                     }
 

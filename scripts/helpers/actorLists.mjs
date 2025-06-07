@@ -2,11 +2,11 @@ import { ActorEquipmentUtils } from "../../module/core/actor/actor-equipment.mjs
 import { ActorUtils } from "../../module/core/actor/actor-utils.mjs";
 
 const map = {
-    'equipment-filtered': (actor) => {
-        const type = actor.sheet.filterBag || 0;
+    'equipment_filtered': (actor) => {
+        const type = actor?.sheet?.filterBag || 0;
         return ActorEquipmentUtils.getFilteredUnequippedEquipment(actor, type);
     },
-    'equipment-equipped': (actor) => {
+    'equipment_equipped': (actor) => {
         return ActorEquipmentUtils.getEquippedItems(actor);
     },
     'allies': (actor) => {

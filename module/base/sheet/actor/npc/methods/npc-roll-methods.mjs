@@ -1,14 +1,14 @@
-import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
-import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
-import { NpcConversor } from "../../../../core/npc/npc-conversor.mjs";
-import { RollSimplified } from "../../../../core/rolls/simplified-roll.mjs";
-import { CreateFormDialog } from "../../../../creators/dialog/create-dialog.mjs";
-import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { CharacteristicType, NpcCharacteristicType } from "../../../../enums/characteristic-enums.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { NpcQualityRepository } from "../../../../repository/npc-quality-repository.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
+import { getObject, localize } from "../../../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../../../core/actor/actor-equipment.mjs";
+import { ActorUtils } from "../../../../../core/actor/actor-utils.mjs";
+import { NpcConversor } from "../../../../../core/npc/npc-conversor.mjs";
+import { RollSimplified } from "../../../../../core/rolls/simplified-roll.mjs";
+import { CreateFormDialog } from "../../../../../creators/dialog/create-dialog.mjs";
+import { NotificationsUtils } from "../../../../../creators/message/notifications.mjs";
+import { CharacteristicType, NpcCharacteristicType } from "../../../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { NpcQualityRepository } from "../../../../../repository/npc-quality-repository.mjs";
+import { DefaultActions } from "../../../../../utils/default-actions.mjs";
 
 export const npcRollHandle = {
     [OnEventType.ROLL]: async (actor, event) => NpcRollMethods.handleRoll(actor, event),
@@ -100,7 +100,7 @@ class NpcRollMethods {
 
     static async rollByEquipment(actor, rollEquipmentInformations, half) {
         if (!rollEquipmentInformations) {
-            NotificationsUtils._warning("É preciso definir um teste padrão para o item");
+            NotificationsUtils.warning("É preciso definir um teste padrão para o item");
             return;
         }
 
@@ -109,7 +109,7 @@ class NpcRollMethods {
 
         const matchedSkill = skills.find(skill => getObject(actor, skill.SKILL_NAME) === ability);
         if (!matchedSkill) {
-            NotificationsUtils._warning("O teste desse item não utiliza nenhuma Habilidade conhecida pelo Personagem");
+            NotificationsUtils.warning("O teste desse item não utiliza nenhuma Habilidade conhecida pelo Personagem");
             return;
         }
 

@@ -47,7 +47,7 @@ export const menuHandleMethods = {
                     return;
                 }
 
-                NotificationsUtils._error("Erro ao exibir arte do Token");
+                NotificationsUtils.error("Erro ao exibir arte do Token");
                 return;
             }
         }

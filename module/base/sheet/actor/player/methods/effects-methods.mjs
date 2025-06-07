@@ -1,8 +1,8 @@
-import { TODO } from "../../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
-import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
+import { TODO } from "../../../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../../../core/actor/actor-equipment.mjs";
+import { ActiveEffectsUtils } from "../../../../../core/effect/active-effects.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { HtmlJsUtils } from "../../../../../utils/html-js-utils.mjs";
 
 export const effectsHandleEvents = {
     [OnEventType.CHECK]: async (actor, event) => EffectsHandleEvents.handleCheck(actor, event),

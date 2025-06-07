@@ -4,7 +4,7 @@
             <h3> {{localize 'S0.Equipados'}} </h3>
             <hr>
             <ul id="equipped-{{actor.id}}" class="S0-container-2-column S0-drop-container" style="row-gap: 6px; grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));">
-                {{#each (actorLists actor 'equipment-equipped') as |item|}}
+                {{#each (actorLists actor 'equipment_equipped') as |item|}}
                 <li class="S0-item-bag-compact">{{> equipamentEquippedItem item }}</li>
                 {{/each}}
             </ul>
@@ -14,7 +14,7 @@
             <h3> {{localize 'S0.Mochila'}} </h3>
             <hr>
             <ul id="bag-{{actor.id}}" class="S0-container-2-column S0-drop-container" style="row-gap: 6px; grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));">
-                {{#each (actorLists actor 'equipment-filtered') as |item|}}
+                {{#each (actorLists actor 'equipment_filtered') as |item|}}
                 <li class="S0-item-bag-compact">{{> equipamentBagItem item }}</li>
                 {{/each}}
             </ul>

@@ -92,7 +92,7 @@ export class ActorEnhancementField extends SchemaField {
         this.name = name;
     }
 
-    static _toJson(id, name) {
+    static toJson(id, name) {
         const object = new ActorEnhancementField(id, name);
         return object.toObject(object);
     }

@@ -1,7 +1,7 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
-import { Setor0BaseActorSheet } from "../../base/sheet/BaseActorSheet.mjs";
-import { npcRollHandle } from "../../base/sheet/npc/methods/npc-roll-methods.mjs";
-import { NpcSheetSize } from "../../base/sheet/npc/npc-sheet.mjs";
+import { Setor0BaseActorSheet } from "../../base/sheet/actor/BaseActorSheet.mjs";
+import { npcRollHandle } from "../../base/sheet/actor/npc/methods/npc-roll-methods.mjs";
+import { NpcSheetSize } from "../../base/sheet/actor/npc/npc-sheet.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 import { SystemFlags } from "../../enums/flags-enums.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";

@@ -1,16 +1,16 @@
-import { selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
-import { SYSTEM_ID, TEMPLATES_PATH } from "../../../constants.mjs";
-import { BaseActorCharacteristicType } from "../../../enums/characteristic-enums.mjs";
-import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
-import { DialogUtils } from "../../../utils/dialog-utils.mjs";
-import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
-import { menuHandleMethods } from "../../menu-default-methods.mjs";
-import { ActorUpdater } from "../../updater/actor-updater.mjs";
-import { SheetActorDragabbleMethods } from "../actor/methods/dragabble-methods.mjs";
-import { handlerEquipmentEvents } from "../actor/methods/equipment-methods.mjs";
-import { handleStatusMethods } from "../actor/methods/status-methods.mjs";
 import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
+import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
+import { SYSTEM_ID, TEMPLATES_PATH } from "../../../../constants.mjs";
+import { BaseActorCharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../../enums/on-event-type.mjs";
+import { DialogUtils } from "../../../../utils/dialog-utils.mjs";
+import { loadAndRegisterTemplates } from "../../../../utils/templates.mjs";
+import { menuHandleMethods } from "../../../menu-default-methods.mjs";
+import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { handlerEquipmentEvents } from "../player/methods/equipment-methods.mjs";
 import { npcRollHandle } from "./methods/npc-roll-methods.mjs";
+import { SheetActorDragabbleMethods } from "../player/methods/dragabble-methods.mjs";
+import { handleStatusMethods } from "../player/methods/status-methods.mjs";
 
 export async function npcTemplatesRegister() {
     const templates = [
@@ -53,7 +53,7 @@ class Setor0NpcSheet extends Setor0BaseActorSheet {
                         case 'vigor':
                             selectCharacteristic(event.currentTarget);
                             const level = event.currentTarget.parentElement.querySelectorAll('.S0-selected').length;
-                            ActorUpdater._verifyAndUpdateActor(actor, BaseActorCharacteristicType.VITALITY.TOTAL, level + 5);
+                            ActorUpdater.verifyAndUpdateActor(actor, BaseActorCharacteristicType.VITALITY.TOTAL, level + 5);
                             break;
                         case 'influencia':
                             this.#updateCharacteristic(actor, BaseActorCharacteristicType.INFLUENCE, event.currentTarget);
@@ -118,6 +118,6 @@ class Setor0NpcSheet extends Setor0BaseActorSheet {
     #updateCharacteristic(actor, characteristic, target) {
         selectCharacteristic(target);
         const level = target.parentElement.querySelectorAll('.S0-selected').length;
-        ActorUpdater._verifyAndUpdateActor(actor, characteristic, level);
+        ActorUpdater.verifyAndUpdateActor(actor, characteristic, level);
     }
 }

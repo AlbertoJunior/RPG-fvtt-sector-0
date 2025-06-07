@@ -41,7 +41,7 @@ class EquipmentSheetCharacteristicsHandle {
                     const selectedEffect = SubstanceEffectRepository.getItem(data.selectedEffect);
 
                     if (actualList.some(item => item.id == selectedEffect.id)) {
-                        NotificationsUtils._error(localize('Itens.Mensagens.Nao_Pode_Efeitos_Iguais'));
+                        NotificationsUtils.error(localize('Itens.Mensagens.Nao_Pode_Efeitos_Iguais'));
                         return;
                     }
 

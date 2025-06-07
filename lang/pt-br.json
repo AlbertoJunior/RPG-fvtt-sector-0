@@ -115,9 +115,7 @@
         "Influencia": "Influência",
         "Nucleo": "Núcleo",
         "Sobrecarga": "Sobrecarga",
-        "Aprimoramento": "Aprimoramento",
         "Aprimoramentos": "Aprimoramentos",
-        "Afetado_Aprimoramento": "Afetado por Aprimoramento",
         "Reiniciar_Efeitos_Passivos": "Reiniciar Efeitos Passivos",
         "Remover_Efeito": "Remover Efeito",
         "Remover_Todos_Efeitos": "Remover todos os Efeitos",
@@ -328,6 +326,16 @@
             "Realizar_Acao": "Tem certeza que deseja realizar essa ação?",
             "Ocultar": "Ocultar?",
             "Ocultar_Acao": "Deseja ocultar esta ação?"
+        },
+
+        "Aprimoramento": {
+            "Nome": "Aprimoramento",
+            "Nome_Plural": "Aprimoramentos",
+            "Afetado_Aprimoramento": "Afetado por Aprimoramento",
+            "Mensagens": {
+                "Ja_Possui_Aprimoramento": "O Personagem já possui esse Aprimoramento: <u>{aprimoramento}</u>",
+                "Ja_Possui_Efeito": "O Personagem já possui esse Efeito: <u>{efeito}</u>"
+            }
         }
     },
     "TYPES": {

@@ -1,14 +1,12 @@
-import { getObject, localize, onArrayRemove } from "../../../../../scripts/utils/utils.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
-import { CreateFormDialog } from "../../../../creators/dialog/create-dialog.mjs";
-import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
-import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { ActorCombatUtils } from "../../../../core/actor/actor-combat-utils.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
-import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { getObject, localize, onArrayRemove } from "../../../../../../scripts/utils/utils.mjs";
+import { CreateFormDialog } from "../../../../../creators/dialog/create-dialog.mjs";
+import { CreateRollableTestDialog } from "../../../../../creators/dialog/create-roll-test-dialog.mjs";
+import { NotificationsUtils } from "../../../../../creators/message/notifications.mjs";
+import { CharacteristicType } from "../../../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { ActorCombatUtils } from "../../../../../core/actor/actor-combat-utils.mjs";
+import { HtmlJsUtils } from "../../../../../utils/html-js-utils.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
 import { playerRollHandle } from "./player-roll-methods.mjs";
 
 export const handlerShortcutEvents = {
@@ -56,14 +54,14 @@ class ShortcutHandleEvents {
     static async handleAdd(actor, event) {
         const onConfirm = async (rollable) => {
             if (!rollable.name) {
-                NotificationsUtils._error("O Teste precisa de um nome");
+                NotificationsUtils.error("O Teste precisa de um nome");
                 return;
             }
 
             const current = getObject(actor, CharacteristicType.SHORTCUTS) || [];
             current.push(rollable);
 
-            await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
+            await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
         };
 
         CreateRollableTestDialog._open(null, onConfirm);
@@ -75,7 +73,7 @@ class ShortcutHandleEvents {
 
         const onConfirm = async (rollable) => {
             if (!rollable.name) {
-                NotificationsUtils._error("O Teste precisa de um nome");
+                NotificationsUtils.error("O Teste precisa de um nome");
                 return;
             }
 
@@ -83,13 +81,13 @@ class ShortcutHandleEvents {
             const index = shortcuts.indexOf(selectedTest);
             if (index >= 0) {
                 shortcuts[index] = rollable;
-                await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
+                await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
             }
         };
         const onDelete = async (rollable) => {
             const shortcuts = getObject(actor, CharacteristicType.SHORTCUTS) || [];
             onArrayRemove(shortcuts, rollable);
-            await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
+            await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
         };
 
         CreateRollableTestDialog._open(selectedTest, onConfirm, onDelete, true);
@@ -133,13 +131,13 @@ class ShortcutHandleEvents {
 
                     const presetMap = isOffensive ? this.#presetsCombatOffensiveShortcuts : this.#presetsCombatDefensiveShortcuts;
                     if (!presetMap) {
-                        NotificationsUtils._error('Tipo inválido');
+                        NotificationsUtils.error('Tipo inválido');
                         return;
                     }
 
                     const key = Object.keys(presetMap).find(presetKey => type.includes(presetKey));
                     if (!key) {
-                        NotificationsUtils._error('Tipo inválido');
+                        NotificationsUtils.error('Tipo inválido');
                         return;
                     }
 

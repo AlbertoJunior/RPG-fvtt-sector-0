@@ -6,8 +6,8 @@ import { ActorType } from "../../../../enums/characteristic-enums.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs"
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
-import { playerRollHandle } from "../../actor/methods/player-roll-methods.mjs";
-import { npcRollHandle } from "../../npc/methods/npc-roll-methods.mjs";
+import { playerRollHandle } from "../../actor/player/methods/player-roll-methods.mjs";
+import { npcRollHandle } from "../../actor/npc/methods/npc-roll-methods.mjs";
 
 export const handlerEquipmentItemRollEvents = {
     [OnEventType.ADD]: async (item, event) => EquipmentSheetItemRollHandle.add(item, event),
@@ -27,7 +27,7 @@ class EquipmentSheetItemRollHandle {
     static async add(item, event) {
         const rollTest = this.#getItemRollTest(item, this.#getItemRollTestId(event));
         if (!rollTest) {
-            NotificationsUtils._error("Erro ao carregar o teste");
+            NotificationsUtils.error("Erro ao carregar o teste");
             return;
         }
         RollTestUtils.createMacroByRollTestData(rollTest, { parentName: item.name, img: item.img });

@@ -1,7 +1,7 @@
 import { logTable } from "../../scripts/utils/utils.mjs";
-import { actorTemplatesRegister } from "../base/sheet/actor/actor-sheet.mjs";
+import { actorTemplatesRegister } from "../base/sheet/actor/player/actor-sheet.mjs";
 import { equipmentTemplatesRegister } from "../base/sheet/equipment/equipment-sheet.mjs";
-import { npcTemplatesRegister } from "../base/sheet/npc/npc-sheet.mjs";
+import { npcTemplatesRegister } from "../base/sheet/actor/npc/npc-sheet.mjs";
 import { REGISTERED_TEMPLATES, TEMPLATES_PATH } from "../constants.mjs";
 
 export async function registerTemplates() {

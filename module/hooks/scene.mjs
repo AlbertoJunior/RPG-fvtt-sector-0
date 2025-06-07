@@ -33,7 +33,7 @@ export class SceneHookHandle {
                             .forEach(sheet => {
                                 sheet.render();
                             });
-                        NotificationsUtils._info(`Tema ${actualMode ? "Claro" : "Escuro"} ativado.`);
+                        NotificationsUtils.info(`Tema ${actualMode ? "Claro" : "Escuro"} ativado.`);
                     }
                 },
                 {
@@ -48,7 +48,7 @@ export class SceneHookHandle {
                             .forEach(sheet => {
                                 sheet.render();
                             });
-                        NotificationsUtils._info(`Modo ${actualMode ? "Expandido" : "Compacto"} ativado.`);
+                        NotificationsUtils.info(`Modo ${actualMode ? "Expandido" : "Compacto"} ativado.`);
                     }
                 }
             ]

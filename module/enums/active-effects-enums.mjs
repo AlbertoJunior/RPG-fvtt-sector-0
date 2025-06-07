@@ -11,10 +11,10 @@ export const ActiveEffectsOriginTypes = Object.freeze({
 export function activeEffectOriginTypeLabel(type) {
     const map = {
         [ActiveEffectsOriginTypes.ITEM]: localize('Item'),
-        [ActiveEffectsOriginTypes.ENHANCEMENT]: localize('Aprimoramento'),
+        [ActiveEffectsOriginTypes.ENHANCEMENT]: localize('Aprimoramento.Nome'),
         [ActiveEffectsOriginTypes.TRAIT]: localize('Traco'),
         [ActiveEffectsOriginTypes.OTHER]: localize('Outro'),
-        [ActiveEffectsOriginTypes.AFFECTED_ENHANCEMENT]: localize('Afetado_Aprimoramento'),
+        [ActiveEffectsOriginTypes.AFFECTED_ENHANCEMENT]: localize('Aprimoramento.Afetado_Aprimoramento'),
     }
 
     return map[type] || `<${localize('Erro')}>`;

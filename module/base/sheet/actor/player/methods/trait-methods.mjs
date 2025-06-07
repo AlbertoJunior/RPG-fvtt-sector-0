@@ -1,12 +1,12 @@
-import { ChatCreator } from "../../../../utils/chat-creator.mjs";
-import { TraitDialog } from "../../../../creators/dialog/trait-dialog.mjs";
-import { TraitRepository } from "../../../../repository/trait-repository.mjs";
-import { ActorTraitField } from "../../../../field/actor-trait-field.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { TraitMessageCreator } from "../../../../creators/message/trait-message.mjs";
-import { getObject, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { ChatCreator } from "../../../../../utils/chat-creator.mjs";
+import { TraitDialog } from "../../../../../creators/dialog/trait-dialog.mjs";
+import { TraitRepository } from "../../../../../repository/trait-repository.mjs";
+import { ActorTraitField } from "../../../../../field/actor-trait-field.mjs";
+import { CharacteristicType } from "../../../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { TraitMessageCreator } from "../../../../../creators/message/trait-message.mjs";
+import { getObject, TODO } from "../../../../../../scripts/utils/utils.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
 
 function getCharacteristic(type) {
     return type == 'good' ? CharacteristicType.TRAIT.GOOD : CharacteristicType.TRAIT.BAD;
@@ -41,7 +41,7 @@ export const traitMethods = {
 
             TODO("Verificar se vai adicionar algum bonus");
 
-            await ActorUpdater._verifyAndUpdateActor(actor, characteristic, updatedTraits);
+            await ActorUpdater.verifyAndUpdateActor(actor, characteristic, updatedTraits);
         });
     },
     [OnEventType.EDIT]: async (actor, event) => {
@@ -61,7 +61,7 @@ export const traitMethods = {
             const objectTrait = ActorTraitField._toJson(editedTrait.id, editedTrait.name, editedTrait.particularity);
             const updatedTraits = [...actorTraits];
             updatedTraits[itemIndex] = objectTrait;
-            await ActorUpdater._verifyAndUpdateActor(actor, characteristic, updatedTraits);
+            await ActorUpdater.verifyAndUpdateActor(actor, characteristic, updatedTraits);
         });
     },
     [OnEventType.REMOVE]: async (actor, event) => {
@@ -80,7 +80,7 @@ export const traitMethods = {
 
         TODO("Verificar se vai remover algum bonus");
 
-        await ActorUpdater._verifyAndUpdateActor(actor, characteristic, updatedTraits);
+        await ActorUpdater.verifyAndUpdateActor(actor, characteristic, updatedTraits);
     },
     [OnEventType.CHAT]: async (actor, event) => {
         const traitType = getTraitType(event);

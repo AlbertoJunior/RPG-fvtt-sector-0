@@ -15,7 +15,7 @@ class EquipmentSheetMenuRollHandle {
     static add(item, event) {
         const onConfirm = async (rollable) => {
             if (!rollable.name) {
-                NotificationsUtils._error("O Teste precisa de um nome");
+                NotificationsUtils.error("O Teste precisa de um nome");
                 return;
             }
 

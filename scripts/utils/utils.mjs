@@ -69,6 +69,10 @@ export function localize(key) {
     return game.i18n.localize(`S0.${key}`);
 }
 
+export function localizeFormat(key, data, prefix = 'S0') {
+    return game.i18n.format(`${prefix}.${key}`, data);
+}
+
 export function labelError() {
     return `<${localize('Erro')}>`;
 }
@@ -89,7 +93,7 @@ export function localizeType(key) {
 export function TODO(message, notify) {
     console.warn(`-> ${message}`);
     if (notify) {
-        NotificationsUtils._info(message);
+        NotificationsUtils.info(message);
     }
 }
 

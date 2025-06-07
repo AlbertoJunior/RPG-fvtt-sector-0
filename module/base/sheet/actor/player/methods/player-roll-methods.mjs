@@ -1,9 +1,9 @@
-import { localize } from "../../../../../scripts/utils/utils.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
-import { CustomRoll } from "../../../../core/rolls/custom-roll.mjs";
-import { RollSimplified } from "../../../../core/rolls/simplified-roll.mjs";
-import { RollVirtue } from "../../../../core/rolls/virtue-roll.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
+import { localize } from "../../../../../../scripts/utils/utils.mjs";
+import { RollAttribute } from "../../../../../core/rolls/attribute-roll.mjs";
+import { CustomRoll } from "../../../../../core/rolls/custom-roll.mjs";
+import { RollSimplified } from "../../../../../core/rolls/simplified-roll.mjs";
+import { RollVirtue } from "../../../../../core/rolls/virtue-roll.mjs";
+import { DefaultActions } from "../../../../../utils/default-actions.mjs";
 
 export const playerRollHandle = {
     default: async (actor, inputParams) => PlayerRollMethods.handleDefaultRoll(actor, inputParams),

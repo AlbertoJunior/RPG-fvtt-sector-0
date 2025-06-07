@@ -7,7 +7,7 @@ import { OnEventType } from "../../enums/on-event-type.mjs";
 import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
-import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
+import { playerRollHandle } from "../../base/sheet/actor/player/methods/player-roll-methods.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class ActorRollDialog {
@@ -123,7 +123,7 @@ export class ActorRollDialog {
         );
         allCharacteristicOptionsGroup.push(
             {
-                group_label: localize('Aprimoramentos'),
+                group_label: localize('Aprimoramento.Nome_Plural'),
                 group_items: enhancementOptions,
             }
         );
