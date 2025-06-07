@@ -1,8 +1,9 @@
-import { CharacteristicType } from "../enums/characteristic-enums.mjs";
+import { SYSTEM_ID } from "../constants.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../enums/characteristic-enums.mjs";
 import { EffectChangeValueType } from "../enums/enhancement-enums.mjs";
 
 export class TraitRepository {
-    static goodTrait = [
+    static #goodTrait = [
         {
             id: '1',
             name: 'Atraente',
@@ -79,6 +80,12 @@ export class TraitRepository {
             xp: 6,
             description: 'Por ser um visionário em situações tensas, durante o combate você consegue comandar estratégias, expor pontos fracos, orquestrar táticas de ataque e defesa, entre outros. Já fora dessa situação, você consegue motivar seus aliados a fazerem coisas grandiosas mesmo quando parece impossível.<br>Quando utilizar os benefícios de <i>Inspirador</i> ou <i>Estrategista</i>, o personagem aumenta em +1 o limite de 3 dados para o efeito <i>Inspirado</i> , além de poder distribuir os dados entre os aliados que o escutaram da maneira que desejar.',
             requirement: 'Estrategista ou Inspirador'
+        },
+        {
+            id: '80',
+            name: 'Engenharia Veloz',
+            xp: 6,
+            description: 'Engenheiros extremamente habilidosos conseguem fabricar SuperEquipamentos em tempo recorde, seja pelo fato de já conhecerem todo o passo-a-passo do objeto a ser construído, ou por terem uma epifania durante o processo. Para construir qualquer SuperEquipamento considere que o tempo entre os testes de fabricação são reduzidos pela metade.'
         },
         {
             id: '13',
@@ -180,7 +187,7 @@ export class TraitRepository {
             xp: 12,
             description: 'Para a sua estatura, você possui muito mais músculos e/ou gordura que a maioria dos outros seres. Essa quantia anormal de massa lhe deixa extremamente evidente em locais públicos, porém lhe confere dois níveis a mais de Vitalidade e também +2 dados em testes de Força para carregar, empurrar, puxar e segurar coisas ou seres.',
             effects: [
-                { key: CharacteristicType.VITALITY.TOTAL, value: 2, typeOfValue: EffectChangeValueType.FIXED },
+                { key: BaseActorCharacteristicType.VITALITY.TOTAL, value: 2, typeOfValue: EffectChangeValueType.FIXED },
             ]
         },
         {
@@ -191,7 +198,7 @@ export class TraitRepository {
         },
     ];
 
-    static badTrait = [
+    static #badTrait = [
         {
             id: '30',
             name: 'Vale da Estranheza',
@@ -520,14 +527,14 @@ export class TraitRepository {
             effects: [
                 { key: CharacteristicType.OVERLOAD, value: -1, typeOfValue: EffectChangeValueType.FIXED },
             ]
-        },
+        }
     ];
 
     static #loadedGoodFromPack = [];
     static #loadedBadFromPack = [];
 
     static async _loadFromPack() {
-        const compendium = (await game.packs.get('setor0OSubmundo.traits')?.getDocuments());
+        const compendium = (await game.packs.get(`${SYSTEM_ID}.traits`)?.getDocuments());
         if (compendium) {
             const allTraits = compendium.map((item) => {
                 const convertedItem = {
@@ -554,11 +561,17 @@ export class TraitRepository {
     }
 
     static _getGoodTraits() {
-        return [... this.goodTrait, ... this.#loadedGoodFromPack];
+        return [
+            ...TraitRepository.#goodTrait,
+            ...TraitRepository.#loadedGoodFromPack
+        ];
     }
 
     static _getBadTraits() {
-        return [... this.badTrait, ... this.#loadedBadFromPack];
+        return [
+            ...TraitRepository.#badTrait,
+            ...TraitRepository.#loadedBadFromPack
+        ];
     }
 
     static _getItemsByType(type) {

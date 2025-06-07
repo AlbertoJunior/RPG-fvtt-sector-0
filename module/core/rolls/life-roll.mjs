@@ -6,7 +6,7 @@ export class RollLife {
     static async roll(actor, amountOverloadTest = 1) {
         const life = getObject(actor, CharacteristicType.LIFE);
         const resultRoll = await CoreRollMethods.rollDice(1);
-        const success = this.calculateSuccess(resultRoll.values, life);
+        const success = this.#calculateSuccess(resultRoll.values, life);
         return {
             life: life,
             roll: resultRoll.roll,
@@ -16,7 +16,7 @@ export class RollLife {
         }
     }
 
-    static calculateSuccess(values, difficulty) {
+    static #calculateSuccess(values, difficulty) {
         let result = 0;
         for (const element of values) {
             if (element <= difficulty) {

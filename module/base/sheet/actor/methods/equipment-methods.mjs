@@ -1,6 +1,7 @@
 import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
+import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
+import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
 import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
 import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
 import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog.mjs";
@@ -8,9 +9,9 @@ import { NotificationsUtils } from "../../../../creators/message/notifications.m
 import { EquipmentCharacteristicType, EquipmentType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs";
 import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
+import { playerRollHandle } from "./player-roll-methods.mjs";
 
 export const handlerEquipmentEvents = {
     [OnEventType.ADD]: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),
@@ -59,17 +60,32 @@ class EquipmentHandleEvents {
 
     static #handleCheckBag(actor, target) {
         const equipmentId = target.dataset.itemId;
-        const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (!equipment) {
             return;
         }
 
+        switch (target.dataset.type.toLowerCase()) {
+            case 'substance': {
+                this.#useSubstance(actor, equipment);
+                return;
+            }
+        }
+    }
+
+    static #useSubstance(actor, equipment) {
         ConfirmationDialog.open({
-            message: localize('Pergunta_Usar_Item'),
+            titleDialog: `Usar: ${equipment.name}`,
+            message: localize('Itens.Pergunta.Usar_Item'),
             onConfirm: () => {
                 const actualValue = getObject(equipment, EquipmentCharacteristicType.QUANTITY);
                 const newValue = Math.max(0, actualValue - 1);
                 EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.QUANTITY, newValue);
+
+                const effects = EquipmentUtils.getSubstanceActiveEffects(equipment);
+                if (effects.length > 0) {
+                    ActiveEffectsUtils.addActorEffect(actor, effects);
+                }
             }
         });
     }
@@ -90,14 +106,14 @@ class EquipmentHandleEvents {
     }
 
     static async #lockUnlockBagItems(actor, isUnlock) {
-        const equipments = ActorEquipmentUtils.getActorEquipments(actor);
+        const equipments = ActorEquipmentUtils.getEquipments(actor);
         equipments.forEach(async (equipment) => {
             EquipmentUpdater.updateEquipmentFlags(equipment, 'editable', isUnlock);
         });
     }
 
     static async #lockUnlockEquippedItems(actor, isUnlock) {
-        const equipments = ActorEquipmentUtils.getActorEquippedItems(actor);
+        const equipments = ActorEquipmentUtils.getEquippedItems(actor);
         equipments.forEach(async (equipment) => {
             EquipmentUpdater.updateEquipmentFlags(equipment, 'editable', isUnlock);
         });
@@ -110,15 +126,14 @@ class EquipmentHandleEvents {
 
         switch (subCharacteristic) {
             case 'bag': {
-                this.#handleEditBag(actor, target);
+                this.#handleEditSubstanceQuantity(actor, target.dataset.itemId);
                 return;
             }
         }
     }
 
-    static #handleEditBag(actor, target) {
-        const equipmentId = target.dataset.itemId;
-        const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+    static #handleEditSubstanceQuantity(actor, equipmentId) {
+        const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (!equipment) {
             return;
         }
@@ -156,7 +171,7 @@ class EquipmentHandleEvents {
             }
             case 'bag': {
                 const equipmentId = dataset.itemId;
-                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+                const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
                 if (equipment) {
                     await ActorEquipmentUtils.equip(actor, equipment);
                 }
@@ -181,7 +196,7 @@ class EquipmentHandleEvents {
                 return;
             }
             case 'equipped': {
-                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+                const equipment = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
                 if (equipment) {
                     await ActorEquipmentUtils.unequip(actor, equipment);
                 }
@@ -194,15 +209,15 @@ class EquipmentHandleEvents {
         switch (type) {
             case 'bag': {
                 const params = {
-                    message: "Essa ação irá remover todos os itens da mochila",
-                    onConfirm: () => ActorUpdater.removeDocuments(actor, ActorEquipmentUtils.getActorEquipments(actor).map(item => item.id))
+                    message: localize('Itens.Mensagens.Aviso_Remocao_Itens_Mochila'),
+                    onConfirm: () => ActorUpdater.removeDocuments(actor, ActorEquipmentUtils.getEquipments(actor).map(item => item.id))
                 }
                 ConfirmationDialog.open(params);
                 return;
             }
             case 'equipped': {
                 const params = {
-                    message: "Essa ação irá desequipar todos os itens equipados",
+                    message: localize('Itens.Mensagens.Aviso_Desequipar_Itens'),
                     onConfirm: () => this.#unequipAllItems(actor)
                 }
                 ConfirmationDialog.open(params);
@@ -212,26 +227,25 @@ class EquipmentHandleEvents {
     }
 
     static async #unequipAllItems(actor) {
-        const equipmentsUnequipPromises = ActorEquipmentUtils.getActorEquippedItems(actor)
-            .map(async equipment => await ActorEquipmentUtils.unequip(actor, equipment));
+        const equipmentsUnequipPromises = ActorEquipmentUtils.getEquippedItems(actor).map(equipment => ActorEquipmentUtils.unequip(actor, equipment));
         await Promise.all(equipmentsUnequipPromises);
     }
 
     static async handleView(actor, event) {
         const equipmentId = event.currentTarget.dataset.itemId;
-        const item = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const item = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (item) {
             item.sheet.render(true, { editable: false });
         }
     }
 
     static async handleChat(actor, event) {
-        TODO('implementar o chat');
+        TODO('implementar');
     }
 
     static async handleRoll(actor, event) {
         const equipmentId = event.currentTarget.dataset.itemId;
-        const item = ActorEquipmentUtils.getActorEquipmentById(actor, equipmentId);
+        const item = ActorEquipmentUtils.getEquipmentById(actor, equipmentId);
         if (!item) {
             return;
         }
@@ -242,18 +256,11 @@ class EquipmentHandleEvents {
             return;
         }
 
-        const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS).find(test => test.id == defaultTestId);
+        const rollTest = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS)?.find(test => test.id == defaultTestId);
         if (!rollTest) {
             return;
         }
 
-        let resultRoll;
-        if (item.system.isWeapon) {
-            resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(actor, rollTest, item);
-        } else {
-            resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
-        }
-
-        DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.name);
+        await playerRollHandle.rollableItem(actor, rollTest, item);
     }
 }

@@ -3,6 +3,7 @@ import { ChatCreator } from "../../utils/chat-creator.mjs";
 import { localize } from "../../../scripts/utils/utils.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { TraitMessageCreator } from "../message/trait-message.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class TraitDialog {
   static async _open(type, callback) {
@@ -96,7 +97,7 @@ export class TraitDialog {
       description: selectedTrait?.description
     };
 
-    return await renderTemplate("systems/setor0OSubmundo/templates/traits/trait-dialog.hbs", data);
+    return await renderTemplate(`${TEMPLATES_PATH}/traits/trait-dialog.hbs`, data);
   }
 
   static #mapOptions(traits, selectedTrait) {

@@ -1,10 +1,10 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
 
-export function _createEmptyOption() {
-    return _createOption('', '');
+export function createEmptyOption() {
+    return createOption('', '');
 }
 
-export function _createOption(value, textContent, data) {
+export function createOption(value, textContent, data) {
     const option = document.createElement('option');
     option.value = value;
     option.textContent = textContent;
@@ -16,26 +16,26 @@ export function _createOption(value, textContent, data) {
     return option;
 }
 
-export function _createOptionGroup(label) {
+export function createOptionGroup(label) {
     const optGroup = document.createElement('optgroup');
     optGroup.label = label;
     return optGroup;
 }
 
-export function _createOptionsAndSetOnSelects(selects = [], options = []) {
+export function createOptionsAndSetOnSelects(selects = [], options = []) {
     selects.forEach(select => {
         select.innerHTML = '';
-        select.appendChild(_createEmptyOption());
+        select.appendChild(createEmptyOption());
 
         const groups = new Map();
 
         options.forEach(({ id, name, level }) => {
             if (!groups.has(level)) {
-                groups.set(level, _createOptionGroup(`${localize('Nivel')}: ${level}`));
+                groups.set(level, createOptionGroup(`${localize('Nivel')}: ${level}`));
             }
 
             const group = groups.get(level);
-            group.appendChild(_createOption(id, name));
+            group.appendChild(createOption(id, name));
         });
 
         [...groups.entries()]
@@ -44,12 +44,12 @@ export function _createOptionsAndSetOnSelects(selects = [], options = []) {
     });
 }
 
-export function _createLi(textContent, options = {}) {
+export function createLi(textContent, options = {}) {
     const li = document.createElement("li");
     li.classList = options?.classList || '';
 
     if (options.icon) {
-        const icon = _createIcon(options.icon);
+        const icon = createIcon(options.icon);
         if (icon) {
             li.appendChild(icon);
         }
@@ -66,7 +66,7 @@ export function _createLi(textContent, options = {}) {
     return li;
 }
 
-export function _createIcon(options = {}) {
+export function createIcon(options = {}) {
     const iconClass = options.class;
     if (!iconClass) {
         return;
@@ -83,7 +83,7 @@ export function _createIcon(options = {}) {
     return i;
 }
 
-export function _createA(textContent, options = {}) {
+export function createA(textContent, options = {}) {
     const element = document.createElement('a');
 
     if (options.class) {
@@ -91,7 +91,7 @@ export function _createA(textContent, options = {}) {
     }
 
     if (options.icon) {
-        const icon = _createIcon(options.icon);
+        const icon = createIcon(options.icon);
         if (icon) {
             element.appendChild(icon);
         }

@@ -1,5 +1,8 @@
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { getObject, TODO } from "../../../scripts/utils/utils.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
+import { getObject } from "../../../scripts/utils/utils.mjs";
+import { MorphologyRepository } from "../../repository/morphology-repository.mjs";
+import { FlagsUtils } from "../../utils/flags-utils.mjs";
+import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 
 export class ActorUtils {
     static getAttributeValue(actor, attr) {
@@ -9,8 +12,8 @@ export class ActorUtils {
     }
 
     static getAbilityValue(actor, ability) {
-        const base = getObject(actor, CharacteristicType.ABILITY)[ability] || 0;
-        const bonus = getObject(actor, CharacteristicType.BONUS.ABILITY)[ability] || 0;
+        const base = getObject(actor, CharacteristicType.SKILLS)[ability] || 0;
+        const bonus = getObject(actor, CharacteristicType.BONUS.SKILL)[ability] || 0;
         return base + bonus;
     }
 
@@ -25,13 +28,13 @@ export class ActorUtils {
     static getEnhancementLevel(actor, enhancement) {
         const enhancements = getObject(actor, CharacteristicType.ENHANCEMENT_ALL);
         const enhancementOnActor = this.#findEnhancementOnActorById(enhancement.id, enhancements);
-        const levelsOnActor = this.#findLevelsWithId(enhancementOnActor);
+        const levelsOnActor = this.#findEnhancementLevelsWithId(enhancementOnActor);
         return levelsOnActor.length;
     }
 
     static getDamage(actor) {
-        const superficial = getObject(actor, CharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
-        const letal = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        const superficial = getObject(actor, BaseActorCharacteristicType.VITALITY.SUPERFICIAL_DAMAGE) || 0;
+        const letal = getObject(actor, BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
         return superficial + letal;
     }
 
@@ -40,11 +43,16 @@ export class ActorUtils {
     }
 
     static calculatePenalty(actor) {
-        const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA);
-        const letalDamage = getObject(actor, CharacteristicType.VITALITY.LETAL_DAMAGE);
-        const calculatedMax = Math.max(letalDamage - stamina, 0);
-        TODO('buscar nos efeitos se vai ter mais alguma penalidade')
-        return Math.min(calculatedMax, 4);
+        const stamina = getObject(actor, CharacteristicType.ATTRIBUTES.STAMINA) || 0;
+        const letalDamage = getObject(actor, BaseActorCharacteristicType.VITALITY.LETAL_DAMAGE) || 0;
+        const bonusPenalty = getObject(actor, CharacteristicType.BONUS.DAMAGE_PENALTY) || 0;
+        const sintheticBonus = getObject(actor, BaseActorCharacteristicType.MORPHOLOGY) == MorphologyRepository.TYPES.SYNTHETIC.id ? 1 : 0;
+
+        const calculateTotal = letalDamage - (stamina + sintheticBonus) + bonusPenalty;
+        const safeMinValue = Math.max(calculateTotal, 0);
+
+        const fixedPenalty = getObject(actor, CharacteristicType.BONUS.DAMAGE_PENALTY_FLAT) || 0;
+        return Math.min(safeMinValue, 4) + fixedPenalty;
     }
 
     static calculateVitalityByUpAttribute(actor, level) {
@@ -62,7 +70,7 @@ export class ActorUtils {
 
     static calculateMovimentPoints(actor) {
         const dexValue = this.getAttributeValue(actor, CharacteristicType.ATTRIBUTES.DEXTERITY.id);
-        const athleticsValue = this.getAbilityValue(actor, CharacteristicType.ABILITY.ATHLETICS.id);
+        const athleticsValue = this.getAbilityValue(actor, CharacteristicType.SKILLS.ATHLETICS.id);
         const bonusPM = getObject(actor, CharacteristicType.BONUS.PM) || 0;
         const calculated = 1 + athleticsValue + bonusPM + Math.floor(dexValue / 2);
         return Math.max(calculated, 0);
@@ -76,7 +84,7 @@ export class ActorUtils {
     }
 
     static calculateTotalLanguages(actor) {
-        const streetWise = getObject(actor, CharacteristicType.ABILITY.STREETWISE);
+        const streetWise = getObject(actor, CharacteristicType.SKILLS.STREETWISE);
         if (streetWise == 0) {
             return 1;
         }
@@ -94,6 +102,27 @@ export class ActorUtils {
         return currentEperience + usedExperience;
     }
 
+    static calculateActualVirtue(actor, characteristicType) {
+        switch (characteristicType) {
+            case CharacteristicType.VIRTUES.CONSCIOUSNESS: {
+                const level = getObject(actor, CharacteristicType.VIRTUES.CONSCIOUSNESS.LEVEL);
+                const buffOrDebuff = getObject(actor, CharacteristicType.BONUS.VIRTUES.CONSCIOUSNESS);
+                return level + buffOrDebuff;
+            }
+            case CharacteristicType.VIRTUES.PERSEVERANCE: {
+                const level = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.LEVEL);
+                const buffOrDebuff = getObject(actor, CharacteristicType.BONUS.VIRTUES.PERSEVERANCE);
+                return level + buffOrDebuff;
+            }
+            case CharacteristicType.VIRTUES.QUIETNESS: {
+                const level = getObject(actor, CharacteristicType.VIRTUES.QUIETNESS.LEVEL);
+                const buffOrDebuff = getObject(actor, CharacteristicType.BONUS.VIRTUES.QUIETNESS);
+                return level + buffOrDebuff;
+            }
+        }
+        return 0;
+    }
+
     static havePerseverance(actor) {
         const level = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.LEVEL);
         const used = getObject(actor, CharacteristicType.VIRTUES.PERSEVERANCE.USED);
@@ -105,7 +134,8 @@ export class ActorUtils {
     }
 
     static getAllEnhancements(actor) {
-        return Object.values(getObject(actor, CharacteristicType.ENHANCEMENT_ALL)).filter(enhancement => enhancement.id !== '') || [];
+        const allEnhancements = getObject(actor, CharacteristicType.ENHANCEMENT_ALL) || [];
+        return Object.values(allEnhancements).filter(enhancement => enhancement.id !== '');
     }
 
     static #findEnhancementOnActorById(selectedId, enhancements) {
@@ -123,7 +153,7 @@ export class ActorUtils {
         return null;
     }
 
-    static #findLevelsWithId(enhancement) {
+    static #findEnhancementLevelsWithId(enhancement) {
         if (!enhancement || !enhancement.levels || typeof enhancement.levels !== 'object') {
             return [];
         }
@@ -150,5 +180,58 @@ export class ActorUtils {
                     system: actor.system
                 }
             });
+    }
+
+    static getActualMovimentPoints(actor) {
+        const pm = ActorUtils.calculateMovimentPoints(actor);
+        const usedPm = FlagsUtils.getActorFlag(actor, 'used_pm') || 0;
+        return Math.max(pm - usedPm, 0);
+    }
+
+    static getEffects(actor) {
+        const effects = [...(actor.effects.contents || [])];
+        return effects;
+    }
+
+    static getEffectsSorted(actor) {
+        const effects = this.getEffects(actor);
+        
+        effects.sort((a, b) => {
+            if (ActiveEffectsUtils.getOriginId(a) === 'dead') {
+                return -1;
+            }
+            if (ActiveEffectsUtils.getOriginId(b) === 'dead') {
+                return 1;
+            }
+
+            const aOrigin = a.origin;
+            const bOrigin = b.origin;
+
+            const hasOriginA = Boolean(aOrigin);
+            const hasOriginB = Boolean(bOrigin);
+
+            if (hasOriginA !== hasOriginB) {
+                return hasOriginA ? -1 : 1;
+            }
+
+            if (hasOriginA && hasOriginB) {
+                const aIsEnhancement = aOrigin.includes('Aprimoramento');
+                const BIsEnhancement = bOrigin.includes('Aprimoramento');
+
+                if (aIsEnhancement !== BIsEnhancement) {
+                    return aIsEnhancement ? -1 : 1;
+                }
+
+                if (aOrigin === bOrigin) {
+                    return a.name.localeCompare(b.name);
+                }
+
+                return aOrigin.localeCompare(bOrigin);
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+
+        return effects;
     }
 }

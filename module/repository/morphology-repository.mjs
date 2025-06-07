@@ -2,12 +2,14 @@ import { localize } from "../../scripts/utils/utils.mjs";
 import { SYSTEM_ID } from "../constants.mjs";
 
 export class MorphologyRepository {
-    static items = [
-        { id: 'androide', label: 'Androide' },
-        { id: 'ciborgue', label: 'Ciborgue' },
-        { id: 'sintetico', label: 'Sintetico' },
-        { id: 'humano', label: 'Humano' },
-    ];
+    static TYPES = Object.freeze({
+        ANDROID: { id: 'androide', label: 'Androide' },
+        CYBORG: { id: 'ciborgue', label: 'Ciborgue' },
+        HUMAN: { id: 'humano', label: 'Humano' },
+        SYNTHETIC: { id: 'sintetico', label: 'Sintetico' },
+    });
+
+    static items = Object.values(MorphologyRepository.TYPES);
 
     static #loadedFromPack = [];
 

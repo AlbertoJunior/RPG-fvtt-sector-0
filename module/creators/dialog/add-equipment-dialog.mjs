@@ -1,4 +1,5 @@
 import { localize, localizeType } from "../../../scripts/utils/utils.mjs"
+import { TEMPLATES_PATH } from "../../constants.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 
@@ -145,6 +146,6 @@ export class AddEquipmentDialog {
     static async #mountContent() {
         const data = {
         }
-        return await renderTemplate("systems/setor0OSubmundo/templates/items/add-equipment-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/items/dialog/add-equipment-dialog.hbs`, data);
     }
 }

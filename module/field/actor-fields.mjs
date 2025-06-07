@@ -1,4 +1,4 @@
-import { EnhancementEffectField } from "./actor-enhancement-field.mjs";
+import { EnhancementEffectField } from "./enhancement-field.mjs";
 
 const { NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -23,7 +23,7 @@ export class ActorAbilities extends SchemaField {
     }
 }
 
-export class ActorAbilityField extends NumberField {
+class ActorAbilityField extends NumberField {
     constructor(label) {
         super({ integer: true, min: 0, initial: 0, max: 6, label: label });
     }
@@ -43,7 +43,7 @@ export class ActorAttributes extends SchemaField {
     }
 }
 
-export class ActorAttributeField extends NumberField {
+class ActorAttributeField extends NumberField {
     constructor(label, initial = 1) {
         super({ nullable: false, integer: true, min: 0, initial: initial, max: 6, label: label });
     }
@@ -55,7 +55,17 @@ export class ActorCharacteristicField extends NumberField {
     }
 }
 
-export class ActorVirtueField extends SchemaField {
+export class ActorVirtues extends SchemaField {
+    constructor() {
+        super({
+            consciencia: new ActorVirtueField("S0.Consciencia"),
+            perseveranca: new ActorVirtueField("S0.Perseveranca"),
+            quietude: new ActorVirtueField("S0.Quietude")
+        });
+    }
+}
+
+class ActorVirtueField extends SchemaField {
     constructor(label) {
         super({
             level: new NumberField({ integer: true, min: 0, initial: 1, max: 5, label: label }),

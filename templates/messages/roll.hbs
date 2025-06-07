@@ -3,90 +3,28 @@
     <hr>
 
     {{#if haveMessageTest}}
-    <p class="S0-hide-long-text" style="text-align: center;">{{ messageTest }}</p>
+    <p style="text-align: center;">{{ messageTest }}</p>
     <hr>
     {{/if}}
 
     {{#if haveResult}}
+
     <div class="dice-tooltip S0-container-contract">
         <p>{{localize 'S0.Habilidade'}}: {{ ability }}</p>
         <p>{{localize 'S0.Teste'}}: {{ formule }}</p>
 
         <hr>
 
-        {{#unless (isEmpty overloadValues)}}
-        <p>{{localize 'S0.Sobrecarga'}}:</p>
-        <ol class="dice-rolls">
-            {{#each overloadValues}}
-            <li class="S0-d10 roll die d10 S0-d10-overload">{{ this }}</li>
-            {{/each}}
-        </ol>
-        {{/unless}}
-
-        {{#unless (isEmpty defaultValues)}}
-        <p>{{localize 'S0.Rolagem'}}:</p>
-        <ol class="dice-rolls">
-            {{#each defaultValues }}
-            <li class="S0-d10 roll die d10">{{ this }}</li>
-            {{/each}}
-        </ol>
-        {{/unless}}
-
-        <hr>
-
-        <div
-            style="display: flex; column-gap: 4px; margin-block: 6px; align-items: center; justify-content: space-around;">
-            <label>{{localize 'S0.Sucessos'}}: {{ resultValue }} </label>
-            <label>{{localize 'S0.Dificuldade'}}: {{ difficulty }}</label>
-        </div>
-
-        <section>
-            {{#unless (lt penalty 1)}}
-            <label style="display: block; margin-block: 4px;">{{localize 'S0.Penalidade'}}: {{ penalty }}</label>
-            {{/unless}}
-
-            {{#unless (lt bonus 1)}}
-            <label style="display: block; margin-block: 4px;">{{localize 'S0.Bonus'}}: {{ bonus }}</label>
-            {{/unless}}
-
-            {{#unless (lt automatic 1)}}
-            <label style="display: block; margin-block: 4px;">{{localize 'S0.Automatico'}}: {{ automatic }}</label>
-            {{/unless}}
-
-            {{#unless (isNull weapon)}}
-            <div>
-                <label style="display: block; margin-block: 4px;">
-                    {{localize 'S0.Arma'}}:
-                </label>
-
-                {{#unless (lt weapon.damage 1)}}
-                <label style="display: block; margin-block: 4px;">
-                    {{localize 'S0.Dano'}}: {{ weapon.damage }}
-                </label>
-                {{/unless}}
-
-                {{#unless (lt weapon.true_damage 1)}}
-                <label style="display: block; margin-block: 4px;">
-                    {{localize 'S0.Dano_Automatico'}}: {{ weapon.true_damage }}
-                </label>
-                {{/unless}}
-            </div>
-            {{/unless}}
-        </section>
-
-        {{#if canUsePerseverance}}
-        <button class="S0-roll-result" data-action="roll" data-handle-on-dom="true" data-type="perseverance">
-            {{localize 'S0.Usar_Perseveranca'}}
-        </button>
-        {{/if}}
+        {{> core-roll-message this}}
     </div>
 
     <button class="S0-roll-result {{ resultMessageClasses }}" data-action="toggle-tooltip" data-handle-on-dom="true">
         {{ resultMessage }} ( {{ resultValue }} )
     </button>
+
     {{else}}
 
-    <p>{{localize 'S0.Teste_Nao_Realizado'}}</p>
+    {{> core-roll-message-invalid this}}
 
     {{/if}}
 </div>

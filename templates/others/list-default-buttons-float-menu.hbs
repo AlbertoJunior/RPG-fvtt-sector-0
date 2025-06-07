@@ -15,6 +15,7 @@
 </li>
 {{/if}}
 
+{{#unless hideDarkModeButton}}
 <li class="S0-simulate-button {{htmlUtils 'marked' (gameFunc 'inDarkMode')}} {{htmlUtils 'compacted'}}"
     data-characteristic="menu" data-action="check" data-type="dark">
     <i class="fas fa-circle-half-stroke"></i>
@@ -22,7 +23,9 @@
     {{localize 'S0.Modo_Escuro'}}
     {{/unless}}
 </li>
+{{/unless}}
 
+{{#unless hideCompactButton}}
 <li class="S0-simulate-button {{htmlUtils 'marked' (gameFunc 'isCompactedSheet')}} {{htmlUtils 'compacted'}}"
     data-characteristic="menu" data-action="check" data-type="compact" title="{{localize 'S0.Modo_Compacto'}}">
     <i class="fas fa-arrows-left-right-to-line"></i>
@@ -30,6 +33,7 @@
     {{localize 'S0.Modo_Compacto'}}
     {{/unless}}
 </li>
+{{/unless}}
 
 {{#if canRoll}}
 <li class="S0-simulate-button {{htmlUtils 'compacted'}}" data-characteristic="menu" data-action="roll"

@@ -38,6 +38,12 @@ export function selectCharacteristic(element) {
     element.blur();
 }
 
+export function selectCharacteristicAndReturnLength(element) {
+    selectCharacteristic(element);
+    const value = element.parentElement.querySelectorAll('.S0-selected').length;
+    return value;
+}
+
 export function toTitleCase(str) {
     return str
         .toLowerCase()
@@ -48,15 +54,23 @@ export function toTitleCase(str) {
         .join(' ');
 }
 
-export function keyJsonToKeyLang(key) {
+export function toKeyLang(key) {
     const removeUnderscore = key.replaceAll('_', ' ');
     const toTitle = toTitleCase(removeUnderscore);
-    const langKey = toTitle.replaceAll(' ', '_');
+    return toTitle.replaceAll(' ', '_');
+}
+
+export function keyJsonToKeyLang(key) {
+    const langKey = toKeyLang(key);
     return `S0.${langKey}`;
 }
 
 export function localize(key) {
-    return game.i18n.localize(`S0.${key}`)
+    return game.i18n.localize(`S0.${key}`);
+}
+
+export function labelError() {
+    return `<${localize('Erro')}>`;
 }
 
 export function onArrayRemove(array, item) {
@@ -69,7 +83,7 @@ export function onArrayRemove(array, item) {
 }
 
 export function localizeType(key) {
-    return game.i18n.localize(`TYPES.${key}`)
+    return game.i18n.localize(`TYPES.${key}`);
 }
 
 export function TODO(message, notify) {
@@ -88,9 +102,14 @@ export function getObject(object, path) {
     return pathHaveSystem.split('.').reduce((acc, key) => acc && acc[key], object);
 }
 
-export function randomId() {
+export function randomId(maxString) {
     const id = crypto.randomUUID?.() ?? Math.random().toString(36).substring(2, 10);
-    return id.replaceAll('-', '');
+    const finalId = id.replaceAll('-', '');
+
+    if (typeof maxString == 'number' && maxString > 0) {
+        return finalId.substring(0, maxString);
+    }
+    return finalId;
 }
 
 export function convertToCollection(items) {
@@ -108,4 +127,18 @@ export function snakeToCamel(entries) {
 
 export function normalizeString(str) {
     return str.replace(/\s+/g, ' ').trim();
+}
+
+export function logTable(title, table) {
+    console.log(`---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----\n-> ${title}`);
+    console.table(table);
+
+    const errors = Object.values(table).filter(result => result.error != null);
+    if (errors.length > 0) {
+        for (const resultWithError of errors) {
+            console.error(resultWithError.error);
+        }
+    }
+
+    console.log('---> ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- <---');
 }

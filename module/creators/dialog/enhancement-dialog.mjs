@@ -1,45 +1,59 @@
-import { sendEffectToChat } from "../../base/sheet/actor/methods/enhancement-methods.mjs";
 import { EnhancementDuration } from "../../enums/enhancement-enums.mjs";
 import { EnhancementRepository } from "../../repository/enhancement-repository.mjs";
 import { EnhancementInfoParser } from "../../core/enhancement/enhancement-info.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { localize } from "../../../scripts/utils/utils.mjs";
 import { OnEventType } from "../../enums/on-event-type.mjs";
-import { RollAttribute } from "../../core/rolls/attribute-roll.mjs";
-import { DefaultActions } from "../../utils/default-actions.mjs";
+import { CreateFormDialog } from "./create-dialog.mjs";
+import { ChatCreator } from "../../utils/chat-creator.mjs";
+import { EnhancementMessageCreator } from "../message/enhancement-message.mjs";
+import { ActiveEffectsUtils } from "../../core/effect/active-effects.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
+import { ActorUtils } from "../../core/actor/actor-utils.mjs";
+import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
 
 export class EnhancementDialog {
-    static async _open(enhancementEffect, actor) {
-        const enhancementFamily = EnhancementRepository._getEnhancementFamilyByEffectId(enhancementEffect.id);
+    static async open(enhancementEffect, actor, onConfirm) {
+        const haveActor = actor != undefined;
+
+        const enhancementFamily = EnhancementRepository.getEnhancementFamilyByEffectId(enhancementEffect.id);
         const content = await this.#mountContent(enhancementEffect, enhancementFamily);
 
         const buttons = {
             cancel: {
                 label: localize("Chat"),
-                callback: (html) => {
-                    sendEffectToChat(enhancementEffect, actor);
-                }
+                callback: () => this.#sendEffectToChat(enhancementEffect, actor)
             }
         };
 
-        const canActive = actor != undefined && enhancementEffect.duration !== EnhancementDuration.PASSIVE;
+        const canActive = haveActor && typeof onConfirm === 'function';
         if (canActive) {
-            buttons.confirm = {
-                label: localize("Ativar"),
-                callback: (html) => {
+            const hasActivated = ActorUtils.getEffects(actor)
+                .map(effect => ActiveEffectsUtils.getOriginId(effect))
+                .includes(enhancementEffect.id);
 
-                }
+            const isUsableType = enhancementEffect.duration === EnhancementDuration.USE;
+            const useOrActiveText = isUsableType ? "Usar" : "Ativar";
+
+            buttons.confirm = {
+                label: localize(hasActivated ? "Desativar" : useOrActiveText),
+                callback: onConfirm
             }
         }
 
         new Dialog(
             {
-                title: `${enhancementEffect.name}`,
+                title: enhancementEffect.name,
                 content: content,
                 buttons: buttons,
                 render: (html) => {
                     DialogUtils.presetDialogRender(html);
-                    $(html).find(`[data-action="${OnEventType.ROLL}"]`).click(EnhancementDialog.#onRollEvent.bind(this, actor, enhancementEffect));
+
+                    if (haveActor) {
+                        $(html)
+                            .find(`[data-action="${OnEventType.ROLL}"]`)
+                            .click((event) => this.#onRollEvent(actor, enhancementEffect, event));
+                    }
                 }
             },
             {
@@ -54,8 +68,9 @@ export class EnhancementDialog {
             overload: EnhancementInfoParser.overloadValueToString(enhancementEffect.overload),
             duration: EnhancementInfoParser.durationValueToString(enhancementEffect.duration),
             family: enhancementFamily.name,
+            familyId: enhancementFamily.id,
         };
-        return await renderTemplate("systems/setor0OSubmundo/templates/enhancement/enhancement-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/enhancement/enhancement-dialog.hbs`, data);
     }
 
     static async #onRollEvent(actor, enhancementEffect, event) {
@@ -66,8 +81,62 @@ export class EnhancementDialog {
             return;
         }
 
-        const resultRoll = await RollAttribute.rollByRollableTests(actor, rollTest);
-        const rollMessage = `${enhancementEffect.name}: ${rollTest.name}`;
-        DefaultActions.sendRollOnChat(actor, resultRoll, rollTest.difficulty, rollMessage);
+        CreateFormDialog.open(
+            localize("Modificadores"),
+            "rolls/modifiers",
+            {
+                presetForm: {
+                    canBeHalf: true,
+                    canBeSpecialist: true,
+                    defaultDifficulty: rollTest.difficulty,
+                    defaultCritic: rollTest.critic,
+                },
+                onConfirm: async (data) => {
+                    const rollMessage = `${enhancementEffect.name}: ${rollTest.name}`;
+                    const difficulty = Number(data.difficulty);
+                    const critic = Number(data.critic);
+                    const bonus = Number(data.bonus);
+                    const automatic = Number(data.automatic);
+                    const isHalf = Boolean(data.half);
+                    const isSpecialist = Boolean(data.specialist);
+                    const mode = data.chatSelect;
+
+                    if (rollTest.ability) {
+                        rollTest.critic = critic;
+                        rollTest.difficulty = difficulty;
+                        rollTest.bonus = bonus;
+                        rollTest.automatic = automatic;
+                        rollTest.specialist = isSpecialist;
+                        rollTest.rollMessage = rollMessage;
+                        rollTest.mode = mode;
+
+                        await playerRollHandle.shortcut(actor, rollTest);
+                    } else {
+                        const inputParams = {
+                            primary: rollTest.primary_attribute,
+                            secondary: rollTest.secondary_attribute,
+                            tertiary: rollTest.tertiary_attribute,
+                            special_primary: rollTest.special_primary,
+                            special_secondary: rollTest.special_secondary,
+                            special_tertiary: rollTest.special_tertiary,
+                            half: isHalf,
+                            specialist: isSpecialist,
+                            bonus: bonus,
+                            automatic: automatic,
+                            difficulty: difficulty,
+                            critic: critic,
+                            rollMode: mode,
+                        }
+
+                        await playerRollHandle.custom(actor, inputParams);
+                    }
+                }
+            }
+        );
+    }
+
+    static async #sendEffectToChat(effect, actor) {
+        const message = await EnhancementMessageCreator.mountContentInfo(effect);
+        ChatCreator._sendToChat(actor, message);
     }
 }

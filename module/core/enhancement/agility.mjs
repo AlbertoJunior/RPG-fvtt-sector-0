@@ -1,7 +1,7 @@
 import { ICONS_PATH } from "../../constants.mjs";
 import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/actor-enhancement-field.mjs";
+import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
 
 const agilityEffects = [
     EnhancementEffectField._toJson(
@@ -53,7 +53,7 @@ const agilityEffects = [
         EnhancementDuration.SCENE,
         ['3'],
         [
-            { key: CharacteristicType.BONUS.DEFENSIVE, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
+            { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
     EnhancementEffectField._toJson(
@@ -72,7 +72,7 @@ const agilityEffects = [
         EnhancementDuration.SCENE,
         ['4', '5'],
         [
-            { key: CharacteristicType.BONUS.DEFENSIVE, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
+            { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
     EnhancementEffectField._toJson(

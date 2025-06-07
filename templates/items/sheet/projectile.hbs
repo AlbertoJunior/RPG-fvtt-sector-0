@@ -1,0 +1,52 @@
+<form autocomplete="off">
+    {{> itemCommon this}}
+
+    <div class="S0-page S0-container">
+        {{> itemCommonWeapon this}}
+
+        <div class="form-group">
+            <label for="{{item.id}}.cadence" style="flex: 1;">{{localize 'S0.Cadencia'}}:</label>
+            <input id="{{item.id}}.cadence" style="flex: 1; text-align: center;" type="number" name="system.cadence"
+                min="1" value="{{item.system.cadence}}" />
+        </div>
+
+        <div class="form-group">
+            <label for="{{item.id}}.capacity" style="flex: 1;">{{localize 'S0.Capacidade'}}:</label>
+            <input id="{{item.id}}.capacity" style="flex: 1; text-align: center;" type="number" name="system.capacity"
+                min="1" value="{{item.system.capacity}}" />
+        </div>
+
+        <div class="form-group">
+            <label for="{{item.id}}.range" style="flex: 1;">{{localize 'S0.Alcance'}}:</label>
+            <input id="{{item.id}}.range" style="flex: 1; text-align: center;" type="number" name="system.range" min="1"
+                value="{{item.system.range}}" />
+        </div>
+
+        <div class="form-group">
+            <label for="{{item.id}}.max_range" style="flex: 1;">
+                {{localize 'S0.Itens.Alcance_Maximo'}}:
+            </label>
+            <select id="{{item.id}}.max_range" class="S0-select" style="flex: 1;" name="system.max_range">
+                <option value="1" {{selectIfEq item.system.max_range 1 }}>x1</option>
+                <option value="2" {{selectIfEq item.system.max_range 2 }}>x2</option>
+                <option value="3" {{selectIfEq item.system.max_range 3 }}>x3</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="{{item.id}}.special" style="flex: 1;">{{localize 'S0.Especial'}}?</label>
+            <div style="flex: 1; min-width: 142.5px; display: flex; justify-content: center; align-items: center; ">
+                <input id="{{item.id}}.special" type="checkbox" name="system.special" {{#if
+                    item.system.special}}checked{{/if}} />
+            </div>
+        </div>
+    </div>
+
+    {{> itemCommonResistance this}}
+
+    {{> itemSuperEquipment this}}
+
+    {{> itemRollableTests this}}
+
+    {{> itemCommonDescription this}}
+</form>

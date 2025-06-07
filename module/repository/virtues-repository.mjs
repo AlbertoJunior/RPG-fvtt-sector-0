@@ -7,14 +7,14 @@ export class VirtuesRepository {
         { id: 'quietude', label: 'Quietude' }
     ];
 
-    static _getItems() {
+    static getItems() {
         return [... this.#characteristics]
-        .map(item=> {
-            return {
-                ...item,
-                label: localize(item.label)
-            };
-        })
-        .sort((a, b) => a.label.localeCompare(b.label));
+            .map(item => {
+                return {
+                    ...item,
+                    label: localize(item.label)
+                };
+            })
+            .sort((a, b) => a.label.localeCompare(b.label));
     }
 }

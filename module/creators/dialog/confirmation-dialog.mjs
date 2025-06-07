@@ -1,4 +1,5 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 
 export class ConfirmationDialog {
@@ -34,9 +35,9 @@ export class ConfirmationDialog {
 
     static async #mountContent(message, title) {
         const data = {
-            title: title || localize("Pergunta_Realizar_Acao"),
+            title: title || localize("Pergunta.Realizar_Acao"),
             message
         }
-        return await renderTemplate("systems/setor0OSubmundo/templates/others/confirmation-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/others/confirmation-dialog.hbs`, data);
     }
 }

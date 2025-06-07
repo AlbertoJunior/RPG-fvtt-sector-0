@@ -8,39 +8,39 @@ export class ActorCombatUtils {
             offensive: this.#makeOffensivePreset(
                 CharacteristicType.ATTRIBUTES.STRENGTH,
                 CharacteristicType.ATTRIBUTES.DEXTERITY,
-                CharacteristicType.ABILITY.BRAWL,
+                CharacteristicType.SKILLS.BRAWL,
                 CharacteristicType.BONUS.OFENSIVE_MELEE
             ),
             defensive: this.#makeDefensivePreset(
                 CharacteristicType.ATTRIBUTES.DEXTERITY,
                 CharacteristicType.ATTRIBUTES.STAMINA,
-                CharacteristicType.ABILITY.BRAWL
+                CharacteristicType.SKILLS.BRAWL
             )
         },
         melee: {
             offensive: this.#makeOffensivePreset(
                 CharacteristicType.ATTRIBUTES.STRENGTH,
                 CharacteristicType.ATTRIBUTES.DEXTERITY,
-                CharacteristicType.ABILITY.MELEE,
+                CharacteristicType.SKILLS.MELEE,
                 CharacteristicType.BONUS.OFENSIVE_MELEE
             ),
             defensive: this.#makeDefensivePreset(
                 CharacteristicType.ATTRIBUTES.DEXTERITY,
                 CharacteristicType.ATTRIBUTES.STAMINA,
-                CharacteristicType.ABILITY.MELEE
+                CharacteristicType.SKILLS.MELEE
             )
         },
         projectile: {
             offensive: this.#makeOffensivePreset(
                 CharacteristicType.ATTRIBUTES.DEXTERITY,
                 CharacteristicType.ATTRIBUTES.PERCEPTION,
-                CharacteristicType.ABILITY.PROJECTILE,
+                CharacteristicType.SKILLS.PROJECTILE,
                 CharacteristicType.BONUS.OFENSIVE_PROJECTILE
             ),
             defensive: this.#makeDefensivePreset(
                 CharacteristicType.ATTRIBUTES.DEXTERITY,
                 CharacteristicType.ATTRIBUTES.STAMINA,
-                CharacteristicType.ABILITY.ATHLETICS
+                CharacteristicType.SKILLS.ATHLETICS
             )
         }
     };
@@ -67,8 +67,9 @@ export class ActorCombatUtils {
                 if (!dices) {
                     safeDices = ActorUtils.calculateDices(actor, attr1Id, attr2Id, abilityId);
                 }
-                const bonus = getObject(actor, CharacteristicType.BONUS.DEFENSIVE) || 0;
-                return Math.floor(safeDices * bonus);
+                const bonusFactor = getObject(actor, CharacteristicType.BONUS.DEFENSIVE_FACTOR) || 0;
+                const bonusFlat = getObject(actor, CharacteristicType.BONUS.DEFENSIVE) || 0;
+                return Math.floor(safeDices * bonusFactor) + bonusFlat;
             }
         };
     }

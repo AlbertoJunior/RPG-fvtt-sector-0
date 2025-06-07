@@ -4,6 +4,7 @@ body {
     --color-underline-header: var(--secondary-color);
     --color-scrollbar: var(--secondary-color);
     --color-scrollbar-border: var(--primary-color);
+    --main-logo: url(systems/setor0OSubmundo/imgs/logo.png);
 }
 
 :root {
@@ -36,6 +37,10 @@ body {
     --color-red-alpha: rgba(240, 10, 10, 0.8);
     --color-red-alpha-50: rgba(240, 10, 10, 0.5);
 
+    --color-green: rgba(10, 140, 10, 1);
+    --color-green-alpha: rgba(10, 140, 10, 0.8);
+    --color-green-alpha-50: rgba(10, 140, 10, 0.5);
+
     --focus-color: rgba(255, 250, 190, 1);
 
     --shadow-color: rgba(0, 0, 0, 0.2);
@@ -55,11 +60,12 @@ body {
     --border-radius-medium: 6px;
     --border-radius-large: 8px;
 
-    /* replace variables */
+    /* variables */
     --color-shadow-primary: var(--shadow-hover-color);
     --color-underline-header: var(--secondary-color);
     --color-scrollbar: var(--secondary-color);
     --color-scrollbar-border: var(--primary-color);
+    --font-size-9: 0.6em;
 }
 
 @font-face {
@@ -122,7 +128,6 @@ section {
 /* #endregion */
 
 /* #region EDIT FOUNDRY STYLE */
-
 .directory-list .directory-item {
     padding-block: 2px;
     box-shadow: 0px 1px 6px black;
@@ -143,20 +148,6 @@ section {
 
 img#logo {
     object-fit: contain;
-}
-
-#chat-log {
-    overflow-y: scroll;
-    padding-left: 10px;
-}
-
-#chat-controls {
-    justify-content: space-around;
-}
-
-#chat-controls .roll-type-select {
-    width: 190px;
-    max-width: 190px;
 }
 
 .combat-sidebar li.combatant .roll {
@@ -199,7 +190,36 @@ img#logo {
     row-gap: 6px;
 }
 
+#chat-log {
+    overflow-y: scroll;
+    padding-left: 10px;
+}
+
+#chat-controls {
+    min-height: 36px;
+    justify-content: space-around;
+    align-items: center;
+    column-gap: 4px;
+}
+
+#chat-controls .roll-type-select {
+    width: auto;
+    margin: 0px;
+}
+
+#chat-controls .control-buttons {
+    flex: none;
+    margin: 0px;
+}
+
+.flavor-text,
+.whisper-to {
+    color: var(--on-secondary-color);
+}
+
 .chat-message {
+    margin-inline: 0px;
+    margin-block: 6px;
     background: var(--secondary-color-alpha-50);
 }
 
@@ -215,7 +235,7 @@ img#logo {
 .message-metadata,
 .chat-message {
     color: var(--primary-color);
-    text-shadow: 0 0px 2px rgba(240, 10, 10, 1);
+    text-shadow: 0 0px 2px var(--color-red);
 }
 
 .message-content button {
@@ -293,20 +313,18 @@ img.S0-clickable:hover {
 }
 
 #token-hud .status-effects {
-    width: 140px;
-    column-gap: 2px;
-    row-gap: 2px;
+    width: 200px;
 }
 
 #token-hud .status-effects .effect-control {
-    width: 36px;
-    height: 36px;
+    width: 100%;
+    height: 50px;
+    aspect-ratio: 1/1;
 }
 
 /* #endregion */
 
 /* #region MY STYLES */
-
 /* #region PAGES */
 
 .S0-page {
@@ -401,18 +419,35 @@ img.S0-clickable:hover {
     margin: 0px;
 }
 
+.S0-container textarea {
+    padding: 6px;
+}
+
+.S0-container input {
+    padding: 2px 6px;
+}
+
 .S0-container :is(input, textarea) {
     color: black;
     height: auto;
-    padding: 2px 6px;
     border: 2px solid var(--secondary-color-alpha-50);
     border-radius: var(--border-radius-large);
     transition: background-color 0.3s ease-in-out, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.S0-container :is(input:not([type="checkbox"]), select) {
+    min-height: 28px;
+}
+
+.S0-container h2 :is(input:not([type="checkbox"]), select) {
+    min-height: 32px;
+}
+
 .S0-container input[type="checkbox"] {
-    height: 18px;
-    width: 18px;
+    min-height: 18px;
+    min-width: 18px;
+    max-height: 18px;
+    max-width: 18px;
 }
 
 .S0-container input[type="checkbox"]:checked {
@@ -440,16 +475,21 @@ img.S0-clickable:hover {
     appearance: none;
 }
 
+.S0-flex-colum {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+}
+
 /* #endregion */
 
 /* #region BASE STYLES */
-
 .S0-actor-sheet section {
     margin-inline: 0px;
 }
 
 .S0-actor-sheet img {
-    object-position: center;
+    object-position: top;
     object-fit: cover;
 }
 
@@ -545,6 +585,16 @@ img.S0-clickable:hover {
     justify-content: center;
 }
 
+.S0-buff-color {
+    color: var(--color-green);
+    text-shadow: 0 0 2px;
+}
+
+.S0-debuff-color {
+    color: var(--color-red);
+    text-shadow: 0 0 2px;
+}
+
 /* #endregion */
 
 /* #region ENHANCEMENT */
@@ -600,7 +650,7 @@ img.S0-clickable:hover {
     font-weight: bold;
     color: var(--primary-color-alpha);
     border-color: var(--secondary-color-alpha-50);
-    border-radius: var(--border-radius-medium);
+    border-radius: var(--border-radius-large);
     box-shadow: 0 1px 4px 1px var(--shadow-color);
 }
 
@@ -614,7 +664,7 @@ img.S0-clickable:hover {
     color: var(--primary-color);
     background-color: rgba(215, 215, 215, 0.2);
     border-color: var(--secondary-color-alpha-50);
-    border-radius: var(--border-radius-small);
+    border-radius: var(--border-radius-medium);
     box-shadow: inset 0 0 5px 0px rgba(40, 40, 40, 0.6);
 }
 
@@ -858,7 +908,12 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-message-content p {
-    margin-block: 0.3em;
+    margin-block: 0.4em;
+}
+
+.S0-message-content .S0-container-2-column label {
+    display: block;
+    text-align: center;
 }
 
 .S0-message-simple-text {
@@ -871,6 +926,19 @@ button.S0-roll-result:not([disabled]):hover {
     background: var(--secondary-color-alpha);
     text-shadow: none;
     line-height: 1.3;
+}
+
+.S0-message-weapon-container {
+    background-color: var(--secondary-color-alpha-50);
+    margin: 10px;
+    padding: 2px 6px;
+    border: 1px solid var(--primary-color-alpha-50);
+    border-radius: 6px;
+    box-shadow: 0 0 6px var(--primary-color);
+}
+
+.S0-message-weapon-container label {
+    display: block;
 }
 
 .S0-dice {
@@ -1020,6 +1088,7 @@ button.S0-roll-result:not([disabled]):hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     text-wrap: nowrap;
+    max-width: 100%;
 }
 
 .S0-max-2-line-text {
@@ -1032,29 +1101,25 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-badge {
+    min-height: 20px;
+    max-height: 28px;
+    min-width: 20px;
+    max-width: 28px;
+    padding: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     right: 4px;
     bottom: 0px;
-    min-height: 20px;
-    max-height: 26px;
-    min-width: 20px;
-    max-width: 26px;
-    padding: 3px;
-    font-size: var(--font-size-12);
+    font-size: var(--font-size-11);
+    font-weight: bold;
     box-shadow: 0 0 6px var(--shadow-color);
     border-radius: 50%;
     opacity: 0;
     background: var(--primary-color);
     transition: bottom 0.2s ease-in-out, opacity 0.2s ease-in-out;
     aspect-ratio: 1 / 1;
-}
-
-.S0-badge span {
-    padding: 2px;
-    font-weight: bold;
 }
 
 .S0-item-bag:hover .S0-badge {
@@ -1092,6 +1157,21 @@ button.S0-roll-result:not([disabled]):hover {
     max-height: 140px;
 }
 
+/* #region SUPER EQUIPMENT*/
+
+.S0-superequipment-container {
+    max-height: 500px;
+    box-shadow: 0 0 10px var(--color-shadow-dark);
+    transition: width 0.2s ease, max-height 0.2s ease;
+    overflow: hidden;
+}
+
+.S0-superequipment-contracted {
+    max-height: 38px;
+}
+
+/* #endregion */
+
 /* #endregion */
 
 /* #region ADD EQUIPMENT DIALOG */
@@ -1122,7 +1202,67 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* #endregion */
 
-/* #region ALLIES AND INFORMANTS */
+/* #region ALLIES, INFORMANTS, NPCs */
+
+/* #region NPC */
+.S0-image-npc {
+    width: 200px;
+    height: 392px;
+    border: 2px solid var(--secondary-color-alpha-50);
+    border-radius: 30px 0px;
+    overflow: hidden;
+    background-color: var(--color-black-alpha-50);
+}
+
+.S0-image-npc img {
+    height: 150%;
+    width: 100%;
+    object-position: top;
+}
+
+.S0-image-npc img.S0-clickable {
+    border: none;
+}
+
+.S0-item-bag-compact .S0-item-bag {
+    width: 80px;
+}
+
+.S0-item-bag-compact .S0-item-bag img {
+    max-width: 65px;
+    max-height: 80px;
+    min-height: 80px;
+}
+
+.S0-item-bag-compact .S0-item-bag .S0-item-name {
+    font-size: var(--font-size-9);
+    bottom: 18px;
+}
+
+.S0-item-bag-compact .S0-item-bag .S0-item-type {
+    font-size: var(--font-size-9);
+}
+
+.S0-item-bag-compact .S0-item-bag .S0-item-legend {
+    font-size: var(--font-size-10);
+    align-items: center;
+}
+
+.S0-item-bag-compact .S0-item-bag.S0-clickable:hover {
+    transform: scale(1.15);
+    z-index: 99;
+}
+
+.S0-item-bag-compact .S0-item-bag a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    position: relative;
+}
+
+/* #endregion */
 
 .S0-actor-images-container h4 {
     padding-right: 16px;
@@ -1238,6 +1378,9 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-drop-container {
+    min-width: 0;
+    min-height: 0;
+    height: 85%;
     padding: var(--border-radius-medium) !important;
     border-radius: var(--border-radius-large);
     transition: background-color 0.2s ease-in-out, padding 0.2s ease-in-out;
@@ -1300,8 +1443,7 @@ button.S0-roll-result:not([disabled]):hover {
 /* #endregion */
 
 /* #region ANIMATE ICONS */
-
-/* === MENU PARA ÍCONES NO HOVER === */
+/* #region ICON MENU */
 .S0-menu-float {
     color: black;
     visibility: hidden;
@@ -1333,7 +1475,9 @@ button.S0-roll-result:not([disabled]):hover {
     opacity: 1;
 }
 
-/* === ROTAÇÃO DE ÍCONES NO HOVER === */
+/* #endregion */
+
+/* #region ICON ROTATE */
 .S0-centralized-icon {
     width: 16px;
     height: 16px;
@@ -1358,8 +1502,9 @@ button.S0-roll-result:not([disabled]):hover {
     scale: 1.15;
 }
 
-/* === SWAP DE ÍCONES NO HOVER === */
+/* #endregion */
 
+/* #region ICON SWAPPER */
 .S0-icon-swaper {
     display: flex;
     align-items: center;
@@ -1392,7 +1537,9 @@ button.S0-roll-result:not([disabled]):hover {
     display: flex;
 }
 
-/* === ÍCONE COM SLIDER ATIVADO NO HOVER === */
+/* #endregion */
+
+/* #region ICON SLIDER */
 .S0-icon-hover-slider {
     position: relative;
     display: inline-flex;
@@ -1487,8 +1634,9 @@ button.S0-roll-result:not([disabled]):hover {
 
 /* #endregion */
 
-/* #region EXPAND/CONTRACT CONTAINER */
+/* #endregion */
 
+/* #region EXPAND/CONTRACT CONTAINER */
 .S0-container-contract {
     overflow: hidden;
     max-height: 0;
@@ -1524,7 +1672,6 @@ button.S0-roll-result:not([disabled]):hover {
     background: url(/ui/denim075.png) repeat;
     margin: 0;
 }
-
 
 .S0-page-transparent .S0-container {
     border-color: var(--tertiary-color-alpha-50);
@@ -1572,6 +1719,18 @@ button.S0-roll-result:not([disabled]):hover {
     background-color: var(--primary-color-alpha);
 }
 
+.S0-page-transparent .S0-characteristic {
+    border-color: var(--primary-color-alpha);
+}
+
+.S0-page-transparent .S0-characteristic.S0-letal {
+    background-color: var(--tertiary-color);
+}
+
+.S0-page-transparent .S0-characteristic.S0-superficial {
+    background-color: var(--primary-color);
+}
+
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial:hover,
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-letal {
     background-color: var(--tertiary-color);
@@ -1584,7 +1743,7 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-page-transparent .S0-clickable.S0-characteristic {
-    background-color: rgba(250, 250, 250, 0.5);
+    background-color: var(--secondary-color);
 }
 
 .S0-page-transparent .S0-clickable:is(.S0-letal, .S0-selected):hover {
@@ -1601,7 +1760,7 @@ button.S0-roll-result:not([disabled]):hover {
 }
 
 .S0-page-transparent .S0-item-bag {
-    border-color: rgba(130, 0, 255);
+    border-color: var(--tertiary-color);
 }
 
 .S0-page-transparent .S0-actor-images-container {
@@ -1632,10 +1791,13 @@ button.S0-roll-result:not([disabled]):hover {
     background-color: var(--tertiary-color-alpha);
 }
 
+.S0-page-transparent .S0-image-npc {
+    border-color: var(--tertiary-color-alpha-50);
+}
+
 /* #endregion */
 
 /* #region ID EDITS */
-
 #actor-image {
     object-position: top;
     width: 220px;
@@ -1664,9 +1826,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 #effects-container.S0-expanded {
     padding-block: 4px;
-    max-height: 340px;
+    max-height: 180px;
 }
 
 /* #endregion */
-
-/* styles.css */

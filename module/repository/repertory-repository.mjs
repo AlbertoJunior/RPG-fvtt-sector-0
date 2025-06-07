@@ -1,3 +1,5 @@
+import { SYSTEM_ID } from "../constants.mjs";
+
 export class RepertoryRepository {
     static items = [
         { id: 'aliados', label: 'S0.Aliados' },

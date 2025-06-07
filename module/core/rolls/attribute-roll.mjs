@@ -1,39 +1,29 @@
-import { getObject } from "../../../scripts/utils/utils.mjs";
-import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
 import { ActorUtils } from "../actor/actor-utils.mjs";
+import { EquipmentUtils } from "../equipment/equipment-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollAttribute {
     static async roll(actor, params) {
-        const { attr1, attr2, ability, specialist = false,
+        const {
+            attr1, attr2, ability, specialist = false,
             bonus = 0, automatic = 0, weapon,
             isHalf = false
         } = params;
 
         const penalty = ActorUtils.calculatePenalty(actor);
         const diceAmount = ActorUtils.calculateDices(actor, attr1, attr2, ability);
-        
+
         const diceAmountVerifiedHalf = isHalf ? Math.floor(diceAmount / 2) : diceAmount;
         const diceAmountPlusBonus = diceAmountVerifiedHalf + Number(bonus);
         const diceAmountSubtractedPenalty = Math.max(diceAmountPlusBonus - penalty, 0);
 
-        let finalDiceAmount = diceAmountSubtractedPenalty;
-        if (diceAmountSubtractedPenalty > 0) {
-            const weaponDamage = Number(weapon?.damage) || 0
-            finalDiceAmount += weaponDamage;
+        let diceAmountWithWeapon = diceAmountSubtractedPenalty;
+        if (diceAmountSubtractedPenalty > 0 && weapon) {
+            const weaponDamage = Number(weapon.damage) || 0;
+            diceAmountWithWeapon += weaponDamage;
         }
 
-        const overloadDiceAmount = Math.min(ActorUtils.getOverload(actor), finalDiceAmount);
-
-        const [rollOverloadResults, rollDefaultResults] = await Promise.all([
-            CoreRollMethods.rollDice(overloadDiceAmount),
-            CoreRollMethods.rollDice(Math.max(finalDiceAmount - overloadDiceAmount, 0))
-        ]);
-
-        const rollsResults = {
-            overload: rollOverloadResults,
-            default: rollDefaultResults
-        }
+        const rollsResults = await CoreRollMethods.rollDiceAmountWithOverload(actor, diceAmountWithWeapon);
 
         const attributes = {
             attr1: {
@@ -47,16 +37,16 @@ export class RollAttribute {
         }
 
         const modifiersInformations = {
+            specialist: specialist,
             automatic: Number(automatic),
             bonus: Number(bonus),
             penalty: penalty,
-            weapon: weapon
+            weapon: weapon,
         }
 
         const abilityInformations = {
             label: ability,
             value: ActorUtils.getAbilityValue(actor, ability),
-            specialist: specialist
         };
 
         return {
@@ -72,13 +62,11 @@ export class RollAttribute {
         return this.roll(actor, params);
     }
 
-    static async rollByRollableTestsWithWeapon(actor, rollable, weapon) {
+    static async rollByRollableTestsWithEquipment(actor, rollable, equipment, half) {
         const params = {
             ...this.#mountParamsByRollable(rollable),
-            weapon: {
-                damage: getObject(weapon, EquipmentCharacteristicType.DAMAGE),
-                true_damage: getObject(weapon, EquipmentCharacteristicType.TRUE_DAMAGE)
-            }
+            isHalf: half,
+            weapon: EquipmentUtils.getItemRollInformation(equipment)
         };
         return this.roll(actor, params);
     }

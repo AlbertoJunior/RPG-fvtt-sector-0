@@ -1,3 +1,4 @@
+import { SYSTEM_ID } from "../constants.mjs";
 import { agilityEnhancement } from "../core/enhancement/agility.mjs";
 import { assimilationEnhancement } from "../core/enhancement/assimilation.mjs";
 import { brutalityEnhancement } from "../core/enhancement/brutality.mjs";
@@ -20,7 +21,7 @@ export class EnhancementRepository {
     static #loadedFromPack = [];
 
     static async _loadFromPack() {
-        const compendium = await game.packs.get('setor0OSubmundo.enhancements')?.getDocuments();
+        const compendium = await game.packs.get(`${SYSTEM_ID}.enhancements`)?.getDocuments();
         if (compendium) {
             EnhancementRepository.#loadedFromPack = compendium.map((item) => {
                 return {
@@ -34,12 +35,14 @@ export class EnhancementRepository {
     }
 
     static _getItems() {
-        return [... this.#enhancements, ... this.#loadedFromPack].sort((a, b) => a.name.localeCompare(b.name));
+        return [
+            ...EnhancementRepository.#enhancements,
+            ...EnhancementRepository.#loadedFromPack
+        ].sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    static _getEnhancementById(enhancementId) {
+    static getEnhancementById(enhancementId) {
         if (enhancementId) {
-            const a = this._getItems();
             const fetchedEnhancement = this._getItems().filter(item => item.id == enhancementId)[0];
             if (fetchedEnhancement) {
                 return fetchedEnhancement;
@@ -48,9 +51,9 @@ export class EnhancementRepository {
         return undefined;
     }
 
-    static _getEnhancementEffectsByEnhancementId(enhancementId) {
+    static getEnhancementEffectsByEnhancementId(enhancementId) {
         if (enhancementId) {
-            const fetchedLevels = this._getEnhancementById(enhancementId)?.effects;
+            const fetchedLevels = this.getEnhancementById(enhancementId)?.effects;
             if (fetchedLevels) {
                 return [...fetchedLevels];
             }
@@ -58,12 +61,12 @@ export class EnhancementRepository {
         return [];
     }
 
-    static _getEnhancementEffectById(effectId, enhancementId) {
+    static getEnhancementEffectById(effectId, enhancementId) {
         if (!effectId)
             return null;
 
         if (enhancementId) {
-            return this._getEnhancementById(enhancementId)?.effects.find(ef => ef.id == effectId) || null;
+            return this.getEnhancementById(enhancementId)?.effects.find(ef => ef.id == effectId) || null;
         }
 
         return this._getItems()
@@ -71,7 +74,7 @@ export class EnhancementRepository {
             .find(ef => ef.id == effectId) || null;
     }
 
-    static _getEnhancementFamilyByEffectId(effectId) {
+    static getEnhancementFamilyByEffectId(effectId) {
         return this._getItems().find(enhancement => enhancement.effects?.some(effect => effect.id == effectId));
     }
 

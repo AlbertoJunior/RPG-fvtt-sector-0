@@ -1,3 +1,5 @@
+import { TEMPLATES_PATH } from "../../constants.mjs";
+
 export class RollInitiativeMessageCreator {
     static async mountContent(params) {
         const { initiative, value, total, values } = params;
@@ -7,6 +9,6 @@ export class RollInitiativeMessageCreator {
             total: total,
             diceValues: values,
         };
-        return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll-initiative.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-initiative.hbs`, data);
     }
 }

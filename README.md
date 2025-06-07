@@ -18,12 +18,19 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 1. Baixe ou clone este repositório.
 2. Mova a pasta para o diretório `Data/systems` do seu Foundry VTT.
 3. Reinicie o Foundry e ative o sistema ao criar um novo mundo.
-
 > 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL.
 
-<details>
-<summary>Legenda de ícones</summary>
+## Utilizando com seus jogadores
+Caso você não possua um servidor para hospedar o Foundry e compartilhar o link, você pode criar um `QuickTunnel` com o `CloudFlare`. Da seguinte maneira:
 
+1. Baixe e instale o [cloudFlarered](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+2. Execute o código no CMD
+```console
+cloudflared tunnel --url http://localhost:30000
+```
+3. Pegue o link que foi apresentado no console e compartilhe.
+
+## Legenda de ícones
 ```
 🧩 Instalação
 🧬 Funcionalidades
@@ -35,7 +42,6 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 🛠️ Em desenvolvimento
 🚧 Planejado
 ```
-</details>
 
 ## 🧬 Funcionalidades
 <details>
@@ -48,39 +54,56 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 </details>
 
 ### Personagem
+* 🚧 Bônus de Nível 6.
 * ✅ Aprimoramentos com efeitos passivos e ativos.
 * ✅ Sistema de inventário com mochila e itens equipados.
+* ✅ Atalhos customizados por Personagem.
 * 🚧 Transacionar itens entre personagens.
 * 🚧 Importar personagem do site.
 * 🚧 Calculo de XP e pontos utilizados.
 
 ### Sistemas
-* 🚧 Bônus de Nível 6.
-* 🚧 Rolagem com Crítico variável.
 * ✅ Aprimoramentos.
 * ✅ Traços Bons e Ruins.
 * ✅ Inventário.
-* ✅ Atalhos customizados por Personagem.
-* ✅ Atalhos customizados por Equipamento.
-* ✅ Rolagens considerando as penalidades e todos os bônus.
-* 🚧 SuperEquipamentos.
-* 🛠️ Aliados e Informantes.
+* ✅ SuperEquipamentos.
+* ✅ Atalhos.
+* ✅ Aliados e Informantes.
 
 ### Efeitos
 * ✅ Efeitos específicos do Setor 0.
 * ✅ Efeitos ativos baseado em Aprimoramentos.
-* 🚧 Efeitos ativos baseado em Traços.
-* 🚧 Efeitos ativos baseado em Equipamentos.
+* 🛠️ Efeitos ativos baseado em Traços.
+* ✅ Efeitos ativos baseado em Equipamentos.
 * ✅ Efeitos que são ativados durante um combate são desativados automaticamente ao final dele.
 
+### Equipamentos
+* ✅ Ficha.
+* ✅ SuperEquipamentos.
+* ✅ Rolagem pelo Equipamento.
+* ✅ Rolagem dividida pelo Equipamento.
+* ✅ Atalhos customizados por Equipamento.
+
+### Personagens Não Jogáveis (PNJ)
+* ✅ Ficha.
+* ✅ Rolagem.
+* ✅ Equipamentos.
+* ✅ Converter Personagem Jogável (PJ) para PNJ.
+
 ### Rolagens
-* ✅ Atributos + Habilidade.
+* ✅ Padrão (Atributos + Habilidade).
+* ✅ Padrão (Dividida).
 * ✅ Virtudes.
+* ✅ Simplificada.
+* ✅ Simplificada (Personagens Não Jogáveis).
+* ✅ Customizada.
 * ✅ Sobrecarga.
 * ✅ Vida.
 * ✅ Iniciativa.
-* ✅ Perseverança pela mensagem do chat.
-* ✅ Rolagem pelo Equipamento.
+* ✅ Perseverança (pelo chat).
+* ✅ Rolagem com Crítico variável.
+* ✅ Rolagem com Especialização.
+* ✅ Rolagens considerando as penalidades e todos os bônus.
 
 ### Macros
 O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. Todo novo jogador recebe em sua Hotbar 3 macros iniciais, dois deles servem para abrir a ficha do Personagem em uma página específica, como a da mochila ou dos atalhos, o terceiro serve para realizar um teste de Sobrecarga, que é comum no sistema.
@@ -179,7 +202,7 @@ Consulte o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
 Este é um projeto com direitos reservados.  
 Sugestões, correções e contribuições são bem-vindas, mas devem ser discutidas e aprovadas previamente.  
 Se você deseja contribuir, entre em contato pelos canais oficiais ou abra uma issue neste repositório.
-Consulte o arquivo [`CONTRIBUTING`](./CONTRIBUTING) para mais detalhes.
+Consulte o arquivo [`CONTRIBUTING`](./CONTRIBUTING.md) para mais detalhes.
 
 ---
 ## ⚠️ P.S.

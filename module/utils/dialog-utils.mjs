@@ -1,13 +1,32 @@
 import { onArrayRemove } from "../../scripts/utils/utils.mjs";
-import { _createA } from "../creators/element/element-creator-jscript.mjs";
+import { createA } from "../creators/element/element-creator-jscript.mjs";
+import { HtmlJsUtils } from "./html-js-utils.mjs";
 
 export class DialogUtils {
     static presetDialogRender(html, params = {}) {
-        const div = html[0].parentElement;
+        const div = html[0]?.parentElement;
+        if (!div) {
+            return null;
+        }
+
         div.classList.add('S0-content');
+
+        const paramsContent = params.content;
+        if (paramsContent && typeof paramsContent === 'object') {
+            Object.entries(params.content).forEach(([key, value]) => {
+                div.style[key] = value;
+            });
+        }
+
+        const firtsChild = div.children[0];
+        if (firtsChild) {
+            firtsChild.classList.add('S0-page-transparent');
+        }
 
         this.#setupHeaderParams(div, params);
         this.#setupDialogButtons(div);
+
+        HtmlJsUtils.setupHeader(html);
 
         return div.closest('.window-app');
     }
@@ -26,7 +45,7 @@ export class DialogUtils {
 
             const buttons = params.header.buttons || [];
             buttons.forEach(button => {
-                const elementA = _createA(button.label, {
+                const elementA = createA(button.label, {
                     icon: button.icon
                 });
 

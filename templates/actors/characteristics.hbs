@@ -23,7 +23,25 @@
             <h2>
                 {{localize 'S0.Fama'}}
             </h2>
-            <div id="famaContainer" class="S0-container-3-column"></div>
+            <div id="fameContainer" class="S0-container-3-column">
+                {{#each (fetchRepository 'fame')}}
+                <div class="S0-characteristic-container" id="{{id}}">
+                    <label>
+                        {{localize label}}
+                    </label>
+
+                    {{#forLoop 0 4}}
+                    <div class="S0-characteristic {{#if ../../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="">
+                    </div>
+                    {{/forLoop}}
+
+                    <div class="S0-characteristic S0-characteristic-6 {{#if ../editable}}S0-clickable{{/if}}"
+                        data-action="characteristic" data-characteristic="">
+                    </div>
+                </div>
+                {{/each}}
+            </div>
         </li>
 
         <li class="S0-container">
@@ -55,7 +73,7 @@
             <h2>
                 {{localize 'S0.Habilidades'}}
             </h2>
-            <div id="habilidadesContainer" class="S0-container-2-column">
+            <div id="skillsContainer" class="S0-container-2-column">
                 {{#each (fetchRepository 'ability')}}
                 <div class="S0-characteristic-container" id="{{id}}">
                     <label>

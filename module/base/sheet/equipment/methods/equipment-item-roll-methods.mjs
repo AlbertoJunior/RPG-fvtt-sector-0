@@ -1,12 +1,13 @@
 import { getObject, onArrayRemove, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { RollTestUtils } from "../../../../core/rolls/roll-test-utils.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
+import { ActorType } from "../../../../enums/characteristic-enums.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs"
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
+import { playerRollHandle } from "../../actor/methods/player-roll-methods.mjs";
+import { npcRollHandle } from "../../npc/methods/npc-roll-methods.mjs";
 
 export const handlerEquipmentItemRollEvents = {
     [OnEventType.ADD]: async (item, event) => EquipmentSheetItemRollHandle.add(item, event),
@@ -90,23 +91,38 @@ class EquipmentSheetItemRollHandle {
     }
 
     static async roll(item, event) {
-        const rollId = event.currentTarget.dataset.itemId;
-        this.rollById(item, rollId);
+        const dataset = event.currentTarget.dataset;
+        const rollId = dataset.itemId;
+        this.rollById(item, rollId, dataset.type == 'half');
     }
 
-    static async rollById(item, rollId) {
+    static async rollById(item, rollId, divided) {
         const possibleTests = this.#getItemTests(item);
         const rollTest = possibleTests.find(test => test.id == rollId);
         if (!rollTest) {
             return;
         }
 
-        const resultRoll = await RollAttribute.rollByRollableTestsWithWeapon(item.actor, rollTest, item);
-        DefaultActions.sendRollOnChat(item.actor, resultRoll, rollTest.difficulty, rollTest.name);
+        const half = divided || false;
+        const actor = item.actor;
+
+        const mappedRollActor = {
+            [ActorType.PLAYER]: async () => {
+                await playerRollHandle.rollableItem(actor, rollTest, item, half);
+            },
+            [ActorType.NPC]: async () => {
+                await npcRollHandle.rollableItem(actor, rollTest, item, half);
+            },
+        }
+
+        const mappedMethod = mappedRollActor[actor?.type];
+        if (typeof mappedMethod === 'function') {
+            mappedMethod();
+        }
     }
 
     static async chat(item, event) {
-        TODO('enviar roll do item no chat');
+        TODO('implementar');
     }
 
     static async view(item, event) {

@@ -1,3 +1,5 @@
+import { SYSTEM_ID, TEMPLATES_PATH } from "../constants.mjs";
+
 const { NumberField, StringField, BooleanField } = foundry.data.fields;
 
 class TraitDataModel extends foundry.abstract.TypeDataModel {
@@ -13,8 +15,8 @@ class TraitDataModel extends foundry.abstract.TypeDataModel {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["setor0OSubmundo", "sheet", "item", "trait"],
-            template: "systems/setor0OSubmundo/templates/traits/trait-sheet.hbs",
+            classes: [SYSTEM_ID, "sheet", "item", "trait"],
+            template: `${TEMPLATES_PATH}/traits/trait-sheet.hbs`,
             width: 600,
             height: 850
         });

@@ -1,17 +1,21 @@
-import { SYSTEM_ID, REGISTERED_TEMPLATES } from "../../../constants.mjs";
+import { SYSTEM_ID, REGISTERED_TEMPLATES, TEMPLATES_PATH } from "../../../constants.mjs";
 import { OnEventTypeClickableEvents } from "../../../enums/on-event-type.mjs";
 import { FlagsUtils } from "../../../utils/flags-utils.mjs";
 import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
 import { menuHandleMethods } from "../../menu-default-methods.mjs";
+import { handlerEquipmentCharacteristicsEvents } from "./methods/equipment-characteristics-methods.mjs";
 import { handlerEquipmentItemRollEvents } from "./methods/equipment-item-roll-methods.mjs";
 import { handlerEquipmentMenuRollEvents } from "./methods/equipment-menu-roll-methods.mjs";
+import { handlerSuperEquipmentEvents } from "./methods/superequipment-methods.mjs";
 
 export class EquipmentSheet extends ItemSheet {
     #mapEvents = {
         menu: menuHandleMethods,
         item_roll: handlerEquipmentItemRollEvents,
-        menu_roll: handlerEquipmentMenuRollEvents
+        menu_roll: handlerEquipmentMenuRollEvents,
+        characteristic: handlerEquipmentCharacteristicsEvents,
+        superequipment: handlerSuperEquipmentEvents,
     };
 
     constructor(...args) {
@@ -23,34 +27,28 @@ export class EquipmentSheet extends ItemSheet {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["setor0OSubmundo", "sheet", "item"],
-            template: `systems/setor0OSubmundo/templates/items/default.hbs`,
-            width: 300,
-            height: 500
+            classes: [SYSTEM_ID, "sheet", "item"],
+            template: `${TEMPLATES_PATH}/items/default.hbs`,
+            width: 320,
+            height: 640
         });
     }
 
     get template() {
         const type = this.item.type.toLowerCase();
-        const path = `systems/${SYSTEM_ID}/templates/items/${type}.hbs`;
+        const path = `${TEMPLATES_PATH}/items/sheet/${type}.hbs`;
 
         if (REGISTERED_TEMPLATES.has(path)) {
             return path;
         }
 
-        return `systems/${SYSTEM_ID}/templates/items/default.hbs`
+        return `${TEMPLATES_PATH}/items/default.hbs`
     }
 
     getData() {
         const data = super.getData();
-        const item = this.item;
-        data.canEdit = game.user.isGM || item.getFlag(SYSTEM_ID, 'canEdit');
-
-        return {
-            ...data,
-            item,
-            system: item.system
-        };
+        data.canEdit = game.user.isGM || this.item.getFlag(SYSTEM_ID, 'canEdit');
+        return data;
     }
 
     get isEditable() {
@@ -117,13 +115,20 @@ export class EquipmentSheet extends ItemSheet {
 
 export async function equipmentTemplatesRegister() {
     const templates = [
-        { path: "items/armor" },
-        { path: "items/melee" },
-        { path: "items/projectile" },
-        { path: "items/substance" },
-        { path: "items/vehicle" },
-        { path: "items/common-equipment" },
-        { path: "items/rollable-tests" }
+        { path: "items/sheet/armor" },
+        { path: "items/sheet/acessory" },
+        { path: "items/sheet/melee" },
+        { path: "items/sheet/projectile" },
+        { path: "items/sheet/substance" },
+        { path: "items/sheet/vehicle" },
+        { path: "items/others/equipment-bag-item", call: 'equipamentBagItem' },
+        { path: "items/others/equipment-equipped-item", call: 'equipamentEquippedItem' },
+        { path: "items/others/common-equipment", call: "itemCommon" },
+        { path: "items/others/common-weapon", call: "itemCommonWeapon" },
+        { path: "items/others/common-resistance", call: "itemCommonResistance" },
+        { path: "items/others/common-description", call: "itemCommonDescription" },
+        { path: "items/others/rollable-tests", call: "itemRollableTests" },
+        { path: "items/others/superequipment", call: "itemSuperEquipment" },
     ];
 
     return await loadAndRegisterTemplates(templates);
@@ -131,8 +136,8 @@ export async function equipmentTemplatesRegister() {
 
 export async function registerEquipment() {
     await Items.unregisterSheet("core", ItemSheet);
-    await Items.registerSheet("setor0OSubmundo", EquipmentSheet, {
-        types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance"],
+    await Items.registerSheet(SYSTEM_ID, EquipmentSheet, {
+        types: ["Melee", "Projectile", "Armor", "Vehicle", "Substance", "Acessory"],
         makeDefault: true
     });
 }

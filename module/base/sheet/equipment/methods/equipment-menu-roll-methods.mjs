@@ -40,7 +40,7 @@ class EquipmentSheetMenuRollHandle {
         HtmlJsUtils.flipClasses(target.children[0], 'fa-chevron-up', 'fa-chevron-down');
 
         const containerList = target.parentElement.parentElement.parentElement.querySelector('#rollable-tests-list');
-        const expandResult = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: item.sheet.defaultHeight, maxHeight: 640 });
+        const expandResult = HtmlJsUtils.expandOrContractElement(containerList, { minHeight: item.sheet.defaultHeight, maxHeight: 840 });
         item.sheet.isExpandedTests = expandResult.isExpanded;
         item.sheet.newHeight = expandResult.newHeight;
     }

@@ -1,0 +1,38 @@
+<form autocomplete="off">
+    {{> itemCommon this}}
+
+    <div class="S0-page S0-container">
+        <div class="form-group">
+            <label for="{{item.id}}.type" style="flex: 1;">
+                {{localize 'S0.Tipo'}}:
+            </label>
+            <select id="{{item.id}}.type" class="S0-select" style="flex: 1; min-width: 142.5px;"
+                name="system.type_vehicle">
+                {{#each (fetchRepository 'equipment-vehicle-type')}}
+                <option value="{{id}}" {{selectIfEq ../item.system.type_vehicle id }}>{{label}}</option>
+                {{/each}}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="{{item.id}}.acceleration" style="flex: 1;">{{localize 'S0.Aceleracao'}}:</label>
+            <input id="{{item.id}}.acceleration" style="flex: 1; text-align: center;" type="number"
+                name="system.acceleration" min="0" max="6" value="{{item.system.acceleration}}" />
+        </div>
+
+        <div class="form-group">
+            <label for="{{item.id}}.speed" style="flex: 1;">{{localize 'S0.Velocidade'}}:</label>
+            <input id="{{item.id}}.speed" style="flex: 1; text-align: center;" type="number" name="system.speed" min="0"
+                max="6" value="{{item.system.speed}}" />
+        </div>
+    </div>
+
+    {{> itemCommonResistance this}}
+
+    {{> itemSuperEquipment this}}
+
+    {{> itemRollableTests this}}
+
+    {{> itemCommonDescription this}}
+</form>

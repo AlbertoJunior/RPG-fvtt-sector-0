@@ -1,4 +1,4 @@
-import { equipmentTypeIdToTypeString, validEquipmentTypes } from "../../module/enums/equipment-enums.mjs";
+import { validEquipmentTypes } from "../../module/enums/equipment-enums.mjs";
 import { MorphologyRepository } from "../../module/repository/morphology-repository.mjs";
 import { DistrictRepository } from "../../module/repository/district-repository.mjs";
 import { EnhancementRepository } from "../../module/repository/enhancement-repository.mjs";
@@ -9,8 +9,23 @@ import { AbilityRepository } from "../../module/repository/ability-repository.mj
 import { AttributeRepository } from "../../module/repository/attribute-repository.mjs";
 import { RepertoryRepository } from "../../module/repository/repertory-repository.mjs";
 import { VirtuesRepository } from "../../module/repository/virtues-repository.mjs";
+import { FameRepository } from "../../module/repository/fame-repository.mjs";
+import { NpcQualityRepository } from "../../module/repository/npc-quality-repository.mjs";
+import { EquipmentInfoParser } from "../../module/core/equipment/equipment-info.mjs";
+import { SuperEquipmentTraitRepository } from "../../module/repository/superequipment-trait-repository.mjs";
 
-const map = {
+function getActorEquipmentTypes() {
+    return validEquipmentTypes().map(item => {
+        const type = EquipmentInfoParser.equipmentTypeIdToTypeString(item);
+        return {
+            id: item,
+            label: localizeType(`Item.${type}`),
+            type: type.toLowerCase(),
+        }
+    });
+}
+
+const repositoryMap = {
     'morphology': MorphologyRepository._getItems(),
     'district': DistrictRepository._getItems(),
     'enhancement': EnhancementRepository._getItems(),
@@ -20,25 +35,27 @@ const map = {
     'attribute': AttributeRepository._getItems(),
     'ability': AbilityRepository._getItems(),
     'repertory': RepertoryRepository._getItems(),
-    'virtue': VirtuesRepository._getItems(),
+    'virtue': VirtuesRepository.getItems(),
+    'fame': FameRepository._getItems(),
+    'npc-fame': FameRepository._getItemsNpc(),
+    'npc-quality': NpcQualityRepository._getItems(),
     'equipment-types': getActorEquipmentTypes,
-}
-
-function getActorEquipmentTypes() {            
-    return validEquipmentTypes().map(item => {
-        const type = equipmentTypeIdToTypeString(item);
-        return {
-            id: item,
-            label: localizeType(`Item.${type}`),
-            type: type.toLowerCase(),
-        }
-    });
+    'equipment-occultability': EquipmentInfoParser.getOccultabilityTypes,
+    'equipment-damage-type': EquipmentInfoParser.getDamageTypes,
+    'equipment-hand-type': EquipmentInfoParser.getHandTypes,
+    'equipment-melee-size': EquipmentInfoParser.getMeleeSize,
+    'equipment-vehicle-type': EquipmentInfoParser.getVehicleTypes,
+    'equipment-substance-type': EquipmentInfoParser.getSubstanceTypes,
+    'superequipment-good-traits': SuperEquipmentTraitRepository.getGoodTraits,
+    'superequipment-bad-traits': SuperEquipmentTraitRepository.getBadTraits,
 }
 
 export default function fetchRepository(repositoryName) {
-    if (repositoryName) {
-        return map[repositoryName]
+    const resolver = repositoryMap[repositoryName];
+    if (resolver) {
+        return resolver;
     }
-    console.warn(`-> [${repositoryName}] não existe no mapper`)
+
+    console.warn(`-> [${repositoryName}] não existe no mapper`);
     return [];
 }

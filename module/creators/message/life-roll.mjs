@@ -1,4 +1,5 @@
 import { localize } from "../../../scripts/utils/utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class RollLifeMessageCreator {
     static async mountContent(params) {
@@ -13,6 +14,6 @@ export class RollLifeMessageCreator {
             resultValue: success,
             resultMessageClasses: isSuccess ? `S0-success` : 'S0-failure'
         };
-        return await renderTemplate("systems/setor0OSubmundo/templates/messages/roll-life.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-life.hbs`, data);
     }
 }

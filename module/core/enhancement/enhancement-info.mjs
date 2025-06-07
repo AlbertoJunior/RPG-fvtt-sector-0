@@ -19,6 +19,7 @@ export class EnhancementInfoParser {
             [EnhancementOverload.ONE_TESTED]: '1',
             [EnhancementOverload.ONE_FIXED]: `1 ${localize('Automatico')}`,
             [EnhancementOverload.ONE_FIXED_ONE_TEST]: `1 ${localize('Automatico')} + 1`,
+            [EnhancementOverload.ONE_TESTED_EFFECT_COST]: `1 + ${localize('Efeito_Utilizado')}`,
             [EnhancementOverload.TWO_TESTED]: '2',
             [EnhancementOverload.TWO_FIXED]: `2 ${localize('Automatico')}`,
         }

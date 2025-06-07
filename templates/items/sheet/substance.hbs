@@ -1,0 +1,52 @@
+<form autocomplete="off">
+    {{> itemCommon this}}
+
+    <div class="S0-container form-group">
+        <label for="{{item.id}}.substance_type" style="flex: 1;">
+            {{localize 'S0.Tipo'}}:
+        </label>
+        <select id="{{item.id}}.substance_type" class="S0-select" style="flex: 1;" name="system.substance_type">
+            {{#each (fetchRepository 'equipment-substance-type')}}
+            <option value="{{id}}" {{selectIfEq ../item.system.substance_type id }}>{{label}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    {{> itemCommonDescription this}}
+
+    {{#if (itemValues item 'substance_with_effects')}}
+    <div class="S0-page S0-container">
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>{{localize 'S0.Efeitos'}}</strong>
+            
+            {{#if editable}}
+            <div style="display: flex; gap: 8px;">
+                <a class="S0-icon-expand" data-characteristic="characteristic" data-type="substance" data-action="add"
+                    title="{{localize 'S0.Adicionar'}}">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+            {{/if}}
+        </div>
+
+        <ul>
+            {{#each (itemValues item 'substance_effects')}}
+            <li
+                style="height: 35px; display: flex; align-items: center; margin-block: 2px; padding-block: 8px; border-bottom: 1px solid var(--secondary-color);">
+                <label style="flex: 1; font-size: var(--font-size-12);">{{description}}</label>
+
+                {{#if ../editable}}
+                <a class="S0-icon-expand" data-characteristic="characteristic" data-type="substance"
+                    data-action="remove" data-item-id="{{id}}" title="Remover">
+                    <i class="fas fa-trash"></i>
+                </a>
+                {{/if}}
+            </li>
+            {{/each}}
+        </ul>
+
+    </div>
+    {{/if}}
+
+</form>

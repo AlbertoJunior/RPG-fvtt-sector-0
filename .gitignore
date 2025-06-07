@@ -17,3 +17,6 @@ css/
 # dont commit pack binaries, but src
 packs/*
 !packs/src
+
+# only for test local scripts
+scripts/test-scripts

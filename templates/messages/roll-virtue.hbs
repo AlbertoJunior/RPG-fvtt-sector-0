@@ -7,7 +7,7 @@
 
         <hr>
 
-        {{#unless (isEmpty diceValues)}}
+        {{#unless (operators 'isEmpty' diceValues)}}
         <p>{{localize 'S0.Rolagem'}}:</p>
         <ol class="dice-rolls">
             {{#each diceValues }}
@@ -25,17 +25,17 @@
         </div>
 
         <section>
-            {{#unless (lt penalty 1)}}
+            {{#if (operators 'gt' penalty 0)}}
             <label style="display: block; margin-block: 4px;">{{localize 'S0.Penalidade'}}: {{ penalty }}</label>
-            {{/unless}}
+            {{/if}}
 
-            {{#unless (lt bonus 1)}}
+            {{#if (operators 'gt' bonus 0)}}
             <label style="display: block; margin-block: 4px;">{{localize 'S0.Bonus'}}: {{ bonus }}</label>
-            {{/unless}}
+            {{/if}}
 
-            {{#unless (lt automatic 1)}}
+            {{#if (operators 'gt' automatic 0)}}
             <label style="display: block; margin-block: 4px;">{{localize 'S0.Automatico'}}: {{ automatic }}</label>
-            {{/unless}}
+            {{/if}}
         </section>
     </div>
 

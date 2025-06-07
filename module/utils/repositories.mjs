@@ -1,19 +1,24 @@
-import { EnhancementRepository } from "../repository/enhancement-repository.mjs";
-import { LanguageRepository } from "../repository/language-repository.mjs";
-import { TraitRepository } from "../repository/trait-repository.mjs";
-import { EquipmentRepository } from "../repository/equipment-repository.mjs";
+import { logTable } from "../../scripts/utils/utils.mjs";
 import { DistrictRepository } from "../repository/district-repository.mjs";
+import { EnhancementRepository } from "../repository/enhancement-repository.mjs";
+import { EquipmentRepository } from "../repository/equipment-repository.mjs";
+import { LanguageRepository } from "../repository/language-repository.mjs";
 import { MorphologyRepository } from "../repository/morphology-repository.mjs";
+import { RepertoryRepository } from "../repository/repertory-repository.mjs";
+import { SuperEquipmentTraitRepository } from "../repository/superequipment-trait-repository.mjs";
+import { TraitRepository } from "../repository/trait-repository.mjs";
 
 export class RepositoriesUtils {
     static async loadFromPackages() {
         const repositories = [
-            { repo: EnhancementRepository, method: '_loadFromPack' },
-            { repo: LanguageRepository, method: '_loadFromPack' },
-            { repo: TraitRepository, method: '_loadFromPack' },
-            { repo: EquipmentRepository, method: '_loadFromPack' },
             { repo: DistrictRepository, method: '_loadFromPack' },
+            { repo: EnhancementRepository, method: '_loadFromPack' },
+            { repo: EquipmentRepository, method: '_loadFromPack' },
+            { repo: LanguageRepository, method: '_loadFromPack' },
             { repo: MorphologyRepository, method: '_loadFromPack' },
+            { repo: RepertoryRepository, method: '_loadFromPack' },
+            { repo: SuperEquipmentTraitRepository, method: '_loadFromPack' },
+            { repo: TraitRepository, method: '_loadFromPack' },
         ];
 
         const results = await Promise.all(
@@ -23,15 +28,13 @@ export class RepositoriesUtils {
                         await repo[method]();
                         return { Repository: repo.name, Status: "Sucesso" };
                     } catch (error) {
-                        console.error(error);
-                        return { Repository: repo.name, Status: "Falha" };
+                        return { Repository: repo.name, Status: "Falha", error: error };
                     }
                 })()
             )
         );
 
-        console.log('-> Todos os pacotes foram processados!');
-        console.table(results);
+        logTable('Todos os pacotes foram processados!', results);
     }
 
     static async loadFromGame() {
@@ -46,14 +49,12 @@ export class RepositoriesUtils {
                         await repo[method]();
                         return { Repository: repo.name, Status: "Sucesso" };
                     } catch (error) {
-                        console.error(error);
-                        return { Repository: repo.name, Status: "Falha" };
+                        return { Repository: repo.name, Status: "Falha", error: error };
                     }
                 })()
             )
         );
 
-        console.log('-> Todos os objetos do Jogo foram processados!');
-        console.table(results);
+        logTable('Todos os objetos do Jogo foram processados!', results);
     }
 }

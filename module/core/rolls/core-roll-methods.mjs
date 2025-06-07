@@ -1,4 +1,23 @@
+import { ActorUtils } from "../actor/actor-utils.mjs";
+
 export class CoreRollMethods {
+    static async rollDiceAmountWithOverload(actor, diceAmount) {
+        const overloadDiceAmount = CoreRollMethods.calculateOverloadDiceAmount(actor, diceAmount);
+        const finalDiceAmount = CoreRollMethods.calculateDiceAmount(overloadDiceAmount, diceAmount);
+
+        const [rollOverloadResults, rollDefaultResults] = await Promise.all(
+            [
+                CoreRollMethods.rollDice(overloadDiceAmount),
+                CoreRollMethods.rollDice(finalDiceAmount)
+            ]
+        );
+
+        return {
+            overload: rollOverloadResults,
+            default: rollDefaultResults
+        }
+    }
+
     static async rollDice(amount) {
         if (amount > 0) {
             const rollFormula = `${amount}d10`;
@@ -21,33 +40,66 @@ export class CoreRollMethods {
         return roll.dice.flatMap(dice => dice.results.map(result => result.result));
     }
 
-    static calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, automatic) {
+    static calculateOverloadDiceAmount(actor, diceAmount) {
+        return Math.min(ActorUtils.getOverload(actor), diceAmount);
+    }
+
+    static calculateDiceAmount(overloadDiceAmount, diceAmount) {
+        return Math.max(diceAmount - overloadDiceAmount, 0);
+    }
+
+    static calculateSuccess(dicesOverload, dicesDefault, specialist, difficulty, criticDifficulty, automatic) {
+        const { resultOverload, criticalOverload, failureOverload } = this.#calculateOverloadSuccesses(dicesOverload, difficulty);
+
+        const resultDefault = this.#calculateDefaultSuccesses(dicesDefault, difficulty, criticDifficulty, specialist);
+
+        const resultWithoutAutomatic = resultOverload + resultDefault;
+        const resultFinal = resultWithoutAutomatic + (resultWithoutAutomatic > 0 ? automatic : 0);
+
+        return {
+            result: resultFinal,
+            criticalOverload: resultFinal > 0 && criticalOverload,
+            failureOverload: resultFinal < 0 && failureOverload,
+        }
+    }
+
+    static #calculateOverloadSuccesses(dicesOverload, difficulty) {
         let resultOverload = 0;
-        let overload = false;
+        let criticalOverload = false;
+        let failureOverload = false;
+
         for (const element of dicesOverload) {
             if (element == 10) {
                 resultOverload += 3;
-                overload = true;
+                criticalOverload = true;
             } else if (element == 1) {
                 resultOverload -= 3;
-                overload = true;
+                failureOverload = true;
             } else if (element >= difficulty) {
                 resultOverload++;
             }
         }
 
+        return {
+            resultOverload,
+            criticalOverload,
+            failureOverload
+        }
+    }
+
+    static #calculateDefaultSuccesses(dicesDefault, difficulty, criticDifficulty, specialist) {
         let resultDefault = 0;
-        let critic = 0;
+        let criticCount = 0;
         let usedSpecialist = !specialist;
 
         for (const element of dicesDefault) {
-            if (element == 10) {
-                critic++;
+            if (element == 10 || (element >= criticDifficulty && element >= difficulty)) {
+                criticCount++;
                 resultDefault++;
             } else if (element == 1) {
                 if (usedSpecialist) {
                     resultDefault--;
-                    critic--;
+                    criticCount--;
                 } else {
                     usedSpecialist = true
                 }
@@ -56,16 +108,11 @@ export class CoreRollMethods {
             }
         }
 
-        if (critic > 0 && critic % 2 !== 0) {
-            critic--;
+        if (criticCount > 0 && criticCount % 2 !== 0) {
+            criticCount--;
         }
+        const resultCritic = Math.floor(Math.max(criticCount, 0) / 2);
 
-        const resultWithoutAutomatic = resultOverload + resultDefault + Math.floor(Math.max(critic, 0) / 2);
-        const resultFinal = resultWithoutAutomatic + (resultWithoutAutomatic > 0 ? automatic : 0);
-
-        return {
-            result: resultFinal,
-            overload: overload
-        }
+        return resultDefault + resultCritic;
     }
 }

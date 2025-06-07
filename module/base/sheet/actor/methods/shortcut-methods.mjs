@@ -1,4 +1,4 @@
-import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize, onArrayRemove } from "../../../../../scripts/utils/utils.mjs";
 import { RollAttribute } from "../../../../core/rolls/attribute-roll.mjs";
 import { CreateFormDialog } from "../../../../creators/dialog/create-dialog.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
@@ -9,6 +9,7 @@ import { ActorCombatUtils } from "../../../../core/actor/actor-combat-utils.mjs"
 import { DefaultActions } from "../../../../utils/default-actions.mjs";
 import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { playerRollHandle } from "./player-roll-methods.mjs";
 
 export const handlerShortcutEvents = {
     [OnEventType.ADD]: async (actor, event) => ShortcutHandleEvents.handleAdd(actor, event),
@@ -119,43 +120,54 @@ class ShortcutHandleEvents {
     }
 
     static async #rollDefaultShortcut(actor, type, subCharacteristic) {
-        CreateFormDialog._open(localize("Modificadores"), "rolls/modifiers", async (data) => {
-            const isOffensive = subCharacteristic.includes('offensive');
+        CreateFormDialog.open(
+            localize("Modificadores"),
+            "rolls/modifiers",
+            {
+                presetForm: {
+                    canBeHalf: false,
+                    canBeSpecialist: true,
+                },
+                onConfirm: async (data) => {
+                    const isOffensive = subCharacteristic.includes('offensive');
 
-            const presetMap = isOffensive ? this.#presetsCombatOffensiveShortcuts : this.#presetsCombatDefensiveShortcuts;
-            if (!presetMap) {
-                NotificationsUtils._error('Tipo inválido');
-                return;
-            }
+                    const presetMap = isOffensive ? this.#presetsCombatOffensiveShortcuts : this.#presetsCombatDefensiveShortcuts;
+                    if (!presetMap) {
+                        NotificationsUtils._error('Tipo inválido');
+                        return;
+                    }
 
-            const key = Object.keys(presetMap).find(presetKey => type.includes(presetKey));
-            if (!key) {
-                NotificationsUtils._error('Tipo inválido');
-                return;
-            }
+                    const key = Object.keys(presetMap).find(presetKey => type.includes(presetKey));
+                    if (!key) {
+                        NotificationsUtils._error('Tipo inválido');
+                        return;
+                    }
 
-            const isHalf = type.includes('half');
+                    const isHalf = type.includes('half');
+                    const preset = presetMap[key];
+                    const name = `${localize(preset.label)} ${isHalf ? 'Dividido' : 'Completo'}`;
+                    const bonusPreset = preset.data.getBonus(actor);
 
-            const preset = presetMap[key];
-            const name = `${localize(preset.label)} ${isHalf ? 'Dividido' : 'Completo'}`;
-            const bonusPreset = preset.data.getBonus(actor);
+                    const inputParams = {
+                        ...preset.data,
+                        bonus: Number(data.bonus) + bonusPreset,
+                        automatic: Number(data.automatic),
+                        difficulty: Number(data.difficulty),
+                        critic: Number(data.critic),
+                        name: name,
+                        isHalf: isHalf,
+                        rollMode: data.chatSelect,
+                    };
 
-            const params = {
-                ...preset.data,
-                bonus: Number(data.bonus) + bonusPreset,
-                automatic: Number(data.automatic),
-                isHalf
-            };
-
-            const resultRoll = await RollAttribute.roll(actor, params);
-            DefaultActions.sendRollOnChat(actor, resultRoll, Number(data.difficulty), name, data.chatSelect);
-        });
+                    await playerRollHandle.default(actor, inputParams);
+                }
+            },
+        );
     }
 
     static async rollCustomShortcut(actor, itemId) {
         const shortcutTest = getObject(actor, CharacteristicType.SHORTCUTS).find(shortcut => shortcut.id == itemId);
-        const resultRoll = await RollAttribute.rollByRollableTests(actor, shortcutTest);
-        DefaultActions.sendRollOnChat(actor, resultRoll, shortcutTest.difficulty, shortcutTest.name);
+        await playerRollHandle.shortcut(actor, shortcutTest);
     }
 
 }

@@ -49,6 +49,7 @@ export class EnhancementUtils {
         let durationObject;
 
         switch (effectDuration) {
+            case EnhancementDuration.TIME:
             case EnhancementDuration.SCENE: {
                 const flags = ActiveEffectsUtils.getFlags(activeEffectData);
                 const haveFlagCombat = flags.combatId != undefined && flags.combatId !== '';
@@ -66,7 +67,6 @@ export class EnhancementUtils {
                 }
                 break;
             }
-            case EnhancementDuration.TIME:
             case EnhancementDuration.USE: {
                 durationObject = { rounds: 1, startRound: 0 };
                 break;
@@ -77,47 +77,53 @@ export class EnhancementUtils {
     }
 
     static #configureActiveEffectIcon(activeEffectData, effectDuration, enhancementId) {
-        if (effectDuration == EnhancementDuration.SCENE) {
-            const enhancement = EnhancementRepository._getEnhancementById(enhancementId);
-            if (!enhancement) {
-                return;
+        switch (effectDuration) {
+            case EnhancementDuration.TIME:
+            case EnhancementDuration.SCENE: {
+                const enhancement = EnhancementRepository.getEnhancementById(enhancementId);
+                if (!enhancement) {
+                    return;
+                }
+                activeEffectData.img = enhancement.icon;
             }
-            activeEffectData.img = enhancement.icon;
         }
     }
 
     static #configureActiveEffectTint(activeEffectData, effectDuration, levelId) {
-        if (effectDuration == EnhancementDuration.SCENE) {
-            const effect = EnhancementRepository._getEnhancementEffectById(levelId);
-            if (!effect) {
-                return;
-            }
+        switch (effectDuration) {
+            case EnhancementDuration.TIME:
+            case EnhancementDuration.SCENE: {
+                const effect = EnhancementRepository.getEnhancementEffectById(levelId);
+                if (!effect) {
+                    return;
+                }
 
-            let tint = "#FFFFFF"
-            switch (effect.level) {
-                case 1: {
-                    tint = "#FFFFFF";
-                    break;
+                let tint = "#FFFFFF"
+                switch (effect.level) {
+                    case 1: {
+                        tint = "#FFFFFF";
+                        break;
+                    }
+                    case 2: {
+                        tint = "#FFE682";
+                        break;
+                    }
+                    case 3: {
+                        tint = "#FFDC00";
+                        break;
+                    }
+                    case 4: {
+                        tint = "#F07823";
+                        break;
+                    }
+                    case 5: {
+                        tint = "#F00A0A";
+                        break;
+                    }
                 }
-                case 2: {
-                    tint = "#FFE682";
-                    break;
-                }
-                case 3: {
-                    tint = "#FFDC00";
-                    break;
-                }
-                case 4: {
-                    tint = "#F07823";
-                    break;
-                }
-                case 5: {
-                    tint = "#F00A0A";
-                    break;
-                }
-            }
 
-            activeEffectData.tint = tint;
+                activeEffectData.tint = tint;
+            }
         }
     }
 }

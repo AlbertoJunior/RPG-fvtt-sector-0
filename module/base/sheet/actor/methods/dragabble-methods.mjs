@@ -3,60 +3,51 @@ import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs"
 import { ActorUpdater } from "../../../updater/actor-updater.mjs";
 import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs"
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
+import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
+import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
 
 export class SheetActorDragabbleMethods {
     static async setup(html, actor) {
-        this.#findUsingActorId(html, 'bag', actor).on('drop', this.#onDropOnBag.bind(this, actor));
+        this.#setupBagDrag(html, actor);
         this.#setupNetworkDrag(html, actor);
 
         if (!window.Sortable) {
             return;
         }
 
-        this.#setupShortcutDrag(html, actor);
-        this.#setupBagDrag(html, actor);
+        this.#setupShortcutDragSortable(html, actor);
+        this.#setupBagDragSortable(html, actor);
     }
 
     static #findUsingActorId(html, id, actor) {
         return html.find(`#${id}-${actor.id}`);
     }
 
+    static #setupBagDrag(html, actor) {
+        const containerBag = this.#findUsingActorId(html, 'bag', actor);
+        containerBag.on('drop', this.#onDropOnBag.bind(this, actor))
+        containerBag.on('dragenter', (event) => {
+            containerBag[0].style.backgroundColor = "var(--tertiary-color-alpha)";
+        });
+
+        containerBag.on('dragleave', (event) => {
+            containerBag[0].style.backgroundColor = "";
+        });
+    }
+
     static async #setupNetworkDrag(html, actor) {
         const containerAllies = this.#findUsingActorId(html, 'allies', actor);
-        this.#presetAllDragEvents(
+        HtmlJsUtils.presetAllDragEvents(
             containerAllies, actor, (actor, event) => { this.#onDropOnAlliesInformants(actor, CharacteristicType.ALLIES, event); }
         );
 
         const containerInformants = this.#findUsingActorId(html, 'informants', actor);
-        this.#presetAllDragEvents(
+        HtmlJsUtils.presetAllDragEvents(
             containerInformants, actor, (actor, event) => { this.#onDropOnAlliesInformants(actor, CharacteristicType.INFORMANTS, event); }
         );
     }
 
-    static #presetAllDragEvents(containerTarget, actor, onDrop = (actor, event) => { }) {
-        if (!containerTarget) {
-            return;
-        }
-
-        containerTarget.on('dragover', (event) => {
-            containerTarget.addClass('S0-drop-target-hover');
-        });
-
-        containerTarget.on('dragenter', () => {
-            containerTarget.addClass('S0-drop-target-hover');
-        });
-
-        containerTarget.on('dragleave', () => {
-            containerTarget.removeClass('S0-drop-target-hover');
-        });
-
-        containerTarget.on('drop', (event) => {
-            containerTarget.removeClass('S0-drop-target-hover');
-            onDrop(actor, event);
-        });
-    }
-
-    static #setupShortcutDrag(html, actor) {
+    static #setupShortcutDragSortable(html, actor) {
         const containerShortcut = this.#findUsingActorId(html, `shortcuts-container`, actor)[0];
         if (!containerShortcut) {
             return;
@@ -84,7 +75,7 @@ export class SheetActorDragabbleMethods {
         });
     }
 
-    static #setupBagDrag(html, actor) {
+    static #setupBagDragSortable(html, actor) {
         const actorId = actor.id;
         const equippedList = this.#findUsingActorId(html, 'equipped', actor)[0];
         const bagList = this.#findUsingActorId(html, 'bag', actor)[0];
@@ -112,7 +103,7 @@ export class SheetActorDragabbleMethods {
                     return;
                 }
 
-                const equipment = ActorEquipmentUtils.getActorEquipmentById(actor, itemId);
+                const equipment = ActorEquipmentUtils.getEquipmentById(actor, itemId);
                 if (!equipment) {
                     console.warn("-> possível erro ao pegar o equipamento");
                     return
@@ -135,8 +126,8 @@ export class SheetActorDragabbleMethods {
     }
 
     static async #sortEquipments(actor, originSource, bagList, equippedList) {
-        const equipped = ActorEquipmentUtils.getActorEquippedItems(actor);
-        const unequipped = ActorEquipmentUtils.getActorFilteredUnequippedEquipment(actor);
+        const equipped = ActorEquipmentUtils.getEquippedItems(actor);
+        const unequipped = ActorEquipmentUtils.getFilteredUnequippedEquipment(actor);
 
         let elementContainer, sourceItems, staticItems;
 
@@ -172,10 +163,11 @@ export class SheetActorDragabbleMethods {
 
     static async #equipOrUnequip(actor, originSource, equipment) {
         if (originSource == 'bag') {
-            if (equipment.system.canEquip) {
+            if (EquipmentUtils.canEquip(equipment)) {
                 await ActorEquipmentUtils.equip(actor, equipment);
             } else {
-                NotificationsUtils._info("Este Item não pode ser equipado");
+                NotificationsUtils._warning("Este Item não pode ser equipado");
+                actor.sheet.render();
             }
         } else if (originSource == 'equipped') {
             await ActorEquipmentUtils.unequip(actor, equipment);

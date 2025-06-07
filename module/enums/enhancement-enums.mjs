@@ -12,6 +12,7 @@ export const EnhancementOverload = Object.freeze({
     TWO_TESTED: 3,
     TWO_FIXED: 4,
     ONE_FIXED_ONE_TEST: 5,
+    ONE_TESTED_EFFECT_COST: 6,
 });
 
 export const EffectChangeValueType = Object.freeze({

@@ -31,7 +31,9 @@ export class MacroUtils {
     }
 
     static async createMacro({ name, command, img, toHotbar = true, flags } = {}) {
-        let macro = game.macros.find(m => normalizeString(m.name) === normalizeString(name) && normalizeString(m.command) === normalizeString(command));
+        const normalizedName = normalizeString(name);
+        const normalizedCommand = normalizeString(command);
+        let macro = game.macros.find(m => normalizeString(m.name) === normalizedName && normalizeString(m.command) === normalizedCommand);
         if (!macro) {
             macro = await Macro.create({
                 flags: {
@@ -79,7 +81,7 @@ export class MacroUtils {
                 rollable: async (params) => {
                     const { actor, id } = params;
                     if (!actor || !id) {
-                        console.log("Elementos inválidos")
+                        console.log("-> Elementos inválidos")
                         return;
                     }
 
@@ -88,7 +90,7 @@ export class MacroUtils {
                         return
                     }
 
-                    const item = ActorEquipmentUtils.getActorEquipments(actor).find(item => {
+                    const item = ActorEquipmentUtils.getEquipments(actor).find(item => {
                         const tests = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
                         return tests.some(test => test.id === id);
                     });

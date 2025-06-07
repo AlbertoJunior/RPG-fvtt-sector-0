@@ -11,17 +11,17 @@ export const resetUserFlagsMacroData = {
   img: "icons/svg/explosion.svg",
   type: "script",
   command: `
-const namespace = 'setor0OSubmundo';
-const user = game.user;
-const flags = foundry.utils.getProperty(user.flags, namespace);
+  const namespace = 'setor0OSubmundo';
+  const user = game.user;
+  const flags = foundry.utils.getProperty(user.flags, namespace);
 
-if (!flags) {
+  if (!flags) {
   ui.notifications.info("Nenhuma flag encontrada para este usuário.");
-} else {
+  } else {
   for (const key of Object.keys(flags)) {
-    await user.unsetFlag(namespace, key);
+  await user.unsetFlag(namespace, key);
   }
   ui.notifications.info("Flags resetadas com sucesso.");
-}
-`,
+  }
+  `,
 }

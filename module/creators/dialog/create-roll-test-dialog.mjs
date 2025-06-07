@@ -4,6 +4,7 @@ import { localize, randomId } from "../../../scripts/utils/utils.mjs"
 import { DialogUtils } from "../../utils/dialog-utils.mjs";
 import { ConfirmationDialog } from "./confirmation-dialog.mjs";
 import { RollTestUtils } from "../../core/rolls/roll-test-utils.mjs";
+import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class CreateRollableTestDialog {
     static async _view(rollTestData) {
@@ -83,6 +84,7 @@ export class CreateRollableTestDialog {
                         bonus: Number(data.bonus || 0),
                         automatic: Number(data.automatic || 0),
                         difficulty: Number(data.difficulty || 6),
+                        critic: Number(data.critic || 10),
                         specialist: Boolean(formData.has("specialist"))
                     };
                     onConfirm(parsed);
@@ -99,10 +101,12 @@ export class CreateRollableTestDialog {
 
     static async #mountContent(rollableData, needConfirmation, buttons) {
         const data = {
+            uuid: `form_dialog.${randomId(10)}`,
             canEdit: needConfirmation,
             attributes: AttributeRepository._getItems(),
             abilities: AbilityRepository._getItems(),
             difficulty: 6,
+            critic: 10,
             bonus: 0,
             automatic: 0,
             specialist: false,
@@ -110,7 +114,7 @@ export class CreateRollableTestDialog {
             ...rollableData
         };
 
-        return await renderTemplate("systems/setor0OSubmundo/templates/rolls/create-roll-test-dialog.hbs", data);
+        return await renderTemplate(`${TEMPLATES_PATH}/rolls/create-roll-test-dialog.hbs`, data);
     }
 
     static #getDialogMode(isCreate, needConfirmation) {

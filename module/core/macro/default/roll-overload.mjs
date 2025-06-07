@@ -9,6 +9,9 @@ export const rollOverloadMacroData = {
     }
   },
   name: "Teste de Sobrecarga",
+  ownership: {
+    default: CONST.USER_ROLES.PLAYER
+  },
   command: `
 ${verifyAndReturnSelectedToken}
 ${verifyAndReturnActor}
