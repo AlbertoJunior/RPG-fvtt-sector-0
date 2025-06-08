@@ -32,7 +32,7 @@ export const traitMethods = {
     [OnEventType.ADD]: async (actor, event) => {
         const traitType = getTraitType(event);
 
-        TraitDialog._open(traitType, async (trait) => {
+        TraitDialog.open(traitType, async (trait) => {
             const characteristic = getCharacteristic(traitType);
             const actorTraits = getObject(actor, characteristic) || [];
 
@@ -57,7 +57,7 @@ export const traitMethods = {
 
         const trait = actorTraits[itemIndex];
 
-        TraitDialog._openByTrait(trait, traitType, actor, async (editedTrait) => {
+        TraitDialog.openByTrait(trait, traitType, actor, async (editedTrait) => {
             const objectTrait = ActorTraitField.toJson(editedTrait.id, editedTrait.name, editedTrait.particularity);
             const updatedTraits = [...actorTraits];
             updatedTraits[itemIndex] = objectTrait;
@@ -101,6 +101,6 @@ export const traitMethods = {
         const characteristic = getCharacteristic(traitType);
         const trait = getObject(actor, characteristic)?.[itemIndex];
 
-        TraitDialog._openByTrait(trait, traitType, actor, undefined);
+        TraitDialog.openByTrait(trait, traitType, actor, undefined);
     }
 }

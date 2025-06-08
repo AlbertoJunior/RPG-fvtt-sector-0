@@ -3,7 +3,7 @@ import { ActorCombatUtils } from "../../module/core/actor/actor-combat-utils.mjs
 import { BaseActorCharacteristicType, CharacteristicType, NpcSkillsMap } from "../../module/enums/characteristic-enums.mjs";
 import { getObject } from "../utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../module/core/actor/actor-equipment.mjs";
-import { NpcConversor } from "../../module/core/npc/npc-conversor.mjs";
+import { NpcUtils } from "../../module/core/npc/npc-utils.mjs";
 
 const map = {
     'penalty': (actor) => ActorUtils.calculatePenalty(actor),
@@ -41,7 +41,7 @@ const map = {
 
     'npc_actual_skill_name': (actor, skill = '') => { return getObject(actor, NpcSkillsMap[skill].SKILL_NAME) || '' },
     'npc_actual_skill_value': (actor, skill) => { return getObject(actor, NpcSkillsMap[skill].VALUE) || 0 },
-    'npc_stamina': (actor) => NpcConversor.getStamina(actor),
+    'npc_stamina': (actor) => NpcUtils.getStamina(actor),
 
     'calculate_dice_pool': (actor, params) => {
         const { primary_attribute, secondary_attribute, ability, bonus = 0 } = params[0];

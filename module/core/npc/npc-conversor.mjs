@@ -1,7 +1,6 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 import { BaseActorCharacteristicType, CharacteristicType, NpcCharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { NpcQualityRepository } from "../../repository/npc-quality-repository.mjs";
-import { ActorUtils } from "../actor/actor-utils.mjs";
 
 export class NpcConversor {
     static actorToNpc(actor) {
@@ -16,7 +15,6 @@ export class NpcConversor {
                 name: actor.name,
                 img: actor.img,
                 system: {
-                    [BaseActorCharacteristicType.NAME.id]: getObject(actor, BaseActorCharacteristicType.NAME),
                     [BaseActorCharacteristicType.MORPHOLOGY.id]: getObject(actor, BaseActorCharacteristicType.MORPHOLOGY),
                     [BaseActorCharacteristicType.DISTRICT.id]: getObject(actor, BaseActorCharacteristicType.DISTRICT),
                     [BaseActorCharacteristicType.BACKGROUND.id]: getObject(actor, BaseActorCharacteristicType.BACKGROUND),
@@ -135,13 +133,5 @@ export class NpcConversor {
         }
 
         return finalSkills;
-    }
-
-    static getStamina(actor) {
-        return getObject(actor, BaseActorCharacteristicType.VITALITY.TOTAL) - 5;
-    }
-
-    static calculatePenalty(actor) {
-        return Math.max(ActorUtils.calculatePenalty(actor) - this.getStamina(actor), 0)
     }
 }

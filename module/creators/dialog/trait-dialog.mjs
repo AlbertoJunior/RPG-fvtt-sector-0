@@ -6,7 +6,7 @@ import { TraitMessageCreator } from "../message/trait-message.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class TraitDialog {
-  static async _open(type, callback) {
+  static async open(type, callback) {
     const traits = TraitRepository._getItemsByType(type);
     const content = await this.#mountContent(traits, true, true);
 
@@ -31,7 +31,7 @@ export class TraitDialog {
     }).render(true);
   }
 
-  static async _openByTrait(trait, type, actor, callback) {
+  static async openByTrait(trait, type, actor, callback) {
     const traits = TraitRepository._getItemsByType(type);
     const content = await this.#mountContent(traits, false, callback != undefined, trait);
 

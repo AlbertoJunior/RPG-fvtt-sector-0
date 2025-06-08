@@ -1,11 +1,9 @@
 import { getObject, localize, TODO } from "../../../scripts/utils/utils.mjs";
 import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes } from "../../enums/active-effects-enums.mjs";
-import { EquipmentCharacteristicType, SubstanceType } from "../../enums/equipment-enums.mjs";
+import { EquipmentCharacteristicType, SubstanceType, validEquipmentTypes } from "../../enums/equipment-enums.mjs";
 import { SuperEquipmentTraitRepository } from "../../repository/superequipment-trait-repository.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
 import { EquipmentInfoParser } from "./equipment-info.mjs";
-
-TODO('no futuro é ideal remover a utilização do system.');
 
 export class EquipmentUtils {
     static getSuperEquipmentEffectsLimits(item) {
@@ -21,15 +19,41 @@ export class EquipmentUtils {
     }
 
     static canEquip(item) {
-        return item?.system?.canEquip || false;
+        const canEquip = getObject(item, EquipmentCharacteristicType.EQUIPPED);
+        return canEquip != undefined && canEquip != null;
+    }
+
+    static canUse(item) {
+        const quantity = getObject(item, EquipmentCharacteristicType.QUANTITY);
+        return quantity > 0;
+    }
+
+    static canRoll(item) {
+        const possibleTests = getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS);
+        return Array.isArray(possibleTests);
+    }
+
+    static haveQuantity(item) {
+        const haveQuantity = getObject(item, EquipmentCharacteristicType.QUANTITY);
+        return haveQuantity != undefined && haveQuantity != null;
     }
 
     static isWeapon(item) {
-        return item?.system?.isWeapon || false;
+        const requiredTypes = [
+            EquipmentCharacteristicType.HAND,
+            EquipmentCharacteristicType.DAMAGE,
+            EquipmentCharacteristicType.TRUE_DAMAGE,
+            EquipmentCharacteristicType.DAMAGE_TYPE,
+        ];
+
+        return requiredTypes.every(type => {
+            const value = getObject(item, type);
+            return value !== undefined && value !== null;
+        });
     }
 
     static isEquipment(item) {
-        return item?.system?.isEquipment || false;
+        return validEquipmentTypes().includes(getObject(item, EquipmentCharacteristicType.TYPE));
     }
 
     static isSuperEquipment(item) {
@@ -201,6 +225,7 @@ export class EquipmentUtils {
     }
 
     static #getEquipmentRollInformation(item, base) {
+        TODO('implementar as informações do item')
         return {
             ...base,
             changes: [

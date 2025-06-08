@@ -14,7 +14,6 @@ const { NumberField, SchemaField, StringField, ArrayField } = foundry.data.field
 class BaseActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
-            name: new StringField({ required: true, label: "S0.Nome" }),
             morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: 'androide' }),
             bairro: new StringField({ required: true, label: "S0.Bairro", initial: 'alfiran' }),
             background: new SchemaField({
@@ -145,6 +144,9 @@ class NPCDataModel extends BaseActorDataModel {
                 secundaria: new NpcSkill(),
                 terciaria: new NpcSkill(),
                 quaternaria: new NpcSkill(),
+            }),
+            bonus: new SchemaField({
+                iniciativa: new NumberField({ integer: true, initial: 0 }),
             })
         };
     }

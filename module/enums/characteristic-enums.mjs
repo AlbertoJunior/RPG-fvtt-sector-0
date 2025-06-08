@@ -4,7 +4,6 @@ export const ActorType = Object.freeze({
 });
 
 export const BaseActorCharacteristicType = Object.freeze({
-    NAME: { id: 'name', system: 'system.name' },
     MORPHOLOGY: { id: 'morphology', system: 'system.morfologia' },
     DISTRICT: { id: 'bairro', system: 'system.bairro' },
     BACKGROUND: {

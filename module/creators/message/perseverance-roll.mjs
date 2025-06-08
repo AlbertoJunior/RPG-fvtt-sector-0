@@ -28,6 +28,6 @@ export class RollPerseveranceMessageCreator {
             resultValue: successes
         };
 
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-perseverance.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/perseverance.hbs`, data);
     }
 }

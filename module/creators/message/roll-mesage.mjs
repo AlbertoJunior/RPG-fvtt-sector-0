@@ -3,7 +3,7 @@ import { keyJsonToKeyLang, localize, toTitleCase } from "../../../scripts/utils/
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class RollMessageCreator {
-    static async mountContent(params) {
+    static async mountContentDefaultRoll(params) {
         const { messageTest, rolls, abilityInfo, modifiers, difficulty, critic, half, havePerseverance } = params;
 
         const { attr1, attr2 } = params.attrs;
@@ -27,7 +27,7 @@ export class RollMessageCreator {
             ...coreContentData,
         };
 
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/default.hbs`, data);
     }
 
     static async mountContentCustomRoll(params) {

@@ -1,3 +1,4 @@
+import { TODO } from "../../scripts/utils/utils.mjs";
 import { EquipmentInfoParser } from "../core/equipment/equipment-info.mjs";
 import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
 import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
@@ -6,26 +7,6 @@ import { RollTestField } from "../field/roll-test-field.mjs";
 const { StringField, NumberField, BooleanField, ArrayField } = foundry.data.fields;
 
 class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
-    get isEquipment() {
-        return true;
-    }
-
-    get canEquip() {
-        return true;
-    }
-
-    get canRoll() {
-        return false;
-    }
-
-    get haveQuantity() {
-        return this.quantity !== undefined;
-    }
-
-    get isWeapon() {
-        return false;
-    }
-
     setupValues(data) {
         this.name = data.name;
         this.img = data.img;
@@ -38,20 +19,11 @@ class BaseEquipmentDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
             description: new StringField({ required: true, label: "S0.Descricao" }),
-            equipped: new BooleanField({ initial: false, label: "S0.Equipado" }),
         };
     }
 }
 
 class SubstanceDataModel extends BaseEquipmentDataModel {
-    get canEquip() {
-        return false;
-    }
-
-    get canUse() {
-        return this.quantity > 0;
-    }
-
     prepareDerivedData() {
         super.prepareDerivedData();
         const data = this;
@@ -82,6 +54,7 @@ class EquipmentDataModel extends BaseEquipmentDataModel {
             resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia" }),
             actual_resistance: new NumberField({ integer: true, initial: 1, label: "S0.Resistencia_Atual" }),
             super_equipment: new SuperEquipmentField(),
+            equipped: new BooleanField({ initial: false, label: "S0.Equipado" }),
         };
     }
 }
@@ -96,10 +69,6 @@ class ArmorDataModel extends EquipmentDataModel {
 }
 
 class RollableEquipmentDataModel extends EquipmentDataModel {
-    get canRoll() {
-        return true;
-    }
-
     static defineSchema() {
         return {
             ...super.defineSchema(),
@@ -119,10 +88,6 @@ class AcessoryDataModel extends RollableEquipmentDataModel {
 }
 
 class VehicleDataModel extends RollableEquipmentDataModel {
-    get canEquip() {
-        return false;
-    }
-
     static defineSchema() {
         return {
             ...super.defineSchema(),
@@ -135,14 +100,6 @@ class VehicleDataModel extends RollableEquipmentDataModel {
 }
 
 class WeaponDataModel extends RollableEquipmentDataModel {
-    get canRoll() {
-        return true;
-    }
-
-    get isWeapon() {
-        return true;
-    }
-
     static defineSchema() {
         return {
             ...super.defineSchema(),

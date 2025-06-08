@@ -2,6 +2,7 @@ import { getObject, localize } from "../../../../../../scripts/utils/utils.mjs";
 import { ActorEquipmentUtils } from "../../../../../core/actor/actor-equipment.mjs";
 import { ActorUtils } from "../../../../../core/actor/actor-utils.mjs";
 import { NpcConversor } from "../../../../../core/npc/npc-conversor.mjs";
+import { NpcUtils } from "../../../../../core/npc/npc-utils.mjs";
 import { RollSimplified } from "../../../../../core/rolls/simplified-roll.mjs";
 import { CreateFormDialog } from "../../../../../creators/dialog/create-dialog.mjs";
 import { NotificationsUtils } from "../../../../../creators/message/notifications.mjs";
@@ -61,7 +62,7 @@ class NpcRollMethods {
                     canBePenalty: true,
                     values: {
                         overload: ActorUtils.getOverload(actor),
-                        penalty: NpcConversor.calculatePenalty(actor),
+                        penalty: NpcUtils.calculatePenalty(actor),
                     }
                 },
                 onConfirm: async (data) => {

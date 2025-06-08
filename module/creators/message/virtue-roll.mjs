@@ -29,7 +29,7 @@ export class RollVirtueMessageCreator {
             resultValue: successes,
             resultMessageClasses: classResult
         };
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-virtue.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/virtue.hbs`, data);
     }
 
     static #calculateSuccess(values, difficulty, automatic) {

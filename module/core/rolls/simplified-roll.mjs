@@ -3,6 +3,7 @@ import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
 import { AbilityRepository } from "../../repository/ability-repository.mjs";
 import { EquipmentUtils } from "../equipment/equipment-utils.mjs";
 import { NpcConversor } from "../npc/npc-conversor.mjs";
+import { NpcUtils } from "../npc/npc-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
 export class RollSimplified {
@@ -72,7 +73,7 @@ export class RollSimplified {
         const parsedEquipmentRoll = {
             value: value,
             skillName: skillName,
-            penalty: NpcConversor.calculatePenalty(actor),
+            penalty: NpcUtils.calculatePenalty(actor),
             isHalf: isHalf,
             specialist: rollTest.specialist,
             bonus: rollTest.bonus + itemBonus,

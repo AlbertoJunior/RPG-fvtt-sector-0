@@ -1,4 +1,3 @@
-import { TODO } from "../../../scripts/utils/utils.mjs";
 import { ActorUtils } from "../actor/actor-utils.mjs";
 import { CoreRollMethods } from "./core-roll-methods.mjs";
 
@@ -8,10 +7,8 @@ export class RollVirtue {
 
         const safeBonus = Number(bonus);
         const safePenalty = Number(penalty);
-        const valueVirtue1 = ActorUtils.getVirtueLevel(actor, virtue1);
-        const valueVirtue2 = ActorUtils.getVirtueLevel(actor, virtue2);
-
-        TODO('buscar nos efeitos bonus e penalidades');
+        const valueVirtue1 = ActorUtils.getVirtueValue(actor, virtue1);
+        const valueVirtue2 = ActorUtils.getVirtueValue(actor, virtue2);
 
         const diceAmount = valueVirtue1 + valueVirtue2 + safeBonus - safePenalty;
 
