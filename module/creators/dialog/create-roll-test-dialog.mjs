@@ -8,10 +8,10 @@ import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class CreateRollableTestDialog {
     static async _view(rollTestData) {
-        this._open(rollTestData);
+        this.open(rollTestData);
     }
 
-    static async _open(rollTestData, onConfirm, onDelete) {
+    static async open(rollTestData, onConfirm, onDelete) {
         const needConfirmation = onConfirm !== undefined;
         const isCreate = rollTestData == undefined;
 
@@ -137,8 +137,8 @@ export class CreateRollableTestDialog {
                     {
                         label: localize("Criar_Macro"),
                         icon: { class: 'fas fa-code' },
-                        onClick: () => {
-                            RollTestUtils.createMacroByRollTestData(rollTestData);
+                        onClick: async () => {
+                            await RollTestUtils.createMacroByRollTestData(rollTestData);
                         }
                     }
                 ]

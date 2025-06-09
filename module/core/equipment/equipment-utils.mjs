@@ -60,6 +60,14 @@ export class EquipmentUtils {
         return Boolean(getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT));
     }
 
+    static getPossibleTests(item) {
+        return getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS) || [];
+    }
+
+    static getDefaultTest(item) {
+        return getObject(item, EquipmentCharacteristicType.DEFAULT_TEST) || '';
+    }
+
     static getSuperEquipmentLevel(item) {
         return getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.LEVEL) || 0;
     }

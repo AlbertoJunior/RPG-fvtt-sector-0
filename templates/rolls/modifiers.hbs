@@ -1,27 +1,33 @@
 <form class="S0-container">
+    {{log this}}
     <h3 style="margin-block: 3px">{{localize 'S0.Modificadores'}}</h3>
     <div class="form-group">
         <label for="{{uuid}}.difficulty" style="flex:1;">{{localize 'S0.Dificuldade'}}:</label>
         <select class="S0-select" id="{{uuid}}.difficulty" name="difficulty" style="flex:1">
+            {{#with (operators 'orValue' values.difficulty 6) as |selected|}}
             {{#forLoop 5 11}}
-            <option value="{{index}}" {{selectIfEq index 6}}>{{index}}</option>
+            <option value="{{index}}" {{selectIfEq index selected}}>{{index}}</option>
             {{/forLoop}}
+            {{/with}}
         </select>
     </div>
 
     <div class="form-group">
         <label for="{{uuid}}.critic" style="flex:1;">{{localize 'S0.Critico'}}:</label>
         <select class="S0-select" id="{{uuid}}.critic" name="critic" style="flex:1">
+            {{#with (operators 'orValue' values.critic 10) as |selected|}}
             {{#forLoop 5 11}}
-            <option value="{{index}}" {{selectIfEq index 10}}>{{index}}</option>
+            <option value="{{index}}" {{selectIfEq index selected}}>{{index}}</option>
             {{/forLoop}}
+            {{/with}}
         </select>
     </div>
 
     {{#if canBeOverload}}
     <div class="form-group">
         <label for="{{uuid}}.overload" style="flex:1;">{{localize 'S0.Sobrecarga'}}:</label>
-        <input id="{{uuid}}.overload" name="overload" type="number" style="flex:1;" value="{{values.overload}}" max="5" min="0">
+        <input id="{{uuid}}.overload" name="overload" type="number" style="flex:1;" value="{{values.overload}}" max="5"
+            min="0">
     </div>
     {{/if}}
 
@@ -33,13 +39,17 @@
     {{/if}}
 
     <div class="form-group">
+        {{#with (operators 'orValue' values.bonus 0) as |value|}}
         <label for="{{uuid}}.bonus" style="flex:1;">{{localize 'S0.Bonus'}}:</label>
-        <input id="{{uuid}}.bonus" name="bonus" type="number" style="flex:1;" value="0">
+        <input id="{{uuid}}.bonus" name="bonus" type="number" style="flex:1;" value="{{value}}">
+        {{/with}}
     </div>
 
     <div class="form-group">
+        {{#with (operators 'orValue' values.automatic 0) as |value|}}
         <label for="{{uuid}}.automatic" style="flex:1;">{{localize 'S0.Automatico'}}:</label>
-        <input id="{{uuid}}.automatic" name="automatic" type="number" style="flex:1;" value="0" min="0">
+        <input id="{{uuid}}.automatic" name="automatic" type="number" style="flex:1;" value="{{value}}" min="0">
+        {{/with}}
     </div>
 
     {{#if (operators 'or' canBeHalf canBeSpecialist)}}
@@ -54,7 +64,7 @@
         {{#if canBeSpecialist}}
         <div style="display: flex; flex: 1; align-items: center; justify-content: space-between;">
             <label for="{{uuid}}.specialist" style="flex:1;">{{localize 'S0.Especialista'}}:</label>
-            <input id="{{uuid}}.specialist" name="specialist" type="checkbox">
+            <input id="{{uuid}}.specialist" name="specialist" type="checkbox" {{#if values.specialist}}checked{{/if}}>
         </div>
         {{/if}}
     </div>

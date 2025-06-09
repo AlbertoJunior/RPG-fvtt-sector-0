@@ -101,7 +101,7 @@ static async handleAdd(actor, event) {
       await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
    };
 
-   CreateRollableTestDialog._open(null, onConfirm);
+   CreateRollableTestDialog.open(null, onConfirm);
 }
 ```
 

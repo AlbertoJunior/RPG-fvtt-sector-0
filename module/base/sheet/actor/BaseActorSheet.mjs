@@ -107,7 +107,7 @@ export class Setor0BaseActorSheet extends ActorSheet {
         }
 
         const value = getObject(armor, EquipmentCharacteristicType.ACTUAL_RESISTANCE) || 0;
-        selectCharacteristic(html.find(`#statusPage #protect .S0-characteristic`)[value - 1]);
+        selectCharacteristic(html.find(`#protect .S0-characteristic`)[value - 1]);
     }
 
     addPageButtonsOnFloatingMenu(html) {
@@ -148,8 +148,9 @@ export class Setor0BaseActorSheet extends ActorSheet {
     }
 
     async #changePage(pageIndex, pages, buttons, event) {
-        if (pageIndex == this.currentPage)
+        if (pageIndex == this.currentPage) {
             return;
+        }
 
         const normalizedCurrentIndex = Math.max(this.currentPage - 1, 0);
         const normalizedIndex = Math.max(pageIndex - 1, 0);

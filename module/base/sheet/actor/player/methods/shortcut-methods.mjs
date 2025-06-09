@@ -64,7 +64,7 @@ class ShortcutHandleEvents {
             await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
         };
 
-        CreateRollableTestDialog._open(null, onConfirm);
+        CreateRollableTestDialog.open(null, onConfirm);
     }
 
     static async handleEdit(actor, event) {
@@ -90,7 +90,7 @@ class ShortcutHandleEvents {
             await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, shortcuts);
         };
 
-        CreateRollableTestDialog._open(selectedTest, onConfirm, onDelete, true);
+        CreateRollableTestDialog.open(selectedTest, onConfirm, onDelete, true);
     }
 
     static async handleView(actor, event) {

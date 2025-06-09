@@ -42,6 +42,7 @@ const map = {
     'npc_actual_skill_name': (actor, skill = '') => { return getObject(actor, NpcSkillsMap[skill].SKILL_NAME) || '' },
     'npc_actual_skill_value': (actor, skill) => { return getObject(actor, NpcSkillsMap[skill].VALUE) || 0 },
     'npc_stamina': (actor) => NpcUtils.getStamina(actor),
+    'npc_pm': (actor) => NpcUtils.getPm(actor),
 
     'calculate_dice_pool': (actor, params) => {
         const { primary_attribute, secondary_attribute, ability, bonus = 0 } = params[0];

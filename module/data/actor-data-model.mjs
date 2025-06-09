@@ -8,6 +8,7 @@ import { NpcSkill } from "../field/npc-fields.mjs";
 import { NpcQualityRepository } from "../repository/npc-quality-repository.mjs";
 import { getObject } from "../../scripts/utils/utils.mjs";
 import { BaseActorCharacteristicType } from "../enums/characteristic-enums.mjs";
+import { NpcUtils } from "../core/npc/npc-utils.mjs";
 
 const { NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
@@ -49,6 +50,11 @@ class BaseActorDataModel extends foundry.abstract.TypeDataModel {
 }
 
 class PlayerDataModel extends BaseActorDataModel {
+
+    get actualPM() {
+        return ActorUtils.getActualMovimentPoints(this.actor);
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
     }
@@ -107,13 +113,14 @@ class PlayerDataModel extends BaseActorDataModel {
             })
         };
     }
-
-    get actualPM() {
-        return ActorUtils.getActualMovimentPoints(this.actor);
-    }
 }
 
 class NPCDataModel extends BaseActorDataModel {
+
+    get actualPM() {
+        return NpcUtils.getPm(this.actor);
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
 
@@ -168,7 +175,7 @@ export async function createActorDataModels() {
         },
         NPC: {
             bar: ["actualVitality", "actualProtection"],
-            value: ["vitalidade.total"]
+            value: ["vitalidade.total", "actualPM"]
         }
     };
 

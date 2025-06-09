@@ -11,7 +11,7 @@ export const playerRollHandle = {
     virtue: async (actor, inputParams) => PlayerRollMethods.handleVirtueRoll(actor, inputParams),
     shortcut: async (actor, shortcutTest) => PlayerRollMethods.handleShortcutRoll(actor, shortcutTest),
     simple: async (actor, inputParams) => PlayerRollMethods.handleSimpleRoll(actor, inputParams),
-    rollableItem: async (actor, rollTest, item, half) => PlayerRollMethods.handleRollabeItemRoll(actor, { rollTest, item, half }),
+    rollableItem: async (actor, rollTest, item, half, mode) => PlayerRollMethods.handleRollabeItemRoll(actor, { rollTest, item, half, mode }),
 }
 
 class PlayerRollMethods {
@@ -36,10 +36,10 @@ class PlayerRollMethods {
     }
 
     static async handleRollabeItemRoll(actor, inputParams) {
-        const { rollTest, item, half } = inputParams;
+        const { rollTest, item, half, mode } = inputParams;
 
         const resultRoll = await RollAttribute.rollByRollableTestsWithEquipment(actor, rollTest, item, half);
-        await DefaultActions.processAttributeRoll(actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name);
+        await DefaultActions.processAttributeRoll(actor, resultRoll, rollTest.difficulty, rollTest.critic, rollTest.name, mode);
     }
 
     static async handleShortcutRoll(actor, shortcutTest) {
