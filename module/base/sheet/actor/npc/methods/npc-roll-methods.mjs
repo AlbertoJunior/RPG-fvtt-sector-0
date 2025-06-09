@@ -60,8 +60,8 @@ class NpcRollMethods {
                     const copiedActor = {
                         ...actor,
                     };
-                    copiedActor.system[CharacteristicType.OVERLOAD.id] = Number(data.overload);
 
+                    this.#setNpcOverload(copiedActor, Number(data.overload));
                     this.#mountRollInformations(copiedActor, rollInformations, data);
                 }
             },
@@ -117,9 +117,13 @@ class NpcRollMethods {
             mode: mode,
         };
 
-        actor.system[CharacteristicType.OVERLOAD.id] = rollTest.overload || 0;
+        this.#setNpcOverload(actor, rollTest.overload || 0);
 
         const simplifiedRoll = await RollSimplified.rollByEquipment(actor, informationsToRoll);
         await DefaultActions.processSimplefiedRoll(actor, simplifiedRoll);
+    }
+
+    static #setNpcOverload(actor, value) {
+        actor.system[CharacteristicType.OVERLOAD.id] = value;
     }
 }

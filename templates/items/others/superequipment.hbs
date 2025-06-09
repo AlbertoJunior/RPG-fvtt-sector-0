@@ -1,9 +1,9 @@
 <div id="{{item.id}}.superequipment"
-    class="S0-page S0-container S0-superequipment-container {{#unless item.system.super_equipment}}S0-superequipment-contracted{{/unless}}">
+    class="S0-page S0-container S0-superequipment-container {{#unless (itemValues item 'superequipment')}}S0-superequipment-contracted{{/unless}}">
     <div style="display: flex; align-items: center;">
         <h4> {{localize 'S0.SuperEquipamento'}}</h4>
         <input type="checkbox" data-action="check" data-characteristic="characteristic" data-type="superequipment" {{#if
-            item.system.super_equipment}}checked{{/if}}>
+            (itemValues item 'superequipment' )}}checked{{/if}}>
     </div>
 
     <div class="S0-characteristic-container" style="padding-inline: 15px;">
@@ -24,7 +24,7 @@
             {{localize 'S0.Ativo'}}
         </label>
 
-        <a class="S0-characteristic S0-clickable {{#if item.system.super_equipment.active}}S0-selected{{/if}}"
+        <a class="S0-characteristic S0-clickable {{#if (itemValues item 'superequipment_active')}}S0-selected{{/if}}"
             title="Ativar" data-action="check" data-characteristic="superequipment" data-type="active"
             data-item-id="{{item.id}}">
         </a>
@@ -48,7 +48,7 @@
             {{/if}}
         </h4>
         <ul>
-            {{#each item.system.super_equipment.effects}}
+            {{#each (itemValues item 'superequipment_effects')}}
             <li>
                 <div
                     style="min-height: 35px; display: flex; align-items: center; margin-block: 2px; padding-block: 8px; border-bottom: 1px solid var(--secondary-color);">
@@ -86,7 +86,7 @@
         </h4>
 
         <ul>
-            {{#each item.system.super_equipment.defects}}
+            {{#each (itemValues item 'superequipment_defects')}}
             <li
                 style="min-height: 35px; display: flex; align-items: center; margin-block: 2px; padding-block: 8px; border-bottom: 1px solid var(--secondary-color);">
                 <div style="min-width: 0; margin-right: 4px; flex: 1; font-size: var(--font-size-12);">

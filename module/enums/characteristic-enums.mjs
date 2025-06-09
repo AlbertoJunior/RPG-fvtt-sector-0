@@ -10,6 +10,7 @@ export const BaseActorCharacteristicType = Object.freeze({
         id: 'background',
         system: 'system.background',
         ASSIGNMENT: { id: 'assignment', system: 'system.background.assignment' },
+        BIOGRAPHY: { id: 'biography', system: 'system.background.biography' },
     },
     BOUNTY: { id: 'nivel_de_procurado', system: 'system.nivel_de_procurado' },
     INFLUENCE: { id: 'influencia', system: 'system.influencia' },

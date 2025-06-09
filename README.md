@@ -13,24 +13,29 @@ Este é o sistema oficial de RPG **Setor 0**, totalmente integrado ao **Foundry 
 
 > ⚠️ **Aviso**: Este sistema está atualmente em fase **Alpha**, e pode conter bugs ou funcionalidades incompletas.
 
-## 🧩 Instalação
+## 🧩 Como usar
+
+### Instalação
 
 1. Baixe ou clone este repositório.
 2. Mova a pasta para o diretório `Data/systems` do seu Foundry VTT.
 3. Reinicie o Foundry e ative o sistema ao criar um novo mundo.
 > 🚧 Ainda será disponibilizado um manifesto para instalação direta via URL.
 
-## Utilizando com seus jogadores
+### Compartilhando com seus jogadores
 Caso você não possua um servidor para hospedar o Foundry e compartilhar o link, você pode criar um `QuickTunnel` com o `CloudFlare`. Da seguinte maneira:
 
-1. Baixe e instale o [cloudFlarered](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
-2. Execute o código no CMD
+1. Baixe e instale o [cloudFlarered](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/).
+2. Abra seu `Prompt de Comando`.
+3. Execute o código.
 ```console
 cloudflared tunnel --url http://localhost:30000
 ```
-3. Pegue o link que foi apresentado no console e compartilhe.
+4. Pegue o link que foi apresentado no console e compartilhe.
 
 ## Legenda de ícones
+<details>
+
 ```
 🧩 Instalação
 🧬 Funcionalidades
@@ -42,6 +47,7 @@ cloudflared tunnel --url http://localhost:30000
 🛠️ Em desenvolvimento
 🚧 Planejado
 ```
+</details>
 
 ## 🧬 Funcionalidades
 <details>
@@ -53,7 +59,9 @@ cloudflared tunnel --url http://localhost:30000
   ```
 </details>
 
-### Personagem
+### Personagens
+
+#### Jogador (PJ)
 * 🚧 Bônus de Nível 6.
 * ✅ Aprimoramentos com efeitos passivos e ativos.
 * ✅ Sistema de inventário com mochila e itens equipados.
@@ -61,6 +69,12 @@ cloudflared tunnel --url http://localhost:30000
 * 🚧 Transacionar itens entre personagens.
 * 🚧 Importar personagem do site.
 * 🚧 Calculo de XP e pontos utilizados.
+
+#### Não Jogáveis (PNJ)
+* ✅ Ficha.
+* ✅ Rolagem.
+* ✅ Equipamentos.
+* ✅ Converter Personagem Jogável (PJ) para PNJ.
 
 ### Sistemas
 * ✅ Aprimoramentos.
@@ -84,12 +98,6 @@ cloudflared tunnel --url http://localhost:30000
 * ✅ Rolagem dividida pelo Equipamento.
 * ✅ Atalhos customizados por Equipamento.
 
-### Personagens Não Jogáveis (PNJ)
-* ✅ Ficha.
-* ✅ Rolagem.
-* ✅ Equipamentos.
-* ✅ Converter Personagem Jogável (PJ) para PNJ.
-
 ### Rolagens
 * ✅ Padrão (Atributos + Habilidade).
 * ✅ Padrão (Dividida).
@@ -104,6 +112,9 @@ cloudflared tunnel --url http://localhost:30000
 * ✅ Rolagem com Crítico variável.
 * ✅ Rolagem com Especialização.
 * ✅ Rolagens considerando as penalidades e todos os bônus.
+
+### Tokens
+* 🚧 Ocultar efeitos ativos de Tokens inimigos (implementar a classe BasePlaceableHUD).
 
 ### Macros
 O Setor 0 conta com um sistema de Macros pré-definidos para novos jogadores. Todo novo jogador recebe em sua Hotbar 3 macros iniciais, dois deles servem para abrir a ficha do Personagem em uma página específica, como a da mochila ou dos atalhos, o terceiro serve para realizar um teste de Sobrecarga, que é comum no sistema.

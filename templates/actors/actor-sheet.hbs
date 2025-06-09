@@ -15,18 +15,26 @@
             <li style="display: flex; align-items: center;">
                 <label for="morfologia" style="flex: 1;">{{ localize 'S0.Morfologia' }}:</label>
                 <select class="S0-select" id="morfologia" name="system.morfologia" style="flex: 2;">
+                    {{#with (actorValues actor 'morphology' ) as |morphology|}}
                     {{#each (fetchRepository 'morphology')}}
-                    <option value="{{id}}" {{selectIfEq ../actor.system.morfologia id }}>{{label}}</option>
+                    <option value="{{id}}" {{selectIfEq morphology id }}>
+                        {{label}}
+                    </option>
                     {{/each}}
+                    {{/with}}
                 </select>
             </li>
 
             <li style="display: flex; align-items: center;">
                 <label for="bairro" style="flex: 1;">{{ localize 'S0.Bairro' }}:</label>
                 <select class="S0-select" id="bairro" name="system.bairro" style="flex: 2;">
+                    {{#with (actorValues actor 'district' ) as |district|}}
                     {{#each (fetchRepository 'district')}}
-                    <option value="{{id}}" {{selectIfEq ../actor.system.bairro id }}>{{label}}</option>
+                    <option value="{{id}}" {{selectIfEq district id }}>
+                        {{label}}
+                    </option>
                     {{/each}}
+                    {{/with}}
                 </select>
             </li>
         </ul>
@@ -37,10 +45,10 @@
             </h1>
             <div>
                 <h3 style="display: inline; padding-right: 6px; border-right: 1px solid var(--secondary-color);">
-                    {{actor.system.morfologia}}
+                    {{actorValues actor 'morphology'}}
                 </h3>
                 <h3 style="display: inline; padding-left: 6px; border-left: 1px solid var(--secondary-color);">
-                    {{actor.system.bairro}}
+                    {{actorValues actor 'district'}}
                 </h3>
             </div>
         </div>

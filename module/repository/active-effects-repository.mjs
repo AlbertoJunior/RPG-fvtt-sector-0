@@ -36,7 +36,7 @@ export class ActiveEffectRepository {
             });
     }
 
-    static _getItems() {
+    static getItems() {
         return [
             ...this.#items,
             ...this.#getFoundryDefaultEffects()

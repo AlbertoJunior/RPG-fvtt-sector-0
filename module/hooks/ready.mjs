@@ -39,7 +39,11 @@ export class ReadyHookHandle {
     }
 
     static #effects() {
-        CONFIG.statusEffects = ActiveEffectRepository._getItems();
+        if (game.user.isGM) {
+            CONFIG.statusEffects = ActiveEffectRepository.getItems();
+        } else {
+            CONFIG.statusEffects = [];
+        }
     }
 
     static async #macro() {

@@ -1,18 +1,19 @@
 <div class="S0-page S0-container">
+    {{#lett resistance=(itemValues item 'resistance') item=item id=item.id}}
     <div class="form-group">
-        <label for="{{item.id}}.resistance" style="flex: 1;">
+        <label for="{{id}}.resistance" style="flex: 1;">
             {{localize 'S0.Resistencia_Total'}}:
         </label>
-        <input id="{{item.id}}.resistance" style="flex: 1; text-align: center;" type="number" name="system.resistance"
-            value="{{item.system.resistance}}" min="1" max="15"/>
+        <input id="{{id}}.resistance" style="flex: 1; text-align: center;" type="number" name="system.resistance"
+            value="{{resistance}}" min="1" max="15" />
     </div>
 
     <div class="form-group">
-        <label for="{{item.id}}.actual_resistance" style="flex: 1;">
+        <label for="{{id}}.actual_resistance" style="flex: 1;">
             {{localize 'S0.Resistencia_Atual'}}:
         </label>
-        <input id="{{item.id}}.actual_resistance" style="flex: 1; text-align: center;" type="number" min="0"
-            max="{{item.system.resistance}}" name="system.actual_resistance"
-            value="{{item.system.actual_resistance}}" />
+        <input id="{{id}}.actual_resistance" style="flex: 1; text-align: center;" type="number" min="0"
+            max="{{resistance}}" name="system.actual_resistance" value="{{itemValues item 'actual_resistance'}}" />
     </div>
+    {{/lett}}
 </div>

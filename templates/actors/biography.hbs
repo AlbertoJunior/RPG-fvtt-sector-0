@@ -21,14 +21,14 @@
 
         <div class="S0-container">
             <label for="assignment" style="display: block; margin: 4px">{{ localize 'S0.Atuacao' }}</label>
-            <input id="assignment" name="system.background.assignment" type="text" rows="5" style="resize: block;"
-                placeholder="{{ localize 'S0.Atuacao' }}" value="{{actor.system.background.assignment}}">
+            <input id="assignment" name="system.background.assignment" type="text" rows="5"
+                placeholder="{{ localize 'S0.Atuacao' }}" value="{{actorValues actor 'assignment'}}">
         </div>
 
         <div class="S0-container">
             <label for="biography" style="display: block; margin: 4px">{{ localize 'S0.Biografia' }}</label>
-            <textarea id="biography" name="system.background.biography" type="text" rows="5" style="resize: block;"
-                placeholder="{{ localize 'S0.Biografia' }}">{{actor.system.background.biography}}</textarea>
+            <textarea id="biography" style="resize: block;" name="system.background.biography" rows="5"
+                placeholder="{{ localize 'S0.Biografia' }}">{{actorValues actor 'biography'}}</textarea>
         </div>
     </div>
 
@@ -55,9 +55,9 @@
     <div class="S0-container">
         <h2> {{localize 'S0.Tracos'}} </h2>
         <section id="tracosContainer" class="S0-container-2-column">
-            {{> traitPartialContainer traits=actor.system.tracos.bons type="good" title='S0.Tracos-Bons' }}
+            {{> traitPartialContainer traits=(actorLists actor 'good_traits') type="good" title='S0.Tracos-Bons' }}
 
-            {{> traitPartialContainer traits=actor.system.tracos.ruins type="bad" title='S0.Tracos-Ruins' }}
+            {{> traitPartialContainer traits=(actorLists actor 'bad_traits') type="bad" title='S0.Tracos-Ruins' }}
         </section>
     </div>
 

@@ -313,14 +313,23 @@ img.S0-clickable:hover {
 }
 
 #token-hud .status-effects {
-    width: 200px;
+    width: max-content;
+    max-width: 200px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
 }
 
 #token-hud .status-effects .effect-control {
-    width: 100%;
+    width: 50px;
     height: 50px;
     aspect-ratio: 1/1;
 }
+
+/* #token-hud .status-effects .effect-control img {
+    width: 50px;
+} */
 
 /* #endregion */
 

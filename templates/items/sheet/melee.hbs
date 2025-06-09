@@ -9,15 +9,17 @@
                 {{localize 'S0.Itens.Tamanho'}}:
             </label>
             <select id="{{item.id}}.size" class="S0-select" style="flex: 1;" name="system.size">
+                {{#with (itemValues item 'size') as |size|}}
                 {{#each (fetchRepository 'equipment-melee-size')}}
-                <option value="{{id}}" {{selectIfEq ../item.system.size id }}>{{label}}</option>
+                <option value="{{id}}" {{selectIfEq size id }}>{{label}}</option>
                 {{/each}}
+                {{/with}}
                 </option>
             </select>
         </div>
     </div>
 
-    {{#if item.system.super_equipment}}
+    {{#if (itemValues item 'superequipment')}}
     {{> itemCommonResistance this}}
     {{/if}}
 

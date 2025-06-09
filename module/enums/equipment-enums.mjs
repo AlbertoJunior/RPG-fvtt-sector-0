@@ -11,6 +11,9 @@ export const EquipmentCharacteristicType = Object.freeze({
         EFFECTS: { id: 'effects', system: `system.effects` },
         TYPE: { id: 'substance_type', system: `system.substance_type` },
     },
+    VEHICLE: {
+        TYPE: { id: 'vehicle_type', system: `system.vehicle_type` },
+    },
     ACCELERATION: { id: 'acceleration', system: `system.acceleration` },
     SPEED: { id: 'speed', system: `system.speed` },
     HAND: { id: 'hand', system: `system.hand` },

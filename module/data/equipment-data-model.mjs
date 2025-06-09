@@ -1,4 +1,3 @@
-import { TODO } from "../../scripts/utils/utils.mjs";
 import { EquipmentInfoParser } from "../core/equipment/equipment-info.mjs";
 import { DamageType, EquipmentHand, EquipmentHidding, EquipmentType, MeleeSize, SubstanceType } from "../enums/equipment-enums.mjs";
 import { SubstanceEffectField, SuperEquipmentField } from "../field/equipment-field.mjs";
@@ -38,6 +37,8 @@ class SubstanceDataModel extends BaseEquipmentDataModel {
             type: new NumberField({ integer: true, initial: EquipmentType.SUBSTANCE, label: "S0.Tipo" }),
             substance_type: new NumberField({ integer: true, initial: SubstanceType.DRUG, label: "S0.Itens.Tipo_Substancia" }),
             quantity: new NumberField({ integer: true, initial: 1, minValue: 0, label: "S0.Quantidade" }),
+            range: new NumberField({ integer: true, initial: 0, minValue: 0, label: "S0.Alcance" }),
+            damage: new NumberField({ integer: true, initial: 0, label: "S0.Dano" }),
             effects: new ArrayField(new SubstanceEffectField()),
         };
     }
@@ -92,7 +93,7 @@ class VehicleDataModel extends RollableEquipmentDataModel {
         return {
             ...super.defineSchema(),
             type: new NumberField({ integer: true, initial: EquipmentType.VEHICLE, label: "S0.Tipo" }),
-            type_vehicle: new NumberField({ integer: true, initial: 0, label: "S0.Tipo" }),
+            vehicle_type: new NumberField({ integer: true, initial: 0, label: "S0.Tipo" }),
             acceleration: new NumberField({ integer: true, initial: 0, label: "S0.Aceleracao" }),
             speed: new NumberField({ integer: true, initial: 0, label: "S0.Velocidade" })
         };

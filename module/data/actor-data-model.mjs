@@ -9,18 +9,19 @@ import { NpcQualityRepository } from "../repository/npc-quality-repository.mjs";
 import { getObject } from "../../scripts/utils/utils.mjs";
 import { BaseActorCharacteristicType } from "../enums/characteristic-enums.mjs";
 import { NpcUtils } from "../core/npc/npc-utils.mjs";
+import { MorphologyRepository } from "../repository/morphology-repository.mjs";
+import { DistrictRepository } from "../repository/district-repository.mjs";
 
 const { NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
 class BaseActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
-            morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: 'androide' }),
-            bairro: new StringField({ required: true, label: "S0.Bairro", initial: 'alfiran' }),
+            morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: MorphologyRepository.TYPES.HUMAN.id }),
+            bairro: new StringField({ required: true, label: "S0.Bairro", initial: DistrictRepository.TYPES.ALFIRAN.id }),
             background: new SchemaField({
-                assignment: new StringField({ required: true, label: "S0.Atuacao" }),
-                age: new NumberField({ required: false, blank: true }),
-                biography: new StringField({ required: false, blank: true, nullable: true }),
+                assignment: new StringField({ required: false, nullable: true }),
+                biography: new StringField({ required: false, nullable: true }),
             }),
             vitalidade: new SchemaField({
                 total: new NumberField({ integer: true, initial: 6 }),

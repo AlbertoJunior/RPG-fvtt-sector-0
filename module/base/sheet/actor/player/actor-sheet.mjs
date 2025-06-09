@@ -224,7 +224,7 @@ export async function actorTemplatesRegister() {
         { path: "actors/biography-trait-partial", call: 'traitPartialContainer' },
         { path: "actors/status" },
         { path: "actors/enhancement" },
-        { path: "actors/enhancement-partial" },
+        { path: "actors/enhancement-partial", call: 'enhancementPartial' },
         { path: "actors/equipment" },
         { path: "actors/shortcuts" },
         { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' },

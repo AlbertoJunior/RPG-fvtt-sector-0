@@ -548,7 +548,10 @@
         "OcclusionRadius": "Raio de Oclusão",
         "OcclusionRadiusHint": "Quando este Token estiver abaixo de um Tile que usa oclusão radial, este valor controla o tamanho do buraco cortado no Tile para permitir que o Token seja visto através dela.",
         "WarningNoActor": "Este Token faz referência a um Personagem que não existe mais no Mundo.",
-        "WarningNoVision": "Não há nenhum Token nesta Cena que lhe conceda visibilidade da área."
+        "WarningNoVision": "Não há nenhum Token nesta Cena que lhe conceda visibilidade da área.",
+        "Mirror": "Espelhar Imagem",
+        "MirrorX": "Horizontal",
+        "MirrorY": "Vertical"
     },
     "EFFECT": {
         "StatusDead": "Morto",

@@ -1,5 +1,6 @@
 export default function selectIfEq(item, eq) {
-    if (!item)
+    if (!item) {
         return "";
+    }
     return item === eq ? "selected" : "";
 }

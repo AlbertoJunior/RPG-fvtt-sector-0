@@ -154,16 +154,32 @@ export class EquipmentUtils {
         );
     }
 
+    static substanceType(item) {
+        return getObject(item, EquipmentCharacteristicType.SUBSTANCE.TYPE);
+    }
+
     static substanceEffects(item) {
         return getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];
     }
 
     static substanceWithEffects(item) {
-        const substanceType = getObject(item, EquipmentCharacteristicType.SUBSTANCE.TYPE);
+        const substanceType = this.substanceType(item);
         if (substanceType == null || substanceType == undefined) {
             return false;
         }
         return substanceType == SubstanceType.DRUG;
+    }
+
+    static substanceWithDamage(item) {
+        const substanceType = this.substanceType(item);
+        const damageSubstance = [SubstanceType.ACID, SubstanceType.POISON, SubstanceType.GAS];
+        return damageSubstance.includes(substanceType);
+    }
+
+    static substanceWithRange(item) {
+        const substanceType = this.substanceType(item);
+        const rangedSubstance = [SubstanceType.GAS];
+        return rangedSubstance.includes(substanceType);
     }
 
     static getSubstanceActiveEffects(item) {
