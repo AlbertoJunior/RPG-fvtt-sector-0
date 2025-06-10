@@ -11,8 +11,10 @@ export class ActiveEffectHookHandle {
     }
 
     static async #onCreateActiveEffect(effect, options, userId) {
-        await ActiveEffectHookHandle.#verifyRemoveChain(effect, options, userId)
-        await ActiveEffectHookHandle.#verifyChangeTokenTint(effect);
+        if (game.user.isGM) {
+            await ActiveEffectHookHandle.#verifyRemoveChain(effect, options, userId)
+            await ActiveEffectHookHandle.#verifyChangeTokenTint(effect);
+        }
     }
 
     static async #onDeleteActiveEffect(effect, options, userId) {
@@ -27,7 +29,7 @@ export class ActiveEffectHookHandle {
             .map(eft => ActiveEffectsUtils.getOriginId(eft))
             .filter(Boolean);
 
-        ActiveEffectsUtils.removeActorEffects(actor, actorEffects);
+        await ActiveEffectsUtils.removeActorEffects(actor, actorEffects);
     }
 
     static async #verifyChangeTokenTint(effect) {

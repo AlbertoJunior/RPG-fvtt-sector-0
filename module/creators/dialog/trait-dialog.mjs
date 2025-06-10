@@ -6,8 +6,8 @@ import { TraitMessageCreator } from "../message/trait-message.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class TraitDialog {
-  static async _open(type, callback) {
-    const traits = TraitRepository._getItemsByType(type);
+  static async open(type, callback) {
+    const traits = TraitRepository.getItemsByType(type);
     const content = await this.#mountContent(traits, true, true);
 
     new Dialog({
@@ -31,12 +31,12 @@ export class TraitDialog {
     }).render(true);
   }
 
-  static async _openByTrait(trait, type, actor, callback) {
-    const traits = TraitRepository._getItemsByType(type);
+  static async openByTrait(trait, type, actor, callback) {
+    const traits = TraitRepository.getItemsByType(type);
     const content = await this.#mountContent(traits, false, callback != undefined, trait);
 
     const dialog = new Dialog({
-      title: `${callback ? 'Editar ' : ''}Traço`,
+      title: `${callback ? `${localize('Editar')} ` : ''}${localize('Traco')}`,
       content: content,
       buttons: {
         confirm: {
@@ -77,17 +77,14 @@ export class TraitDialog {
   }
 
   static async #mountContent(traits, enableChangeTrait, enableChangeParticularity, trait) {
-    const isEnabledChangeTrait = enableChangeTrait ? '' : 'disabled';
-    const isEnabledChangeParticularity = enableChangeParticularity ? '' : 'disabled';
-
     const selectedTrait = traits.find(element => element.id == trait?.id);
 
     const data = {
       title: localize('Traco'),
       options: this.#mapOptions(traits, selectedTrait),
-      isEnabledChangeTrait: isEnabledChangeTrait,
+      isEnabledChangeTrait: enableChangeTrait ? '' : 'disabled',
       particularity: localize('Particularidade'),
-      isEnabledChangeParticularity: isEnabledChangeParticularity,
+      isEnabledChangeParticularity: enableChangeParticularity ? '' : 'disabled',
       particularityValue: selectedTrait?.particularity || '',
       morph: localize('Morfologia'),
       morphValue: selectedTrait?.morph || '',
@@ -103,31 +100,30 @@ export class TraitDialog {
   static #mapOptions(traits, selectedTrait) {
     const groups = {};
 
+    const prefix = 'XP:';
+
     traits.forEach((attr, index) => {
-      const groupLabel = attr.morph ? attr.morph : `XP: ${attr.xp}`;
+      const groupLabel = attr.morph ? attr.morph : `${prefix} ${attr.xp}`;
 
       if (!groups[groupLabel]) {
         groups[groupLabel] = [];
       }
 
-      const isSelected = selectedTrait?.id === attr.id ? 'selected' : '';
-
       groups[groupLabel].push({
         id: attr.id,
-        index,
-        isSelected,
+        isSelected: selectedTrait?.id === attr.id ? 'selected' : '',
         label: attr.name
       });
     });
 
     return Object.entries(groups)
       .sort(([labelA], [labelB]) => {
-        const isXPA = labelA.startsWith("XP:");
-        const isXPB = labelB.startsWith("XP:");
+        const isXPA = labelA.startsWith(prefix);
+        const isXPB = labelB.startsWith(prefix);
 
         if (isXPA && isXPB) {
-          const xpA = parseInt(labelA.replace("XP:", "").trim());
-          const xpB = parseInt(labelB.replace("XP:", "").trim());
+          const xpA = parseInt(labelA.replace(prefix, "").trim());
+          const xpB = parseInt(labelB.replace(prefix, "").trim());
           return xpA - xpB;
         }
 
@@ -150,10 +146,10 @@ export class TraitDialog {
   }
 
   static #mountTraitObject(html, traits) {
-    const trait = html.find('#trait').val();
-    const particularity = html.find('#particularity').val();
-    const objectTrait = traits[trait];
+    const traitId = html.find('#trait').val();
+    const objectTrait = this.#findTrait(traits, traitId);
     if (objectTrait.particularity != undefined) {
+      const particularity = html.find('#particularity').val();
       objectTrait['particularity'] = particularity;
     }
     return objectTrait;
@@ -168,13 +164,8 @@ export class TraitDialog {
   }
 
   static #updateValues(html, traits) {
-    html.parent().parent().css('height', 'auto');
-
-    const traitIndex = html.find('#trait').val();
-    const selectedOption = html.find(`#trait option[value="${traitIndex}"]`);
-    const dataId = selectedOption.data('id');
-
-    const selectedTrait = traits.find(element => element.id == dataId);
+    const traitId = html.find('#trait').val();
+    const selectedTrait = this.#findTrait(traits, traitId);
 
     const htmlElements = {
       costLabel: { element: html.find('#cost') },
@@ -203,6 +194,12 @@ export class TraitDialog {
       htmlElements.costLabel.html('0');
       htmlElements.particularityLabel.html('');
     }
+
+    html.parent().parent().css('height', 'auto');
+  }
+
+  static #findTrait(traits, traitId) {
+    return traits.find(element => element.id == traitId);
   }
 
   static #toggleVisibility(particularity, container, labelContainer = null, value = "") {

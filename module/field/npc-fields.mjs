@@ -11,7 +11,7 @@ export class NpcSkill extends SchemaField {
         this.valor = params.valor || 0;
     }
 
-    static _toJson(skill, value) {
+    static toJson(skill, value) {
         const object = new NpcSkill({
             nome: skill,
             valor: value,

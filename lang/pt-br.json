@@ -48,6 +48,8 @@
         "Limite": "Limite",
         "Simples": "Simples",
         "Valores": "Valores",
+        "Clonar": "Clonar",
+        "Copia": "Copia",
 
         "Realizar_Teste": "Realizar Teste",
         "Rolagens_Player": "Modo de Rolagem",
@@ -115,9 +117,7 @@
         "Influencia": "Influência",
         "Nucleo": "Núcleo",
         "Sobrecarga": "Sobrecarga",
-        "Aprimoramento": "Aprimoramento",
         "Aprimoramentos": "Aprimoramentos",
-        "Afetado_Aprimoramento": "Afetado por Aprimoramento",
         "Reiniciar_Efeitos_Passivos": "Reiniciar Efeitos Passivos",
         "Remover_Efeito": "Remover Efeito",
         "Remover_Todos_Efeitos": "Remover todos os Efeitos",
@@ -205,6 +205,7 @@
         "Selecione_Um_Item": "Selecione um item para ver detalhes.",
         "Filtrar_Por_Nome": "Filtrar por nome...",
         "Selecionar_Item": "Selecionar Item",
+        "Nao_Possui": "Não Possui",
 
         "Expandir_Contrair": "Expandir/Contrair",
         "Contrair_Expandir": "Contrair/Expandir",
@@ -250,6 +251,7 @@
         "Criar_Macro": "Criar Macro",
         "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa.",
         "Teste_Customizado": "Teste Customizado",
+        "Voce_Usou_Nome": "Você usou {nome}",
 
         "NPC": {
             "Ver_Ficha": "Ver Ficha",
@@ -328,6 +330,30 @@
             "Realizar_Acao": "Tem certeza que deseja realizar essa ação?",
             "Ocultar": "Ocultar?",
             "Ocultar_Acao": "Deseja ocultar esta ação?"
+        },
+
+        "Aviso": {
+            "Teste": {
+                "Erro_Carregar": "Erro ao carregar o teste.",
+                "Erro_Sem_Nome": "O teste precisa de um nome para ser criado.",
+                "Erro_Sem_Ator": "O item precisa estar associado a algum personagem.",
+                "Erro_Sem_Teste_Padrao": "É preciso definir um teste padrão para o item.",
+                "Erro_Sem_Habilidade": "O teste desse item não utiliza nenhuma Habilidade conhecida pelo Personagem"
+            },
+            "Erro": {
+                "Ator_Invalido": "Ator inválido.",
+                "Efeito_Invalido": "Efeito inválido."
+            }
+        },
+
+        "Aprimoramento": {
+            "Nome": "Aprimoramento",
+            "Nome_Plural": "Aprimoramentos",
+            "Afetado_Aprimoramento": "Afetado por Aprimoramento",
+            "Mensagens": {
+                "Ja_Possui_Aprimoramento": "O Personagem já possui esse Aprimoramento: <u>{aprimoramento}</u>",
+                "Ja_Possui_Efeito": "O Personagem já possui esse Efeito: <u>{efeito}</u>"
+            }
         }
     },
     "TYPES": {
@@ -527,7 +553,10 @@
         "OcclusionRadius": "Raio de Oclusão",
         "OcclusionRadiusHint": "Quando este Token estiver abaixo de um Tile que usa oclusão radial, este valor controla o tamanho do buraco cortado no Tile para permitir que o Token seja visto através dela.",
         "WarningNoActor": "Este Token faz referência a um Personagem que não existe mais no Mundo.",
-        "WarningNoVision": "Não há nenhum Token nesta Cena que lhe conceda visibilidade da área."
+        "WarningNoVision": "Não há nenhum Token nesta Cena que lhe conceda visibilidade da área.",
+        "Mirror": "Espelhar Imagem",
+        "MirrorX": "Horizontal",
+        "MirrorY": "Vertical"
     },
     "EFFECT": {
         "StatusDead": "Morto",

@@ -7,19 +7,40 @@
         </label>
         <select id="{{item.id}}.substance_type" class="S0-select" style="flex: 1;" name="system.substance_type">
             {{#each (fetchRepository 'equipment-substance-type')}}
-            <option value="{{id}}" {{selectIfEq ../item.system.substance_type id }}>{{label}}</option>
+            <option value="{{id}}" {{selectIfEq (itemValues ../item 'substance_type' ) id }}>{{label}}</option>
             {{/each}}
         </select>
     </div>
 
-    {{> itemCommonDescription this}}
+    {{#lett withDamage=(itemValues item 'substance_with_damage') withRange=(itemValues item 'substance_with_range')
+    item=item}}
+    {{#if (operators 'or' withDamage withRange)}}
+    <div class="S0-container">
+        {{#if withDamage}}
+        <div class="form-group">
+            <label for="{{item.id}}.damage" style="flex: 1;">{{localize 'S0.Dano'}}:</label>
+            <input id="{{item.id}}.damage" style="flex: 1; text-align: center;" type="number" name="system.damage"
+                min="0" max="99" value="{{itemValues item 'damage'}}" />
+        </div>
+        {{/if}}
+
+        {{#if withRange}}
+        <div class="form-group">
+            <label for="{{item.id}}.range" style="flex: 1;">{{localize 'S0.Alcance'}}:</label>
+            <input id="{{item.id}}.range" style="flex: 1; text-align: center;" type="number" name="system.range" min="0"
+                max="99" value="{{itemValues item 'range'}}" />
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
+    {{/lett}}
 
     {{#if (itemValues item 'substance_with_effects')}}
     <div class="S0-page S0-container">
 
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <strong>{{localize 'S0.Efeitos'}}</strong>
-            
+
             {{#if editable}}
             <div style="display: flex; gap: 8px;">
                 <a class="S0-icon-expand" data-characteristic="characteristic" data-type="substance" data-action="add"
@@ -48,5 +69,7 @@
 
     </div>
     {{/if}}
+
+    {{> itemCommonDescription this}}
 
 </form>

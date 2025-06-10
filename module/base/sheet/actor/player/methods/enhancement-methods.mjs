@@ -1,20 +1,21 @@
-import { ChatCreator } from "../../../../utils/chat-creator.mjs";
-import { EnhancementDialog } from "../../../../creators/dialog/enhancement-dialog.mjs";
-import { createOptionsAndSetOnSelects } from "../../../../creators/element/element-creator-jscript.mjs";
-import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
-import { EnhancementUtils } from "../../../../core/enhancement/enhancement-utils.mjs";
-import { getActorEnhancementSlot } from "../../../../enums/characteristic-enums.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { EnhancementDuration } from "../../../../enums/enhancement-enums.mjs";
-import { ActorEnhancementField } from "../../../../field/actor-fields.mjs";
-import { EnhancementRepository } from "../../../../repository/enhancement-repository.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
-import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
-import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes, ActiveEffectsTypes } from "../../../../enums/active-effects-enums.mjs";
-import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
-import { EnhancementMessageCreator } from "../../../../creators/message/enhancement-message.mjs";
-import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
+import { getObject, localize, localizeFormat } from "../../../../../../scripts/utils/utils.mjs";
+import { ChatCreator } from "../../../../../utils/chat-creator.mjs";
+import { ActorEnhancementField } from "../../../../../field/actor-fields.mjs";
+import { EnhancementRepository } from "../../../../../repository/enhancement-repository.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
+import { EnhancementUtils } from "../../../../../core/enhancement/enhancement-utils.mjs";
+import { ActiveEffectsUtils } from "../../../../../core/effect/active-effects.mjs";
+import { ActorUtils } from "../../../../../core/actor/actor-utils.mjs";
+import { EnhancementDialog } from "../../../../../creators/dialog/enhancement-dialog.mjs";
+import { createOptionsAndSetOnSelects } from "../../../../../creators/element/element-creator-jscript.mjs";
+import { NotificationsUtils } from "../../../../../creators/message/notifications.mjs";
+import { EnhancementMessageCreator } from "../../../../../creators/message/enhancement-message.mjs";
+import { ConfirmationDialog } from "../../../../../creators/dialog/confirmation-dialog.mjs";
+import { getActorEnhancementSlot } from "../../../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { EnhancementDuration } from "../../../../../enums/enhancement-enums.mjs";
+import { activeEffectOriginTypeLabel, ActiveEffectsFlags, ActiveEffectsOriginTypes, ActiveEffectsTypes } from "../../../../../enums/active-effects-enums.mjs";
+
 
 export function updateEnhancementLevelsOptions(enhancementId, selects) {
     const enhancementLevels = EnhancementRepository.getEnhancementEffectsByEnhancementId(enhancementId);
@@ -50,55 +51,73 @@ async function updateActorEnhancement(currentTarget, actor) {
     const enhancementText = selectedEnhancement.text;
 
     const enhancementOnSlotKey = getActorEnhancementSlot(currentTarget.dataset.itemId);
-    const characteristic = ActorEnhancementField._toJson(enhancementId, enhancementText);
+    const enhancementOnSlot = getObject(actor, enhancementOnSlotKey);
+
+    const enhancementsIds = ActorUtils.getAllEnhancements(actor).some(enhancement => enhancement.id === enhancementId);
+    if (enhancementId !== '' && enhancementsIds) {
+        NotificationsUtils.error(localizeFormat('Aprimoramento.Mensagens.Ja_Possui_Aprimoramento', { aprimoramento: enhancementText }));
+
+        const jCurrentTarget = $(currentTarget);
+
+        const oldEnhancement = EnhancementRepository.getEnhancementById(enhancementOnSlot?.id);
+        if (!oldEnhancement) {
+            jCurrentTarget.prop('selectedIndex', 0).trigger('change');
+        } else {
+            const optionIndex = Object.values(jCurrentTarget[0].options)
+                .findIndex(opt => opt.value == oldEnhancement.value);
+            jCurrentTarget.prop('selectedIndex', optionIndex);
+        }
+        return;
+    }
 
     if (enhancementId == undefined || enhancementId == '') {
-        const enhancementOnSlot = getObject(actor, enhancementOnSlotKey);
         await removeEnhancementEffects(actor, enhancementOnSlot);
     }
 
-    const enhancementsIds = ActorUtils.getAllEnhancements(actor).some(enh => enh.id === enhancementId);
-    if (enhancementId !== '' && enhancementsIds) {
-        NotificationsUtils._error(`O Personagem já possui esse Aprimoramento: <u>${enhancementText}</u>`);
-        currentTarget.options[0].selected = true;
-        currentTarget.blur();
-        return;
-    }
-    ActorUpdater._verifyAndUpdateActor(actor, enhancementOnSlotKey, characteristic);
+    const characteristic = ActorEnhancementField.toJson(enhancementId, enhancementText);
+    ActorUpdater.verifyAndUpdateActor(actor, enhancementOnSlotKey, characteristic);
 }
 
 async function updateActorLevelEnhancement(currentTarget, actor) {
-    const { enhancementSlot, enhancementLevel } = currentTarget.dataset;
-    const effectId = currentTarget.selectedOptions[0].value;
+    const jCurrentTarget = $(currentTarget);
+
+    const { enhancementSlot, enhancementLevel } = jCurrentTarget.data();
+    const effectId = jCurrentTarget.val();
 
     const enhancementOnSlotKey = getActorEnhancementSlot(enhancementSlot);
-    const enhancementOnSlot = getObject(actor, `${enhancementOnSlotKey}`);
+    const enhancementOnSlot = getObject(actor, enhancementOnSlotKey);
 
     const effect = EnhancementRepository.getEnhancementEffectById(effectId, enhancementOnSlot.id);
 
-    if (effectId !== '') {
-        const alreadyHasEffect = ActorUtils.getAllEnhancements(actor)
-            .flatMap(enhacement => Object.values(enhacement.levels))
-            .map(levelEnhancement => levelEnhancement.id)
-            .some(levelEnhancementId => levelEnhancementId == effectId);
+    const levelKey = `nv${enhancementLevel}`;
+    const oldEffect = enhancementOnSlot.levels[levelKey];
 
-        if (alreadyHasEffect) {
-            NotificationsUtils._error(`O Personagem já possui esse Efeito: <u>${effect.name}</u>`);
-            currentTarget.options[0].selected = true;
-            currentTarget.blur();
+    if (effectId !== '') {
+        const hasEffect = ActorUtils.getAllEnhancements(actor)
+            .flatMap(enhacement => Object.values(enhacement.levels))
+            .some(levelEnhancement => levelEnhancement.id == effectId);
+
+        if (hasEffect) {
+            NotificationsUtils.error(localizeFormat('Aprimoramento.Mensagens.Ja_Possui_Efeito', { efeito: effect.name }));
+            if (!oldEffect) {
+                jCurrentTarget.prop('selectedIndex', 0).trigger('change');
+            } else {
+                const listOptions = Object.values(jCurrentTarget[0].options);
+                const optionIndex = listOptions.findIndex(opt => opt.value == oldEffect.id);
+                jCurrentTarget.prop('selectedIndex', optionIndex);
+            }
             return;
         }
     }
 
-    const oldEffect = enhancementOnSlot.levels[`nv${enhancementLevel}`];
     if (oldEffect.id && oldEffect.id != '' && oldEffect.id != effectId) {
         await ActiveEffectsUtils.removeActorEffect(actor, oldEffect.id)
     }
 
     const updatedCharacteristicLevels = { ...enhancementOnSlot.levels };
-    updatedCharacteristicLevels[`nv${enhancementLevel}`] = effect;
+    updatedCharacteristicLevels[levelKey] = effect;
 
-    await ActorUpdater._verifyAndUpdateActor(actor, `${enhancementOnSlotKey}.levels`, updatedCharacteristicLevels);
+    await ActorUpdater.verifyAndUpdateActor(actor, `${enhancementOnSlotKey}.levels`, updatedCharacteristicLevels);
 
     if (effect?.duration == EnhancementDuration.PASSIVE) {
         toggleEnhancementEffectOnActor(effect, actor);
@@ -145,12 +164,12 @@ async function verifyIsGmAndDefineShowChat(message, actor) {
 
 async function toggleEnhancementEffectOnActor(effect, actor) {
     if (!effect) {
-        NotificationsUtils._error(`Efeito inválido`);
+        NotificationsUtils.error(localize('Aviso.Erro.Efeito_Invalido'));
         return;
     }
 
     if (!actor) {
-        NotificationsUtils._error(`Ator inválido`);
+        NotificationsUtils.error(localize('Aviso.Erro.Ator_Invalido'));
         return;
     }
 
@@ -167,14 +186,15 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
     }
 
     if (effect.duration == EnhancementDuration.USE) {
-        await NotificationsUtils._info(`${localize("Voce")} ${localize("Usou")} ${effect.name}`)
+        await NotificationsUtils.info(localizeFormat('Voce_Usou_Nome', { nome: effect.name }));
         await usedEffectSendOnChat(effect, actor);
         return;
     } else {
+        const enhancementLabel = localize('Aprimoramento.Nome');
         const activeEffectData = ActiveEffectsUtils.createEffectData({
             name: effect.name,
-            description: localize('Aprimoramento'),
-            origin: `${localize('Aprimoramento')}: ${enhancement.name}`,
+            description: enhancementLabel,
+            origin: `${enhancementLabel}: ${enhancement.name}`,
             statuses: [effect.id],
             flags: {
                 [ActiveEffectsFlags.ORIGIN_ID]: effect.id,
@@ -234,7 +254,7 @@ export const enhancementHandleMethods = {
         } else if (type == 'level') {
             updateActorLevelEnhancement(currentTarget, actor);
         } else {
-            NotificationsUtils._warning(`enhancement-methods:change:type [${type}] is not mapped`);
+            NotificationsUtils.warning(`enhancement-methods:change:type [${type}] is not mapped`);
         }
     },
     [OnEventType.VIEW]: async (actor, event) => {
@@ -243,7 +263,7 @@ export const enhancementHandleMethods = {
         if (effect) {
             EnhancementDialog.open(effect, actor, () => toggleEnhancementEffectOnActor(effect, actor));
         } else {
-            NotificationsUtils._warning('enhancement-methods:view:effect is null');
+            NotificationsUtils.warning('enhancement-methods:view:effect is null');
         }
     },
     [OnEventType.CHECK]: async (actor, event) => {
@@ -252,7 +272,7 @@ export const enhancementHandleMethods = {
         if (effect) {
             toggleEnhancementEffectOnActor(effect, actor);
         } else {
-            NotificationsUtils._warning('enhancement-methods:check:effect is null');
+            NotificationsUtils.warning('enhancement-methods:check:effect is null');
         }
     },
 }

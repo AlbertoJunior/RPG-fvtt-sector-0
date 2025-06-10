@@ -1,10 +1,11 @@
 import { localize } from "../../scripts/utils/utils.mjs";
+import { CharacteristicType } from "../enums/characteristic-enums.mjs";
 
 export class VirtuesRepository {
     static #characteristics = [
-        { id: 'consciencia', label: 'Consciencia' },
-        { id: 'perseveranca', label: 'Perseveranca' },
-        { id: 'quietude', label: 'Quietude' }
+        { id: CharacteristicType.VIRTUES.CONSCIOUSNESS.id, label: 'Consciencia' },
+        { id: CharacteristicType.VIRTUES.PERSEVERANCE.id, label: 'Perseveranca' },
+        { id: CharacteristicType.VIRTUES.QUIETNESS.id, label: 'Quietude' }
     ];
 
     static getItems() {

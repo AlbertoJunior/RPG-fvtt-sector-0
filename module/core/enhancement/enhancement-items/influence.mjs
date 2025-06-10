@@ -1,12 +1,12 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestField } from "../../data/roll-test-data-model.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
-import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { RollTestField } from "../../../field/roll-test-field.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
+import { ActiveEffectsUtils } from "../../effect/active-effects.mjs";
 
 const influenceEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '25',
         'Encantar',
         1,
@@ -14,7 +14,7 @@ const influenceEffects = [
         EnhancementDuration.SCENE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
             {
                 key: ActiveEffectsUtils.KEYS.TINT_TOKEN,
                 mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
@@ -24,7 +24,7 @@ const influenceEffects = [
             },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '26',
         'Apavorar',
         1,
@@ -32,7 +32,7 @@ const influenceEffects = [
         EnhancementDuration.SCENE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
             {
                 key: ActiveEffectsUtils.KEYS.TINT_TOKEN,
                 mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
@@ -42,7 +42,7 @@ const influenceEffects = [
             },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '27',
         'Vício',
         2,
@@ -50,7 +50,7 @@ const influenceEffects = [
         EnhancementDuration.SCENE,
         ['25', '26']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '28',
         'Mesmerizar',
         3,
@@ -70,7 +70,7 @@ const influenceEffects = [
             ),
         ],
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '29',
         'Esquecimento',
         3,
@@ -90,7 +90,7 @@ const influenceEffects = [
             ),
         ],
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '30',
         'Magnetismo',
         4,
@@ -98,7 +98,7 @@ const influenceEffects = [
         EnhancementDuration.SCENE,
         ['28', '29']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '31',
         'Racionalizar',
         4,
@@ -106,7 +106,7 @@ const influenceEffects = [
         EnhancementDuration.USE,
         ['28', '29']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '32',
         'Divindade',
         5,

@@ -1,4 +1,5 @@
 import { EquipmentUtils } from "../core/equipment/equipment-utils.mjs";
+import { NotificationsUtils } from "../creators/message/notifications.mjs";
 import { EquipmentRepository } from "../repository/equipment-repository.mjs";
 
 export class CreateItemHookHandle {
@@ -25,7 +26,7 @@ export class CreateItemHookHandle {
         }
 
         const filterTypesMessage = filterTypes.map(type => localizeType(`Item.${type}`)).join(', ');
-        NotificationsUtils._warning(`Este pacote só aceita itens do tipo '${filterTypesMessage}'.`);
+        NotificationsUtils.warning(`Este pacote só aceita itens do tipo '${filterTypesMessage}'.`);
         item.delete();
 
         return false;

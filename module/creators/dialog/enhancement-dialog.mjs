@@ -10,7 +10,7 @@ import { EnhancementMessageCreator } from "../message/enhancement-message.mjs";
 import { ActiveEffectsUtils } from "../../core/effect/active-effects.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
-import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
+import { playerRollHandle } from "../../base/sheet/actor/player/methods/player-roll-methods.mjs";
 
 export class EnhancementDialog {
     static async open(enhancementEffect, actor, onConfirm) {

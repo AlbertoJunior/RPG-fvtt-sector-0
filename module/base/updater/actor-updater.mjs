@@ -1,11 +1,11 @@
 import { getObject } from "../../../scripts/utils/utils.mjs";
 
 export class ActorUpdater {
-    static async _verifyAndUpdateActor(actor, systemCharacteristic, value) {
-        await this._verifyKeysAndUpdateActor(actor, [{ systemCharacteristic: systemCharacteristic, value: value }]);
+    static async verifyAndUpdateActor(actor, systemCharacteristic, value) {
+        await this.verifyKeysAndUpdateActor(actor, [{ systemCharacteristic: systemCharacteristic, value: value }]);
     }
 
-    static async _verifyKeysAndUpdateActor(actor, params = []) {
+    static async verifyKeysAndUpdateActor(actor, params = []) {
         const keysToUpdate = {};
         params.forEach(item => {
             const verifiedSystemCharacteristic = item.systemCharacteristic.system ? item.systemCharacteristic.system : item.systemCharacteristic;

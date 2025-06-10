@@ -10,7 +10,7 @@ export class AttributeRepository {
         { id: CharacteristicType.ATTRIBUTES.INTELLIGENCE.id, label: 'S0.Inteligencia' }
     ];
 
-    static _getItems() {
+    static getItems() {
         return [...AttributeRepository.#characteristics];
     }
 }

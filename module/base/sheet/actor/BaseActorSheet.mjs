@@ -1,12 +1,12 @@
-import { getObject, selectCharacteristic } from "../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../core/actor/actor-equipment.mjs";
-import { createLi } from "../../creators/element/element-creator-jscript.mjs";
-import { BaseActorCharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EquipmentCharacteristicType } from "../../enums/equipment-enums.mjs";
-import { SystemFlags } from "../../enums/flags-enums.mjs";
-import { OnEventType, OnMethod, verifyAndParseOnEventType } from "../../enums/on-event-type.mjs";
-import { FlagsUtils } from "../../utils/flags-utils.mjs";
-import { HtmlJsUtils } from "../../utils/html-js-utils.mjs";
+import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../core/actor/actor-equipment.mjs";
+import { createLi } from "../../../creators/element/element-creator-jscript.mjs";
+import { BaseActorCharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EquipmentCharacteristicType } from "../../../enums/equipment-enums.mjs";
+import { SystemFlags } from "../../../enums/flags-enums.mjs";
+import { OnEventType, OnMethod, verifyAndParseOnEventType } from "../../../enums/on-event-type.mjs";
+import { FlagsUtils } from "../../../utils/flags-utils.mjs";
+import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
 
 export class Setor0BaseActorSheet extends ActorSheet {
     get mapEvents() {
@@ -107,7 +107,7 @@ export class Setor0BaseActorSheet extends ActorSheet {
         }
 
         const value = getObject(armor, EquipmentCharacteristicType.ACTUAL_RESISTANCE) || 0;
-        selectCharacteristic(html.find(`#statusPage #protect .S0-characteristic`)[value - 1]);
+        selectCharacteristic(html.find(`#protect .S0-characteristic`)[value - 1]);
     }
 
     addPageButtonsOnFloatingMenu(html) {
@@ -148,8 +148,9 @@ export class Setor0BaseActorSheet extends ActorSheet {
     }
 
     async #changePage(pageIndex, pages, buttons, event) {
-        if (pageIndex == this.currentPage)
+        if (pageIndex == this.currentPage) {
             return;
+        }
 
         const normalizedCurrentIndex = Math.max(this.currentPage - 1, 0);
         const normalizedIndex = Math.max(pageIndex - 1, 0);

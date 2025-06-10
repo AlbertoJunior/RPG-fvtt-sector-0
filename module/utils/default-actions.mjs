@@ -108,7 +108,7 @@ export class DefaultActions {
         }
 
         const rolls = this.#prepareRolls(params.rolls, params);
-        const message = await RollMessageCreator.mountContent(params);
+        const message = await RollMessageCreator.mountContentDefaultRoll(params);
         await ChatCreator._sendToChatTypeRoll(actor, message, rolls, mode);
     }
 

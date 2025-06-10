@@ -1,6 +1,7 @@
 import { SYSTEM_ID } from "../constants.mjs";
 import { CharacteristicType } from "../enums/characteristic-enums.mjs";
 import { SuperEquipmentParticularityType } from "../enums/equipment-enums.mjs";
+import { ChangeField } from "../field/change-field.mjs";
 import { SuperEquipmentTraitField } from "../field/equipment-field.mjs";
 
 export class SuperEquipmentTraitRepository {
@@ -13,10 +14,7 @@ export class SuperEquipmentTraitRepository {
             description: 'Para alguma Habilidade não combativa.',
             particularity: {
                 type: SuperEquipmentParticularityType.SKILL,
-                change: {
-                    key: '',
-                    value: 1,
-                }
+                change: ChangeField.toJson({ value: 1 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -144,10 +142,7 @@ export class SuperEquipmentTraitRepository {
             description: 'Temporariamente aumenta em 2 um Atributo escolhido.',
             particularity: {
                 type: SuperEquipmentParticularityType.ATTRIBUTE,
-                change: {
-                    key: '',
-                    value: 2,
-                }
+                change: ChangeField.toJson({ value: 2 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -240,10 +235,7 @@ export class SuperEquipmentTraitRepository {
             particularity: {
                 type: SuperEquipmentParticularityType.FIXED,
                 description: '-2 no Ataque (Corpo-a-Corpo)',
-                change: {
-                    key: CharacteristicType.BONUS.OFENSIVE_MELEE.system,
-                    value: -2,
-                }
+                change: ChangeField.toJson({ key: CharacteristicType.BONUS.OFENSIVE_MELEE.system, value: -2 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -255,10 +247,7 @@ export class SuperEquipmentTraitRepository {
             particularity: {
                 type: SuperEquipmentParticularityType.FIXED,
                 description: '-2 no Ataque (Armas de Projeção)',
-                change: {
-                    key: CharacteristicType.BONUS.OFENSIVE_PROJECTILE.system,
-                    value: -2,
-                }
+                change: ChangeField.toJson({ key: CharacteristicType.BONUS.OFENSIVE_PROJECTILE.system, value: -2 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -270,10 +259,7 @@ export class SuperEquipmentTraitRepository {
             particularity: {
                 type: SuperEquipmentParticularityType.FIXED,
                 description: '-2 na Defesa',
-                change: {
-                    key: CharacteristicType.BONUS.DEFENSIVE.system,
-                    value: -2,
-                }
+                change: ChangeField.toJson({ key: CharacteristicType.BONUS.DEFENSIVE.system, value: -2 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -320,10 +306,7 @@ export class SuperEquipmentTraitRepository {
             particularity: {
                 type: SuperEquipmentParticularityType.FIXED,
                 description: '-4 no Ataque (Corpo-a-Corpo)',
-                change: {
-                    key: CharacteristicType.BONUS.OFENSIVE_MELEE.system,
-                    value: -4,
-                }
+                change: ChangeField.toJson({ key: CharacteristicType.BONUS.OFENSIVE_MELEE.system, value: -4 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -335,10 +318,7 @@ export class SuperEquipmentTraitRepository {
             particularity: {
                 type: SuperEquipmentParticularityType.FIXED,
                 description: '-4 no Ataque (Armas de Projeção)',
-                change: {
-                    key: CharacteristicType.BONUS.OFENSIVE_PROJECTILE.system,
-                    value: -4,
-                }
+                change: ChangeField.toJson({ key: CharacteristicType.BONUS.OFENSIVE_PROJECTILE.system, value: -4 }),
             }
         }),
         SuperEquipmentTraitField.toJson({
@@ -350,10 +330,7 @@ export class SuperEquipmentTraitRepository {
             particularity: {
                 type: SuperEquipmentParticularityType.FIXED,
                 description: '-4 na Defesa',
-                change: {
-                    key: CharacteristicType.BONUS.DEFENSIVE.system,
-                    value: -4,
-                }
+                change: ChangeField.toJson({ key: CharacteristicType.BONUS.DEFENSIVE.system, value: -4 }),
             }
         }),
         SuperEquipmentTraitField.toJson({

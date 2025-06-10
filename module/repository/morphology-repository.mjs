@@ -35,7 +35,7 @@ export class MorphologyRepository {
         });
     }
 
-    static _getItems() {
+    static getItems() {
         return [... this.#getBaseItems(), ... this.#loadedFromPack].sort((a, b) => a.label.localeCompare(b.label));
     }
 }

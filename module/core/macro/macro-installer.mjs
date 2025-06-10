@@ -48,7 +48,7 @@ export class MacroInstaller {
         }
 
         await user.assignHotbarMacro(worldMacro);
-        NotificationsUtils._info(`Macro "${macroName}" adicionada à sua hotbar.`);
+        NotificationsUtils.info(`Macro "${macroName}" adicionada à sua hotbar.`);
 
         await FlagsUtils.setItemFlag(user, 'macroInstalled', [...installedMacros, macroKey]);
     }

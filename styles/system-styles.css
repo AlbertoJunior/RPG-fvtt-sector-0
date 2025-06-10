@@ -313,14 +313,23 @@ img.S0-clickable:hover {
 }
 
 #token-hud .status-effects {
-    width: 200px;
+    width: max-content;
+    max-width: 200px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
 }
 
 #token-hud .status-effects .effect-control {
-    width: 100%;
+    width: 50px;
     height: 50px;
     aspect-ratio: 1/1;
 }
+
+/* #token-hud .status-effects .effect-control img {
+    width: 50px;
+} */
 
 /* #endregion */
 
@@ -752,12 +761,14 @@ img.S0-clickable:hover {
 .S0-letal,
 .S0-clickable.S0-letal,
 .S0-clickable.S0-superficial:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--alternate-black-color);
+    box-shadow: 0 0 3px var(--alternate-black-color);
 }
 
 .S0-superficial,
 .S0-clickable.S0-superficial {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
+    box-shadow: 0 0 3px var(--secondary-color);
 }
 
 .S0-clickable:is(.S0-letal, .S0-selected):hover {
@@ -934,7 +945,7 @@ button.S0-roll-result:not([disabled]):hover {
     padding: 2px 6px;
     border: 1px solid var(--primary-color-alpha-50);
     border-radius: 6px;
-    box-shadow: 0 0 6px var(--primary-color);
+    box-shadow: 0 0 3px var(--primary-color);
 }
 
 .S0-message-weapon-container label {
@@ -1685,7 +1696,7 @@ button.S0-roll-result:not([disabled]):hover {
     margin-block: 4px;
     border-top: 1px solid var(--tertiary-color-alpha-50);
     border-bottom: 1px solid var(--tertiary-color-alpha);
-    box-shadow: 0px 0px 6px var(--tertiary-color-alpha-50);
+    box-shadow: 0px 0px 3px var(--tertiary-color-alpha-50);
 }
 
 .S0-page-transparent :is(select, input, textarea) {
@@ -1723,23 +1734,17 @@ button.S0-roll-result:not([disabled]):hover {
     border-color: var(--primary-color-alpha);
 }
 
-.S0-page-transparent .S0-characteristic.S0-letal {
-    background-color: var(--tertiary-color);
+.S0-page-transparent .S0-characteristic.S0-letal,
+.S0-page-transparent .S0-clickable.S0-characteristic.S0-letal,
+.S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial:hover {
+    background-color: var(--primary-color-alpha);
+    box-shadow: 0px 0px 3px var(--primary-color);
 }
 
-.S0-page-transparent .S0-characteristic.S0-superficial {
-    background-color: var(--primary-color);
-}
-
-.S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial:hover,
-.S0-page-transparent .S0-clickable.S0-characteristic.S0-letal {
-    background-color: var(--tertiary-color);
-    box-shadow: 0px 0px 6px var(--tertiary-color-alpha);
-}
-
+.S0-page-transparent .S0-characteristic.S0-superficial,
 .S0-page-transparent .S0-clickable.S0-characteristic.S0-superficial {
-    background-color: var(--primary-color);
-    box-shadow: 0px 0px 6px var(--primary-color-alpha-50);
+    background-color: var(--tertiary-color-alpha);
+    box-shadow: 0px 0px 3px var(--tertiary-color);
 }
 
 .S0-page-transparent .S0-clickable.S0-characteristic {
@@ -1748,7 +1753,7 @@ button.S0-roll-result:not([disabled]):hover {
 
 .S0-page-transparent .S0-clickable:is(.S0-letal, .S0-selected):hover {
     background-color: var(--color-red-alpha);
-    box-shadow: 0 0 6px var(--color-red-alpha);
+    box-shadow: 0px 0px 6px var(--color-red-alpha);
 }
 
 .S0-page-transparent .S0-badge span {

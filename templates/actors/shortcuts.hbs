@@ -59,9 +59,10 @@
             {{/if}}
         </h2>
 
-        <div id="shortcuts-container-{{actor.id}}" class="S0-container-2-fixed-column S0-container-contract S0-drop-container S0-expanded"
+        <div id="shortcuts-container-{{actor.id}}"
+            class="S0-container-2-fixed-column S0-container-contract S0-drop-container S0-expanded"
             style="overflow-y: scroll; padding-left: 4px; grid-row-gap: 0px; grid-column-gap: 4px;">
-            {{#each actor.system.atalhos as |shortcut|}}
+            {{#each (actorLists actor 'shortcuts') as |shortcut|}}
             <div class="S0-container S0-shortcut-item {{#if ../editable}}draggable{{/if}}">
                 {{#if ../editable}}
                 <a class="S0-icon-expand" title="{{localize 'S0.Editar'}}" data-action="edit"
@@ -76,7 +77,7 @@
                     {{shortcut.name}}
                 </label>
 
-                <h3 class="S0-h-marked" {{#if shortcut.specialist}}title="{{localize 'S0.Especialista'}}" {{/if}}
+                <h3 class="S0-h-marked" {{#if shortcut.specialist}} title="{{localize 'S0.Especialista'}}" {{/if}}
                     style="{{#if shortcut.specialist}}border: 2px ridge var(--primary-color-alpha);{{/if}}">
                     {{actorValues ../actor 'calculate_dice_pool' shortcut}}
                     {{#if (operators 'gt' automatic 0)}}

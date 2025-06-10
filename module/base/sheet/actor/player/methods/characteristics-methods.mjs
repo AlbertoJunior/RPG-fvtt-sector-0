@@ -1,7 +1,7 @@
-import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
-import { selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
-import { BaseActorCharacteristicType, CharacteristicType, CharacteristicTypeMap } from "../../../../enums/characteristic-enums.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { ActorUtils } from "../../../../../core/actor/actor-utils.mjs";
+import { selectCharacteristic } from "../../../../../../scripts/utils/utils.mjs";
+import { BaseActorCharacteristicType, CharacteristicType, CharacteristicTypeMap } from "../../../../../enums/characteristic-enums.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
 
 export async function characteristicOnClick(event, actor) {
     const element = event.target;
@@ -48,7 +48,7 @@ async function handleVirtue(actor, virtueId, level) {
         }
     }
 
-    await ActorUpdater._verifyAndUpdateActor(actor, characteristic, level);
+    await ActorUpdater.verifyAndUpdateActor(actor, characteristic, level);
 }
 
 async function handleOtherwise(actor, systemCharacteristic, characteristicId, level) {
@@ -69,5 +69,5 @@ async function handleOtherwise(actor, systemCharacteristic, characteristicId, le
         );
     }
 
-    await ActorUpdater._verifyKeysAndUpdateActor(actor, params);
+    await ActorUpdater.verifyKeysAndUpdateActor(actor, params);
 }

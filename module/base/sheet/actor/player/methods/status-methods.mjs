@@ -1,9 +1,9 @@
-import { selectCharacteristicAndReturnLength } from "../../../../../scripts/utils/utils.mjs";
-import { BaseActorCharacteristicType, CharacteristicType, getActorVirtue } from "../../../../enums/characteristic-enums.mjs";
-import { DefaultActions } from "../../../../utils/default-actions.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
+import { selectCharacteristicAndReturnLength } from "../../../../../../scripts/utils/utils.mjs";
+import { BaseActorCharacteristicType, CharacteristicType, getActorVirtue } from "../../../../../enums/characteristic-enums.mjs";
+import { DefaultActions } from "../../../../../utils/default-actions.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { ActorEquipmentUtils } from "../../../../../core/actor/actor-equipment.mjs";
 
 function selectLifeCharacteristic(event, addClassIfBlank) {
     let toUpdate = event.currentTarget;
@@ -45,7 +45,7 @@ const mapContextual = {
     health: async (actor, event) => {
         selectLifeCharacteristic(event, 'S0-superficial');
         const keysToUpdate = mountLifeCharacteristicToUpdate(event);
-        ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+        ActorUpdater.verifyKeysAndUpdateActor(actor, keysToUpdate);
     }
 }
 
@@ -58,20 +58,20 @@ const mapCheck = {
         }
 
         const value = selectCharacteristicAndReturnLength(event.currentTarget);
-        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey.USED, value);
+        ActorUpdater.verifyAndUpdateActor(actor, characteristicKey.USED, value);
     },
     overload: async (actor, event) => {
         const value = selectCharacteristicAndReturnLength(event.currentTarget);
-        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, value);
+        ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, value);
     },
     life: async (actor, event) => {
         const value = selectCharacteristicAndReturnLength(event.currentTarget);
-        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.LIFE, value);
+        ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.LIFE, value);
     },
     health: async (actor, event) => {
         selectLifeCharacteristic(event, 'S0-letal')
         const keysToUpdate = mountLifeCharacteristicToUpdate(event);
-        ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+        ActorUpdater.verifyKeysAndUpdateActor(actor, keysToUpdate);
     },
     protect: async (actor, event) => {
         const value = selectCharacteristicAndReturnLength(event.currentTarget);
@@ -120,7 +120,7 @@ const mapRemove = {
             },
         ];
 
-        ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+        ActorUpdater.verifyKeysAndUpdateActor(actor, keysToUpdate);
     },
     virtue: async (actor, event) => {
         const itemType = event.currentTarget.dataset.itemType;
@@ -128,10 +128,10 @@ const mapRemove = {
         if (!characteristicKey) {
             return;
         }
-        ActorUpdater._verifyAndUpdateActor(actor, characteristicKey.USED, 0);
+        ActorUpdater.verifyAndUpdateActor(actor, characteristicKey.USED, 0);
     },
     overload: async (actor, event) => {
-        ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, 0);
+        ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.OVERLOAD, 0);
     },
     health: async (actor, event) => {
         const keysToUpdate = [
@@ -144,7 +144,7 @@ const mapRemove = {
                 value: 0
             },
         ];
-        ActorUpdater._verifyKeysAndUpdateActor(actor, keysToUpdate);
+        ActorUpdater.verifyKeysAndUpdateActor(actor, keysToUpdate);
     },
     protect: async (actor, event) => {
         ActorEquipmentUtils.updateArmorEquippedActualResistance(actor, 999);

@@ -91,17 +91,17 @@ static async handleAdd(actor, event) {
    ...
    const onConfirm = async (rollable) => {
       if (!rollable.name) {
-            NotificationsUtils._error("O Teste precisa de um nome");
+            NotificationsUtils.error("O Teste precisa de um nome");
             return;
       }
 
       const current = getObject(actor, CharacteristicType.SHORTCUTS) || [];
       current.push(rollable);
 
-      await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
+      await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, current);
    };
 
-   CreateRollableTestDialog._open(null, onConfirm);
+   CreateRollableTestDialog.open(null, onConfirm);
 }
 ```
 

@@ -1,6 +1,6 @@
 <section data-label="{{ localize 'S0.Status' }}" class="S0-page" id="statusPage" data-icon="fas fa-heart-pulse">
 
-    {{#if (operators 'isNotNull' actor.system.experiencia)}}
+    {{#if (operators 'isNotNull' (actorValues actor 'experience'))}}
     <div class="S0-container">
         <h2>
             {{localize 'S0.Experiencia'}}
@@ -8,6 +8,7 @@
 
         <ul class="S0-ul-flex">
             {{#if editable}}
+
             {{#if (gameFunc 'isGm')}}
             <li class="S0-container">
                 <h3>
@@ -15,33 +16,37 @@
                 </h3>
                 <h4>
                     <input id="experiencia.atual" name="system.experiencia.atual" type="text"
-                        value="{{actor.system.experiencia.atual}}" placeholder="0" />
+                        value="{{actorValues actor 'actual_experience'}}" placeholder="0" />
                 </h4>
             </li>
             {{else}}
             <li class="S0-container">
                 <h3>{{localize 'S0.Disponivel'}}</h3>
-                <h4>{{actor.system.experiencia.atual}}</h4>
+                <h4>{{actorValues actor 'actual_experience'}}</h4>
             </li>
             {{/if}}
+
             <li class="S0-container">
                 <h3>
                     <label for="experiencia.usada">{{localize 'S0.Usada'}}</label>
                 </h3>
                 <h4>
                     <input id="experiencia.usada" name="system.experiencia.usada" type="text"
-                        value="{{actor.system.experiencia.usada}}" placeholder="0" />
+                        value="{{actorValues actor 'used_experience'}}" placeholder="0" />
                 </h4>
             </li>
+
             {{else}}
+
             <li class="S0-container">
                 <h3>{{localize 'S0.Disponivel'}}</h3>
-                <h4>{{actor.system.experiencia.atual}}</h4>
+                <h4>{{actorValues actor 'actual_experience'}}</h4>
             </li>
             <li class="S0-container">
                 <h3>{{localize 'S0.Usada'}}</h3>
-                <h4>{{actor.system.experiencia.usada}}</h4>
+                <h4>{{actorValues actor 'used_experience'}}</h4>
             </li>
+
             {{/if}}
 
             <li class="S0-container">
@@ -97,14 +102,18 @@
                     {{/if}}
                 </h3>
                 <div id="consciencia" class="S0-inner-container">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 (actorValues actor 'actual_consciousness')}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="virtue"
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary" data-type="virtue"
                         data-item-type="consciencia">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+
+                    {{/lett}}
                 </div>
             </li>
 
@@ -119,14 +128,18 @@
                     {{/if}}
                 </h3>
                 <div id="perseveranca" class="S0-inner-container">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 (actorValues actor 'actual_perseverance')}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="virtue"
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary" data-type="virtue"
                         data-item-type="perseveranca">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+
+                    {{/lett}}
                 </div>
             </li>
 
@@ -141,20 +154,24 @@
                     {{/if}}
                 </h3>
                 <div id="quietude" class="S0-inner-container">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 (actorValues actor 'actual_quietness')}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="virtue"
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary" data-type="virtue"
                         data-item-type="quietude">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+
+                    {{/lett}}
                 </div>
             </li>
         </ul>
 
         <ul class="S0-ul-flex">
-            {{#if (operators 'eq' actor.system.morfologia 'sintetico')}}
+            {{#if (operators 'eq' (actorValues actor 'morphology') 'sintetico')}}
             <li class="S0-container">
                 <h3>
                     {{ localize 'S0.Vida' }}
@@ -165,18 +182,21 @@
                     {{/if}}
                 </h3>
                 <div id="vida" class="S0-inner-container">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 10}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="life">
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary" data-type="life">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+                    {{/lett}}
                 </div>
             </li>
             {{/if}}
 
-            {{#if (operators 'gt' actor.system.nucleo 0)}}
+            {{#if (operators 'gt' (actorValues actor 'core') 0)}}
             <li class="S0-container">
                 <h3>
                     {{ localize 'S0.Sobrecarga' }}
@@ -190,13 +210,16 @@
                     {{/if}}
                 </h3>
                 <div id="sobrecarga" class="S0-inner-container">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 5}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="overload">
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary" data-type="overload">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+                    {{/lett}}
                 </div>
             </li>
             {{/if}}
@@ -216,13 +239,16 @@
 
                 <div id="protect" class="S0-inner-container"
                     style="flex-wrap: wrap; column-gap: 12px; row-gap:10px; flex: 1;">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 (actorValues actor 'equipped_amor_total_resistance')}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check{{/if}}" data-characteristic="temporary" data-type="protect">
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary" data-type="protect">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+                    {{/lett}}
                 </div>
             </div>
             {{/if}}
@@ -240,14 +266,17 @@
                     {{/if}}
                 </h3>
                 <div id="vitalidade" class="S0-inner-container">
+                    {{#lett actor=actor
+                    action=(operators 'ternary' canRoll 'check_contextual' '')
+                    selectedClass=(operators 'ternary' canRoll 'S0-clickable' '')}}
+
                     {{#forLoop 0 (actorValues actor 'vitality')}}
-                    {{#with ../canRoll as |canRoll|}}
-                    <div class="S0-characteristic S0-characteristic-temp {{#if canRoll}}S0-clickable{{/if}}"
-                        data-action="{{#if canRoll}}check_contextual{{/if}}" data-characteristic="temporary"
+                    <div class="S0-characteristic S0-characteristic-temp {{../selectedClass}}"
+                        data-action="{{../action}}" data-characteristic="temporary"
                         data-type="health">
                     </div>
-                    {{/with}}
                     {{/forLoop}}
+                    {{/lett}}
                 </div>
 
                 <div class="S0-container" style="display: flex; justify-content: space-around; margin-bottom: 2px;">
@@ -285,7 +314,7 @@
         </h2>
 
         <ul id="effects-container" class="S0-container S0-container-contract S0-expanded">
-            {{#each (actorValues actor 'effects') as |item|}}
+            {{#each (actorLists actor 'effects') as |item|}}
             <li style="display: flex; gap: 4px; align-items: center;">
                 {{#if (itemValues item 'effect_has_type')}}
 

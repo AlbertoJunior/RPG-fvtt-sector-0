@@ -1,14 +1,14 @@
-import { ActorRollDialog } from "../../../../creators/dialog/actor-roll-dialog.mjs";
-import { getObject, selectCharacteristic, } from "../../../../../scripts/utils/utils.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
+import { ActorRollDialog } from "../../../../../creators/dialog/actor-roll-dialog.mjs";
+import { getObject, selectCharacteristic, } from "../../../../../../scripts/utils/utils.mjs";
+import { CharacteristicType } from "../../../../../enums/characteristic-enums.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
 import { handleStatusMethods } from "./status-methods.mjs";
 import { handlerEquipmentEvents } from "./equipment-methods.mjs";
 import { traitMethods } from "./trait-methods.mjs";
-import { enhancementHandleMethods } from "../methods/enhancement-methods.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
+import { enhancementHandleMethods } from "./enhancement-methods.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
 import { handlerShortcutEvents } from "./shortcut-methods.mjs";
-import { menuHandleMethods } from "../../../menu-default-methods.mjs";
+import { menuHandleMethods } from "../../../../menu-default-methods.mjs";
 import { alliesHandleEvents, informantsHandleEvents } from "./network-methods.mjs"
 import { effectsHandleEvents } from "./effects-methods.mjs";
 
@@ -16,7 +16,7 @@ export class SheetMethods {
     static handleMethods = {
         menu: {
             ...menuHandleMethods,
-            [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
+            [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog.open(actor); },
         },
         language: {
             [OnEventType.ADD]: async (actor, event) => {
@@ -40,7 +40,7 @@ export class SheetMethods {
                     }
                 }
 
-                await ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.LANGUAGE, new Set(updatedLanguages))
+                await ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.LANGUAGE, new Set(updatedLanguages))
             }
         },
         trait: traitMethods,

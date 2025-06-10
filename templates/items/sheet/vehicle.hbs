@@ -7,10 +7,12 @@
                 {{localize 'S0.Tipo'}}:
             </label>
             <select id="{{item.id}}.type" class="S0-select" style="flex: 1; min-width: 142.5px;"
-                name="system.type_vehicle">
+                name="system.vehicle_type">
+                {{#with (itemValues item 'vehicle_type') as |vehicle_type|}}
                 {{#each (fetchRepository 'equipment-vehicle-type')}}
-                <option value="{{id}}" {{selectIfEq ../item.system.type_vehicle id }}>{{label}}</option>
+                <option value="{{id}}" {{selectIfEq vehicle_type id }}>{{label}}</option>
                 {{/each}}
+                {{/with}}
                 </option>
             </select>
         </div>
@@ -18,13 +20,13 @@
         <div class="form-group">
             <label for="{{item.id}}.acceleration" style="flex: 1;">{{localize 'S0.Aceleracao'}}:</label>
             <input id="{{item.id}}.acceleration" style="flex: 1; text-align: center;" type="number"
-                name="system.acceleration" min="0" max="6" value="{{item.system.acceleration}}" />
+                name="system.acceleration" min="0" max="6" value="{{itemValues item 'acceleration'}}" />
         </div>
 
         <div class="form-group">
             <label for="{{item.id}}.speed" style="flex: 1;">{{localize 'S0.Velocidade'}}:</label>
             <input id="{{item.id}}.speed" style="flex: 1; text-align: center;" type="number" name="system.speed" min="0"
-                max="6" value="{{item.system.speed}}" />
+                max="6" value="{{itemValues item 'speed'}}" />
         </div>
     </div>
 

@@ -102,12 +102,12 @@ export class SubstanceEffectRepository {
         }),
     ];
 
-    static _getItems() {
+    static getItems() {
         return [...SubstanceEffectRepository.#items];
     }
 
     static getItem(id) {
-        const item = this._getItems().find(item => item.id == id);
+        const item = this.getItems().find(item => item.id == id);
         return item ? foundry.utils.deepClone(item) : null;
     }
 }

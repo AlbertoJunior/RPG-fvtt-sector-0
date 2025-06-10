@@ -1,11 +1,11 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestField } from "../../data/roll-test-data-model.mjs";
-import { CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { RollTestField } from "../../../field/roll-test-field.mjs";
+import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
 
 const brutalityEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '18',
         'Força Brutal',
         1,
@@ -13,10 +13,10 @@ const brutalityEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.STRENGTH, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.STRENGTH.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '19',
         'Fanático',
         2,
@@ -36,7 +36,7 @@ const brutalityEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '20',
         'Força Esmagadora',
         2,
@@ -56,7 +56,7 @@ const brutalityEffects = [
             ),
         ],
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '21',
         'Canhão',
         3,
@@ -76,7 +76,7 @@ const brutalityEffects = [
             ),
         ],
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '22',
         'Fulminante',
         3,
@@ -84,10 +84,10 @@ const brutalityEffects = [
         EnhancementDuration.SCENE,
         ['19', '20'],
         [
-            { key: CharacteristicType.BONUS.OFENSIVE_MELEE, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
+            { key: CharacteristicType.BONUS.OFENSIVE_MELEE.system, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '23',
         'Hit Kill',
         4,
@@ -95,7 +95,7 @@ const brutalityEffects = [
         EnhancementDuration.USE,
         ['21', '22'],
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '24',
         'Destroçar',
         5,

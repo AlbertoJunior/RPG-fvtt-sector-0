@@ -7,7 +7,7 @@ import { OnEventType } from "../../enums/on-event-type.mjs";
 import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
 import { ActorUtils } from "../../core/actor/actor-utils.mjs";
 import { RepertoryRepository } from "../../repository/repertory-repository.mjs";
-import { playerRollHandle } from "../../base/sheet/actor/methods/player-roll-methods.mjs";
+import { playerRollHandle } from "../../base/sheet/actor/player/methods/player-roll-methods.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class ActorRollDialog {
@@ -18,7 +18,7 @@ export class ActorRollDialog {
         3: ActorRollDialog.#confirmCustomRoll,
     };
 
-    static async _open(actor) {
+    static async open(actor) {
         const uuid = `roll_dialog.${randomId(10)}`;
         const dataOptions = this.#mountDataOptions(actor);
         const content = await this.#mountContent(uuid, dataOptions);
@@ -69,7 +69,7 @@ export class ActorRollDialog {
     }
 
     static #mountDataOptions(actor) {
-        const attributesOptions = AttributeRepository._getItems()
+        const attributesOptions = AttributeRepository.getItems()
             .map(attr => {
                 return {
                     id: attr.id,
@@ -77,7 +77,7 @@ export class ActorRollDialog {
                 }
             });
 
-        const abilitiesOptions = AbilityRepository._getItems()
+        const abilitiesOptions = AbilityRepository.getItems()
             .map(attr => {
                 return {
                     id: attr.id,
@@ -95,7 +95,7 @@ export class ActorRollDialog {
                 }
             });
 
-        const repertoryOptions = RepertoryRepository._getItems().map(repertory => {
+        const repertoryOptions = RepertoryRepository.getItems().map(repertory => {
             return {
                 id: repertory.id,
                 label: game.i18n.localize(repertory.label)
@@ -123,7 +123,7 @@ export class ActorRollDialog {
         );
         allCharacteristicOptionsGroup.push(
             {
-                group_label: localize('Aprimoramentos'),
+                group_label: localize('Aprimoramento.Nome_Plural'),
                 group_items: enhancementOptions,
             }
         );

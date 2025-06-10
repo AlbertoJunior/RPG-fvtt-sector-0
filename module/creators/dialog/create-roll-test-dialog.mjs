@@ -7,11 +7,11 @@ import { RollTestUtils } from "../../core/rolls/roll-test-utils.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class CreateRollableTestDialog {
-    static async _view(rollTestData) {
-        this._open(rollTestData);
+    static async view(rollTestData) {
+        this.open(rollTestData);
     }
 
-    static async _open(rollTestData, onConfirm, onDelete) {
+    static async open(rollTestData, onConfirm, onDelete) {
         const needConfirmation = onConfirm !== undefined;
         const isCreate = rollTestData == undefined;
 
@@ -103,8 +103,8 @@ export class CreateRollableTestDialog {
         const data = {
             uuid: `form_dialog.${randomId(10)}`,
             canEdit: needConfirmation,
-            attributes: AttributeRepository._getItems(),
-            abilities: AbilityRepository._getItems(),
+            attributes: AttributeRepository.getItems(),
+            abilities: AbilityRepository.getItems(),
             difficulty: 6,
             critic: 10,
             bonus: 0,
@@ -137,8 +137,8 @@ export class CreateRollableTestDialog {
                     {
                         label: localize("Criar_Macro"),
                         icon: { class: 'fas fa-code' },
-                        onClick: () => {
-                            RollTestUtils.createMacroByRollTestData(rollTestData);
+                        onClick: async () => {
+                            await RollTestUtils.createMacroByRollTestData(rollTestData);
                         }
                     }
                 ]

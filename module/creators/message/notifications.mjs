@@ -1,11 +1,11 @@
 export class NotificationsUtils {
-    static async _info(message) {
+    static async info(message) {
         ui.notifications.info(message);
     }
-    static async _error(message) {
+    static async error(message) {
         ui.notifications.error(message);
     }
-    static async _warning(message) {
+    static async warning(message) {
         ui.notifications.warn(message);
     }
 }

@@ -25,7 +25,7 @@
             <i class="fas fa-message-quote S0-icon-hover"></i>
         </a>
 
-        {{#if system.canEquip}}
+        {{#if (itemValues this 'canEquip')}}
         <a {{#if system.equipped}}class="hidden" {{else}}class="S0-icon-swaper" {{/if}} data-action="add"
             data-characteristic="equipment" data-sub-characteristic="bag" data-type="{{type}}" data-item-id="{{id}}"
             title="{{localize 'S0.Equipar'}}">
@@ -34,7 +34,7 @@
         </a>
         {{/if}}
 
-        {{#if system.canUse}}
+        {{#if (itemValues this 'canUse')}}
         <a class="S0-icon-swaper" data-action="check" data-characteristic="equipment" data-sub-characteristic="bag"
             data-type="{{type}}" data-item-id="{{id}}" title="{{localize 'S0.Usar'}}">
             <i class="fas fa-hand-holding S0-icon-idle"></i>
@@ -42,7 +42,7 @@
         </a>
         {{/if}}
 
-        {{#if system.haveQuantity}}
+        {{#if (itemValues this 'haveQuantity')}}
         <a class="S0-icon-hover-slider" data-action="edit" data-characteristic="equipment" data-sub-characteristic="bag"
             data-type="{{type}}" data-item-id="{{id}}" title="{{localize 'S0.Alterar_Quantidade'}}">
             <i class="fas fa-plus-minus S0-icon-idle"></i>

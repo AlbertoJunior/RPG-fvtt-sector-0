@@ -34,14 +34,14 @@ class EquipmentSheetCharacteristicsHandle {
             'items/dialog/substance-effect',
             {
                 presetForm: {
-                    effects: this.#mapOptions(SubstanceEffectRepository._getItems())
+                    effects: this.#mapOptions(SubstanceEffectRepository.getItems())
                 },
                 onConfirm: async (data) => {
                     const actualList = getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];
                     const selectedEffect = SubstanceEffectRepository.getItem(data.selectedEffect);
 
                     if (actualList.some(item => item.id == selectedEffect.id)) {
-                        NotificationsUtils._error(localize('Itens.Mensagens.Nao_Pode_Efeitos_Iguais'));
+                        NotificationsUtils.error(localize('Itens.Mensagens.Nao_Pode_Efeitos_Iguais'));
                         return;
                     }
 

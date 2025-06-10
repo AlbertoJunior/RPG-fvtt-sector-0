@@ -1,3 +1,4 @@
+import { SceneHookHandle } from "./scene.mjs";
 import { OscillatingTintManager } from "../core/effect/oscilating-effect-manager.mjs";
 import { RepositoriesUtils } from "../utils/repositories.mjs";
 import { ActiveEffectRepository } from "../repository/active-effects-repository.mjs";
@@ -5,9 +6,8 @@ import { MacroSync } from "../core/macro/macro-sync.mjs";
 import { MacroInstaller } from "../core/macro/macro-installer.mjs";
 import { MacroUtils } from "../core/macro/macro-utils.mjs";
 import { registerEquipment } from "../base/sheet/equipment/equipment-sheet.mjs";
-import { registerActor } from "../base/sheet/actor/actor-sheet.mjs";
-import { SceneHookHandle } from "./scene.mjs";
-import { registerNpc } from "../base/sheet/npc/npc-sheet.mjs";
+import { registerActor } from "../base/sheet/actor/player/actor-sheet.mjs";
+import { registerNpc } from "../base/sheet/actor/npc/npc-sheet.mjs";
 
 export class ReadyHookHandle {
     static async handle() {
@@ -39,7 +39,11 @@ export class ReadyHookHandle {
     }
 
     static #effects() {
-        CONFIG.statusEffects = ActiveEffectRepository._getItems();
+        if (game.user.isGM) {
+            CONFIG.statusEffects = ActiveEffectRepository.getItems();
+        } else {
+            CONFIG.statusEffects = [];
+        }
     }
 
     static async #macro() {

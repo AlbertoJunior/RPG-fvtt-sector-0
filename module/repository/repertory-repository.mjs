@@ -1,12 +1,13 @@
 import { SYSTEM_ID } from "../constants.mjs";
+import { CharacteristicType } from "../enums/characteristic-enums.mjs";
 
 export class RepertoryRepository {
     static items = [
-        { id: 'aliados', label: 'S0.Aliados' },
-        { id: 'arsenal', label: 'S0.Arsenal' },
-        { id: 'informantes', label: 'S0.Informantes' },
-        { id: 'recursos', label: 'S0.Recursos' },
-        { id: 'superequipamentos', label: 'S0.SuperEquipamentos' }
+        { id: CharacteristicType.REPERTORY.ALLIES.id, label: 'S0.Aliados' },
+        { id: CharacteristicType.REPERTORY.ARSENAL.id, label: 'S0.Arsenal' },
+        { id: CharacteristicType.REPERTORY.INFORMANTS.id, label: 'S0.Informantes' },
+        { id: CharacteristicType.REPERTORY.RESOURCES.id, label: 'S0.Recursos' },
+        { id: CharacteristicType.REPERTORY.SUPEREQUIPMENTS.id, label: 'S0.SuperEquipamentos' }
     ];
 
     static #loadedFromPack = [];
@@ -24,7 +25,7 @@ export class RepertoryRepository {
         }
     }
 
-    static _getItems() {
+    static getItems() {
         return [... this.items, ...this.#loadedFromPack].sort((a, b) => a.label.localeCompare(b.label));
     }
 }

@@ -1,17 +1,17 @@
-import { getObject, localize, TODO } from "../../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
-import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
-import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
-import { AddEquipmentDialog } from "../../../../creators/dialog/add-equipment-dialog.mjs";
-import { ConfirmationDialog } from "../../../../creators/dialog/confirmation-dialog.mjs";
-import { UpdateEquipmentQuantityDialog } from "../../../../creators/dialog/update-equipment-quantity-dialog.mjs";
-import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { EquipmentCharacteristicType, EquipmentType } from "../../../../enums/equipment-enums.mjs";
-import { OnEventType } from "../../../../enums/on-event-type.mjs";
-import { EquipmentRepository } from "../../../../repository/equipment-repository.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
-import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
-import { playerRollHandle } from "./player-roll-methods.mjs";
+import { getObject, localize, TODO } from "../../../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../../../core/actor/actor-equipment.mjs";
+import { ActiveEffectsUtils } from "../../../../../core/effect/active-effects.mjs";
+import { EquipmentUtils } from "../../../../../core/equipment/equipment-utils.mjs";
+import { AddEquipmentDialog } from "../../../../../creators/dialog/add-equipment-dialog.mjs";
+import { ConfirmationDialog } from "../../../../../creators/dialog/confirmation-dialog.mjs";
+import { UpdateEquipmentQuantityDialog } from "../../../../../creators/dialog/update-equipment-quantity-dialog.mjs";
+import { NotificationsUtils } from "../../../../../creators/message/notifications.mjs";
+import { EquipmentCharacteristicType, EquipmentType } from "../../../../../enums/equipment-enums.mjs";
+import { OnEventType } from "../../../../../enums/on-event-type.mjs";
+import { EquipmentRepository } from "../../../../../repository/equipment-repository.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
+import { EquipmentUpdater } from "../../../../updater/equipment-updater.mjs";
+import { rollByItemAndRollId } from "../../../equipment/methods/equipment-item-roll-methods.mjs";
 
 export const handlerEquipmentEvents = {
     [OnEventType.ADD]: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),
@@ -252,7 +252,7 @@ class EquipmentHandleEvents {
 
         const defaultTestId = getObject(item, EquipmentCharacteristicType.DEFAULT_TEST);
         if (!defaultTestId) {
-            NotificationsUtils._warning("É preciso definir um teste padrão para o item");
+            NotificationsUtils.warning("É preciso definir um teste padrão para o item");
             return;
         }
 
@@ -261,6 +261,6 @@ class EquipmentHandleEvents {
             return;
         }
 
-        await playerRollHandle.rollableItem(actor, rollTest, item);
+        await rollByItemAndRollId(item, rollTest.id);
     }
 }

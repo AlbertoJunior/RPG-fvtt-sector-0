@@ -12,6 +12,6 @@ export class RollOverloadMessageCreator {
             resultValue: success,
             resultMessageClasses: isSuccess ? `S0-success` : 'S0-failure'
         };
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-overload.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/overload.hbs`, data);
     }
 }

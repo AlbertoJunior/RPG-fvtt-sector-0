@@ -1,8 +1,5 @@
 <form class="S0-container">
     <select class="S0-select" name="selectedEffect">
-        {{!-- {{#each effects}}
-        <option value="{{id}}">{{description}}</option>
-        {{/each}} --}}
         {{#each effects as |group|}}
         <optgroup label="{{ group.label }}">
             {{#each group.options as |option|}}

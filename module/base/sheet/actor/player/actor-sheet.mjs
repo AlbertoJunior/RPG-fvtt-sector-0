@@ -1,17 +1,17 @@
-import { getObject, selectCharacteristic } from "../../../../scripts/utils/utils.mjs";
-import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../enums/on-event-type.mjs";
+import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
+import { getObject, selectCharacteristic } from "../../../../../scripts/utils/utils.mjs";
+import { OnEventType, OnEventTypeClickableEvents, OnEventTypeContextualEvents } from "../../../../enums/on-event-type.mjs";
 import { SheetMethods } from "./methods/sheet-methods.mjs";
 import { selectLevelOnOptions, updateEnhancementLevelsOptions } from "./methods/enhancement-methods.mjs";
-import { EquipmentType } from "../../../enums/equipment-enums.mjs";
-import { CharacteristicType } from "../../../enums/characteristic-enums.mjs";
-import { HtmlJsUtils } from "../../../utils/html-js-utils.mjs";
-import { loadAndRegisterTemplates } from "../../../utils/templates.mjs";
-import { SYSTEM_ID, TEMPLATES_PATH } from "../../../constants.mjs";
+import { EquipmentType } from "../../../../enums/equipment-enums.mjs";
+import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs";
+import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
+import { loadAndRegisterTemplates } from "../../../../utils/templates.mjs";
+import { SYSTEM_ID, TEMPLATES_PATH } from "../../../../constants.mjs";
 import { SheetActorDragabbleMethods } from "./methods/dragabble-methods.mjs";
-import { ActorUtils } from "../../../core/actor/actor-utils.mjs";
-import { Setor0BaseActorSheet } from "../BaseActorSheet.mjs";
+import { ActorUtils } from "../../../../core/actor/actor-utils.mjs";
 import { characteristicOnClick } from "./methods/characteristics-methods.mjs";
-import { ActiveEffectsUtils } from "../../../core/effect/active-effects.mjs";
+import { ActiveEffectsUtils } from "../../../../core/effect/active-effects.mjs";
 
 class Setor0ActorSheet extends Setor0BaseActorSheet {
 
@@ -224,7 +224,7 @@ export async function actorTemplatesRegister() {
         { path: "actors/biography-trait-partial", call: 'traitPartialContainer' },
         { path: "actors/status" },
         { path: "actors/enhancement" },
-        { path: "actors/enhancement-partial" },
+        { path: "actors/enhancement-partial", call: 'enhancementPartial' },
         { path: "actors/equipment" },
         { path: "actors/shortcuts" },
         { path: "actors/shortcut-default-partial", call: 'shortcutDefaultPartial' },

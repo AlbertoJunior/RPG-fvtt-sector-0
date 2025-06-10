@@ -1,4 +1,4 @@
-import { getObject } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize } from "../../../../../scripts/utils/utils.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
@@ -9,29 +9,32 @@ import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
 export const handlerEquipmentMenuRollEvents = {
     [OnEventType.ADD]: async (item, event) => EquipmentSheetMenuRollHandle.add(item, event),
     [OnEventType.VIEW]: async (item, event) => EquipmentSheetMenuRollHandle.view(item, event),
+    createRollTest: async (item, rollable) => EquipmentSheetMenuRollHandle.createRollTest(item, rollable),
 }
 
 class EquipmentSheetMenuRollHandle {
     static add(item, event) {
-        const onConfirm = async (rollable) => {
-            if (!rollable.name) {
-                NotificationsUtils._error("O Teste precisa de um nome");
-                return;
-            }
+        CreateRollableTestDialog.open(null, async (rollable) => {
+            await this.createRollTest(item, rollable);
+        });
+    }
 
-            const current = [...getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS)] || [];
-            current.push(rollable);
+    static async createRollTest(item, rollable) {
+        if (!rollable.name) {
+            NotificationsUtils.error(localize('Aviso.Teste.Erro_Sem_Nome'));
+            return;
+        }
 
-            const changes = [];
-            changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.POSSIBLE_TESTS, current));
+        const current = [...getObject(item, EquipmentCharacteristicType.POSSIBLE_TESTS)] || [];
+        current.push(rollable);
 
-            if (current.length == 1) {
-                changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.DEFAULT_TEST, rollable.id));
-            }
-            await EquipmentUpdater.updateEquipmentData(item, changes);
-        };
+        const changes = [];
+        changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.POSSIBLE_TESTS, current));
 
-        CreateRollableTestDialog._open(null, onConfirm);
+        if (current.length == 1) {
+            changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.DEFAULT_TEST, rollable.id));
+        }
+        await EquipmentUpdater.updateEquipmentData(item, changes);
     }
 
     static view(item, event) {

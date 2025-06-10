@@ -98,7 +98,7 @@ export class CustomRoll {
         const checks = [
             () => this.#tryGetValue(actor, params.attributes, characteristic, ActorUtils.getAttributeValue),
             () => this.#tryGetValue(actor, params.skills, characteristic, ActorUtils.getAbilityValue),
-            () => this.#tryGetValue(actor, params.virtues, characteristic, ActorUtils.getVirtueLevel),
+            () => this.#tryGetValue(actor, params.virtues, characteristic, ActorUtils.getVirtueValue),
             () => this.#tryGetValue(actor, params.repertory, characteristic, this.#repertoryValueGetter),
             () => this.#tryGetValue(actor, params.others, characteristic, this.#baseValueGetter),
             () => this.#tryEnhancement(actor, params.enhancements, characteristic, special)

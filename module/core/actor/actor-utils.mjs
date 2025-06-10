@@ -1,5 +1,5 @@
 import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { getObject } from "../../../scripts/utils/utils.mjs";
+import { getObject, localize } from "../../../scripts/utils/utils.mjs";
 import { MorphologyRepository } from "../../repository/morphology-repository.mjs";
 import { FlagsUtils } from "../../utils/flags-utils.mjs";
 import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
@@ -19,6 +19,12 @@ export class ActorUtils {
 
     static getVirtueLevel(actor, virtue) {
         return getObject(actor, CharacteristicType.VIRTUES)[virtue].level;
+    }
+
+    static getVirtueValue(actor, virtue) {
+        const base = this.getVirtueLevel(actor, virtue);
+        const bonus = getObject(actor, CharacteristicType.BONUS.VIRTUES)[virtue];
+        return base + bonus;
     }
 
     static getOverload(actor) {
@@ -195,7 +201,8 @@ export class ActorUtils {
 
     static getEffectsSorted(actor) {
         const effects = this.getEffects(actor);
-        
+        const enhancementLabel = localize('Aprimoramento.Nome');
+
         effects.sort((a, b) => {
             if (ActiveEffectsUtils.getOriginId(a) === 'dead') {
                 return -1;
@@ -215,8 +222,8 @@ export class ActorUtils {
             }
 
             if (hasOriginA && hasOriginB) {
-                const aIsEnhancement = aOrigin.includes('Aprimoramento');
-                const BIsEnhancement = bOrigin.includes('Aprimoramento');
+                const aIsEnhancement = aOrigin.includes(enhancementLabel);
+                const BIsEnhancement = bOrigin.includes(enhancementLabel);
 
                 if (aIsEnhancement !== BIsEnhancement) {
                     return aIsEnhancement ? -1 : 1;

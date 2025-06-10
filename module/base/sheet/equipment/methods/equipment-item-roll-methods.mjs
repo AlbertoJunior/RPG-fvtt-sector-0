@@ -1,4 +1,4 @@
-import { getObject, onArrayRemove, TODO } from "../../../../../scripts/utils/utils.mjs";
+import { getObject, localize, onArrayRemove, randomId, TODO } from "../../../../../scripts/utils/utils.mjs";
 import { RollTestUtils } from "../../../../core/rolls/roll-test-utils.mjs";
 import { CreateRollableTestDialog } from "../../../../creators/dialog/create-roll-test-dialog.mjs";
 import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
@@ -6,8 +6,11 @@ import { ActorType } from "../../../../enums/characteristic-enums.mjs";
 import { EquipmentCharacteristicType } from "../../../../enums/equipment-enums.mjs";
 import { OnEventType } from "../../../../enums/on-event-type.mjs"
 import { EquipmentUpdater } from "../../../updater/equipment-updater.mjs";
-import { playerRollHandle } from "../../actor/methods/player-roll-methods.mjs";
-import { npcRollHandle } from "../../npc/methods/npc-roll-methods.mjs";
+import { playerRollHandle } from "../../actor/player/methods/player-roll-methods.mjs";
+import { npcRollHandle } from "../../actor/npc/methods/npc-roll-methods.mjs";
+import { handlerEquipmentMenuRollEvents } from "./equipment-menu-roll-methods.mjs";
+import { CreateFormDialog } from "../../../../creators/dialog/create-dialog.mjs";
+import { NpcUtils } from "../../../../core/npc/npc-utils.mjs";
 
 export const handlerEquipmentItemRollEvents = {
     [OnEventType.ADD]: async (item, event) => EquipmentSheetItemRollHandle.add(item, event),
@@ -27,10 +30,21 @@ class EquipmentSheetItemRollHandle {
     static async add(item, event) {
         const rollTest = this.#getItemRollTest(item, this.#getItemRollTestId(event));
         if (!rollTest) {
-            NotificationsUtils._error("Erro ao carregar o teste");
+            NotificationsUtils.error(localize('Aviso.Teste.Erro_Carregar'));
             return;
         }
-        RollTestUtils.createMacroByRollTestData(rollTest, { parentName: item.name, img: item.img });
+
+        const addType = event.currentTarget.dataset.type;
+        if (addType == 'macro') {
+            await RollTestUtils.createMacroByRollTestData(rollTest, { parentName: item.name, img: item.img });
+        } else if (addType == 'clone') {
+            const cloneTest = {
+                ...rollTest,
+                name: `${rollTest.name} (${localize('Copia')})`,
+                id: randomId(),
+            };
+            await handlerEquipmentMenuRollEvents.createRollTest(item, cloneTest);
+        }
     }
 
     static async edit(item, event) {
@@ -40,7 +54,7 @@ class EquipmentSheetItemRollHandle {
             possibleTests[possibleTests.indexOf(rollTest)] = newRollTest;
             await EquipmentUpdater.updateEquipment(item, EquipmentCharacteristicType.POSSIBLE_TESTS, possibleTests)
         }
-        CreateRollableTestDialog._open(rollTest, onConfirm);
+        CreateRollableTestDialog.open(rollTest, onConfirm);
     }
 
     static async remove(item, event) {
@@ -93,32 +107,75 @@ class EquipmentSheetItemRollHandle {
     static async roll(item, event) {
         const dataset = event.currentTarget.dataset;
         const rollId = dataset.itemId;
-        this.rollById(item, rollId, dataset.type == 'half');
+        this.rollById(item, rollId);
     }
 
-    static async rollById(item, rollId, divided) {
+    static async rollById(item, rollId) {
         const possibleTests = this.#getItemTests(item);
         const rollTest = possibleTests.find(test => test.id == rollId);
         if (!rollTest) {
             return;
         }
 
-        const half = divided || false;
+        if (!item.actor) {
+            NotificationsUtils.error(localize('Aviso.Teste.Erro_Sem_Ator'));
+            return;
+        }
+
         const actor = item.actor;
+        const isNpc = actor.type == ActorType.NPC;
 
-        const mappedRollActor = {
-            [ActorType.PLAYER]: async () => {
-                await playerRollHandle.rollableItem(actor, rollTest, item, half);
-            },
-            [ActorType.NPC]: async () => {
-                await npcRollHandle.rollableItem(actor, rollTest, item, half);
-            },
-        }
+        CreateFormDialog.open(
+            localize("Modificadores"),
+            "rolls/modifiers",
+            {
+                presetForm: {
+                    canBeHalf: isNpc ? NpcUtils.canHalfTest(actor) : true,
+                    canBeOverload: isNpc,
+                    canBeSpecialist: isNpc ? NpcUtils.canBeSpecialist(actor) : true,
+                    canBePenalty: isNpc,
+                    values: {
+                        bonus: rollTest.bonus,
+                        automatic: rollTest.automatic,
+                        specialist: rollTest.specialist,
+                        critic: rollTest.critic,
+                        difficulty: rollTest.difficulty,
+                        penalty: isNpc ? NpcUtils.calculatePenalty(actor) : 0,
+                    }
+                },
+                onConfirm: async (data) => {
+                    const updatedRollTest = {
+                        ...rollTest,
+                        bonus: Number(data.bonus),
+                        automatic: Number(data.automatic),
+                        specialist: Boolean(data.specialist),
+                        critic: Number(data.critic),
+                        difficulty: Number(data.difficulty),
+                    };
 
-        const mappedMethod = mappedRollActor[actor?.type];
-        if (typeof mappedMethod === 'function') {
-            mappedMethod();
-        }
+                    const half = Boolean(data.half);
+                    const rollMode = data.chatSelect;
+
+                    const mappedRollActor = {
+                        [ActorType.PLAYER]: async () => {
+                            await playerRollHandle.rollableItem(actor, updatedRollTest, item, half, rollMode);
+                        },
+                        [ActorType.NPC]: async () => {
+                            updatedRollTest.penalty = Number(data.penalty);
+                            updatedRollTest.overload = Number(data.overload);
+                            await npcRollHandle.rollableItem(actor, updatedRollTest, item, half, rollMode);
+                        },
+                    }
+
+                    const mappedMethod = mappedRollActor[actor.type];
+                    if (typeof mappedMethod === 'function') {
+                        mappedMethod();
+                    } else {
+                        console.warn('o teste não possui um tipo de personagem mapeado');
+                    }
+                }
+            },
+        );
     }
 
     static async chat(item, event) {
@@ -130,7 +187,7 @@ class EquipmentSheetItemRollHandle {
         if (!rollTest) {
             return;
         }
-        CreateRollableTestDialog._view(rollTest);
+        CreateRollableTestDialog.view(rollTest);
     }
 
     static #getItemRollTestId(event) {

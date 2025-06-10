@@ -1,6 +1,6 @@
-<section data-label="{{localize 'S0.Aprimoramentos'}}" class="S0-page" data-icon="fas fa-lungs">
+<section data-label="{{localize 'S0.Aprimoramento.Nome_Plural'}}" class="S0-page" data-icon="fas fa-lungs">
     <div class="S0-container">
-        <h2> {{localize 'S0.Aprimoramentos'}}
+        <h2> {{localize 'S0.Aprimoramento.Nome_Plural'}}
             <a class="S0-icon-rotate" style="font-size: small;" data-action="remove" data-characteristic="enhancement"
                 title="{{localize 'S0.Atualizar_Efeitos'}}">
                 <i class="fas fa-refresh"></i>
@@ -9,7 +9,7 @@
 
         <div class="S0-container-2-column" style="margin-block: 2px; padding-block: 2px; row-gap: 8px">
             {{#forLoop 1 5}}
-            {{> "systems/setor0OSubmundo/templates/actors/enhancement-partial.hbs" enhancement-slot=index}}
+            {{> enhancementPartial enhancement-slot=index}}
             {{/forLoop}}
         </div>
     </div>

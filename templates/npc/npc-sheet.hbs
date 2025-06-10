@@ -26,9 +26,13 @@
                             <label for="morfologia">{{ localize 'S0.Morfologia' }}:</label>
                             <select class="S0-select" id="morfologia" name="system.morfologia" {{#unless
                                 editable}}disabled{{/unless}}>
+                                {{#with (actorValues actor 'morphology' ) as |morphology|}}
                                 {{#each (fetchRepository 'morphology')}}
-                                <option value="{{id}}" {{selectIfEq ../actor.system.morfologia id }}>{{label}}</option>
+                                <option value="{{id}}" {{selectIfEq morphology id }}>
+                                    {{label}}
+                                </option>
                                 {{/each}}
+                                {{/with}}
                             </select>
                         </div>
 
@@ -36,9 +40,13 @@
                             <label for="bairro">{{ localize 'S0.Bairro' }}:</label>
                             <select class="S0-select" id="bairro" name="system.bairro" {{#unless
                                 editable}}disabled{{/unless}}>
+                                {{#with (actorValues actor 'district' ) as |district|}}
                                 {{#each (fetchRepository 'district')}}
-                                <option value="{{id}}" {{selectIfEq ../actor.system.bairro id }}>{{label}}</option>
+                                <option value="{{id}}" {{selectIfEq district id }}>
+                                    {{label}}
+                                </option>
                                 {{/each}}
+                                {{/with}}
                             </select>
                         </div>
                     </div>

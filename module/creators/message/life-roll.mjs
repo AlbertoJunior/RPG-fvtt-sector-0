@@ -14,6 +14,6 @@ export class RollLifeMessageCreator {
             resultValue: success,
             resultMessageClasses: isSuccess ? `S0-success` : 'S0-failure'
         };
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-life.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/life.hbs`, data);
     }
 }

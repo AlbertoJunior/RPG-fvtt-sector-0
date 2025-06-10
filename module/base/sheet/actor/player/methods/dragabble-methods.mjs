@@ -1,10 +1,10 @@
-import { getObject } from "../../../../../scripts/utils/utils.mjs";
-import { ActorEquipmentUtils } from "../../../../core/actor/actor-equipment.mjs";
-import { ActorUpdater } from "../../../updater/actor-updater.mjs";
-import { CharacteristicType } from "../../../../enums/characteristic-enums.mjs"
-import { NotificationsUtils } from "../../../../creators/message/notifications.mjs";
-import { HtmlJsUtils } from "../../../../utils/html-js-utils.mjs";
-import { EquipmentUtils } from "../../../../core/equipment/equipment-utils.mjs";
+import { getObject } from "../../../../../../scripts/utils/utils.mjs";
+import { ActorEquipmentUtils } from "../../../../../core/actor/actor-equipment.mjs";
+import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
+import { CharacteristicType } from "../../../../../enums/characteristic-enums.mjs"
+import { NotificationsUtils } from "../../../../../creators/message/notifications.mjs";
+import { HtmlJsUtils } from "../../../../../utils/html-js-utils.mjs";
+import { EquipmentUtils } from "../../../../../core/equipment/equipment-utils.mjs";
 
 export class SheetActorDragabbleMethods {
     static async setup(html, actor) {
@@ -70,7 +70,7 @@ export class SheetActorDragabbleMethods {
                         return shortcuts.find(shortcut => shortcut.id == id);
                     }).filter(Boolean);
 
-                ActorUpdater._verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, newOrder);
+                ActorUpdater.verifyAndUpdateActor(actor, CharacteristicType.SHORTCUTS, newOrder);
             }
         });
     }
@@ -166,7 +166,7 @@ export class SheetActorDragabbleMethods {
             if (EquipmentUtils.canEquip(equipment)) {
                 await ActorEquipmentUtils.equip(actor, equipment);
             } else {
-                NotificationsUtils._warning("Este Item não pode ser equipado");
+                NotificationsUtils.warning("Este Item não pode ser equipado");
                 actor.sheet.render();
             }
         } else if (originSource == 'equipped') {
@@ -196,7 +196,7 @@ export class SheetActorDragabbleMethods {
         }
 
         if (data.type !== "Item") {
-            NotificationsUtils._warning("Este campo só aceita Equipamentos");
+            NotificationsUtils.warning("Este campo só aceita Equipamentos");
             return;
         }
 
@@ -223,23 +223,23 @@ export class SheetActorDragabbleMethods {
         event.originalEvent.preventDefault();
 
         if (data.type !== "Actor") {
-            NotificationsUtils._warning("Este campo só aceita Personagens");
+            NotificationsUtils.warning("Este campo só aceita Personagens");
             return;
         }
 
         const actorCreated = await Actor.implementation.fromDropData(data);
         if (!actorCreated || !characteristic) {
             console.warn("-> possível erro ao criar o Actor ou na Characteristic");
-            NotificationsUtils._warning("Não foi possível adicionar este Personagem.");
+            NotificationsUtils.warning("Não foi possível adicionar este Personagem.");
             return;
         }
 
         if (actorCreated.id == actor.id) {
-            NotificationsUtils._error("O personagem não pode se adicionar como Aliado ou Informante.")
+            NotificationsUtils.error("O personagem não pode se adicionar como Aliado ou Informante.")
             return;
         }
 
         const list = getObject(actor, characteristic) || [];
-        await ActorUpdater._verifyAndUpdateActor(actor, characteristic, new Set([...list, actorCreated.id]));
+        await ActorUpdater.verifyAndUpdateActor(actor, characteristic, new Set([...list, actorCreated.id]));
     }
 }

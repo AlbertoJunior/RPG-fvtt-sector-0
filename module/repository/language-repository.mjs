@@ -1,18 +1,19 @@
 import { SYSTEM_ID } from "../constants.mjs";
+import { DistrictRepository } from "./district-repository.mjs";
 
 export class LanguageRepository {
     static #languages = [
-        { id: 'domini', label: 'Domini', checked: true, district: 'colmeia', color: '#ed7d31' },
-        { id: 'ameinsprache', label: 'Ameinsprache', district: 'ameisen', color: '#c00000' },
-        { id: 'aranhes', label: 'Aranhês', district: 'aranhas', color: '#ffd965' },
-        { id: 'bantura', label: 'Bantura', district: 'vyura', color: '#2e75b5' },
-        { id: 'kemyura', label: 'Kemyura', district: 'vyura', color: '#2e75b5' },
-        { id: 'dameise', label: 'L\'Ameise', district: 'ameisen', color: '#c00000' },
-        { id: 'ptikor', label: 'Ptikor', district: 'ptitsy', color: '#548135' },
-        { id: 'ptisyan', label: 'Ptisyan', district: 'ptitsy', color: '#548135' },
-        { id: 'tokojhae', label: 'Tokojhae', district: 'tokojirami', color: '#7030a0' },
-        { id: 'tokuma', label: 'Tokumá', district: 'tokojirami', color: '#7030a0' },
-        { id: 'zuarur', label: 'Zu\'arur', district: 'alfiran', color: '#262626' },
+        { id: 'domini', label: 'Domini', checked: true, district: DistrictRepository.TYPES.COLMEIA, color: '#ed7d31' },
+        { id: 'ameinsprache', label: 'Ameinsprache', district: DistrictRepository.TYPES.AMEISEN, color: '#c00000' },
+        { id: 'aranhes', label: 'Aranhês', district: DistrictRepository.TYPES.ARANHAS, color: '#ffd965' },
+        { id: 'bantura', label: 'Bantura', district: DistrictRepository.TYPES.VYURA, color: '#2e75b5' },
+        { id: 'kemyura', label: 'Kemyura', district: DistrictRepository.TYPES.VYURA, color: '#2e75b5' },
+        { id: 'dameise', label: 'L\'Ameise', district: DistrictRepository.TYPES.AMEISEN, color: '#c00000' },
+        { id: 'ptikor', label: 'Ptikor', district:  DistrictRepository.TYPES.PTITSY, color: '#548135' },
+        { id: 'ptisyan', label: 'Ptisyan', district:  DistrictRepository.TYPES.PTITSY, color: '#548135' },
+        { id: 'tokojhae', label: 'Tokojhae', district:  DistrictRepository.TYPES.TOKOJIRAMI, color: '#7030a0' },
+        { id: 'tokuma', label: 'Tokumá', district:  DistrictRepository.TYPES.TOKOJIRAMI, color: '#7030a0' },
+        { id: 'zuarur', label: 'Zu\'arur', district:  DistrictRepository.TYPES.ALFIRAN, color: '#262626' },
     ];
 
     static #loadedFromPack = [];
@@ -31,7 +32,7 @@ export class LanguageRepository {
         }
     }
 
-    static _getItems() {
+    static getItems() {
         return [... this.#languages, ... this.#loadedFromPack];
     }
 }

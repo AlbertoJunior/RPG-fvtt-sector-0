@@ -1,12 +1,12 @@
-import { ICONS_PATH } from "../../constants.mjs";
-import { RollTestField } from "../../data/roll-test-data-model.mjs";
-import { BaseActorCharacteristicType, CharacteristicType } from "../../enums/characteristic-enums.mjs";
-import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../enums/enhancement-enums.mjs";
-import { EnhancementEffectField } from "../../field/enhancement-field.mjs";
-import { ActiveEffectsUtils } from "../effect/active-effects.mjs";
+import { ICONS_PATH } from "../../../constants.mjs";
+import { RollTestField } from "../../../field/roll-test-field.mjs";
+import { BaseActorCharacteristicType, CharacteristicType } from "../../../enums/characteristic-enums.mjs";
+import { EffectChangeValueType, EnhancementDuration, EnhancementOverload } from "../../../enums/enhancement-enums.mjs";
+import { EnhancementEffectField } from "../../../field/enhancement-field.mjs";
+import { ActiveEffectsUtils } from "../../effect/active-effects.mjs";
 
 const hardnessEffects = [
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '50',
         'Resiliência',
         1,
@@ -14,10 +14,10 @@ const hardnessEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: BaseActorCharacteristicType.VITALITY.TOTAL, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: BaseActorCharacteristicType.VITALITY.TOTAL.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '51',
         'Dureza',
         2,
@@ -37,7 +37,7 @@ const hardnessEffects = [
             ),
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '52',
         'Pele de Aço',
         3,
@@ -54,7 +54,7 @@ const hardnessEffects = [
             },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '53',
         'Inquebrável',
         4,
@@ -62,7 +62,7 @@ const hardnessEffects = [
         EnhancementDuration.SCENE,
         ['52']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '54',
         'Troco',
         4,
@@ -70,7 +70,7 @@ const hardnessEffects = [
         EnhancementDuration.SCENE,
         ['52']
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '55',
         'Proeza da Dor',
         5,
@@ -78,10 +78,10 @@ const hardnessEffects = [
         EnhancementDuration.SCENE,
         ['53', '54'],
         [
-            { key: CharacteristicType.BONUS.DAMAGE_PENALTY, value: -99, typeOfValue: EffectChangeValueType.FIXED },
+            { key: CharacteristicType.BONUS.DAMAGE_PENALTY.system, value: -99, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
-    EnhancementEffectField._toJson(
+    EnhancementEffectField.toJson(
         '56',
         'Última Chance',
         5,

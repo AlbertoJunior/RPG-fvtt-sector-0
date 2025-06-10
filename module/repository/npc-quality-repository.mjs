@@ -12,7 +12,7 @@ export class NpcQualityRepository {
 
     static #items = Object.values(NpcQualityRepository.TYPES);
 
-    static _getItems() {
+    static getItems() {
         return [... this.#items]
             .map(item => {
                 return {
@@ -23,7 +23,7 @@ export class NpcQualityRepository {
     }
 
     static getItem(id) {
-        const item = this._getItems().find(item => item.id == id);
+        const item = this.getItems().find(item => item.id == id);
         return item ? foundry.utils.deepClone(item) : null;
     }
 }

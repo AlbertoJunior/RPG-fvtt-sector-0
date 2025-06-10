@@ -10,6 +10,14 @@ const operators = {
     isEmpty: (collection) => Array.isArray(collection) && collection.length === 0,
     isNotEmpty: (collection) => Array.isArray(collection) && collection.length > 0,
     or: (values) => values.some(Boolean),
+    orValue: (values) => {
+        const a = values[0];
+        const b = values[1];
+        return a !== undefined && a !== null ? a : b;
+    },
+    ternary: (values) => {
+        return values[0] ? values[1] : values[2];
+    },
 };
 
 export default function operator(op, ...params) {

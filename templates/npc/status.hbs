@@ -1,5 +1,5 @@
 <div class="S0-page" data-label="{{ localize 'S0.Status' }}" data-icon="fas fa-heart-pulse">
-    <div class="S0-container">
+    <div class="S0-container S0-container-2-column" style="align-items: center;">
         <div class="S0-characteristic-container" id="vigor">
             <label>
                 {{localize 'S0.Vigor'}}
@@ -15,11 +15,15 @@
                 data-action="characteristic" data-characteristic="characteristic" data-type="vigor">
             </div>
         </div>
+        <div style="text-align: center;">
+            <h4>{{localize 'S0.Movimento'}}</h4>
+            <label>{{actorValues actor 'npc_pm'}}</label>
+        </div>
     </div>
 
     <ul>
         {{#if (actorValues actor 'have_equipped_armor') }}
-        <div class="S0-container" style="display: flex; flex-direction: column;">
+        <div id="protecao" class="S0-container" style="display: flex; flex-direction: column;">
             <h3>
                 {{ localize 'S0.Protecao' }}
                 {{#if canRoll}}
@@ -65,7 +69,7 @@
                 {{/forLoop}}
             </div>
 
-            <div class="S0-container" style="display: flex; justify-content: space-around; margin-bottom: 2px;">
+            <div class="S0-container S0-container-2-column" style="margin-bottom: 2px;">
                 <div class="S0-inner-li">
                     <label><strong>{{localize 'S0.Clique_Esquerdo'}}:</strong> {{localize 'S0.Letal'}}</label>
                     <div class="S0-characteristic S0-characteristic-temp S0-letal">

@@ -3,24 +3,25 @@ import { Setor0TokenDocument } from "../core/token/setor0-token.mjs";
 import { ActorCharacteristicField, ActorEnhancementField, ActorAttributes, ActorAbilities, ActorVirtues } from "../field/actor-fields.mjs";
 import { ActorTraitField } from "../field/actor-trait-field.mjs";
 import { ActorUtils } from "../core/actor/actor-utils.mjs";
-import { RollTestField } from "./roll-test-data-model.mjs";
+import { RollTestField } from "../field/roll-test-field.mjs";
 import { NpcSkill } from "../field/npc-fields.mjs";
 import { NpcQualityRepository } from "../repository/npc-quality-repository.mjs";
 import { getObject } from "../../scripts/utils/utils.mjs";
 import { BaseActorCharacteristicType } from "../enums/characteristic-enums.mjs";
+import { NpcUtils } from "../core/npc/npc-utils.mjs";
+import { MorphologyRepository } from "../repository/morphology-repository.mjs";
+import { DistrictRepository } from "../repository/district-repository.mjs";
 
 const { NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
 class BaseActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
-            name: new StringField({ required: true, label: "S0.Nome" }),
-            morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: 'androide' }),
-            bairro: new StringField({ required: true, label: "S0.Bairro", initial: 'alfiran' }),
+            morfologia: new StringField({ required: true, label: "S0.Morfologia", initial: MorphologyRepository.TYPES.HUMAN.id }),
+            bairro: new StringField({ required: true, label: "S0.Bairro", initial: DistrictRepository.TYPES.ALFIRAN.id }),
             background: new SchemaField({
-                assignment: new StringField({ required: true, label: "S0.Atuacao" }),
-                age: new NumberField({ required: false, blank: true }),
-                biography: new StringField({ required: false, blank: true, nullable: true }),
+                assignment: new StringField({ required: false, nullable: true }),
+                biography: new StringField({ required: false, nullable: true }),
             }),
             vitalidade: new SchemaField({
                 total: new NumberField({ integer: true, initial: 6 }),
@@ -50,6 +51,11 @@ class BaseActorDataModel extends foundry.abstract.TypeDataModel {
 }
 
 class PlayerDataModel extends BaseActorDataModel {
+
+    get actualPM() {
+        return ActorUtils.getActualMovimentPoints(this.actor);
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
     }
@@ -108,13 +114,14 @@ class PlayerDataModel extends BaseActorDataModel {
             })
         };
     }
-
-    get actualPM() {
-        return ActorUtils.getActualMovimentPoints(this.actor);
-    }
 }
 
 class NPCDataModel extends BaseActorDataModel {
+
+    get actualPM() {
+        return NpcUtils.getPm(this.actor);
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
 
@@ -145,6 +152,9 @@ class NPCDataModel extends BaseActorDataModel {
                 secundaria: new NpcSkill(),
                 terciaria: new NpcSkill(),
                 quaternaria: new NpcSkill(),
+            }),
+            bonus: new SchemaField({
+                iniciativa: new NumberField({ integer: true, initial: 0 }),
             })
         };
     }
@@ -166,7 +176,7 @@ export async function createActorDataModels() {
         },
         NPC: {
             bar: ["actualVitality", "actualProtection"],
-            value: ["vitalidade.total"]
+            value: ["vitalidade.total", "actualPM"]
         }
     };
 

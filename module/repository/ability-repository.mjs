@@ -18,14 +18,14 @@ export class AbilityRepository {
         { id: CharacteristicType.SKILLS.CHEMISTRY.id, label: 'S0.Quimica' },
     ];
 
-    static _getItems() {
+    static getItems() {
         return [
             ...AbilityRepository.#characteristics
         ].sort((a, b) => a.label.localeCompare(b.label));
     }
 
     static getItem(id) {
-        const item = this._getItems().find(item => item.id == id);
+        const item = this.getItems().find(item => item.id == id);
         return item ? foundry.utils.deepClone(item) : null;
     }
 }

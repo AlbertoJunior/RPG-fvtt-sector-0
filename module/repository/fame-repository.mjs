@@ -1,13 +1,14 @@
 import { localize } from "../../scripts/utils/utils.mjs";
+import { CharacteristicType, BaseActorCharacteristicType } from "../enums/characteristic-enums.mjs";
 
 export class FameRepository {
     static #characteristics = [
-        { id: 'nucleo', label: 'Nucleo' },
-        { id: 'influencia', label: 'Influencia' },
-        { id: 'nivel_de_procurado', label: 'Procurado' }
+        { id: CharacteristicType.CORE.id, label: 'Nucleo' },
+        { id: BaseActorCharacteristicType.INFLUENCE.id, label: 'Influencia' },
+        { id: BaseActorCharacteristicType.BOUNTY.id, label: 'Procurado' }
     ];
 
-    static _getItems() {
+    static getItems() {
         return [... this.#characteristics]
             .map(item => {
                 return {
@@ -17,7 +18,7 @@ export class FameRepository {
             });
     }
 
-    static _getItemsNpc() {
-        return FameRepository._getItems().filter(item => item.id != 'nucleo')
+    static getItemsNpc() {
+        return FameRepository.getItems().filter(item => item.id != 'nucleo')
     }
 }

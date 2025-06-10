@@ -9,6 +9,6 @@ export class RollInitiativeMessageCreator {
             total: total,
             diceValues: values,
         };
-        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll-initiative.hbs`, data);
+        return await renderTemplate(`${TEMPLATES_PATH}/messages/roll/initiative.hbs`, data);
     }
 }

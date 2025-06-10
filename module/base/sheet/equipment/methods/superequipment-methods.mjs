@@ -34,7 +34,7 @@ class SuperEquipmentSheeHandle {
             ];
 
             await EquipmentUpdater.updateEquipmentData(item, changes);
-            this.#verifyAndActiveEffects(item);
+            this.#verifyActiveEffects(item);
         });
     }
 
@@ -69,38 +69,37 @@ class SuperEquipmentSheeHandle {
             ];
 
             await EquipmentUpdater.updateEquipmentData(item, changes);
-            this.#verifyAndActiveEffects(item);
+            this.#verifyActiveEffects(item);
         }
     }
 
     static async check(item, event) {
         const isActive = getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE) || false;
         await EquipmentUpdater.updateEquipment(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE, !isActive);
-        this.#verifyAndActiveEffects(item);
+        this.#verifyActiveEffects(item);
     }
 
-    static async #verifyAndActiveEffects(item) {
+    static async #verifyActiveEffects(item) {
         if (!item.actor) {
             return;
         }
 
-        const isActive = getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE) || false;
-        if (isActive) {
-            await this.#addActiveEffects(item);
-        } else {
+        const activeEffect = ActiveEffectsUtils.getActorEffect(item.actor, item.id);
+        if (activeEffect) {
             await this.#removeActiveEffects(item);
+        }
+
+        const isEquipped = getObject(item, EquipmentCharacteristicType.EQUIPPED) || false;
+        const isActive = getObject(item, EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE) || false;
+        if (isEquipped && isActive) {
+            await this.#addActiveEffects(item);
         }
     }
 
     static async #addActiveEffects(item) {
         const effectData = EquipmentUtils.getSuperEquipmentActiveEffect(item);
         if (effectData) {
-            const actor = item.actor;
-            const activeEffect = ActiveEffectsUtils.getActorEffect(actor, item.id);
-            if (activeEffect) {
-                await this.#removeActiveEffects(item)
-            }
-            await ActiveEffectsUtils.addActorEffect(actor, [effectData]);
+            await ActiveEffectsUtils.addActorEffect(item.actor, [effectData]);
         }
     }
 

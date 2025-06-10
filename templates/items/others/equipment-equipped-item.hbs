@@ -20,7 +20,7 @@
         </a>
 
         {{#if @root/canRoll}}
-        {{#if system.canRoll}}
+        {{#if (itemValues this 'canRoll')}}
         <a class="S0-icon-rotate" data-action="roll" data-characteristic="equipment" data-type="{{type}}"
             data-sub-characteristic="equipped" data-item-id="{{id}}" title="{{localize 'S0.Rolar'}}">
             <i class="fas fa-dice-d10"></i>
