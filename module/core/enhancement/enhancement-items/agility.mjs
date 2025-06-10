@@ -12,7 +12,7 @@ const agilityEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: CharacteristicType.BONUS.INITIATIVE, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
+            { key: CharacteristicType.BONUS.INITIATIVE.system, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -23,7 +23,7 @@ const agilityEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: CharacteristicType.BONUS.INITIATIVE, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
+            { key: CharacteristicType.BONUS.INITIATIVE.system, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -34,7 +34,7 @@ const agilityEffects = [
         EnhancementDuration.SCENE,
         ['1', '2'],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.DEXTERITY, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.DEXTERITY.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -53,7 +53,7 @@ const agilityEffects = [
         EnhancementDuration.SCENE,
         ['3'],
         [
-            { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
+            { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR.system, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -72,7 +72,7 @@ const agilityEffects = [
         EnhancementDuration.SCENE,
         ['4', '5'],
         [
-            { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
+            { key: CharacteristicType.BONUS.DEFENSIVE_FACTOR.system, value: 1 / 2, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
     EnhancementEffectField.toJson(

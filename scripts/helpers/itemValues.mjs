@@ -12,6 +12,7 @@ const map = {
     'possible_tests': (item) => EquipmentUtils.getPossibleTests(item),
     'default_test': (item) => EquipmentUtils.getDefaultTest(item),
 
+    'equipped': (item) => getObject(item, EquipmentCharacteristicType.EQUIPPED),
     'description': (item) => getObject(item, EquipmentCharacteristicType.DESCRIPTION),
     'range': (item) => getObject(item, EquipmentCharacteristicType.RANGE) || 0,
     'max_range': (item) => getObject(item, EquipmentCharacteristicType.MAX_RANGE) || 0,

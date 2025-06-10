@@ -101,11 +101,39 @@ export class ActorEquipmentUtils {
     }
 
     static async equip(actor, equipment) {
-        await EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.EQUIPPED, true);
+        const changes = [
+            EquipmentUpdater.createChange(EquipmentCharacteristicType.EQUIPPED, true),
+        ];
+
+        const superEquipment = getObject(equipment, EquipmentCharacteristicType.SUPER_EQUIPMENT);
+        if (superEquipment) {
+            const needsActivate = EquipmentUtils.getSuperEquipmentNeedsActivate(equipment);
+            changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE, !needsActivate));
+        }
+
+        await EquipmentUpdater.updateEquipmentData(equipment, changes);
+
+        if (changes[1]?.value) {
+            this.verifyPassiveSuperEquipmentEffects(actor);
+        }
     }
 
     static async unequip(actor, equipment) {
-        await EquipmentUpdater.updateEquipment(equipment, EquipmentCharacteristicType.EQUIPPED, false);
+        const changes = [
+            EquipmentUpdater.createChange(EquipmentCharacteristicType.EQUIPPED, false),
+        ];
+
+        const superEquipment = getObject(equipment, EquipmentCharacteristicType.SUPER_EQUIPMENT);
+        if (superEquipment) {
+            changes.push(EquipmentUpdater.createChange(EquipmentCharacteristicType.SUPER_EQUIPMENT.ACTIVE, false));
+        }
+
+        await EquipmentUpdater.updateEquipmentData(equipment, changes);
+
+        const activeEffect = ActiveEffectsUtils.getActorEffect(actor, equipment.id);
+        if (activeEffect) {
+            ActiveEffectsUtils.removeActorEffect(actor, equipment.id);
+        }
     }
 
     static async updateArmorEquippedActualResistance(actor, value) {

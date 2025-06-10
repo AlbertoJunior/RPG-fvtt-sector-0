@@ -186,7 +186,7 @@ async function toggleEnhancementEffectOnActor(effect, actor) {
     }
 
     if (effect.duration == EnhancementDuration.USE) {
-        await NotificationsUtils.info(`${localize("Voce")} ${localize("Usou")} ${effect.name}`)
+        await NotificationsUtils.info(localizeFormat('Voce_Usou_Nome', { nome: effect.name }));
         await usedEffectSendOnChat(effect, actor);
         return;
     } else {

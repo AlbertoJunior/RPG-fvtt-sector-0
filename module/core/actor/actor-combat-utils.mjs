@@ -91,7 +91,8 @@ export class ActorCombatUtils {
 
     static calculateOffensiveDices(actor, data) {
         const bonus = data.getBonus(actor);
-        return ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability) + bonus;
+        const finalValue = ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability) + bonus;
+        return Math.max(finalValue, 0);
     }
 
     static calculateDefensiveDodgeDices(actor) {
@@ -126,11 +127,13 @@ export class ActorCombatUtils {
 
     static #calculateDefensiveDices(actor, data) {
         const dices = ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability);
-        return dices + data.getBonus(actor, dices);
+        const finalValue = dices + data.getBonus(actor, dices);
+        return Math.max(finalValue, 0);
     }
 
     static #calculateHalfDefensiveDices(actor, data) {
         const dices = ActorUtils.calculateDices(actor, data.attr1, data.attr2, data.ability);
-        return Math.floor(dices / 2) + data.getBonus(actor, dices);
+        const finalValue = Math.floor(dices / 2) + data.getBonus(actor, dices);
+        return Math.max(finalValue, 0);
     }
 }

@@ -14,7 +14,7 @@ const hardnessEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: BaseActorCharacteristicType.VITALITY.TOTAL, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: BaseActorCharacteristicType.VITALITY.TOTAL.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -78,7 +78,7 @@ const hardnessEffects = [
         EnhancementDuration.SCENE,
         ['53', '54'],
         [
-            { key: CharacteristicType.BONUS.DAMAGE_PENALTY, value: -99, typeOfValue: EffectChangeValueType.FIXED },
+            { key: CharacteristicType.BONUS.DAMAGE_PENALTY.system, value: -99, typeOfValue: EffectChangeValueType.FIXED },
         ]
     ),
     EnhancementEffectField.toJson(

@@ -15,7 +15,7 @@ const assimilationEffects = [
         EnhancementDuration.SCENE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.PERCEPTION, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.PERCEPTION.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -141,7 +141,7 @@ const assimilationEffects = [
         EnhancementDuration.SCENE,
         ['12', '13'],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.INTELLIGENCE, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.INTELLIGENCE.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ],
         [
             RollTestField.toJson(

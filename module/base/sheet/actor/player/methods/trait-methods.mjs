@@ -36,7 +36,11 @@ export const traitMethods = {
             const characteristic = getCharacteristic(traitType);
             const actorTraits = getObject(actor, characteristic) || [];
 
-            const objectTrait = ActorTraitField.toJson(trait.id, trait.name, trait.particularity);
+            const objectTrait = ActorTraitField.toJson({
+                sourceId: trait.id,
+                name: trait.name,
+                particularity: trait.particularity
+            });
             const updatedTraits = [...actorTraits, objectTrait];
 
             TODO("Verificar se vai adicionar algum bonus");

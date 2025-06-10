@@ -13,7 +13,7 @@ const brutalityEffects = [
         EnhancementDuration.PASSIVE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.STRENGTH, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.STRENGTH.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
         ]
     ),
     EnhancementEffectField.toJson(
@@ -84,7 +84,7 @@ const brutalityEffects = [
         EnhancementDuration.SCENE,
         ['19', '20'],
         [
-            { key: CharacteristicType.BONUS.OFENSIVE_MELEE, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
+            { key: CharacteristicType.BONUS.OFENSIVE_MELEE.system, value: 1, typeOfValue: EffectChangeValueType.HALF_ENHANCEMENT_LEVEL_PLUS_FIXED },
         ]
     ),
     EnhancementEffectField.toJson(

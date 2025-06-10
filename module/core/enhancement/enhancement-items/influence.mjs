@@ -14,7 +14,7 @@ const influenceEffects = [
         EnhancementDuration.SCENE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
             {
                 key: ActiveEffectsUtils.KEYS.TINT_TOKEN,
                 mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
@@ -32,7 +32,7 @@ const influenceEffects = [
         EnhancementDuration.SCENE,
         [],
         [
-            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
+            { key: CharacteristicType.BONUS.ATTRIBUTES.CHARISMA.system, value: 0, typeOfValue: EffectChangeValueType.ENHANCEMENT_LEVEL },
             {
                 key: ActiveEffectsUtils.KEYS.TINT_TOKEN,
                 mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,

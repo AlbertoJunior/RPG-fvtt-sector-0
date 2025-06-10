@@ -13,28 +13,24 @@ export class EnhancementUtils {
         [EffectChangeValueType.OTHER_VALUE]: (value, enhancementLevel, otherValue) => otherValue,
     };
 
-    static #valueCalculator(change, enhancementLevel, actor) {
+    static #valueCalculator(change, enhancementLevel) {
         const typeOfValue = change.typeOfValue;
         const value = change.value;
         const otherValue = change.otherValue;
-        return this.valueCalculators[typeOfValue]?.(value, enhancementLevel, otherValue, actor) || 0;
+        return this.valueCalculators[typeOfValue]?.(value, enhancementLevel, otherValue) || 0;
     }
 
     static verifyAndSetEffectChanges(actor, activeEffectData, effectChanges, enhancement) {
         if (effectChanges.length > 0) {
             const enhancementLevel = ActorUtils.getEnhancementLevel(actor, enhancement);
 
-            activeEffectData.changes = effectChanges.map(change => {
-                const value = this.#valueCalculator(change, enhancementLevel, actor);
-                const verifiedKey = change.key.system ? change.key.system : change.key;
-                const verifiedMode = change.mode ? change.mode : CONST.ACTIVE_EFFECT_MODES.ADD;
-
-                return {
-                    key: verifiedKey,
-                    mode: verifiedMode,
-                    value: value
-                }
-            });
+            activeEffectData.changes = effectChanges
+                .filter(change => Boolean(change.key))
+                .map(change => ({
+                    key: change.key,
+                    mode: change.mode ?? CONST.ACTIVE_EFFECT_MODES.ADD,
+                    value: this.#valueCalculator(change, enhancementLevel, actor)
+                }));
         }
     }
 

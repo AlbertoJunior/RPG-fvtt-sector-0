@@ -251,6 +251,7 @@
         "Criar_Macro": "Criar Macro",
         "Nenhum_variavel_Cadastrado": "Nenhum {tipo} cadastrado, arraste e solte um Personagem em cima dessa caixa.",
         "Teste_Customizado": "Teste Customizado",
+        "Voce_Usou_Nome": "Você usou {nome}",
 
         "NPC": {
             "Ver_Ficha": "Ver Ficha",
@@ -344,7 +345,6 @@
                 "Efeito_Invalido": "Efeito inválido."
             }
         },
-        
 
         "Aprimoramento": {
             "Nome": "Aprimoramento",

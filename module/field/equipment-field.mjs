@@ -1,5 +1,6 @@
 import { ActiveEffectsTypes } from "../enums/active-effects-enums.mjs";
 import { SuperEquipmentParticularityType } from "../enums/equipment-enums.mjs";
+import { ChangeField } from "./change-field.mjs";
 
 const { NumberField, BooleanField, StringField, SchemaField, ArrayField } = foundry.data.fields;
 
@@ -57,10 +58,7 @@ export class SuperEquipmentParticularityField extends SchemaField {
         super({
             type: new NumberField({ required: true, integer: true, initial: SuperEquipmentParticularityType.TEXT }),
             description: new StringField({ required: false, initial: '' }),
-            change: new SchemaField({
-                key: new StringField({ required: false, nullable: true, initial: null }),
-                value: new NumberField({ required: false, integer: true, initial: 0 }),
-            }, { initial: null, nullable: true })
+            change: new ChangeField(),
         }, { initial: null, nullable: true });
 
         this.type = type;
@@ -80,10 +78,7 @@ export class SubstanceEffectField extends SchemaField {
             id: new StringField({ required: true }),
             type: new StringField({ required: false, initial: ActiveEffectsTypes.BUFF }),
             description: new StringField({ required: true }),
-            change: new SchemaField({
-                key: new StringField({ required: false, nullable: true, initial: null }),
-                value: new NumberField({ required: false, integer: true, initial: 0 }),
-            }, { initial: null, nullable: true }),
+            change: new ChangeField(),
         }, { initial: null, nullable: true });
 
         this.id = id;
