@@ -1,0 +1,17 @@
+Copyright © 2025 Alberto Junior. Todos os direitos reservados.
+
+Este repositório contém o código e os materiais relacionados ao sistema de RPG "Setor 0 - O Submundo", desenvolvido para uso com a plataforma Foundry VTT.
+
+Você tem permissão para:
+
+- Utilizar este sistema em suas mesas pessoais de jogo.
+- Visualizar e estudar o código-fonte para fins educacionais.
+
+Você **não tem permissão para**:
+
+- Modificar, redistribuir ou reutilizar este código ou seus derivados de forma pública ou comercial sem autorização explícita e por escrito do autor.
+- Utilizar os nomes, logotipos, ambientações, regras ou qualquer conteúdo associado ao "Setor 0 - O Submundo" fora das permissões expressamente concedidas.
+
+Solicitações para uso adicional (modificações, contribuições, forks públicos, ou redistribuições) podem ser feitas diretamente ao autor através dos canais oficiais.
+
+Todos os direitos relativos ao sistema de jogo "Setor 0 - O Submundo", incluindo mas não se limitando a regras, terminologia, ambientação e identidade visual, estão protegidos por direitos autorais e outras formas de propriedade intelectual.

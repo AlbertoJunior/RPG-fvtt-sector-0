@@ -1,46 +1,27 @@
-import { createDataModels } from "./module/data/actor-data-model.mjs";
-import { htmlTemplateRegister } from "./module/base/sheet/html-template.mjs";
-import { loadHandlebarsHelpers } from "./scripts/utils/loadHelpers.mjs";
+import { InitHookHandle } from "./module/hooks/init.mjs";
+import { ReadyHookHandle } from "./module/hooks/ready.mjs";
+import { CreateItemHookHandle } from "./module/hooks/create-item.mjs";
+import { CreateCombatHookHandle } from "./module/hooks/create-combat.mjs";
+import { LOGO_PATH } from "./module/constants.mjs";
+import { UpdateActorHookHandle } from "./module/hooks/update-actor.mjs";
 
 Hooks.once('init', async function () {
-  console.log('Setor 0 - O Submundo | Inicializando sistema');
-  //CONFIG.debug.hooks = true;
-
-  createDataModels();
-  configureSheetModels();
-  await loadHandlebarsHelpers();
-  await addListenersOnDOM();
-  await configureTemplates();
+  document.getElementById('logo').src = LOGO_PATH
+  await InitHookHandle.handle();
 });
 
-function configureSheetModels() {
-  Actors.unregisterSheet("core", ActorSheet);
-  htmlTemplateRegister();
-}
+Hooks.once('ready', async () => {
+  await ReadyHookHandle.handle();
+});
 
-async function addListenersOnDOM() {
-  document.body.addEventListener('click', (event) => {
-    if (event.target.classList.contains('toggle-tooltip')) {
-      console.log(event)
-      let tooltip = event.target.previousElementSibling;
-      let hooks = 0;
-      while (hooks < 5 && tooltip) {
-        if (tooltip.classList.contains('tooltip-part')) {
-          tooltip.classList.toggle('hidden');
-          return;
-        } else {
-          tooltip = tooltip.previousElementSibling;
-          hooks++;
-        }
-      }
-    }
-  });
-}
+Hooks.on('createItem', (item) => {
+  CreateItemHookHandle.handle(item);
+});
 
-async function configureTemplates() {
-  await loadTemplates([
-    "actors/characteristics",
-    "actors/biography",
-    "actors/status",
-  ].map(item => `systems/setor0OSubmundo/templates/${item}.hbs`));
-}
+Hooks.on('createCombat', (combat) => {
+  CreateCombatHookHandle.handle(combat);
+});
+
+Hooks.on("updateActor", (updatedActor, changes, options, userId) => {
+  UpdateActorHookHandle.handle(updatedActor, changes, options, userId);
+});
