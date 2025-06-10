@@ -15,13 +15,17 @@ export class ConfirmationDialog {
                 cancel: {
                     label: cancelButtonText || localize("Cancelar"),
                     callback: (html) => {
-                        onCancel?.();
+                        if (typeof onCancel === 'function') {
+                            onCancel();
+                        }
                     }
                 },
                 confirm: {
                     label: confirmButtonText || localize("Confirmar"),
                     callback: (html) => {
-                        onConfirm?.();
+                        if (typeof onConfirm === 'function') {
+                            onConfirm();
+                        }
                     }
                 }
             },

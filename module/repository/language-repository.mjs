@@ -32,7 +32,7 @@ export class LanguageRepository {
         }
     }
 
-    static _getItems() {
+    static getItems() {
         return [... this.#languages, ... this.#loadedFromPack];
     }
 }

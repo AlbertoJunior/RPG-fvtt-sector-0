@@ -8,7 +8,7 @@ export class FameRepository {
         { id: BaseActorCharacteristicType.BOUNTY.id, label: 'Procurado' }
     ];
 
-    static _getItems() {
+    static getItems() {
         return [... this.#characteristics]
             .map(item => {
                 return {
@@ -18,7 +18,7 @@ export class FameRepository {
             });
     }
 
-    static _getItemsNpc() {
-        return FameRepository._getItems().filter(item => item.id != 'nucleo')
+    static getItemsNpc() {
+        return FameRepository.getItems().filter(item => item.id != 'nucleo')
     }
 }

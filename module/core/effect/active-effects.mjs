@@ -10,6 +10,7 @@ export class ActiveEffectsUtils {
 
     static createEffectData(params) {
         const {
+            id,
             name = "",
             description = "",
             origin = "",
@@ -34,7 +35,7 @@ export class ActiveEffectsUtils {
         }
 
         const activeEffectData = {
-            id: randomId(10),
+            id: id || randomId(10),
             name: name,
             description: description,
             origin: origin,
@@ -100,12 +101,12 @@ export class ActiveEffectsUtils {
         const effectType = this.getFlags(effect)[ActiveEffectsFlags.TYPE];
         return effectType == ActiveEffectsTypes.BUFF;
     }
-    
+
     static isDebuff(effect) {
         const effectType = this.getFlags(effect)[ActiveEffectsFlags.TYPE];
         return effectType == ActiveEffectsTypes.DEBUFF;
     }
-    
+
     static async enableEffect(effect) {
         if (effect) {
             await effect.update({ disabled: false });

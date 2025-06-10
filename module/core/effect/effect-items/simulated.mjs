@@ -5,7 +5,9 @@ import { EffectChangeValueType } from "../../../enums/enhancement-enums.mjs";
 import { assimilationEnhancement } from "../../enhancement/enhancement-items/assimilation.mjs";
 import { ActiveEffectsUtils } from "../active-effects.mjs";
 
+const id = 'CustomActiveEffect.CenaSimulada';
 const simulated = ActiveEffectsUtils.createEffectData({
+    id: id,
     name: "Cena Simulada",
     origin: `Aprimoramento: ${assimilationEnhancement.name}`,
     img: `${ICONS_PATH}/user-ninja.svg`,
@@ -20,7 +22,7 @@ const simulated = ActiveEffectsUtils.createEffectData({
         },
     ],
     flags: {
-        [ActiveEffectsFlags.ORIGIN_ID]: 'CustomActiveEffect.CenaSimulada',
+        [ActiveEffectsFlags.ORIGIN_ID]: id,
         [ActiveEffectsFlags.ORIGIN_TYPE]: ActiveEffectsOriginTypes.AFFECTED_ENHANCEMENT,
         [ActiveEffectsFlags.TYPE]: ActiveEffectsTypes.BUFF,
     }

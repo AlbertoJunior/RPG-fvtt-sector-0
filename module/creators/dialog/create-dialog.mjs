@@ -7,6 +7,7 @@ export class CreateFormDialog {
         onConfirm: async (data) => { },
         onCancel: async (html) => { },
         render: (html, windowApp) => { },
+        onClose: () => { },
         presetForm: {},
     }
 
@@ -33,6 +34,7 @@ export class CreateFormDialog {
                 const windowApp = this.#render(html, dialog, { buttons });
                 options.render?.(html, windowApp);
             },
+            close: () => { options.onClose?.() }
         });
         dialog.render(true);
     }

@@ -34,7 +34,7 @@ export class EnhancementRepository {
         }
     }
 
-    static _getItems() {
+    static getItems() {
         return [
             ...EnhancementRepository.#enhancements,
             ...EnhancementRepository.#loadedFromPack
@@ -43,7 +43,7 @@ export class EnhancementRepository {
 
     static getEnhancementById(enhancementId) {
         if (enhancementId) {
-            const fetchedEnhancement = this._getItems().filter(item => item.id == enhancementId)[0];
+            const fetchedEnhancement = this.getItems().filter(item => item.id == enhancementId)[0];
             if (fetchedEnhancement) {
                 return fetchedEnhancement;
             }
@@ -69,13 +69,13 @@ export class EnhancementRepository {
             return this.getEnhancementById(enhancementId)?.effects.find(ef => ef.id == effectId) || null;
         }
 
-        return this._getItems()
+        return this.getItems()
             .flatMap(enhancement => enhancement.effects)
             .find(ef => ef.id == effectId) || null;
     }
 
     static getEnhancementFamilyByEffectId(effectId) {
-        return this._getItems().find(enhancement => enhancement.effects?.some(effect => effect.id == effectId));
+        return this.getItems().find(enhancement => enhancement.effects?.some(effect => effect.id == effectId));
     }
 
 }

@@ -7,7 +7,7 @@ import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class TraitDialog {
   static async open(type, callback) {
-    const traits = TraitRepository._getItemsByType(type);
+    const traits = TraitRepository.getItemsByType(type);
     const content = await this.#mountContent(traits, true, true);
 
     new Dialog({
@@ -32,7 +32,7 @@ export class TraitDialog {
   }
 
   static async openByTrait(trait, type, actor, callback) {
-    const traits = TraitRepository._getItemsByType(type);
+    const traits = TraitRepository.getItemsByType(type);
     const content = await this.#mountContent(traits, false, callback != undefined, trait);
 
     const dialog = new Dialog({

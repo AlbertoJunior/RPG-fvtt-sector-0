@@ -33,7 +33,7 @@ export class DistrictRepository {
         return [... this.#items].filter(district => district != DistrictRepository.TYPES.COLMEIA);
     }
 
-    static _getItems() {
+    static getItems() {
         return [... this.#getBaseItems(), ...this.#loadedFromPack].sort((a, b) => a.label.localeCompare(b.label));
     }
 }

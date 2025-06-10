@@ -338,8 +338,13 @@
                 "Erro_Sem_Ator": "O item precisa estar associado a algum personagem.",
                 "Erro_Sem_Teste_Padrao": "É preciso definir um teste padrão para o item.",
                 "Erro_Sem_Habilidade": "O teste desse item não utiliza nenhuma Habilidade conhecida pelo Personagem"
+            },
+            "Erro": {
+                "Ator_Invalido": "Ator inválido.",
+                "Efeito_Invalido": "Efeito inválido."
             }
         },
+        
 
         "Aprimoramento": {
             "Nome": "Aprimoramento",

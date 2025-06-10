@@ -34,7 +34,7 @@ class EquipmentSheetCharacteristicsHandle {
             'items/dialog/substance-effect',
             {
                 presetForm: {
-                    effects: this.#mapOptions(SubstanceEffectRepository._getItems())
+                    effects: this.#mapOptions(SubstanceEffectRepository.getItems())
                 },
                 onConfirm: async (data) => {
                     const actualList = getObject(item, EquipmentCharacteristicType.SUBSTANCE.EFFECTS) || [];

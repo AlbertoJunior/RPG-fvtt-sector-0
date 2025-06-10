@@ -16,7 +16,7 @@ export class SheetMethods {
     static handleMethods = {
         menu: {
             ...menuHandleMethods,
-            [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog._open(actor); },
+            [OnEventType.ROLL]: async (actor, event) => { ActorRollDialog.open(actor); },
         },
         language: {
             [OnEventType.ADD]: async (actor, event) => {

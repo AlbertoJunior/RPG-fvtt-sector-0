@@ -25,7 +25,7 @@ export class RepertoryRepository {
         }
     }
 
-    static _getItems() {
+    static getItems() {
         return [... this.items, ...this.#loadedFromPack].sort((a, b) => a.label.localeCompare(b.label));
     }
 }

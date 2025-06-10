@@ -4,6 +4,7 @@ import { influenceEnhancement } from "../../enhancement/enhancement-items/influe
 import { ActiveEffectsUtils } from "../active-effects.mjs";
 
 const addicted = ActiveEffectsUtils.createEffectData({
+    id: 'CustomActiveEffect.Viciado',
     name: "Viciado",
     origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
@@ -23,6 +24,7 @@ const addicted = ActiveEffectsUtils.createEffectData({
 });
 
 const mesmerized = ActiveEffectsUtils.createEffectData({
+    id: 'CustomActiveEffect.Mesmerizado',
     name: "Mesmerizado",
     origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
@@ -43,6 +45,7 @@ const mesmerized = ActiveEffectsUtils.createEffectData({
 });
 
 const racionalize = ActiveEffectsUtils.createEffectData({
+    id: 'CustomActiveEffect.Racionalizando',
     name: "Racionalizando",
     origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,
@@ -57,6 +60,7 @@ const racionalize = ActiveEffectsUtils.createEffectData({
 });
 
 const fascinated = ActiveEffectsUtils.createEffectData({
+    id: 'CustomActiveEffect.Fascinado',
     name: "Fascinado",
     origin: `Aprimoramento: ${influenceEnhancement.name}`,
     img: `${influenceEnhancement.icon}`,

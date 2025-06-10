@@ -7,7 +7,7 @@ import { RollTestUtils } from "../../core/rolls/roll-test-utils.mjs";
 import { TEMPLATES_PATH } from "../../constants.mjs";
 
 export class CreateRollableTestDialog {
-    static async _view(rollTestData) {
+    static async view(rollTestData) {
         this.open(rollTestData);
     }
 
@@ -103,8 +103,8 @@ export class CreateRollableTestDialog {
         const data = {
             uuid: `form_dialog.${randomId(10)}`,
             canEdit: needConfirmation,
-            attributes: AttributeRepository._getItems(),
-            abilities: AbilityRepository._getItems(),
+            attributes: AttributeRepository.getItems(),
+            abilities: AbilityRepository.getItems(),
             difficulty: 6,
             critic: 10,
             bonus: 0,

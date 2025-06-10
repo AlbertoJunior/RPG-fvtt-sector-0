@@ -187,7 +187,7 @@ class EquipmentSheetItemRollHandle {
         if (!rollTest) {
             return;
         }
-        CreateRollableTestDialog._view(rollTest);
+        CreateRollableTestDialog.view(rollTest);
     }
 
     static #getItemRollTestId(event) {

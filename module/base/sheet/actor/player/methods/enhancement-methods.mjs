@@ -1,4 +1,4 @@
-import { getObject, localize, localizeFormat, TODO } from "../../../../../../scripts/utils/utils.mjs";
+import { getObject, localize, localizeFormat } from "../../../../../../scripts/utils/utils.mjs";
 import { ChatCreator } from "../../../../../utils/chat-creator.mjs";
 import { ActorEnhancementField } from "../../../../../field/actor-fields.mjs";
 import { EnhancementRepository } from "../../../../../repository/enhancement-repository.mjs";
@@ -164,12 +164,12 @@ async function verifyIsGmAndDefineShowChat(message, actor) {
 
 async function toggleEnhancementEffectOnActor(effect, actor) {
     if (!effect) {
-        NotificationsUtils.error(`Efeito inválido`);
+        NotificationsUtils.error(localize('Aviso.Erro.Efeito_Invalido'));
         return;
     }
 
     if (!actor) {
-        NotificationsUtils.error(`Ator inválido`);
+        NotificationsUtils.error(localize('Aviso.Erro.Ator_Invalido'));
         return;
     }
 

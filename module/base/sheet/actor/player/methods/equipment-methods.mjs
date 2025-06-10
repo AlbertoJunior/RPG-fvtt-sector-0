@@ -11,7 +11,7 @@ import { OnEventType } from "../../../../../enums/on-event-type.mjs";
 import { EquipmentRepository } from "../../../../../repository/equipment-repository.mjs";
 import { ActorUpdater } from "../../../../updater/actor-updater.mjs";
 import { EquipmentUpdater } from "../../../../updater/equipment-updater.mjs";
-import { playerRollHandle } from "./player-roll-methods.mjs";
+import { rollByItemAndRollId } from "../../../equipment/methods/equipment-item-roll-methods.mjs";
 
 export const handlerEquipmentEvents = {
     [OnEventType.ADD]: async (actor, event) => EquipmentHandleEvents.handleAdd(actor, event),
@@ -261,6 +261,6 @@ class EquipmentHandleEvents {
             return;
         }
 
-        await playerRollHandle.rollableItem(actor, rollTest, item);
+        await rollByItemAndRollId(item, rollTest.id);
     }
 }

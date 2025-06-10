@@ -560,26 +560,26 @@ export class TraitRepository {
         }
     }
 
-    static _getGoodTraits() {
+    static getGoodTraits() {
         return [
             ...TraitRepository.#goodTrait,
             ...TraitRepository.#loadedGoodFromPack
         ];
     }
 
-    static _getBadTraits() {
+    static getBadTraits() {
         return [
             ...TraitRepository.#badTrait,
             ...TraitRepository.#loadedBadFromPack
         ];
     }
 
-    static _getItemsByType(type) {
-        const items = type === 'good' ? this._getGoodTraits() : this._getBadTraits();
+    static getItemsByType(type) {
+        const items = type === 'good' ? this.getGoodTraits() : this.getBadTraits();
         return items.sort((a, b) => a.xp - b.xp || a.name.localeCompare(b.name));
     }
 
-    static _getItemByTypeAndId(type, traitId) {
-        return this._getItemsByType(type).find(element => element.id == traitId);
+    static getItemByTypeAndId(type, traitId) {
+        return this.getItemsByType(type).find(element => element.id == traitId);
     }
 }
